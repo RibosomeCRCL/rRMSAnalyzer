@@ -4,9 +4,14 @@
 \alias{compute.window.median.mad}
 \title{Computation of C- and Z-scores for genomic positions within a predefined window}
 \usage{
-compute.window.median.mad(ds = NULL, known.meth.vector = NULL,
-  suspected.meth.vector = NULL, flanking = 6, data.counts.col = 4,
-  data.position.col = 1)
+compute.window.median.mad(
+  ds = NULL,
+  known.meth.vector = NULL,
+  suspected.meth.vector = NULL,
+  flanking = 6,
+  data.counts.col = 4,
+  data.position.col = 1
+)
 }
 \arguments{
 \item{data.position.col}{}

@@ -4,10 +4,16 @@
 \alias{plot.cscores.by.site}
 \title{C-score plot along the genomic positions}
 \usage{
-\method{plot}{cscores.by.site}(df = NULL, save.as.png = TRUE,
-  display.plot = TRUE, output.folder = "",
-  plot.analysis.type = "UNDEFINED", plot.new.candidates = FALSE,
-  plot.prefix = "", verbose = TRUE)
+\method{plot}{cscores.by.site}(
+  df = NULL,
+  save.as.png = TRUE,
+  display.plot = TRUE,
+  output.folder = "",
+  plot.analysis.type = "UNDEFINED",
+  plot.new.candidates = FALSE,
+  plot.prefix = "",
+  verbose = TRUE
+)
 }
 \arguments{
 \item{verbose}{}

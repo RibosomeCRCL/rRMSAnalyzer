@@ -4,10 +4,16 @@
 \alias{plot.quality.control.correlation}
 \title{Quality control plot}
 \usage{
-\method{plot}{quality.control.correlation}(all.samples = NULL,
-  output.folder = "", plot.prefix = "", save.as.png = TRUE,
-  display.plot = TRUE, data.counts.col = 4, data.position.col = 1,
-  verbose = TRUE)
+\method{plot}{quality.control.correlation}(
+  all.samples = NULL,
+  output.folder = "",
+  plot.prefix = "",
+  save.as.png = TRUE,
+  display.plot = TRUE,
+  data.counts.col = 4,
+  data.position.col = 1,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{output.folder:}{a character string indicating the path to output folder where the plots will be saved. Default is the working directory.}

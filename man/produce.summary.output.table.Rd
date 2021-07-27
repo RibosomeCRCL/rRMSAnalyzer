@@ -4,10 +4,18 @@
 \alias{produce.summary.output.table}
 \title{creates output table with scores and information from the literature, if available}
 \usage{
-produce.summary.output.table(df.all.samples = NULL, annot = NULL,
-  select.category = "known", species = "human", annot.project.col = 1,
-  annot.rna.col = 4, annot.name.col = 5, GC.min = 0.2, GC.max = 0.8,
-  verbose = TRUE)
+produce.summary.output.table(
+  df.all.samples = NULL,
+  annot = NULL,
+  select.category = "known",
+  species = "human",
+  annot.project.col = 1,
+  annot.rna.col = 4,
+  annot.name.col = 5,
+  GC.min = 0.2,
+  GC.max = 0.8,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{verbose}{}

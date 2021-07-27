@@ -4,8 +4,7 @@
 \alias{get.suspected.sites.info}
 \title{Get vector of positions suspected to be methylated (internal function)}
 \usage{
-get.suspected.sites.info(annot = NULL, annot.rna.col = 4,
-  species = "human")
+get.suspected.sites.info(annot = NULL, annot.rna.col = 4, species = "human")
 }
 \arguments{
 \item{species}{}

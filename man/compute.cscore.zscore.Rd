@@ -4,10 +4,18 @@
 \alias{compute.cscore.zscore}
 \title{Computes C- and Z-scores of all samples of a given study}
 \usage{
-compute.cscore.zscore(all.samples = NULL, annot = NULL, annot.rna.col = 4,
-  species = "human", verbose = FALSE, window.size = 6,
-  data.position.col = 1, data.counts.col = 4, gc.probas.pos.col = 1,
-  gc.probas.GC.col = 7)
+compute.cscore.zscore(
+  all.samples = NULL,
+  annot = NULL,
+  annot.rna.col = 4,
+  species = "human",
+  verbose = FALSE,
+  window.size = 6,
+  data.position.col = 1,
+  data.counts.col = 4,
+  gc.probas.pos.col = 1,
+  gc.probas.GC.col = 7
+)
 }
 \arguments{
 \item{gc.probas.GC.col}{}

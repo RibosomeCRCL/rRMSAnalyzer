@@ -11,6 +11,6 @@ License: What license is it under?
 Depends: R (>= 3.0.0), corrplot, lattice, stringi, plyr, WriteXLS,
         ggplot2, ggrepel, ggpubr, scales
 LazyData: TRUE
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.1
 NeedsCompilation: no
 Packaged: 2019-02-04 13:27:40 UTC; janice

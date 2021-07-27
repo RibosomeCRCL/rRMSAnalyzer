@@ -4,9 +4,17 @@
 \alias{select.new.candidates}
 \title{Select new candidates based on minimal tresholds for C-Scores and Z-Scores and within a predefined GC-content window. Already known methylated sites are filtered out, suspected sites are kept.}
 \usage{
-\method{select}{new.candidates}(wdw.df.list = NULL, annot = NULL,
-  data.position.col = 1, annot.name.col = 5, annot.group.col = 3,
-  GC.min = 0.2, GC.max = 0.8, zscore = 2, cscore = 0.8)
+select.new.candidates(
+  wdw.df.list = NULL,
+  annot = NULL,
+  data.position.col = 1,
+  annot.name.col = 5,
+  annot.group.col = 3,
+  GC.min = 0.2,
+  GC.max = 0.8,
+  zscore = 2,
+  cscore = 0.8
+)
 }
 \arguments{
 \item{annot:}{a data frame with general project informations. Must have columns specifying the project, rRNA, sample names, paths.}

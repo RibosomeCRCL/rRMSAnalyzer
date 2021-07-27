@@ -2,20 +2,21 @@
 % Please edit documentation in R/output_scores_metadata.R
 \name{prepare.output.data.Scores}
 \alias{prepare.output.data.Scores}
-\alias{prepare.output.data.Scores}
 \title{Prepares the output data (Cscore and Zscore) for Excel}
 \usage{
-prepare.output.data.Scores(df.all.samples = NULL, annot = NULL,
-  annot.name.col = 5)
+prepare.output.data.Scores(
+  df.all.samples = NULL,
+  annot = NULL,
+  annot.name.col = 5
+)
 
-prepare.output.data.Scores(df.all.samples = NULL, annot = NULL,
-  annot.name.col = 5)
+prepare.output.data.Scores(
+  df.all.samples = NULL,
+  annot = NULL,
+  annot.name.col = 5
+)
 }
 \arguments{
-\item{annot:}{a data frame with general project informations. Must have columns specifying the project, rRNA, sample names, paths.}
-
-\item{annot.name.col:}{a numerical value specifying the column of the sample name in the annotation <annot>. Default is 5.}
-
 \item{annot:}{a data frame with general project informations. Must have columns specifying the project, rRNA, sample names, paths.}
 
 \item{annot.name.col:}{a numerical value specifying the column of the sample name in the annotation <annot>. Default is 5.}

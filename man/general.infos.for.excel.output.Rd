@@ -4,10 +4,18 @@
 \alias{general.infos.for.excel.output}
 \title{Extracts literature information from internal data sets for known/suspected methylation sites}
 \usage{
-general.infos.for.excel.output(df.all.samples = NULL, annot = NULL,
-  select.category = "known", species = "human", annot.project.col = 1,
-  annot.rna.col = 4, annot.name.col = 5, GC.min = 0.2, GC.max = 0.8,
-  verbose = TRUE)
+general.infos.for.excel.output(
+  df.all.samples = NULL,
+  annot = NULL,
+  select.category = "known",
+  species = "human",
+  annot.project.col = 1,
+  annot.rna.col = 4,
+  annot.name.col = 5,
+  GC.min = 0.2,
+  GC.max = 0.8,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{df.all.samples:}{a data frame, output of select.methylated.positions()}

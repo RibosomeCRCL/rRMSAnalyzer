@@ -4,8 +4,13 @@
 \alias{select.methylated.positions}
 \title{Selection of genomic positions}
 \usage{
-\method{select}{methylated.positions}(wdw.df.list = NULL, annot = NULL,
-  select.category = "known", annot.name.col = 5, annot.group.col = 3)
+select.methylated.positions(
+  wdw.df.list = NULL,
+  annot = NULL,
+  select.category = "known",
+  annot.name.col = 5,
+  annot.group.col = 3
+)
 }
 \arguments{
 \item{annot:}{a data frame with general project informations. Must have columns specifying the project, rRNA, sample names, paths.}

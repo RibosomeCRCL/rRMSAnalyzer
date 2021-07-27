@@ -4,9 +4,15 @@
 \alias{mann.whitney.test}
 \title{Nonparametric Mann-Whitney U-Test to compare methylation between different biological conditions}
 \usage{
-mann.whitney.test(output.final = NULL, annot = NULL, annot.group.col = 3,
-  annot.name.col = 5, score.to.test = "both", verbose = TRUE,
-  digits = 5)
+mann.whitney.test(
+  output.final = NULL,
+  annot = NULL,
+  annot.group.col = 3,
+  annot.name.col = 5,
+  score.to.test = "both",
+  verbose = TRUE,
+  digits = 5
+)
 }
 \arguments{
 \item{annot:}{a data frame with general project informations. Must have columns specifying the project, rRNA, sample names, paths.}

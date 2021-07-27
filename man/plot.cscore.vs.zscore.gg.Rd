@@ -4,12 +4,21 @@
 \alias{plot.cscore.vs.zscore.gg}
 \title{C-score versus Z-score}
 \usage{
-\method{plot}{cscore.vs.zscore.gg}(wdw.df.list = NULL, save.as.png = TRUE,
-  display.plot = TRUE, output.folder = "", plot.prefix = "",
-  xyplot.rows = 2, zscore.col.name = "dist2medInMad",
-  cscore.col.name = "ScoreC.Median.net", meth.col.name = "meth",
-  suspected.col.name = "suspected", verbose = TRUE, zscore.threshold = 2,
-  cscore.threshold = 0.8)
+\method{plot}{cscore.vs.zscore.gg}(
+  wdw.df.list = NULL,
+  save.as.png = TRUE,
+  display.plot = TRUE,
+  output.folder = "",
+  plot.prefix = "",
+  xyplot.rows = 2,
+  zscore.col.name = "dist2medInMad",
+  cscore.col.name = "ScoreC.Median.net",
+  meth.col.name = "meth",
+  suspected.col.name = "suspected",
+  verbose = TRUE,
+  zscore.threshold = 2,
+  cscore.threshold = 0.8
+)
 }
 \arguments{
 \item{save.as.png:}{a logical indicating if the graphical output should be saved as .png or not. Default is TRUE.}

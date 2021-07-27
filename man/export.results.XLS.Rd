@@ -4,8 +4,13 @@
 \alias{export.results.XLS}
 \title{Export results to Excel}
 \usage{
-export.results.XLS(results = NULL, output.folder = "",
-  select.category = "", output.file.prefix = "", digits = 5)
+export.results.XLS(
+  results = NULL,
+  output.folder = "",
+  select.category = "",
+  output.file.prefix = "",
+  digits = 5
+)
 }
 \arguments{
 \item{digits:}{an interger indicating the number of digits used for rounding the numerical values of the results table}

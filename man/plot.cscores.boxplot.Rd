@@ -4,10 +4,16 @@
 \alias{plot.cscores.boxplot}
 \title{Boxplot of C-scores across biological conditions}
 \usage{
-\method{plot}{cscores.boxplot}(df = NULL, save.as.png = TRUE,
-  display.plot = TRUE, output.folder = "",
-  plot.analysis.type = "UNDEFINED", plot.new.candidates = FALSE,
-  plot.prefix = "", verbose = TRUE)
+\method{plot}{cscores.boxplot}(
+  df = NULL,
+  save.as.png = TRUE,
+  display.plot = TRUE,
+  output.folder = "",
+  plot.analysis.type = "UNDEFINED",
+  plot.new.candidates = FALSE,
+  plot.prefix = "",
+  verbose = TRUE
+)
 }
 \arguments{
 \item{verbose}{}

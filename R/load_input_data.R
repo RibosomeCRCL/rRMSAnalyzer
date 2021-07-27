@@ -36,20 +36,23 @@ get.file.prefix <- function(annot=NULL, annot.project.col=1, annot.rna.col=4){
 # OTHERWISE, (if column ordering changed) you have to change the following parameters:
 # <data.position.col>, <data.type.col>, <data.identity.col>, <data.counts.col>
 #--------------------------------------------------------------------------------
-#' Reads ribomethseq sequencing files
+#'  Reads ribomethseq sequencing files
 #'
-#' @param data.folder: a character string indicating the data folder with the input files
-#' @param annot: a data frame with general project informations. Must have columns specifying the project, rRNA, sample names, paths.
-#' @param annot.path.col: a numerical value specifying the column with the file name in the annotation <annot>. Default is 2.
-#' @param annot.name.col: a numerical value specifying the column of the sample name in the annotation <annot>. Default is 5.
-#' @param annot.rna.col: a numerical value specifying the column of the rRNA in the annotation <annot>. Default is 4.
-#' @param annot.group.col: a numerical value specifying the column of the biological condition in the annotation <annot>. Default is 3. Note that only 2 different biological conditions are allowed.
-#' @param data.position.col: a numerical value specifying the column with the genomic position of the sequencing data in the data file. Default is 1.
-#' @param data.type.col: a numerical value specifying the column with the RNA type of the sequencing data in the data file. Default is 2. If there is no column specifiying the RNA type, the parameter should set to 1.
-#' @param data.identity.col: a numerical value specifying the column with the annotation of the RNA methylation site. Default is 3. If there is no column with the annotations, the parameter should set to 1.
-#' @param data.counts.col: : a numerical value specifying the column of the rRNA in the annotation <annot>. Default is 4.
-#' @param species: a character string specifying the species. Default is "human". In this version of the R-packge, only "human" is supported.
-#' @param sep: the field separator character for the internal function read.table(). Values on each line of the file are separated by this character. If sep = "" (the default for read.table) the separator is ‘white space’, that is one or more spaces, tabs, newlines or carriage returns.
+#' @param data.folder a character string indicating the data folder with the input files
+#' @param annot a data frame with general project informations. Must have columns specifying the project, rRNA, sample names, paths.
+#' @param species a character string specifying the species. Default is "human". In this version of the R-packge, only "human" is supported.
+#' @param annot.path.col a numerical value specifying the column with the file name in the annotation <annot>. Default is 2.
+#' @param annot.group.col a numerical value specifying the column of the biological condition in the annotation <annot>. Default is 3. Note that only 2 different biological conditions are allowed.
+#' @param annot.rna.col a numerical value specifying the column of the rRNA in the annotation <annot>. Default is 4.
+#' @param annot.name.col a numerical value specifying the column of the sample name in the annotation <annot>. Default is 5.
+#' @param data.position.col a numerical value specifying the column with the genomic position of the sequencing data in the data file. Default is 1.
+#' @param data.type.col a numerical value specifying the column with the RNA type of the sequencing data in the data file. Default is 2. If there is no column specifiying the RNA type, the parameter should set to 1.
+#' @param data.identity.col a numerical value specifying the column with the annotation of the RNA methylation site. Default is 3. If there is no column with the annotations, the parameter should set to 1.
+#' @param data.counts.col a numerical value specifying the column of the rRNA in the annotation <annot>. Default is 4.
+#' @param sep the field separator character for the internal function read.table. Values on each line of the file are separated by this character. If sep is "" (the default for read.table) the separator is "white space", that is one or more spaces, tabs, newlines or carriage returns.
+#' @param um14 
+#'
+#' @description Reads ribomethseq sequencing files
 #'
 #' @return List of data frames. Each element is a count table of one sample, the name of the list element corresponds to the sample name
 #' @export
@@ -144,12 +147,13 @@ read.and.annotate.data <- function(data.folder=NULL, annot=NULL, species="human"
 # lf =list of file paths that should match the file paths in the anntoation file / coulmn annot.path.col
 # returns sample names from annotation file / column annot.name.col
 #--------------------------------------------------------------------------------
-#' internal function which is used by the function read.and.annotate.data()
+#' Get sample names from annotation files
+#'  @description internal function which is used by the function read.and.annotate.data()
 #'
+#' @param annot a data frame with general project informations. Must have columns specifying the project, rRNA, sample names, paths.
+#' @param annot.path.col a numerical value specifying the column with the file name in the annotation <annot>. Default is 2.
+#' @param annot.name.col a numerical value specifying the column of the sample name in the annotation <annot>. Default is 5.
 #' @param lf
-#' @param annot: a data frame with general project informations. Must have columns specifying the project, rRNA, sample names, paths.
-#' @param annot.path.col: a numerical value specifying the column with the file name in the annotation <annot>. Default is 2.
-#' @param annot.name.col: a numerical value specifying the column of the sample name in the annotation <annot>. Default is 5.
 #'
 #' @return sample names
 #' @export

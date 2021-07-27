@@ -2,23 +2,31 @@
 % Please edit documentation in R/load_input_data.R
 \name{get.sample.names.from.annot}
 \alias{get.sample.names.from.annot}
-\title{internal function which is used by the function read.and.annotate.data()}
+\title{Get sample names from annotation files
+ @description internal function which is used by the function read.and.annotate.data()}
 \usage{
-get.sample.names.from.annot(lf = NULL, annot = NULL, annot.path.col = 2,
-  annot.name.col = 5)
+get.sample.names.from.annot(
+  lf = NULL,
+  annot = NULL,
+  annot.path.col = 2,
+  annot.name.col = 5
+)
 }
 \arguments{
-\item{annot:}{a data frame with general project informations. Must have columns specifying the project, rRNA, sample names, paths.}
+\item{lf}{}
 
-\item{annot.path.col:}{a numerical value specifying the column with the file name in the annotation <annot>. Default is 2.}
+\item{annot}{a data frame with general project informations. Must have columns specifying the project, rRNA, sample names, paths.}
 
-\item{annot.name.col:}{a numerical value specifying the column of the sample name in the annotation <annot>. Default is 5.}
+\item{annot.path.col}{a numerical value specifying the column with the file name in the annotation <annot>. Default is 2.}
+
+\item{annot.name.col}{a numerical value specifying the column of the sample name in the annotation <annot>. Default is 5.}
 }
 \value{
 sample names
 }
 \description{
-internal function which is used by the function read.and.annotate.data()
+Get sample names from annotation files
+ @description internal function which is used by the function read.and.annotate.data()
 }
 \examples{
 get.sample.names.from.annot(lf, annot)
