@@ -180,4 +180,75 @@ get.sample.names.from.annot <- function(lf=NULL, annot=NULL, annot.path.col=2, a
 }
 #--------------------------------------------------------------------------------
 
+#' Read ribomethseq count files and their associated metadata
+#' 
+#' @param counts_path: path to the data folder with the count files
+#' @param metadata_path: path to the CSV file containing metadata
+#' @param rna_names: names of the RNA used in this run
+#' @param count_sep: delimiter used in genomecov csv
+#' @param metadata_sep: delimiter used in metadata csv
+#' @param metadata_filename_col: name or position of the column containing the filename
+#' @param metadata_sample_name_col: name or position of the column containing sample name
+#' @return a riboclass
+#' @export
+read_counts <- function(counts_path,
+                        metadata_path=NA,
+                        rna_names,
+                        count_sep="\t",
+                        metadata_sep=";",
+                        metadata_filename_col= 1,
+                        metadata_sample_name_col = 2) {
+  
+  rna_counts_fl <- list.files(counts_path, recursive = T, full.names = T)
+  
+  rna_counts_dt <- lapply(rna_counts_fl, read.csv, sep = count_sep, header = F)
+  
+  #TODO: Check if the elements in RNA_counts_dt are in the same order as in RNA_counts_fl
+  names(rna_counts_dt) = basename(rna_counts_fl)
+  
+  #loading metadata
+  if(is.na(metadata_path)) {
+    metadata_df <- generate_metadata_df(counts_path,create_samplename_col = F)
+  }
+  else {
+    metadata_df <- read.csv(metadata_path, sep = metadata_sep)
+    # Rename sample in raw_counts according to the names in metadata
+    names(rna_counts_dt) <- metadata_df[,metadata_sample_name_col][which(names(rna_counts_dt) == metadata_df[,metadata_filename_col])]
+    
+  }
+  
+  # Merge metadata and counts in the single named list.
+  return_list <- list(raw_counts = rna_counts_dt, metadata = metadata_df)
+  class(return_list) <- "RiboClass" # TODO : create a real constructor
+  return(return_list)
+}
+
+#' Generate a metadata dataframe, given a list of files
+#' @param counts_folder_path: the path where count files are stored
+#' @param create_samplename_col: generate a sample name col with filename by default
+#' @param stop_symbol: keep the filename until the stop symbol is reached
+#' @export
+generate_metadata_df <- function(counts_folder_path,
+                                 create_samplename_col=T,
+                                 stop_symbol=NA) {
+  
+  sample_filenames <- basename(list.files(counts_folder_path, recursive = T))
+  
+  if(create_samplename_col) {
+    sample_name <- sample_filenames
+    #if a symbol has been given to shorten the name
+    if(!is.na(stop_symbol)) {
+      sample_name <- stringr::str_extract(sample_name,
+                                          paste0("^([^", stop_symbol,"])+"))
+    }
+    
+    metadata_template <- data.frame(filename = sample_filenames, name=sample_name)
+  }
+  else {
+    metadata_template <- data.frame(filename = sample_filenames)
+  }
+  
+  return(metadata_template)
+}
+
 
