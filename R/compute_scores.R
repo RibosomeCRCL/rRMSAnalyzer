@@ -106,7 +106,76 @@ compute.cscore.zscore <- function(all.samples=NULL, annot=NULL, annot.rna.col=4,
 }
 #------------------------------------------
 
+#' Calculate both C-score and Z-score for one RNA of one sample.
+#'
+#' @param ds 
+#' @param flanking 
+#' @param data.counts.col 
+#' @param data.position.col 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+calculate_score_by_RNA <- function(ds=NULL, flanking=6, data.counts.col=4, data.position.col=1) {
+  
+  # check that all parameters exist
+  if (is.null(ds)) {stop("MISSING parameter. Please specify a data frame <ds>.")}
+  ds[, "mean"] <- NA
+  ds[, "median"] <- NA
+  ds[, "mad"] <- NA
+  
+  # compute scores
+  for (i in (flanking + 1) : (dim(ds)[1] - flanking)){
+    #TODO : selection mean/median
+    ds[i, "mean"] <- mean(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data.counts.col]) # mean
+    ds[i, "median"] <- median(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data.counts.col]) # median
+    ds[i, "mad"] <- mad(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data.counts.col]) # mad
+    
+  }
+  ds[, "dist2medInMad"] <- (ds[,"median"] - ds[, data.counts.col])/ds[,"mad"]
+  scoreC.Median.raw <- 1 - ds[, data.counts.col]/ds[, "median"]
+  ds[, "ScoreC.Median.net"] <- ifelse(scoreC.Median.raw < 0, 0, scoreC.Median.raw)
+  
+  return(ds)
+}
 
+#' Title
+#'
+#' @param dt 
+#' @param flanking 
+#' @param data_counts_col 
+#' @param data_position_col 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+calculate_score <- function(dt=NULL, flanking=6, data_counts_col=4, data_position_col=1) {
+  
+  if(class(dt) == "RiboClass") {
+    samples_counts = dt["raw_counts"] #we only need the counts to calculate the score
+  }
+  
+  samples_czscore = list()
+  
+  for(sample_count_nm in names(samples_counts[["raw_counts"]])) { #TODO : lapply 
+    
+    sample_count <- samples_counts[["raw_counts"]][[sample_count_nm]]
+    sample_count[,1] <- as.factor(sample_count[,1])
+    
+    sample_score <- data.frame()
+    for(RNA in levels(sample_count[,1])) {
+      RNA_counts <- sample_count[which(sample_count[,1] == RNA),]
+     rna_score<-calculate_score_by_RNA(RNA_counts,data.position.col = 2,data.counts.col = 3)
+     sample_score <- rbind(sample_score,rna_score)
+    }
+    samples_czscore[sample_count_nm] <- list(sample_score)
 
-
-
+  }
+  
+  return(samples_czscore)
+  
+  
+}
+  
