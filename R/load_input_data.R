@@ -200,6 +200,12 @@ read_counts <- function(counts_path,
                         metadata_sample_name_col = 2) {
   
   rna_counts_fl <- list.files(counts_path, recursive = T, full.names = T)
+
+  # Check if there is any duplicated name in the list
+
+  if(anyDuplicated(basename(rna_counts_fl)) > 0) {
+    stop("ERROR: some samples share the same filename!")
+  }
   
   rna_counts_dt <- lapply(rna_counts_fl, read.csv, sep = count_sep, header = F)
   
