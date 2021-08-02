@@ -10,6 +10,8 @@ read_counts(
   rna_names,
   count_sep = "\\t",
   metadata_sep = ";",
+  counts_rna_col = 1,
+  counts_rnapos_col = 2,
   metadata_filename_col = 1,
   metadata_sample_name_col = 2
 )
@@ -24,6 +26,10 @@ read_counts(
 \item{count_sep:}{delimiter used in genomecov csv}
 
 \item{metadata_sep:}{delimiter used in metadata csv}
+
+\item{counts_rna_col:}{name or position of the column containing the name of the RNA in counts data}
+
+\item{counts_rnapos_col:}{name or position of the column containing the position on an RNA in counts data}
 
 \item{metadata_filename_col:}{name or position of the column containing the filename}
 
