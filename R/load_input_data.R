@@ -187,6 +187,8 @@ get.sample.names.from.annot <- function(lf=NULL, annot=NULL, annot.path.col=2, a
 #' @param rna_names: names of the RNA used in this run
 #' @param count_sep: delimiter used in genomecov csv
 #' @param metadata_sep: delimiter used in metadata csv
+#' @param counts_rna_col: name or position of the column containing the name of the RNA in counts data
+#' @param counts_rnapos_col: name or position of the column containing the position on an RNA in counts data
 #' @param metadata_filename_col: name or position of the column containing the filename
 #' @param metadata_sample_name_col: name or position of the column containing sample name
 #' @return a riboclass
@@ -196,6 +198,8 @@ read_counts <- function(counts_path,
                         rna_names,
                         count_sep="\t",
                         metadata_sep=";",
+                        counts_rna_col = 1,
+                        counts_rnapos_col = 2,
                         metadata_filename_col= 1,
                         metadata_sample_name_col = 2) {
   
@@ -208,7 +212,10 @@ read_counts <- function(counts_path,
   }
   
   rna_counts_dt <- lapply(rna_counts_fl, read.csv, sep = count_sep, header = F)
-  
+  #combine the RNA name and the position on this RNA to form the row names.
+  rna_counts_dt <- lapply(rna_counts_dt,function(x){ 
+    row.names(x) <-  paste(x[,counts_rna_col], x[,counts_rnapos_col], sep = "_"); x 
+    })
   #TODO: Check if the elements in RNA_counts_dt are in the same order as in RNA_counts_fl
   names(rna_counts_dt) = basename(rna_counts_fl)
   
