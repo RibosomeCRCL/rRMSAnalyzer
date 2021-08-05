@@ -2,13 +2,14 @@
 % Please edit documentation in R/compute_scores.R
 \name{calculate_score}
 \alias{calculate_score}
-\title{Title}
+\title{Calculate score for a whole sample cohort}
 \usage{
 calculate_score(
   dt = NULL,
   flanking = 6,
+  data_rna_col = 1,
   data_counts_col = 4,
-  data_position_col = 1
+  use_multithreads = F
 )
 }
 \arguments{
@@ -24,5 +25,5 @@ calculate_score(
 
 }
 \description{
-Title
+Calculate score for a whole sample cohort
 }
