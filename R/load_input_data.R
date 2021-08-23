@@ -214,10 +214,22 @@ read_counts <- function(counts_path,
   rna_counts_dt <- lapply(rna_counts_fl, read.csv, sep = count_sep, header = F)
   #combine the RNA name and the position on this RNA to form the row names.
   rna_counts_dt <- lapply(rna_counts_dt,function(x){ 
-    row.names(x) <-  paste(x[,counts_rna_col], x[,counts_rnapos_col], sep = "_"); x 
+    x["named_position"] <-  paste(x[,counts_rna_col], x[,counts_rnapos_col], sep = "_"); x 
     })
   #TODO: Check if the elements in RNA_counts_dt are in the same order as in RNA_counts_fl
   names(rna_counts_dt) = basename(rna_counts_fl)
+  
+  #Compare if each sample has the same samples as the reference
+  #The first sample will be used as a reference.
+  
+  failing_samples <- names(which(lapply(rna_counts_dt,check_sample_positions,rna_counts_dt[[1]]) == F))
+  if(identical(failing_samples, character(0))) {
+    print("[SUCCESS] all samples have identical positions!")
+  }
+  else {
+    warning(paste("[WARNING] The following samples have failed the positions check : ", failing_samples))
+  }
+  
   
   #loading metadata
   if(is.na(metadata_path)) {
@@ -265,3 +277,30 @@ generate_metadata_df <- function(counts_folder_path,
 }
 
 
+#' Check if two samples share the same positions
+#'
+#' @param sample_1 First sample to check against sample_2
+#' @param sample_2 Second sample to check against sample_1
+#'
+#' @return A boolean indicating if the two samples are identical.
+#' 
+#'
+#' @examples
+check_sample_positions <- function(sample_1, sample_2) {
+  sample_size <- length(sample_1[, "named_position"])
+  
+  if (length(sample_2[, "named_position"]) == sample_size) {
+    if (length(sample_1["named_position"] == sample_2["named_position"]))
+      return(TRUE)
+    else {
+      warning("[WARNING] Two samples share the same size but have different positions!")
+      return(FALSE)
+    }
+    
+  }
+  else {
+    warning("[WARNING] Two samples have different size!")
+    return(FALSE)
+  }
+  
+}
