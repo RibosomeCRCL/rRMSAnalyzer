@@ -5,10 +5,10 @@
 \title{Calculate both C-score and Z-score for one RNA of one sample.}
 \usage{
 calculate_score_by_RNA(
-  ds = NULL,
+  ds,
   flanking = 6,
-  data.counts.col = 4,
-  data.position.col = 1
+  data_counts_col = 4,
+  data_position_col = 1
 )
 }
 \arguments{
