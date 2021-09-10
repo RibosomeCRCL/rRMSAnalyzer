@@ -4,7 +4,7 @@
 \alias{check_sample_positions}
 \title{Check if two samples share the same positions}
 \usage{
-check_sample_positions(sample_1, sample_2)
+check_sample_positions(sample_1, sample_2, sample_1_name, sample_2_name)
 }
 \arguments{
 \item{sample_1}{First sample to check against sample_2}
