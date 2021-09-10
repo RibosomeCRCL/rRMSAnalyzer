@@ -7,7 +7,7 @@
 read_counts(
   counts_path,
   metadata_path = NA,
-  rna_names,
+  columns_names = c("RNA", "Position_on_RNA", "Count"),
   count_sep = "\\t",
   metadata_sep = ";",
   counts_rna_col = 1,
@@ -17,11 +17,11 @@ read_counts(
 )
 }
 \arguments{
+\item{columns_names}{: list of names to set for each column (from left to right)}
+
 \item{counts_path:}{path to the data folder with the count files}
 
 \item{metadata_path:}{path to the CSV file containing metadata}
-
-\item{rna_names:}{names of the RNA used in this run}
 
 \item{count_sep:}{delimiter used in genomecov csv}
 
