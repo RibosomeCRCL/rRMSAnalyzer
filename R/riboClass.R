@@ -33,3 +33,28 @@ aggregate_samples_by_col <- function(sample_list, col_to_keep, position_to_rowna
   
   
 }
+
+#' Update rna names
+#'
+#' @param sample_list
+#' @param rna_col 
+#' @param rna_names 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+update_riboclass_rna_names <- function(ribo) {
+  
+  sample_list <- ribo[["raw_counts"]]
+  rna_names <- ribo[["rna_names"]]
+  
+  sample_list_renamed <- lapply(sample_list, function(x) {
+    x[,1] <- rna_names[,2][match(x[,1], rna_names[,1])]
+    return(x)
+  })
+  
+  ribo[["raw_counts"]] <- sample_list_renamed
+  return(ribo)
+}
+  

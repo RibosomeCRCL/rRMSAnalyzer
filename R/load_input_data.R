@@ -34,6 +34,10 @@ read_counts <- function(counts_path,
    colnames(x) <- columns_names
    return(x)
   })
+  
+  #create a table containing rna names
+  rna_names_df <- data.frame(rna = unique(rna_counts_dt[[1]][,1]),new_rna_name = NA )
+  
   #combine the RNA name and the position on this RNA to form the row names.
   rna_counts_dt <- lapply(rna_counts_dt,function(x){ 
     x["named_position"] <-  paste(x[,counts_rna_col], x[,counts_rnapos_col], sep = "_"); x 
@@ -76,7 +80,7 @@ read_counts <- function(counts_path,
   }
   
   # Merge metadata and counts in the single named list.
-  return_list <- list(raw_counts = rna_counts_dt, metadata = metadata_df)
+  return_list <- list(raw_counts = rna_counts_dt, metadata = metadata_df,rna_names = rna_names_df)
   class(return_list) <- "RiboClass" # TODO : create a real constructor
   return(return_list)
 }
@@ -128,7 +132,7 @@ check_sample_positions <- function(sample_1, sample_2,sample_1_name,sample_2_nam
     else {
       errored_positions <- setdiff(sample_1[["named_position"]],sample_2[["named_position"]])
       errored_positions2 <- setdiff(sample_2[["named_position"]],sample_1[["named_position"]])
-      warning(paste("[WARNING] Two samples have differents positions! \n Mismatch at ", sample_1_name, ": ",paste(errored_positions,collapse = ", "),"\n Mismatch at ",sample_2_name, ": ",paste(errored_positions2,collapse = ", ")))
+      paste("[WARNING] Two samples have differents positions! \n Mismatch at ", sample_1_name, ": ",paste(errored_positions,collapse = ", "),"\n Mismatch at ",sample_2_name, ": ",paste(errored_positions2,collapse = ", "))
       return(FALSE)
     }
     
