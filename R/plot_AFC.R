@@ -57,16 +57,16 @@ plot_AFC <- function(ribo,col_to_plot,order_by_col,col_for_color = NULL) {
   ##### metadata = data.frame with sample annotation
   ##### col.by.col = index of metadata data.frame. It will colour the raw.counts
   #TODO : not forcing metadata. 
-  
   if(is.null(col.by.col)) {col.by.col = "Red"}
   else {col.by.col <- as.factor(metadata[,col.by.col])}
   
   plot.afc <- fviz_ca_col(dudi.coa, 
-                          repel = T, 
+                          repel = T,
                           col.col = col.by.col,
                           pointsize = 2,  #TODO : reduce size
                           labelsize = 4, 
-                          axes = c(1,2),title = paste("Correspondence analysis of the raw counts on all genomic positions. Colored by: ", as.character(colnames(metadata)[col.by.col]))) + theme(text = element_text(size = 18))
+                          axes = c(1,2),title = paste("Correspondence analysis of the raw counts on all genomic positions")) + theme(text = element_text(size = 12)) + labs(color = paste(col.by.col), subtitle = paste(length(metadata[,"filename"]), "samples"))  # col.by.col returns "e"
+
   
   return(plot.afc) #TODO : find good colors and forms
   #TODO : 20 differents colors
