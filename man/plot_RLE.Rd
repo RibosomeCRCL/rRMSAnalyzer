@@ -4,12 +4,14 @@
 \alias{plot_RLE}
 \title{Title}
 \usage{
-plot_RLE(ribo, col_to_plot)
+plot_RLE(ribo, col_to_plot, show_outlier)
 }
 \arguments{
 \item{ribo}{}
 
 \item{col_to_plot}{}
+
+\item{show_outlier}{}
 }
 \value{
 

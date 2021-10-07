@@ -4,10 +4,12 @@
 \alias{.plot_RLE}
 \title{Title}
 \usage{
-.plot_RLE(mat = NULL, ...)
+.plot_RLE(mat = NULL, show_outlier, ...)
 }
 \arguments{
 \item{mat}{}
+
+\item{show_outlier}{}
 
 \item{...}{}
 }
