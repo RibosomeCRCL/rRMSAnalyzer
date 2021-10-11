@@ -4,7 +4,13 @@
 \alias{plot_heatmap_corr}
 \title{plot a correlation heatmap from a riboclass object}
 \usage{
-plot_heatmap_corr(ribo, col_to_plot, cols_for_annotation, order_by_col)
+plot_heatmap_corr(
+  ribo,
+  col_to_plot,
+  cols_for_annotation,
+  order_by_col,
+  use_triangle = F
+)
 }
 \arguments{
 \item{ribo}{}

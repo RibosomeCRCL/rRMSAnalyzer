@@ -17,7 +17,11 @@ plot_heatmap(
 
 \item{col_to_plot}{}
 
+\item{cols_for_annotation}{}
+
 \item{order_by_col}{}
+
+\item{most_variant}{}
 }
 \value{
 
