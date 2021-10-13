@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-.calculate_afc <- function(raw.counts = NULL, metadata = NULL, order.by.col = NULL){
+.calculate_fca <- function(raw.counts = NULL, metadata = NULL, order.by.col = NULL){
   ##### raw.counts = matrix with the counts
   ##### metadata = data.frame with sample annotation
   ##### order.by.col = index of metadata data.frame. It will order the raw.counts
@@ -21,24 +21,24 @@
   
 }
 
-#' Title
+#' factorial correspondence analysis of a riboclass for a given column
 #'
-#' @param ribo 
-#' @param col_to_plot 
-#' @param order_by_col 
-#' @param col_for_color 
+#' @param ribo A RiboClass object
+#' @param col_to_plot column containing the values to plot the fca on
+#' @param order_by_col column containing the sample names for linking data and metadata
+#' @param col_for_color metadata column to colorize samples
 #'
-#' @return
+#' @return a FCA plot
 #' @export
 #'
 #' @examples
-plot_AFC <- function(ribo,col_to_plot,order_by_col,col_for_color = NULL) {
+plot_fca <- function(ribo,col_to_plot,order_by_col,col_for_color = NULL) {
   
-  afc_matrix <- aggregate_samples_by_col(ribo[["raw_counts"]],col_to_plot,position_to_rownames = T)
+  fca_matrix <- aggregate_samples_by_col(ribo[["raw_counts"]],col_to_plot,position_to_rownames = T)
    
-  afc_calculated <- .calculate_afc(afc_matrix, ribo[["metadata"]],order_by_col)
+  fca_calculated <- .calculate_fca(fca_matrix, ribo[["metadata"]],order_by_col)
   
-  return(.plot_afc(afc_calculated,ribo[["metadata"]],col_for_color))
+  return(.plot_fca(fca_calculated,ribo[["metadata"]],col_for_color))
   
 }
 
@@ -52,7 +52,7 @@ plot_AFC <- function(ribo,col_to_plot,order_by_col,col_for_color = NULL) {
 #' @export
 #'
 #' @examples
-.plot_afc <- function(dudi.coa = NULL, metadata = NULL, col.by.col = NULL) {
+.plot_fca <- function(dudi.coa = NULL, metadata = NULL, col.by.col = NULL) {
   #### dudi.coa = output of dudi.coa function
   ##### metadata = data.frame with sample annotation
   ##### col.by.col = index of metadata data.frame. It will colour the raw.counts
@@ -60,7 +60,7 @@ plot_AFC <- function(ribo,col_to_plot,order_by_col,col_for_color = NULL) {
   if(is.null(col.by.col)) {col.by.col = "Red"}
   else {col.by.col <- as.factor(metadata[,col.by.col])}
   
-  plot.afc <- fviz_ca_col(dudi.coa, 
+  plot.fca <- fviz_ca_col(dudi.coa, 
                           repel = T,
                           col.col = col.by.col,
                           pointsize = 2,  #TODO : reduce size
@@ -68,7 +68,7 @@ plot_AFC <- function(ribo,col_to_plot,order_by_col,col_for_color = NULL) {
                           axes = c(1,2),title = paste("Correspondence analysis of the raw counts on all genomic positions")) + theme(text = element_text(size = 12)) + labs(color = paste(col.by.col), subtitle = paste(length(metadata[,"filename"]), "samples"))  # col.by.col returns "e"
 
   
-  return(plot.afc) #TODO : find good colors and forms
+  return(plot.fca) #TODO : find good colors and forms
   #TODO : 20 differents colors
   
 } 
