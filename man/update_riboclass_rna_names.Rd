@@ -17,3 +17,6 @@ update_riboclass_rna_names(ribo)
 \description{
 Update rna names
 }
+\examples{
+
+}

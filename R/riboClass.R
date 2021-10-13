@@ -44,6 +44,8 @@ aggregate_samples_by_col <- function(sample_list, col_to_keep, position_to_rowna
 #' @export
 #'
 #' @examples
+#' 
+#TODO : add "actual rna names" col
 update_riboclass_rna_names <- function(ribo) {
   
   sample_list <- ribo[["raw_counts"]]
@@ -54,7 +56,27 @@ update_riboclass_rna_names <- function(ribo) {
     return(x)
   })
   
+  sample_list_renamed <- generate_riboclass_named_position(sample_list_renamed,1,2)
+  
   ribo[["raw_counts"]] <- sample_list_renamed
   return(ribo)
+}
+
+#' Title
+#'
+#' @param sample_count_list 
+#' @param rna_col 
+#' @param rnapos_col 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+generate_riboclass_named_position <- function(sample_count_list,rna_col,rnapos_col) {
+  #combine the RNA name and the position on this RNA to form the row names.
+  sample_count_list_named <- lapply(sample_count_list,function(x){ 
+    x["named_position"] <-  paste(x[,rna_col], x[,rnapos_col], sep = "_"); x 
+  })
+  return(sample_count_list_named)
 }
   
