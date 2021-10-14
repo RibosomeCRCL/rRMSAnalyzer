@@ -30,7 +30,9 @@ calculate_score_by_RNA <- function(ds, flanking=6,
   }
   ds[, "dist2medInMad"] <- (ds[,"median"] - ds[, data_counts_col])/ds[,"mad"]
   scorec_median_raw <- 1 - ds[, data_counts_col]/ds[, "median"]
+  scorec_mean_raw <- 1 - ds[, data_counts_col]/ds[, "mean"]
   ds[, "ScoreC.Median.net"] <- ifelse(scorec_median_raw < 0, 0, scorec_median_raw)
+  ds[, "ScoreC.Mean.net"] <- ifelse(scorec_mean_raw < 0, 0, scorec_mean_raw)
   
   return(ds)
 }
