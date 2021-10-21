@@ -4,7 +4,7 @@
 \alias{.plot_RLE}
 \title{Title}
 \usage{
-.plot_RLE(mat = NULL, show_outlier, ...)
+.plot_RLE(mat = NULL, show_outlier, col_to_plot)
 }
 \arguments{
 \item{mat}{}
