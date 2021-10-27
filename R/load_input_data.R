@@ -48,11 +48,7 @@ read_counts <- function(counts_path,
   #Compare if each sample has the same samples as the reference
   #The first sample will be used as a reference.
   reference_sample_name <- names(rna_counts_dt)[1]
-  
-  # checked_samples <- lapply(names(rna_counts_dt),function(x) {
-  #   check_sample_positions(rna_counts_dt[[x]],rna_counts_dt[[1]],x,reference_sample_name)
-  # })
-  
+
   sample_check_results <- sapply(names(rna_counts_dt),function(x) check_sample_positions(
                            sample_1 = rna_counts_dt[[1]],
                            sample_1_name= reference_sample_name,
@@ -104,7 +100,7 @@ generate_metadata_df <- function(counts_folder_path,
                                           paste0("^([^", stop_symbol,"])+"))
     }
     
-    metadata_template <- data.frame(filename = sample_filenames, name=sample_name)
+    metadata_template <- data.frame(filename = sample_filenames, samplename=sample_name)
   }
   else {
     metadata_template <- data.frame(filename = sample_filenames)
