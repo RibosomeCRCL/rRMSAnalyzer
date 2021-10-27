@@ -39,8 +39,12 @@ plot_heatmap <- function(ribo, col_to_plot, cols_for_annotation, order_by_col, m
     as.factor
   )
 
-  annotation_samples_1 <- annotation_samples[cols_for_annotation]
-
+  annotation_samples_1 <- NA
+  if(!is.na(cols_for_annotation)) {
+    annotation_samples_1 <- annotation_samples[cols_for_annotation]
+    annotation_samples_1 <- data.frame(annotation_samples_1)
+    
+  }
   if (most_variant) {
     cscore_matrix <- get_most_or_less_variant(cscore_matrix)
   }
@@ -89,7 +93,7 @@ plot_heatmap_corr <- function(ribo, col_to_plot, cols_for_annotation, order_by_c
 #' @export
 #'
 #' @examples
-.plot_heatmap_corr <- function(cscore_matrix = NULL, annotation_samples = NULL, cols_for_annotation = NULL, order_by_col = NULL, use_triangle = F) {
+.plot_heatmap_corr <- function(cscore_matrix = NULL, annotation_samples = NULL, cols_for_annotation = NA, order_by_col = NULL, use_triangle = F) {
 
   # rownames of annotation_samples
   rownames(annotation_samples) <- annotation_samples[, order_by_col]
@@ -102,10 +106,14 @@ plot_heatmap_corr <- function(ribo, col_to_plot, cols_for_annotation, order_by_c
   )
   corr_matrix <- 1 - cor(cscore_matrix)
   dist_cor <- as.dist(corr_matrix)
-  annotation_samples_1 <- annotation_samples[cols_for_annotation]
+  annotation_samples_1 <- NA
+  if(!is.na(cols_for_annotation)) {
+    annotation_samples_1 <- annotation_samples[cols_for_annotation]
+    annotation_samples_1 <- data.frame(annotation_samples_1)
+    
+    }
 
   white_red <- colorRampPalette(c("white", "red"), interpolate = "linear")(100)
-
   if (use_triangle) {
     corr_matrix[lower.tri(corr_matrix)] <- NA
 
@@ -114,7 +122,7 @@ plot_heatmap_corr <- function(ribo, col_to_plot, cols_for_annotation, order_by_c
       cluster_rows = F,
       color = white_red,
       breaks = seq(0, 1, by = 0.01),
-      annotation_col = data.frame(annotation_samples_1), main = "correlation heatmap"
+      annotation_col = annotation_samples_1, main = "correlation heatmap"
     )
   } else {
     htmap <- pheatmap::pheatmap(corr_matrix[, match(annotation_samples[, order_by_col], colnames(corr_matrix))],
@@ -125,7 +133,7 @@ plot_heatmap_corr <- function(ribo, col_to_plot, cols_for_annotation, order_by_c
       cutree_rows = 4,
       color = white_red,
       breaks = seq(0, 1, by = 0.01),
-      annotation_col = data.frame(annotation_samples_1), main = "correlation heatmap"
+      annotation_col = annotation_samples_1, main = "correlation heatmap"
     )
   }
   return(htmap)

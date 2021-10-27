@@ -5,20 +5,15 @@
 \title{Internal function of plot_heatmap_corr.}
 \usage{
 .plot_heatmap_corr(
-  cscore.matrix = NULL,
-  annotation.samples = NULL,
-  cols_for_annotation = NULL,
-  order.by.col = NULL
+  cscore_matrix = NULL,
+  annotation_samples = NULL,
+  cols_for_annotation = NA,
+  order_by_col = NULL,
+  use_triangle = F
 )
 }
 \arguments{
-\item{cscore.matrix}{}
-
-\item{annotation.samples}{}
-
-\item{cols_for_annotation}{}
-
-\item{order.by.col}{}
+\item{use_triangle}{}
 }
 \value{
 

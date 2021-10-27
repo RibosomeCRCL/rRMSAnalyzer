@@ -13,11 +13,7 @@
 )
 }
 \arguments{
-\item{cscore_matrix}{}
-
-\item{annotation_samples}{}
-
-\item{order_by_col}{}
+\item{most_variant}{}
 }
 \value{
 
