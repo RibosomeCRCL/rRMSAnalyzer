@@ -1,17 +1,14 @@
-#' Title
+#' (internal) factorial correspondence analysis calculation function 
 #'
 #' @param raw.counts 
 #' @param metadata 
 #' @param order.by.col 
 #'
-#' @return
+#' @return a coa object
 #' @export
 #'
 #' @examples
 .calculate_fca <- function(raw.counts = NULL, metadata = NULL, order.by.col = NULL){
-  ##### raw.counts = matrix with the counts
-  ##### metadata = data.frame with sample annotation
-  ##### order.by.col = index of metadata data.frame. It will order the raw.counts
   #TODO : better names
   res.coa <- ade4::dudi.coa(raw.counts[complete.cases(raw.counts), match(metadata[,order.by.col], colnames(raw.counts))], 
                             scannf = FALSE, 
@@ -42,9 +39,9 @@ plot_fca <- function(ribo,col_to_plot,order_by_col,col_for_color = NULL) {
   
 }
 
-#' Title
+#' (internal) Plot a coa object 
 #'
-#' @param dudi.coa 
+#' @param dudi.coa a coa object
 #' @param metadata 
 #' @param col.by.col 
 #'
@@ -53,9 +50,6 @@ plot_fca <- function(ribo,col_to_plot,order_by_col,col_for_color = NULL) {
 #'
 #' @examples
 .plot_fca <- function(dudi.coa = NULL, metadata = NULL, col.by.col = NULL) {
-  #### dudi.coa = output of dudi.coa function
-  ##### metadata = data.frame with sample annotation
-  ##### col.by.col = index of metadata data.frame. It will colour the raw.counts
   #TODO : not forcing metadata. 
   if(is.null(col.by.col)) {col.by.col = "Red"}
   else {col.by.col <- as.factor(metadata[,col.by.col])}

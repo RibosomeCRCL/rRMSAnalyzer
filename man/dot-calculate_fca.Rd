@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_FCA.R
 \name{.calculate_fca}
 \alias{.calculate_fca}
-\title{Title}
+\title{(internal) factorial correspondence analysis calculation function}
 \usage{
 .calculate_fca(raw.counts = NULL, metadata = NULL, order.by.col = NULL)
 }
@@ -14,8 +14,8 @@
 \item{order.by.col}{}
 }
 \value{
-
+a coa object
 }
 \description{
-Title
+(internal) factorial correspondence analysis calculation function
 }

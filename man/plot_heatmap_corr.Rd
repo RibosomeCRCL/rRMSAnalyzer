@@ -13,17 +13,19 @@ plot_heatmap_corr(
 )
 }
 \arguments{
-\item{ribo}{}
+\item{ribo}{a riboclass object}
 
-\item{col_to_plot}{}
+\item{col_to_plot}{column containing the values to be used for the heatmap.}
 
-\item{cols_for_annotation}{}
+\item{cols_for_annotation}{metadata columns for annotation}
 
-\item{order_by_col}{}
+\item{order_by_col}{column that contains your sample names. Makes the link between your data and metadata}
+
+\item{use_triangle}{Show only a correlation triange without any more values}
 }
 \value{
 
 }
 \description{
-plot a correlation heatmap from a riboclass object
+This heatmap is used to compare
 }

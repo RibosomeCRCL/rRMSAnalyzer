@@ -2,12 +2,12 @@
 % Please edit documentation in R/plot_FCA.R
 \name{.plot_fca}
 \alias{.plot_fca}
-\title{Title}
+\title{(internal) Plot a coa object}
 \usage{
 .plot_fca(dudi.coa = NULL, metadata = NULL, col.by.col = NULL)
 }
 \arguments{
-\item{dudi.coa}{}
+\item{dudi.coa}{a coa object}
 
 \item{metadata}{}
 
@@ -17,5 +17,5 @@
 
 }
 \description{
-Title
+(internal) Plot a coa object
 }

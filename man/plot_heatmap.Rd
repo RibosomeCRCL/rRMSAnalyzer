@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_heatmap.R
 \name{plot_heatmap}
 \alias{plot_heatmap}
-\title{plot heatmap for a ribo}
+\title{plot heatmap for a riboclass object}
 \usage{
 plot_heatmap(
   ribo,
@@ -13,19 +13,22 @@ plot_heatmap(
 )
 }
 \arguments{
-\item{ribo}{}
+\item{ribo}{a riboclass object}
 
-\item{col_to_plot}{}
+\item{col_to_plot}{column containing the values for the heatmap}
 
-\item{cols_for_annotation}{}
+\item{cols_for_annotation}{(optional) metadata columns to show on the heatmap}
 
-\item{order_by_col}{}
+\item{order_by_col}{column that contains your samplenames. Makes the link between your data and metadata}
 
-\item{most_variant}{}
+\item{most_variant}{boolean to select the most variants}
 }
 \value{
 
 }
 \description{
-plot heatmap for a ribo
+This easy function will let you display an heatmap for any given column (count or c-score). You add an additionnal layer of information with metadata columns.
+}
+\examples{
+plot_heatmap(ribo_with_score, "ScoreC.Median.net", cols_for_annotation = c("group", "group_num"), order_by_col = "samplename")
 }

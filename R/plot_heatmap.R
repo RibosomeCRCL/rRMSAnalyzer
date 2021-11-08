@@ -122,7 +122,7 @@ plot_heatmap_corr <- function(ribo, col_to_plot, cols_for_annotation, order_by_c
       cluster_rows = F,
       color = white_red,
       breaks = seq(0, 1, by = 0.01),
-      annotation_col = annotation_samples_1, main = "correlation heatmap"
+      annotation_col = annotation_samples_1, main = "correlation-based distance heatmap"
     )
   } else {
     htmap <- pheatmap::pheatmap(corr_matrix[, match(annotation_samples[, order_by_col], colnames(corr_matrix))],
@@ -133,7 +133,7 @@ plot_heatmap_corr <- function(ribo, col_to_plot, cols_for_annotation, order_by_c
       cutree_rows = 4,
       color = white_red,
       breaks = seq(0, 1, by = 0.01),
-      annotation_col = annotation_samples_1, main = "correlation heatmap"
+      annotation_col = annotation_samples_1, main = "correlation-based distance heatmap"
     )
   }
   return(htmap)

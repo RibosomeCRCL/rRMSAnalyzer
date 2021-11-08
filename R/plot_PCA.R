@@ -50,7 +50,7 @@ plot_PCA <- function(ribo,col_to_plot,order_by_col,col_for_color = NULL) {
 #'
 #' @examples
 .plot_pca <- function(dudi.pca = NULL, metadata = NULL, col.by.col = NULL) {
-  plot.pca <- fviz_pca_ind(dudi.pca, 
+  plot.pca <- factoextra::fviz_pca_ind(dudi.pca, 
                            title = paste("PCA of Cscore for", as.character(ncol(dudi.pca$tab)), "sites."),
                            repel = T, 
                            habillage = metadata[,col.by.col],
