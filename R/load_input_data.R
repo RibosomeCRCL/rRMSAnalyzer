@@ -1,7 +1,7 @@
 #' Read ribomethseq count files and their associated metadata
 #' 
 #' @param counts_path: path to the data folder with the count files
-#' @param metadata_path: path to the CSV file containing metadata
+#' @param metadata: data frame or path to the CSV file containing metadata
 #' @param columns_names : list of names to set for each column (from left to right)
 #' @param count_sep: delimiter used in genomecov csv
 #' @param metadata_sep: delimiter used in metadata csv
@@ -12,74 +12,43 @@
 #' @return a riboclass
 #' @export
 read_counts <- function(counts_path,
-                        metadata_path=NA,
-                        columns_names=c("RNA","Position_on_RNA","Count"),
+                        metadata=NA,
                         count_sep="\t",
                         metadata_sep=";",
                         counts_rna_col = 1,
                         counts_rnapos_col = 2,
+                        counts_count_col = 3,
                         metadata_filename_col= 1,
                         metadata_sample_name_col = 2) {
   
-  rna_counts_fl <- list.files(counts_path, recursive = T, full.names = T)
-
-  # Check if there is any duplicated name in the list
-
-  if(anyDuplicated(basename(rna_counts_fl)) > 0) {
-    stop("ERROR: some samples share the same filename!")
-  }
-  #TODO : always use the following structure : RNA | position_on_rna | count
-  # Actually, there is neither check nor correction for this.
-  rna_counts_dt <- lapply(rna_counts_fl, read.csv, sep = count_sep, header = F)
-  rna_counts_dt <- lapply(rna_counts_dt, function(x){
-   colnames(x) <- columns_names
-   return(x)
-  })
+  # read count files
+  rna_counts_dt <- read_count_files(counts_path,count_sep,counts_rna_col,counts_rnapos_col,counts_count_col)
   
   #create a table containing rna names
-  rna_names_df <- data.frame(rna = unique(rna_counts_dt[[1]][,1]),new_rna_name = NA )
+  rna_names_df <- generate_rna_names_table(rna_counts_dt[[1]])
   
-  #combine the RNA name and the position on this RNA to generate the column "named_position".
-  rna_counts_dt <- generate_riboclass_named_position(rna_counts_dt,counts_rna_col,counts_rnapos_col)
 
-  #TODO: Check if the elements in RNA_counts_dt are in the same order as in RNA_counts_fl
-  names(rna_counts_dt) = basename(rna_counts_fl)
-  
-  #Compare if each sample has the same samples as the reference
-  #The first sample will be used as a reference.
-  reference_sample_name <- names(rna_counts_dt)[1]
-
-  sample_check_results <- sapply(names(rna_counts_dt),function(x) check_sample_positions(
-                           sample_1 = rna_counts_dt[[1]],
-                           sample_1_name= reference_sample_name,
-                           sample_2 = rna_counts_dt[[x]],
-                           sample_2_name = x))
-
-  failing_samples <- names(sample_check_results[which(sample_check_results== F)])
-  if(identical(failing_samples, character(0))) {
-    print("[SUCCESS] all samples have identical positions!")
-  }
-  else {
-    warning(paste("[WARNING] The following samples have failed the positions check : ", paste(failing_samples,collapse = "; ")))
-  }
-  
   
   #loading metadata
-  if(is.na(metadata_path)) {
+  if(is.na(metadata)) {
     metadata_df <- generate_metadata_df(counts_path,create_samplename_col = F)
   }
   else {
-    metadata_df <- read.csv(metadata_path, sep = metadata_sep)
+    if(is.character(metadata)) {
+    metadata <- read.csv(metadata, sep = metadata_sep)
+    }
     # Rename sample in raw_counts according to the names in metadata
-    names(rna_counts_dt) <- metadata_df[,metadata_sample_name_col][which(names(rna_counts_dt) == metadata_df[,metadata_filename_col])]
+    names(rna_counts_dt) <- metadata[,metadata_sample_name_col][which(names(rna_counts_dt) == metadata_df[,metadata_filename_col])]
     
   }
   
   # Merge metadata and counts in the single named list.
-  return_list <- list(raw_counts = rna_counts_dt, metadata = metadata_df,rna_names = rna_names_df)
+  return_list <- list(raw_counts = rna_counts_dt, metadata = metadata,rna_names = rna_names_df)
   class(return_list) <- "RiboClass" # TODO : create a real constructor
   return(return_list)
 }
+
+
 
 #' Generate a metadata dataframe, given a list of files
 #' @param counts_folder_path: the path where count files are stored
@@ -108,6 +77,7 @@ generate_metadata_df <- function(counts_folder_path,
   
   return(metadata_template)
 }
+
 
 
 #' Check if two samples share the same positions

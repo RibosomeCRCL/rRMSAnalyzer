@@ -1,3 +1,79 @@
+#' Import and transform a list of count files for a riboClass
+#' @description This function should not be used by itself. It is better to generate a full riboClass.
+#' @param path_to_files path to the folder containing count files
+#' @param sep CSV seperator 
+#' @param rna_col position of the column containing RNA name
+#' @param position_col position of the column containing the genomic position
+#' @param count_col position of the column contaning the count for the given genomic position 
+#'
+#' @return
+#'
+#' @examples
+read_count_files <-
+  function(path_to_files,
+           sep,
+           rna_col,
+           position_col,
+           count_col) {
+    rna_counts_fl <-
+      list.files(path_to_files, recursive = T, full.names = T)
+    
+    # 1) Check if there is any duplicated name in the filename list
+    
+    if (anyDuplicated(basename(rna_counts_fl)) > 0) {
+      stop("ERROR: some samples share the same filename!")
+    }
+    
+    
+    # 2) reorder cols for each count table and name them like this :
+    # RNA | position_on_rna | count
+    rna_counts_dt <-
+      lapply(rna_counts_fl, read.csv, sep = sep, header = F)
+    rna_counts_dt <- lapply(rna_counts_dt, function(x) {
+      x <- x[, c(rna_col, position_col, count_col)]
+      colnames(x) <- c("RNA", "Position_on_RNA", "Count")
+      return(x)
+    })
+    
+    # 3) combine both the RNA and genomic position columns to generate the column "named_position".
+    rna_counts_dt <-
+      generate_riboclass_named_position(rna_counts_dt, rna_col, position_col)
+    
+   
+    # 4) give a name for each element of the list
+    #TODO: Check if the elements in RNA_counts_dt are in the same order as in RNA_counts_fl
+    names(rna_counts_dt) <- basename(rna_counts_fl)
+    
+    # 5) using named_position, we check if samples share the same positions
+    reference_sample_name <- names(rna_counts_dt)[1]
+    
+    sample_check_results <-
+      sapply(names(rna_counts_dt), function(x)
+        check_sample_positions(
+          sample_1 = rna_counts_dt[[1]],
+          sample_1_name = reference_sample_name,
+          sample_2 = rna_counts_dt[[x]],
+          sample_2_name = x
+        ))
+    
+    failing_samples <-
+      names(sample_check_results[which(sample_check_results == F)])
+    if (identical(failing_samples, character(0))) {
+      print("[SUCCESS] all samples have identical positions!")
+    }
+    else {
+      stop(paste(
+        "[ERROR] The following samples have failed the positions check : ",
+        paste(failing_samples, collapse = "; ")
+      ))
+    }
+    
+    
+    
+    return(rna_counts_dt)
+  }
+
+
 #' Aggregate results into a single matrix
 #'
 #' @param sample_list 
@@ -52,18 +128,35 @@ update_riboclass_rna_names <- function(ribo) {
   rna_names <- ribo[["rna_names"]]
   
   sample_list_renamed <- lapply(sample_list, function(x) {
-    x[,1] <- rna_names[,2][match(x[,1], rna_names[,1])]
+    x[,1] <- rna_names[,3][match(x[,1], rna_names[,2])]
     return(x)
   })
   
   sample_list_renamed <- generate_riboclass_named_position(sample_list_renamed,1,2)
-  
+  rna_names[,2] <- rna_names[,3]
+  rna_names[,3] <- NA
   ribo[["raw_counts"]] <- sample_list_renamed
+  ribo[["rna_names"]] <- rna_names
   return(ribo)
 }
 
-#' Title
+#' Generate a table with current rna names for a given riboClass
+#' The table also contains 
+#' @param count_df 
 #'
+#' @return
+#' @export
+#'
+#' @examples
+generate_rna_names_table <- function(count_df) {
+  rna_names <- unique(count_df[,1])
+  rna_names_df <- data.frame(original_name = rna_names, current_name =rna_names,new_rna_name = NA )
+  return(rna_names_df)
+}
+
+#' Generate the default name for positions
+#' This function is used to generate the named_position column in a given sample.
+#' It is always called when generating a riboClass.
 #' @param sample_count_list 
 #' @param rna_col 
 #' @param rnapos_col 
@@ -79,4 +172,5 @@ generate_riboclass_named_position <- function(sample_count_list,rna_col,rnapos_c
   })
   return(sample_count_list_named)
 }
+
   
