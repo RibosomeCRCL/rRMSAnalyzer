@@ -16,23 +16,21 @@ calculate_score_by_RNA <- function(ds, flanking=6,
                                    data_position_col=1) {
   # check that all parameters exist
   if (is.null(ds)) {stop("MISSING parameter. Please specify a data frame <ds>.")}
-  ds[, "mean"] <- NA
-  ds[, "median"] <- NA
-  ds[, "mad"] <- NA
+
   
   # compute scores
   for (i in (flanking + 1) : (dim(ds)[1] - flanking)){
     #TODO : selection mean/median
-    ds[i, "mean"] <- mean(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # mean
-    ds[i, "median"] <- median(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # median
-    ds[i, "mad"] <- mad(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # mad
+    ds[i, "flanking_mean"] <- mean(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # mean
+    ds[i, "flanking_median"] <- median(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # median
+    ds[i, "flanking_mad"] <- mad(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # mad
     
   }
-  ds[, "dist2medInMad"] <- (ds[,"median"] - ds[, data_counts_col])/ds[,"mad"]
-  scorec_median_raw <- 1 - ds[, data_counts_col]/ds[, "median"]
-  scorec_mean_raw <- 1 - ds[, data_counts_col]/ds[, "mean"]
-  ds[, "ScoreC.Median.net"] <- ifelse(scorec_median_raw < 0, 0, scorec_median_raw)
-  ds[, "ScoreC.Mean.net"] <- ifelse(scorec_mean_raw < 0, 0, scorec_mean_raw)
+  ds[, "dist_to_med_in_mad"] <- (ds[,"flanking_median"] - ds[, data_counts_col])/ds[,"flanking_mad"]
+  scorec_median_raw <- 1 - ds[, data_counts_col]/ds[, "flanking_median"]
+  scorec_mean_raw <- 1 - ds[, data_counts_col]/ds[, "flanking_mean"]
+  ds[, "cscore_median"] <- ifelse(scorec_median_raw < 0, 0, scorec_median_raw)
+  ds[, "cscore_mean"] <- ifelse(scorec_mean_raw < 0, 0, scorec_mean_raw)
   
   return(ds)
 }
@@ -77,7 +75,7 @@ calculate_score_by_sample <- function(sample_df=NULL,
 #' @examples
 calculate_score <- function(dt=NULL, flanking=6,
                             data_rna_col = 1,
-                            data_counts_col=4,
+                            data_counts_col=3,
                             use_multithreads = F) {
   
   
