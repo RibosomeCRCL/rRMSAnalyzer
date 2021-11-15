@@ -31,14 +31,14 @@ read_counts <- function(counts_path,
   
   #loading metadata
   if(is.na(metadata)) {
-    metadata_df <- generate_metadata_df(counts_path,create_samplename_col = F)
+    metadata <- generate_metadata_df(counts_path,create_samplename_col = F)
   }
   else {
     if(is.character(metadata)) {
     metadata <- read.csv(metadata, sep = metadata_sep)
     }
     # Rename sample in raw_counts according to the names in metadata
-    names(rna_counts_dt) <- metadata[,metadata_sample_name_col][which(names(rna_counts_dt) == metadata_df[,metadata_filename_col])]
+    names(rna_counts_dt) <- metadata[,metadata_sample_name_col][which(names(rna_counts_dt) == metadata[,metadata_filename_col])]
     
   }
   
