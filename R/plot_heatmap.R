@@ -11,7 +11,7 @@
 #'
 #' @examples plot_heatmap(ribo_with_score, "ScoreC.Median.net", cols_for_annotation = c("group", "group_num"), order_by_col = "samplename")
 plot_heatmap <- function(ribo, col_to_plot, cols_for_annotation, order_by_col, most_variant = F) {
-  matrix <- aggregate_samples_by_col(ribo[["raw_counts"]], col_to_plot, position_to_rownames = T)
+  matrix <- aggregate_samples_by_col(ribo[["counts"]], col_to_plot, position_to_rownames = T)
   .plot_heatmap(matrix, ribo[["metadata"]], order_by_col, cols_for_annotation = cols_for_annotation, most_variant = most_variant)
 }
 
@@ -78,7 +78,7 @@ plot_heatmap <- function(ribo, col_to_plot, cols_for_annotation, order_by_col, m
 #'
 #' @examples
 plot_heatmap_corr <- function(ribo, col_to_plot, cols_for_annotation, order_by_col, use_triangle = F) {
-  matrix <- aggregate_samples_by_col(ribo[["raw_counts"]], col_to_plot, position_to_rownames = T)
+  matrix <- aggregate_samples_by_col(ribo[["counts"]], col_to_plot, position_to_rownames = T)
   .plot_heatmap_corr(matrix, ribo[["metadata"]], order_by_col = order_by_col, cols_for_annotation = cols_for_annotation, use_triangle)
 }
 #' Internal function of plot_heatmap_corr.

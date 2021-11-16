@@ -37,13 +37,13 @@ read_counts <- function(counts_path,
     if(is.character(metadata)) {
     metadata <- read.csv(metadata, sep = metadata_sep)
     }
-    # Rename sample in raw_counts according to the names in metadata
-    names(rna_counts_dt) <- metadata[,metadata_sample_name_col][which(names(rna_counts_dt) == metadata[,metadata_filename_col])]
+    # Rename sample in counts list according to the names in metadata
+    names(rna_counts_dt) <- metadata[,metadata_sample_name_col][match(names(rna_counts_dt), metadata[,metadata_filename_col])]
     
   }
   
   # Merge metadata and counts in the single named list.
-  return_list <- list(raw_counts = rna_counts_dt, metadata = metadata,rna_names = rna_names_df)
+  return_list <- list(counts = rna_counts_dt, metadata = metadata,rna_names = rna_names_df, has_cscore = FALSE)
   class(return_list) <- "RiboClass" # TODO : create a real constructor
   return(return_list)
 }

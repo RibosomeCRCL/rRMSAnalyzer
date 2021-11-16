@@ -124,7 +124,7 @@ aggregate_samples_by_col <- function(sample_list, col_to_keep, position_to_rowna
 #TODO : add "actual rna names" col
 update_riboclass_rna_names <- function(ribo) {
   
-  sample_list <- ribo[["raw_counts"]]
+  sample_list <- ribo[["counts"]]
   rna_names <- ribo[["rna_names"]]
   
   sample_list_renamed <- lapply(sample_list, function(x) {
@@ -135,7 +135,7 @@ update_riboclass_rna_names <- function(ribo) {
   sample_list_renamed <- generate_riboclass_named_position(sample_list_renamed,1,2)
   rna_names[,2] <- rna_names[,3]
   rna_names[,3] <- NA
-  ribo[["raw_counts"]] <- sample_list_renamed
+  ribo[["counts"]] <- sample_list_renamed
   ribo[["rna_names"]] <- rna_names
   return(ribo)
 }

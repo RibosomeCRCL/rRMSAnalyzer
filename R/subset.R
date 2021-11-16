@@ -10,7 +10,7 @@
 #' @examples
 subset_ribo <- function(ribo, positions_to_keep) {
   
-  ribo_data <- ribo[["raw_counts"]]
+  ribo_data <- ribo[["counts"]]
   
   #check if positions_to_keep contains only existing positions. Throw a warning if not.
   
@@ -29,7 +29,7 @@ subset_ribo <- function(ribo, positions_to_keep) {
     return(x)
   })
   
-  ribo[["raw_counts"]] <- subsetted_ribo_data
+  ribo[["counts"]] <- subsetted_ribo_data
   return(ribo)
 
   

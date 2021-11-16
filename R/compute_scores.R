@@ -81,16 +81,16 @@ calculate_score <- function(dt=NULL, flanking=6,
   
   if(class(dt) == "RiboClass") {
     ribo = dt
-    dt = dt["raw_counts"] #we only need the counts to calculate the score
+    dt = dt["counts"] #we only need the counts to calculate the score
     
   }
    # Experimental : Multithreading is 3x faster than single-thread
    # TODO : implement 
-   if(use_multithreads) samples_czscore <- BiocParallel::bplapply(dt[["raw_counts"]], calculate_score_by_sample)
-   else samples_czscore <- lapply(dt[["raw_counts"]], calculate_score_by_sample, data_counts_col = data_counts_col, data_rna_col = data_rna_col)
+   if(use_multithreads) samples_czscore <- BiocParallel::bplapply(dt[["counts"]], calculate_score_by_sample, data_counts_col = data_counts_col, data_rna_col = data_rna_col)
+   else samples_czscore <- lapply(dt[["counts"]], calculate_score_by_sample, data_counts_col = data_counts_col, data_rna_col = data_rna_col)
   
    if(exists("ribo")) {
-     ribo[["raw_counts"]] <- samples_czscore
+     ribo[["counts"]] <- samples_czscore
      return(ribo)
    }
   return(samples_czscore)

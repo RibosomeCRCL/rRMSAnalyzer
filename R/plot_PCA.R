@@ -11,7 +11,7 @@
 #' @examples
 plot_PCA <- function(ribo,col_to_plot,order_by_col,col_for_color = NULL) {
   
-  pca_matrix <- aggregate_samples_by_col(ribo[["raw_counts"]],col_to_plot,position_to_rownames = T)
+  pca_matrix <- aggregate_samples_by_col(ribo[["counts"]],col_to_plot,position_to_rownames = T)
   
   pca_calculated <- .calculate_pca(pca_matrix, ribo[["metadata"]],order_by_col)
   

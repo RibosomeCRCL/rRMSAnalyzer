@@ -51,6 +51,6 @@
 #' @examples
 plot_RLE <- function(ribo, col_to_plot,show_outlier) {
   
-  rle_matrix <- aggregate_samples_by_col(ribo[["raw_counts"]],col_to_keep = col_to_plot,position_to_rownames = T)
+  rle_matrix <- aggregate_samples_by_col(ribo[["counts"]],col_to_keep = col_to_plot,position_to_rownames = T)
   return(.plot_RLE(rle_matrix,show_outlier = show_outlier,col_to_plot))
 }
