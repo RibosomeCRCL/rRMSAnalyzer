@@ -34,7 +34,6 @@ plot_boxplot_count <- function(ribo, metadata_col=NA,show_outlier = T) {
   
   shape_outlier <- NA
   if(show_outlier) shape_outlier <- 19
-  print(matrix_melted)
   p <- ggplot2::ggplot( matrix_melted, aes(x = reorder(named_position,!!sym(values_to_plot),na.rm = T), y = !!sym(values_to_plot))) +
     geom_boxplot(outlier.shape = shape_outlier) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
   return(p)
