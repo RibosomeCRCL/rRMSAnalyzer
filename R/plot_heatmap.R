@@ -117,7 +117,7 @@ plot_heatmap_corr <- function(ribo, col_to_plot, cols_for_annotation, order_by_c
   if (use_triangle) {
     corr_matrix[lower.tri(corr_matrix)] <- NA
 
-    htmap <- pheatmap::pheatmap(corr_matrix[, match(annotation_samples[, order_by_col], colnames(corr_matrix))],
+    htmap <- pheatmap::pheatmap(corr_matrix,
       cluster_cols = F,
       cluster_rows = F,
       color = white_red,
