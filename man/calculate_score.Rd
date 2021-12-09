@@ -8,7 +8,7 @@ calculate_score(
   dt = NULL,
   flanking = 6,
   data_rna_col = 1,
-  data_counts_col = 4,
+  data_counts_col = 3,
   use_multithreads = F
 )
 }

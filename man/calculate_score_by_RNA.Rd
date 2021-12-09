@@ -4,21 +4,16 @@
 \alias{calculate_score_by_RNA}
 \title{Calculate both C-score and Z-score for one RNA of one sample.}
 \usage{
-calculate_score_by_RNA(
-  ds,
-  flanking = 6,
-  data_counts_col = 4,
-  data_position_col = 1
-)
+calculate_score_by_RNA(ds, flanking = 6, data_counts_col = 4)
 }
 \arguments{
-\item{ds}{}
+\item{ds}{dataframe of a given RNA for a given sample}
 
-\item{flanking}{}
+\item{flanking}{the number of flanking position to use for the window}
 
-\item{data.counts.col}{}
+\item{data.counts.col}{column number where counts value are stored}
 
-\item{data.position.col}{}
+\item{data.position.col}{column number where position is stored}
 }
 \value{
 

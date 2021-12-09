@@ -2,18 +2,16 @@
 
 #' Calculate both C-score and Z-score for one RNA of one sample.
 #'
-#' @param ds 
-#' @param flanking 
-#' @param data.counts.col 
-#' @param data.position.col 
+#' @param ds dataframe of a given RNA for a given sample
+#' @param flanking the number of flanking position to use for the window
+#' @param data.counts.col column number where counts value are stored
+#' @param data.position.col column number where position is stored
 #'
 #' @return
 #' @export
 #'
 #' @examples
-calculate_score_by_RNA <- function(ds, flanking=6,
-                                   data_counts_col=4,
-                                   data_position_col=1) {
+calculate_score_by_RNA <- function(ds, flanking=6, data_counts_col=4) {
   # check that all parameters exist
   if (is.null(ds)) {stop("MISSING parameter. Please specify a data frame <ds>.")}
 
@@ -51,12 +49,11 @@ calculate_score_by_RNA <- function(ds, flanking=6,
 calculate_score_by_sample <- function(sample_df=NULL,
                                       data_rna_col = 1,
                                       flanking=6, 
-                                      data_counts_col=3,
-                                      data_position_col=1) {
+                                      data_counts_col=3) {
   
   sample_df[,data_rna_col] <- as.factor(sample_df[,data_rna_col])
   RNA_counts_list <- split(sample_df, sample_df[,data_rna_col])
-  sample_score <- lapply(RNA_counts_list, calculate_score_by_RNA, flanking = flanking, data_counts_col = data_counts_col, data_position_col = data_position_col)
+  sample_score <- lapply(RNA_counts_list, calculate_score_by_RNA, flanking = flanking, data_counts_col = data_counts_col)
   
   return(dplyr::bind_rows(sample_score))
   

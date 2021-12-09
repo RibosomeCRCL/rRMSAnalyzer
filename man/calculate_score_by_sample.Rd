@@ -8,8 +8,7 @@ calculate_score_by_sample(
   sample_df = NULL,
   data_rna_col = 1,
   flanking = 6,
-  data_counts_col = 3,
-  data_position_col = 1
+  data_counts_col = 3
 )
 }
 \arguments{
