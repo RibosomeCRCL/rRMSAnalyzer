@@ -125,11 +125,11 @@ plot_heatmap_corr <- function(ribo, col_to_plot, cols_for_annotation, order_by_c
       annotation_col = annotation_samples_1, main = "correlation-based distance heatmap"
     )
   } else {
-    htmap <- pheatmap::pheatmap(corr_matrix[, match(annotation_samples[, order_by_col], colnames(corr_matrix))],
+    htmap <- pheatmap::pheatmap(corr_matrix,
       clustering_method = "ward.D2",
       clustering_distance_cols = dist_cor,
       clustering_distance_rows = dist_cor,
-      cutree_cols = 2,
+      cutree_cols = 4,
       cutree_rows = 4,
       color = white_red,
       breaks = seq(0, 1, by = 0.01),
