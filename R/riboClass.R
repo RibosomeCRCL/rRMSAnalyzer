@@ -37,7 +37,7 @@ read_count_files <-
     
     # 3) combine both the RNA and genomic position columns to generate the column "named_position".
     rna_counts_dt <-
-      generate_riboclass_named_position(rna_counts_dt, rna_col, position_col)
+      generate_riboclass_named_position(rna_counts_dt, "RNA", "Position_on_RNA")
     
    
     # 4) give a name for each element of the list
