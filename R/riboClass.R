@@ -12,6 +12,7 @@
 read_count_files <-
   function(path_to_files,
            sep,
+           header,
            rna_col,
            position_col,
            count_col) {
@@ -28,7 +29,7 @@ read_count_files <-
     # 2) reorder cols for each count table and name them like this :
     # RNA | position_on_rna | count
     rna_counts_dt <-
-      lapply(rna_counts_fl, read.csv, sep = sep, header = F)
+      lapply(rna_counts_fl, read.csv, sep = sep, header = header)
     rna_counts_dt <- lapply(rna_counts_dt, function(x) {
       x <- x[, c(rna_col, position_col, count_col)]
       colnames(x) <- c("RNA", "Position_on_RNA", "Count")

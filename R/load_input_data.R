@@ -5,6 +5,7 @@
 #' @param columns_names : list of names to set for each column (from left to right)
 #' @param count_sep: delimiter used in genomecov csv
 #' @param metadata_sep: delimiter used in metadata csv
+#' @param counts_header: boolean, specify if count files have a header or not. 
 #' @param counts_rna_col: name or position of the column containing the name of the RNA in counts data
 #' @param counts_rnapos_col: name or position of the column containing the position on an RNA in counts data
 #' @param metadata_filename_col: name or position of the column containing the filename
@@ -15,14 +16,16 @@ read_counts <- function(counts_path,
                         metadata=NA,
                         count_sep="\t",
                         metadata_sep=";",
+                        counts_header =F,
                         counts_rna_col = 1,
                         counts_rnapos_col = 2,
                         counts_count_col = 3,
                         metadata_filename_col= 1,
                         metadata_sample_name_col = 2) {
   
+
   # read count files
-  rna_counts_dt <- read_count_files(counts_path,count_sep,counts_rna_col,counts_rnapos_col,counts_count_col)
+  rna_counts_dt <- read_count_files(counts_path,count_sep,counts_header,counts_rna_col,counts_rnapos_col,counts_count_col)
   
   #create a table containing rna names
   rna_names_df <- generate_rna_names_table(rna_counts_dt[[1]])
