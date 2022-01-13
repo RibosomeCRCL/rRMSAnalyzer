@@ -22,7 +22,7 @@ ribo_combatseq <- function(ribo, library_col) {
   matrix_ribo <- aggregate_samples_by_col(ribo[["counts"]],"Count",position_to_rownames = T)
   #reorganize column according to metadata and convert DF to matrix (otherwise, ComBat_seq won't work)
   matrix_ribo <- as.matrix(matrix_ribo[,c(ribo[["metadata"]][["samplename"]])])
-  adjusted_matrix <- ComBat_seq(matrix_ribo,batch = ribo[["metadata"]][[library_col]])
+  adjusted_matrix <- sva::ComBat_seq(matrix_ribo,batch = ribo[["metadata"]][[library_col]])
   
   return(update_ribo_count_with_matrix(ribo,adjusted_matrix))
   
