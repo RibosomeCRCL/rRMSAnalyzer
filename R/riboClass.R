@@ -174,4 +174,38 @@ generate_riboclass_named_position <- function(sample_count_list,rna_col,rnapos_c
   return(sample_count_list_named)
 }
 
+
+#' Update count values inside a riboclass with a matrix of values
+#' 
+#' @param ribo a riboclass object
+#' @param update_matrix a position x sample matrix containing the new values 
+#'
+#' @return a riboclass with updated values
+#' @export
+#'
+#' @examples
+update_ribo_count_with_matrix <- function(ribo, update_matrix) {
   
+  #first, check if we have the sample name in our column
+  update_df <- as.data.frame(update_matrix)
+  col_names <- sort(names(update_df))
+  riboclass_names <- sort(names(ribo[["counts"]]))
+  
+  if(col_names != riboclass_names) {
+    error("mismatch between samplenames and matrix's samples names")
+  }
+  
+  # For each sample in the riboclass, replace count values with matrix's ones
+  
+  count_list <- ribo[["counts"]]
+  
+  for(sample in names(count_list)) {
+    count_list[[sample]]["Count"] <- update_df[sample]
+  }
+  
+  ribo[["counts"]] <- count_list
+  
+  return(ribo)
+  
+  
+}
