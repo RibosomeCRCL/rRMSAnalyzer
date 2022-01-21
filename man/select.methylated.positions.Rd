@@ -4,7 +4,7 @@
 \alias{select.methylated.positions}
 \title{Selection of genomic positions}
 \usage{
-select.methylated.positions(
+\method{select}{methylated.positions}(
   wdw.df.list = NULL,
   annot = NULL,
   select.category = "known",

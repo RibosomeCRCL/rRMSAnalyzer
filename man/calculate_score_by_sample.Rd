@@ -19,8 +19,6 @@ calculate_score_by_sample(
 \item{flanking}{}
 
 \item{data_counts_col}{}
-
-\item{data_position_col}{}
 }
 \value{
 

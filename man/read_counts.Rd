@@ -6,26 +6,29 @@
 \usage{
 read_counts(
   counts_path,
-  metadata_path = NA,
-  columns_names = c("RNA", "Position_on_RNA", "Count"),
+  metadata = NA,
   count_sep = "\\t",
   metadata_sep = ";",
+  counts_header = F,
   counts_rna_col = 1,
   counts_rnapos_col = 2,
+  counts_count_col = 3,
   metadata_filename_col = 1,
   metadata_sample_name_col = 2
 )
 }
 \arguments{
-\item{columns_names}{: list of names to set for each column (from left to right)}
-
 \item{counts_path:}{path to the data folder with the count files}
 
-\item{metadata_path:}{path to the CSV file containing metadata}
+\item{metadata:}{data frame or path to the CSV file containing metadata}
+
+\item{columns_names}{: list of names to set for each column (from left to right)}
 
 \item{count_sep:}{delimiter used in genomecov csv}
 
 \item{metadata_sep:}{delimiter used in metadata csv}
+
+\item{counts_header:}{boolean, specify if count files have a header or not.}
 
 \item{counts_rna_col:}{name or position of the column containing the name of the RNA in counts data}
 

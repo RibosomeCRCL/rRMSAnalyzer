@@ -5,7 +5,7 @@
 \title{Calculate score for a whole sample cohort}
 \usage{
 calculate_score(
-  dt = NULL,
+  ribo = NULL,
   flanking = 6,
   data_rna_col = 1,
   data_counts_col = 3,
@@ -13,13 +13,13 @@ calculate_score(
 )
 }
 \arguments{
-\item{dt}{}
+\item{ribo}{a riboclass object}
 
-\item{flanking}{}
+\item{flanking}{the window size around the position (the latter is excluded)}
 
-\item{data_counts_col}{}
+\item{data_rna_col}{Name or position of the column containing the RNA}
 
-\item{data_position_col}{}
+\item{data_counts_col}{Name or position of the column containing count values}
 }
 \value{
 

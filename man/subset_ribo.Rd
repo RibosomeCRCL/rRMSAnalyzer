@@ -2,18 +2,21 @@
 % Please edit documentation in R/subset.R
 \name{subset_ribo}
 \alias{subset_ribo}
-\title{Title}
+\title{Keep only a subset of positions for all samples.}
 \usage{
 subset_ribo(ribo, positions_to_keep)
 }
 \arguments{
-\item{ribo}{}
+\item{ribo}{a riboClass object}
 
-\item{positions_to_keep}{}
+\item{positions_to_keep}{either a dataframe with a column "named_position" or a vector of named positions.}
 }
 \value{
-
+a riboClass object with only selected positions for each sample.
 }
 \description{
-Title
+Keep only a subset of positions for all samples.
+}
+\examples{
+subset_ribo(ribo, c("18S_15","5.8S_4")) # returns a riboClass with only 2 selected positions
 }

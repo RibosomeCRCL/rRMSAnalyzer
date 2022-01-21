@@ -4,7 +4,7 @@
 \alias{select.new.candidates}
 \title{Select new candidates based on minimal tresholds for C-Scores and Z-Scores and within a predefined GC-content window. Already known methylated sites are filtered out, suspected sites are kept.}
 \usage{
-select.new.candidates(
+\method{select}{new.candidates}(
   wdw.df.list = NULL,
   annot = NULL,
   data.position.col = 1,
