@@ -209,3 +209,30 @@ update_ribo_count_with_matrix <- function(ribo, update_matrix) {
   
   
 }
+
+#' Regroup samples by condition and calculate mean for each condition
+#'
+#' @param ribo a riboClass object
+#' @param metadata_condition condition to group samples by
+#' @param value value to calculate mean by condition
+#'
+#' @return
+#' @export
+#'
+#' @examples
+mean_samples_by_conditon <- function(ribo,value, metadata_condition) {
+  
+  ribo_list <- ribo[["counts"]]
+  ribo_names <- names(ribo_list)
+  ribo_list_named <- lapply(ribo_names, function(x){
+    ribo_list[[x]]["sample"] <- x
+    return(ribo_list[[x]])
+  })
+  
+  ribo_concat <- dplyr::bind_rows(ribo_list_named)
+  
+  metadata <- ribo[["metadata"]]
+  ribo_concat[metadata_condition] <- metadata[,metadata_condition][match(ribo_concat[,"sample"], metadata[,"samplename"])]
+  ribo_condition <- ribo_concat %>% group_by(named_position, !!sym(metadata_condition)) %>% summarise(mean = mean(!!sym(value)), sd = sd(!!sym(value)))
+  return(ribo_condition)
+}
