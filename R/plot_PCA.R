@@ -1,9 +1,9 @@
-#' Title
+  #' Principal component analysis of a riboClass object
 #'
-#' @param ribo 
-#' @param col_to_plot 
+#' @param ribo the riboClass Object
+#' @param col_to_plot column containing the values that will be used for the PCA
 #' @param order_by_col 
-#' @param col_for_color 
+#' @param col_for_color metadata column to colorize your samples
 #'
 #' @return
 #' @export
