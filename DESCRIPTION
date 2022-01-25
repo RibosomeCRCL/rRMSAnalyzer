@@ -9,7 +9,7 @@ Maintainer: Theo COMBE <theo.combe@lyon.unicancer.fr>
 Description: More about what it does (maybe more than one line)
 License: What license is it under?
 Depends: R (>= 3.0.0), corrplot, lattice, stringi, plyr, WriteXLS,
-        ggplot2, ggrepel, ggpubr, scales, dplyr, tidyr, factoextra, pheatmap, sva
+        ggplot2, ggrepel, ggpubr, scales, dplyr, tidyr, factoextra, pheatmap, sva, ade4
 LazyData: TRUE
 RoxygenNote: 7.1.1
 NeedsCompilation: no
