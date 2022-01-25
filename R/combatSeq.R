@@ -4,10 +4,10 @@
 #' @param ribo a riboclass
 #' @param library_col name of the column containing the library for each sample (metadata)
 #'
-#' @return
+#' @return a riboClass with adjusted counts
 #' @export
 #'
-#' @examples
+#' @examples 
 ribo_combatseq <- function(ribo, library_col) {
   # Get the count matrix.
   # example :
@@ -24,7 +24,10 @@ ribo_combatseq <- function(ribo, library_col) {
   matrix_ribo <- as.matrix(matrix_ribo[,c(ribo[["metadata"]][["samplename"]])])
   adjusted_matrix <- sva::ComBat_seq(matrix_ribo,batch = ribo[["metadata"]][[library_col]])
   
-  return(update_ribo_count_with_matrix(ribo,adjusted_matrix))
+  ribo_updated <- update_ribo_count_with_matrix(ribo,adjusted_matrix)
+  ribo_updated["combatSeq_count"] <- TRUE
+  ribo_updated["col_used_combatSeq"] <- library_col
+  return(ribo_updated)
   
 }
 
