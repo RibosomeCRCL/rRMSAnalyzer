@@ -5,7 +5,6 @@
 #' @param ds dataframe of a given RNA for a given sample
 #' @param flanking the number of flanking position to use for the window
 #' @param data.counts.col column number where counts value are stored
-#' @param data.position.col column number where position is stored
 #'
 #' @return
 #' @export
@@ -40,8 +39,6 @@ calculate_score_by_RNA <- function(ds, flanking=6, data_counts_col=4) {
 #' @param data_rna_col 
 #' @param flanking 
 #' @param data_counts_col 
-#' @param data_position_col 
-#'
 #' @return
 #' @export
 #'
@@ -61,36 +58,35 @@ calculate_score_by_sample <- function(sample_df=NULL,
 
 #' Calculate score for a whole sample cohort
 #'
-#' @param dt 
-#' @param flanking 
-#' @param data_counts_col 
-#' @param data_position_col 
+#' @param ribo a riboclass object 
+#' @param flanking the window size around the position (the latter is excluded)
+#' @param data_counts_col Name or position of the column containing count values
+#' @param data_rna_col Name or position of the column containing the RNA
 #'
 #' @return
 #' @export
 #'
 #' @examples
-calculate_score <- function(dt=NULL, flanking=6,
+calculate_score <- function(ribo=NULL, flanking=6,
                             data_rna_col = 1,
                             data_counts_col=3,
                             use_multithreads = F) {
   
   
-  if(class(dt) == "RiboClass") {
-    ribo = dt
-    dt = dt["counts"] #we only need the counts to calculate the score
+
+    dt = ribo["counts"] #we only need the counts to calculate the score
     
-  }
+  
    # Experimental : Multithreading is 3x faster than single-thread
    # TODO : implement 
    if(use_multithreads) samples_czscore <- BiocParallel::bplapply(dt[["counts"]], calculate_score_by_sample, data_counts_col = data_counts_col, data_rna_col = data_rna_col)
    else samples_czscore <- lapply(dt[["counts"]], calculate_score_by_sample, data_counts_col = data_counts_col, data_rna_col = data_rna_col)
-  
-   if(exists("ribo")) {
+
      ribo[["counts"]] <- samples_czscore
-     return(ribo)
-   }
-  return(samples_czscore)
+     ribo["cscore_window"] <- flanking
+     ribo["has_cscore"] <- TRUE
+
+  return(ribo)
   
   
 }
