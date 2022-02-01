@@ -44,7 +44,7 @@
     ggtitle("RLE plot") + 
     geom_hline(yintercept = 2*mad(rle.calc$value, na.rm = T), colour = "blue") + 
     geom_hline(yintercept = - 2*mad(rle.calc$value, na.rm = T), colour = "blue") +
-    theme(axis.text.x = element_text(colour = ifelse(rle_grouped$median < mad,"red","black")))
+    theme(axis.text.x = element_text(colour = ifelse(rle_grouped$median < mad,"red","black"),angle=90))
  
    return(rle.plot)
 }
