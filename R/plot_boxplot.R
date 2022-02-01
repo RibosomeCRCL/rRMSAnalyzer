@@ -71,11 +71,14 @@ plot_boxplot_count <- function(ribo, metadata_col=NA,show_outlier = T) {
   if(is.na(metadata_col)) {
     p <- ggplot2::ggplot(matrix_melted, aes_string(x = "sample", y = values_to_plot)) +
       geom_boxplot(outlier.shape = shape_outlier) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-    return(p)
+   
   }
   else {
   p <- ggplot2::ggplot(matrix_melted, aes_string(x = "sample", y = values_to_plot,fill = metadata_col)) +
     geom_boxplot(outlier.shape = shape_outlier) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-  return(p)
+ 
   }
+ p <-  p +  geom_hline(yintercept = 2,colour = "blue") 
+
+  return(p)
 }
