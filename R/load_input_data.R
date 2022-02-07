@@ -45,6 +45,9 @@ read_counts <- function(counts_path,
     # Rename sample in counts list according to the names in metadata
     names(rna_counts_dt) <- metadata[,"samplename"][match(names(rna_counts_dt), metadata[,metadata_filename_col])]
     
+    # order samples by metadata
+    
+    rna_counts_dt <- rna_counts_dt[metadata[,"samplename"]]
   }
   
   # Merge metadata and counts in the single named list.
