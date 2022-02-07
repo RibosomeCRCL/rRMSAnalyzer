@@ -2,7 +2,6 @@
 #'
 #' @param ribo 
 #' @param col_to_plot 
-#' @param order_by_col 
 #' @param col_for_color
 #' @param axis
 #'
@@ -10,13 +9,21 @@
 #' @export
 #'
 #' @examples
-plot_PCA <- function(ribo,col_to_plot,order_by_col,col_for_color = NULL, axis = c(1,2)) {
+plot_PCA <- function(ribo, col_for_color = NULL, axis = c(1,2)) {
+  
+  
+  if (is.null(ribo)) {stop("MISSING parameter: please provide a RiboClass!")}
+  if (class(ribo) != "RiboClass") {stop("ribo parameter is not a RiboClass!")}
+  
+  
+  if (isFALSE(ribo$has_cscore)) {stop("You should calculate Cscores first using calculate_score funciton")}
   
   # Faut faire des controles de chaque params
+  # Attention, il faut changer le nom de la colonne cscore_median à juste cscore
   
-  pca_matrix <- aggregate_samples_by_col(ribo[["counts"]],col_to_plot,position_to_rownames = T)
+  pca_matrix <- aggregate_samples_by_col(ribo[["counts"]],"cscore_median",position_to_rownames = T)
   
-  pca_calculated <- .calculate_pca(pca_matrix, ribo[["metadata"]],order_by_col)
+  pca_calculated <- .calculate_pca(pca_matrix, ribo[["metadata"]])
   
   return(.plot_pca(pca_calculated,ribo[["metadata"]],col_for_color, axis = axis))
   
@@ -33,8 +40,8 @@ plot_PCA <- function(ribo,col_to_plot,order_by_col,col_for_color = NULL, axis = 
 #' @export
 #'
 #' @examples
-.calculate_pca <- function(cscore.matrix = NULL, metadata = NULL, order.by.col = NULL) {
-  pca.res <- dudi.pca(t(cscore.matrix[complete.cases(cscore.matrix), match(metadata[,order.by.col], colnames(cscore.matrix))]), 
+.calculate_pca <- function(cscore.matrix = NULL, metadata = NULL) {
+  pca.res <- dudi.pca(t(cscore.matrix[complete.cases(cscore.matrix),]), 
                       scannf = F, 
                       nf = 5)
   
@@ -54,7 +61,7 @@ plot_PCA <- function(ribo,col_to_plot,order_by_col,col_for_color = NULL, axis = 
 #' @examples
 .plot_pca <- function(dudi.pca = NULL, metadata = NULL, col.by.col = NULL, axis = axis) {
   plot.pca <- factoextra::fviz_pca_ind(dudi.pca, 
-                           title = paste("PCA of Cscore for", as.character(ncol(dudi.pca$tab)), "sites."),
+                           title = paste("PCA of Cscore for", as.character(ncol(dudi.pca$tab)), "sites"),
                            repel = TRUE, 
                            habillage = metadata[,col.by.col],
                            pointsize = 2, 
