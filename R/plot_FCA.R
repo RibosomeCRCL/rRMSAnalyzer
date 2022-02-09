@@ -1,9 +1,6 @@
 #' (internal) factorial correspondence analysis calculation function 
 #'
 #' @param raw.counts 
-#' @param metadata 
-#' @param order.by.col 
-#'
 #' @return a coa object
 #' @export
 #'
@@ -21,8 +18,6 @@
 #' factorial correspondence analysis of a riboclass for a given column
 #'
 #' @param ribo A RiboClass object
-#' @param col_to_plot column containing the values to plot the fca on
-#' @param order_by_col column containing the sample names for linking data and metadata
 #' @param col_for_color metadata column to colorize samples
 #' @param axis COA axis to plot. First and second axis will be plotted by default
 #'
@@ -45,6 +40,7 @@ plot_fca <- function(ribo,col_for_color = NULL, axis = c(1,2)) {
 #' @param dudi.coa a coa object
 #' @param metadata 
 #' @param col.by.col 
+#' @param axis COA axis to plot. First and second axis will be plotted by default
 #'
 #' @return
 #' @export
@@ -61,9 +57,9 @@ plot_fca <- function(ribo,col_for_color = NULL, axis = c(1,2)) {
                           pointsize = 2,  #TODO : reduce size
                           labelsize = 4, 
                           axes = axis,
-                          title = paste("Correspondence analysis of the raw counts on all genomic positions (", nrow(fca$tab),")")) 
+                          title = paste("Correspondence analysis of the raw counts on all genomic positions (", nrow(dudi.coa$tab),")")) 
   plot.fca <- plot.fca + theme(text = element_text(size = 12)) 
-  plot.fca <- plot.fca + labs(color = paste(col.by.col), subtitle = paste(ncol(fca$tab), "samples"))  # col.by.col returns "e"
+  plot.fca <- plot.fca + labs(color = paste(col.by.col), subtitle = paste(ncol(dudi.coa$tab), "samples"))  # col.by.col returns "e"
 
   
   return(plot.fca) #TODO : find good colors and forms
