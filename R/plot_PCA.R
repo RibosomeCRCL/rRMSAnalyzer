@@ -18,8 +18,8 @@ plot_PCA <- function(ribo, col_for_color = NULL, axis = c(1,2)) {
   
   if (isFALSE(ribo$has_cscore)) {stop("You should calculate Cscores first using calculate_score funciton")}
   
-  # Faut faire des controles de chaque params
-  # Attention, il faut changer le nom de la colonne cscore_median à juste cscore
+# Faut faire des controles de chaque params
+# Attention, il faut changer le nom de la colonne cscore_median juste cscore
   
   pca_matrix <- aggregate_samples_by_col(ribo[["counts"]],"cscore_median",position_to_rownames = T)
   
