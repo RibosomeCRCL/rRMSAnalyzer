@@ -23,7 +23,7 @@ plot_PCA <- function(ribo, col_for_color = NULL, axis = c(1,2)) {
   
   pca_matrix <- aggregate_samples_by_col(ribo[["counts"]],"cscore_median",position_to_rownames = T)
   
-  pca_calculated <- .calculate_pca(pca_matrix, ribo[["metadata"]])
+  pca_calculated <- .calculate_pca(pca_matrix)
   
   return(.plot_pca(pca_calculated,ribo[["metadata"]],col_for_color, axis = axis))
   
@@ -33,14 +33,11 @@ plot_PCA <- function(ribo, col_for_color = NULL, axis = c(1,2)) {
 #' Title
 #'
 #' @param cscore.matrix 
-#' @param metadata 
-#' @param order.by.col 
-#'
 #' @return
 #' @export
 #'
 #' @examples
-.calculate_pca <- function(cscore.matrix = NULL, metadata = NULL) {
+.calculate_pca <- function(cscore.matrix = NULL) {
   pca.res <- dudi.pca(t(cscore.matrix[complete.cases(cscore.matrix),]), 
                       scannf = F, 
                       nf = 5)
@@ -60,10 +57,17 @@ plot_PCA <- function(ribo, col_for_color = NULL, axis = c(1,2)) {
 #'
 #' @examples
 .plot_pca <- function(dudi.pca = NULL, metadata = NULL, col.by.col = NULL, axis = axis) {
+  # col.by.com argument can be NULL if no metadata is given by the user
+  if(is.null(col.by.col)) {
+    col.by.col <- "none"
+  }
+  else {
+    col.by.col <- metadata[,col.by.col]
+  }
   plot.pca <- factoextra::fviz_pca_ind(dudi.pca, 
                            title = paste("PCA of Cscore for", as.character(ncol(dudi.pca$tab)), "sites"),
                            repel = TRUE, 
-                           habillage = metadata[,col.by.col],
+                           habillage = col.by.col,
                            pointsize = 2, 
                            labelsize = 4,
                            axes = axis) + 
