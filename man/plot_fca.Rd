@@ -4,20 +4,21 @@
 \alias{plot_fca}
 \title{factorial correspondence analysis of a riboclass for a given column}
 \usage{
-plot_fca(ribo, col_to_plot, order_by_col, col_for_color = NULL)
+plot_fca(ribo, col_for_color = NULL, axis = c(1, 2))
 }
 \arguments{
 \item{ribo}{A RiboClass object}
 
-\item{col_to_plot}{column containing the values to plot the fca on}
-
-\item{order_by_col}{column containing the sample names for linking data and metadata}
-
 \item{col_for_color}{metadata column to colorize samples}
+
+\item{axis}{COA axis to plot. First and second axis will be plotted by default}
 }
 \value{
 a FCA plot
 }
 \description{
 factorial correspondence analysis of a riboclass for a given column
+}
+\examples{
+plot_fca(ribo = ribo, col_for_color = "condition")
 }

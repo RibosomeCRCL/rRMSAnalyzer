@@ -4,7 +4,7 @@
 \alias{.plot_fca}
 \title{(internal) Plot a coa object}
 \usage{
-.plot_fca(dudi.coa = NULL, metadata = NULL, col.by.col = NULL)
+.plot_fca(dudi.coa = NULL, metadata = NULL, col.by.col = NULL, axis = c(1, 2))
 }
 \arguments{
 \item{dudi.coa}{a coa object}
@@ -12,6 +12,8 @@
 \item{metadata}{}
 
 \item{col.by.col}{}
+
+\item{axis}{COA axis to plot. First and second axis will be plotted by default}
 }
 \value{
 

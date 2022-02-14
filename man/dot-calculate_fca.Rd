@@ -4,18 +4,17 @@
 \alias{.calculate_fca}
 \title{(internal) factorial correspondence analysis calculation function}
 \usage{
-.calculate_fca(raw.counts = NULL, metadata = NULL, order.by.col = NULL)
+.calculate_fca(raw.counts = NULL)
 }
 \arguments{
 \item{raw.counts}{}
-
-\item{metadata}{}
-
-\item{order.by.col}{}
 }
 \value{
 a coa object
 }
 \description{
 (internal) factorial correspondence analysis calculation function
+}
+\examples{
+.calculate_fca(raw_counts = cscore_matrix)
 }

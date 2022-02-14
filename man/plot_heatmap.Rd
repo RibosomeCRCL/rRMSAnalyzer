@@ -4,22 +4,12 @@
 \alias{plot_heatmap}
 \title{plot heatmap for a riboclass object}
 \usage{
-plot_heatmap(
-  ribo,
-  col_to_plot,
-  cols_for_annotation,
-  order_by_col,
-  most_variant = F
-)
+plot_heatmap(ribo, cols_for_annotation = NULL, most_variant = F)
 }
 \arguments{
 \item{ribo}{a riboclass object}
 
-\item{col_to_plot}{column containing the values for the heatmap}
-
 \item{cols_for_annotation}{(optional) metadata columns to show on the heatmap}
-
-\item{order_by_col}{column that contains your samplenames. Makes the link between your data and metadata}
 
 \item{most_variant}{boolean to select the most variants}
 }
@@ -30,5 +20,5 @@ plot_heatmap(
 This easy function will let you display an heatmap for any given column (count or c-score). You add an additionnal layer of information with metadata columns.
 }
 \examples{
-plot_heatmap(ribo_with_score, "ScoreC.Median.net", cols_for_annotation = c("group", "group_num"), order_by_col = "samplename")
+plot_heatmap(ribo,  cols_for_annotation = c("SAMPLE..ORIGIN"), most_variant = TRUE)
 }

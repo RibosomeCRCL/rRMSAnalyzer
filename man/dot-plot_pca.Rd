@@ -4,7 +4,7 @@
 \alias{.plot_pca}
 \title{Title}
 \usage{
-.plot_pca(dudi.pca = NULL, metadata = NULL, col.by.col = NULL)
+.plot_pca(dudi.pca = NULL, metadata = NULL, col.by.col = NULL, axis = axis)
 }
 \arguments{
 \item{dudi.pca}{}
