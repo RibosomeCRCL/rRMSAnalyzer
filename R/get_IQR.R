@@ -1,3 +1,13 @@
+#' Compute IQR or variance for 2'Ome sites
+#'
+#' @param df.meth.scores a dataframe 
+#' @param order athe type of variance to be computed. Should be var or iqr.
+#' @return a ggplot data frame with Cscore, Site, IQR or var value and sample ID
+#' @export
+#'
+#' @examples get_IQR(aggregate_samples_by_col(ribo[["counts"]],"cscore_median",position_to_rownames = T))
+
+
 get_IQR <- function(df.meth.scores = NULL, order = "IQR"){
   
   
@@ -33,6 +43,18 @@ get_IQR <- function(df.meth.scores = NULL, order = "IQR"){
   
 }
 
+
+#' Plot IQR or variance per site ID / Plot boxplot per site id 
+#'
+#' @param ribo a ribo class
+#' @param plot boxplot or IQR (by defalut)
+#' @param variance IQR or var for variance
+#' 
+#' @return a ggplot
+#' @export
+#'
+#' @examples plot_sites_by_IQR(ribo = ribo.meth, plot = "boxplot")
+#' plot_sites_by_IQR(ribo = ribo.meth)
 
 
 plot_sites_by_IQR <- function(ribo = NULL, plot = "IQR", variance = "IQR") {
