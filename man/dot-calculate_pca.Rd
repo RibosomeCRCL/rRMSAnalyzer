@@ -4,14 +4,10 @@
 \alias{.calculate_pca}
 \title{Title}
 \usage{
-.calculate_pca(cscore.matrix = NULL, metadata = NULL, order.by.col = NULL)
+.calculate_pca(cscore.matrix = NULL)
 }
 \arguments{
 \item{cscore.matrix}{}
-
-\item{metadata}{}
-
-\item{order.by.col}{}
 }
 \value{
 

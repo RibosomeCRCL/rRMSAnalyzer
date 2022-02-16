@@ -1,25 +1,23 @@
 #' plot heatmap for a riboclass object
 #' @description This easy function will let you display an heatmap for any given column (count or c-score). You add an additionnal layer of information with metadata columns.
 #' @param ribo a riboclass object
-#' @param col_to_plot column containing the values for the heatmap
-#' @param order_by_col column that contains your samplenames. Makes the link between your data and metadata
 #' @param cols_for_annotation (optional) metadata columns to show on the heatmap
 #' @param most_variant boolean to select the most variants
 #'
 #' @return
 #' @export
 #'
-#' @examples plot_heatmap(ribo_with_score, "ScoreC.Median.net", cols_for_annotation = c("group", "group_num"), order_by_col = "samplename")
-plot_heatmap <- function(ribo, col_to_plot, cols_for_annotation, order_by_col, most_variant = F) {
-  matrix <- aggregate_samples_by_col(ribo[["counts"]], col_to_plot, position_to_rownames = T)
-  .plot_heatmap(matrix, ribo[["metadata"]], order_by_col, cols_for_annotation = cols_for_annotation, most_variant = most_variant)
+#' @examples 
+#' plot_heatmap(ribo,  cols_for_annotation = c("SAMPLE..ORIGIN"), most_variant = TRUE)
+plot_heatmap <- function(ribo, cols_for_annotation = NULL, most_variant = F) {
+  matrix <- aggregate_samples_by_col(ribo[["counts"]], "cscore_median", position_to_rownames = T)
+  .plot_heatmap(matrix, ribo[["metadata"]], cols_for_annotation = cols_for_annotation, most_variant = most_variant)
 }
 
 #' Title
 #'
 #' @param cscore_matrix
 #' @param annotation_samples
-#' @param order_by_col
 #' @param cols_for_annotation
 #' @param most_variant
 #'
@@ -27,38 +25,57 @@ plot_heatmap <- function(ribo, col_to_plot, cols_for_annotation, order_by_col, m
 #' @export
 #'
 #' @examples
-.plot_heatmap <- function(cscore_matrix = NULL, annotation_samples = NULL, cols_for_annotation = NULL, order_by_col = NULL, most_variant = F) {
-  annotation_samples <- annotation_samples[, c(order_by_col, cols_for_annotation)]
-  # rownames of annotation_samples
-  rownames(annotation_samples) <- annotation_samples[, order_by_col]
-
-
-  # all character columns to factor columns
-  annotation_samples[sapply(annotation_samples, is.character)] <- lapply(
-    annotation_samples[sapply(annotation_samples, is.character)],
-    as.factor
-  )
-
-  annotation_samples_1 <- NA
-  if(!is.na(cols_for_annotation)) {
-    annotation_samples_1 <- annotation_samples[cols_for_annotation]
-    annotation_samples_1 <- data.frame(annotation_samples_1)
-    
-  }
+.plot_heatmap <- function(cscore_matrix = NULL, annotation_samples = NULL, cols_for_annotation = NULL, most_variant = F) {
+  
+  # Get the most variant sites
+  
   if (most_variant) {
     cscore_matrix <- get_most_or_less_variant(cscore_matrix)
   }
+  
+  # Here I imagine that annotation_samples has the samplename column.
+  # TOBECHECKED later
+  
+  
+  if(is.null(cols_for_annotation)) {
+    htmap <- pheatmap::pheatmap(cscore_matrix[complete.cases(cscore_matrix),],
+                                clustering_method = "ward.D2",
+                                clustering_distance_cols = "manhattan",
+                                clustering_distance_rows = "manhattan",
+                                #    color = viridis::magma(100),
+                                cutree_cols = 2,
+                                cutree_rows = 4,
+                                main = "heatmap"
+    )
+  } else {
+    # annotation_samples <- annotation_samples[, c("samplename", cols_for_annotation)]
+    # rownames of annotation_samples
+    rownames(annotation_samples) <- annotation_samples["samplename"]
+    # all character columns to factor columns
+    annotation_samples[sapply(annotation_samples, is.character)] <- lapply(
+      annotation_samples[sapply(annotation_samples, is.character)],
+      as.factor
+    )
+    
+    annotation_samples_1 <- NA
+    if(!is.na(cols_for_annotation)) {
+      annotation_samples_1 <- annotation_samples[cols_for_annotation]
+      annotation_samples_1 <- data.frame(annotation_samples_1)
+      
+    }
+    
+    htmap <- pheatmap::pheatmap(cscore_matrix[complete.cases(cscore_matrix),],
+                                clustering_method = "ward.D2",
+                                clustering_distance_cols = "manhattan",
+                                clustering_distance_rows = "manhattan",
+                                #    color = viridis::magma(100),
+                                cutree_cols = 2,
+                                cutree_rows = 4,
+                                annotation_col = data.frame(annotation_samples_1), main = "heatmap"
+    )
+    
+  }
 
-
-  htmap <- pheatmap::pheatmap(cscore_matrix[complete.cases(cscore_matrix), match(annotation_samples[, order_by_col], colnames(cscore_matrix))],
-    clustering_method = "ward.D2",
-    clustering_distance_cols = "manhattan",
-    clustering_distance_rows = "manhattan",
-    #    color = viridis::magma(100),
-    cutree_cols = 2,
-    cutree_rows = 4,
-    annotation_col = data.frame(annotation_samples_1), main = "heatmap"
-  )
   return(htmap)
 }
 
