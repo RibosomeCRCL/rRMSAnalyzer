@@ -50,7 +50,7 @@ plot_heatmap <- function(ribo, cols_for_annotation = NULL, most_variant = F) {
   } else {
     # annotation_samples <- annotation_samples[, c("samplename", cols_for_annotation)]
     # rownames of annotation_samples
-    rownames(annotation_samples) <- annotation_samples["samplename"]
+    rownames(annotation_samples) <- annotation_samples[["samplename"]]
     # all character columns to factor columns
     annotation_samples[sapply(annotation_samples, is.character)] <- lapply(
       annotation_samples[sapply(annotation_samples, is.character)],
