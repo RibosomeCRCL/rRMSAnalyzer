@@ -8,6 +8,7 @@ calculate_score_by_sample(
   sample_df = NULL,
   data_rna_col = 1,
   flanking = 6,
+  median_or_mean = "median",
   data_counts_col = 3
 )
 }

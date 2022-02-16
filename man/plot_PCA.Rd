@@ -4,7 +4,7 @@
 \alias{plot_PCA}
 \title{Principal component analysis of a riboClass object}
 \usage{
-plot_PCA(ribo, col_to_plot, order_by_col, col_for_color = NULL)
+plot_PCA(ribo, col_to_plot, order_by_col, col_for_color = NULL, axis = c(1, 2))
 }
 \arguments{
 \item{ribo}{the riboClass Object}
@@ -13,7 +13,9 @@ plot_PCA(ribo, col_to_plot, order_by_col, col_for_color = NULL)
 
 \item{order_by_col}{}
 
-\item{col_for_color}{metadata column to colorize your samples}
+\item{col_for_color}{metadata column to colorize your sample}
+
+\item{axis}{}
 }
 \value{
 

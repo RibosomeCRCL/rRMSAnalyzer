@@ -4,7 +4,12 @@
 \alias{calculate_score_by_RNA}
 \title{Calculate both C-score and Z-score for one RNA of one sample.}
 \usage{
-calculate_score_by_RNA(ds, flanking = 6, data_counts_col = 4)
+calculate_score_by_RNA(
+  ds,
+  flanking = 6,
+  data_counts_col = 4,
+  median_or_mean = "median"
+)
 }
 \arguments{
 \item{ds}{dataframe of a given RNA for a given sample}

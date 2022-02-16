@@ -5,7 +5,10 @@
 \title{Title}
 \usage{
 generate_report(
-  riboclass,
+  data_path,
+  data_sep,
+  metadat_path,
+  metadata_sep,
   project_name = "Untitled Project",
   biological_condition_col,
   library_col
