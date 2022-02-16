@@ -13,7 +13,7 @@
   mat <- mat + 1
   med <- apply(mat, 1, median)
   rle <- log2(mat/med)
-  rle <- gather(as.data.frame(rle))
+  rle <- tidyr::gather(as.data.frame(rle))
   return(rle)
 }
 
