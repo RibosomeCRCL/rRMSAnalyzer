@@ -169,7 +169,7 @@ generate_rna_names_table <- function(count_df) {
 generate_riboclass_named_position <- function(sample_count_list,rna_col,rnapos_col) {
   #combine the RNA name and the position on this RNA to form the row names.
   sample_count_list_named <- lapply(sample_count_list,function(x){ 
-    x["named_position"] <-  paste(x[,rna_col], x[,rnapos_col], sep = "_"); x 
+    x["named_position"] <-  paste(x[,rna_col], formatC(x[,rnapos_col],width = 4,flag = "0"), sep = "_"); x 
   })
   return(sample_count_list_named)
 }
@@ -235,4 +235,30 @@ mean_samples_by_conditon <- function(ribo,value, metadata_condition) {
   ribo_concat[metadata_condition] <- metadata[,metadata_condition][match(ribo_concat[,"sample"], metadata[,"samplename"])]
   ribo_condition <- ribo_concat %>% group_by(named_position, !!sym(metadata_condition)) %>% summarise(mean = mean(!!sym(value)), sd = sd(!!sym(value)))
   return(ribo_condition)
+}
+
+
+#' Remove a RNA among all samples
+#' 
+#' @param ribo 
+#' @param name_rna_to_remove 
+#'
+#' @return a riboClass without the specified RNA
+#' @export
+#'
+#' @examples
+ribo_remove_rna <- function(ribo, name_rna_to_remove) {
+  #TODO : use lapply instead
+  for(name in names(ribo$counts)) {
+    
+    df <- ribo$counts[[name]]
+    df <- df[df["RNA"] != name_rna_to_remove,]
+    ribo$counts[[name]] <- df
+    
+  }
+  
+  
+  
+  return(ribo)
+  
 }
