@@ -63,9 +63,9 @@ plot_sites_by_IQR <- function(ribo = NULL, plot = "IQR", variance = "IQR") {
   IQR_order_df <- get_IQR(Cscore_matrix, order = variance)
   
   
-  if (tolower(plot) == "iqr") {
+  if (tolower(plot) %in% c("iqr","var")) {
   
-  p1 <- ggplot(IQR_order_df, aes(x = sites.id, y = iqr)) +
+  p1 <- ggplot(IQR_order_df, aes_string(x = "sites.id", y = variance)) +
     geom_point() +
     theme_bw() + 
     theme(axis.text.x = element_text(angle = 45, size = 9, hjust = 1), 
