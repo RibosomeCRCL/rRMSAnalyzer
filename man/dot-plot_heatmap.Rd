@@ -8,7 +8,6 @@
   cscore_matrix = NULL,
   annotation_samples = NULL,
   cols_for_annotation = NULL,
-  order_by_col = NULL,
   most_variant = F
 )
 }

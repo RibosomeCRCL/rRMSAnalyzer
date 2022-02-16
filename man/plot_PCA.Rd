@@ -2,24 +2,21 @@
 % Please edit documentation in R/plot_PCA.R
 \name{plot_PCA}
 \alias{plot_PCA}
-\title{Principal component analysis of a riboClass object}
+\title{Title}
 \usage{
-plot_PCA(ribo, col_to_plot, order_by_col, col_for_color = NULL, axis = c(1, 2))
+
+plot_PCA(ribo, col_for_color = NULL, axis = c(1, 2))
 }
 \arguments{
-\item{ribo}{the riboClass Object}
-
-\item{col_to_plot}{column containing the values that will be used for the PCA}
-
-\item{order_by_col}{}
-
-\item{col_for_color}{metadata column to colorize your sample}
+\item{ribo}{}
 
 \item{axis}{}
+
+\item{col_to_plot}{}
 }
 \value{
 
 }
 \description{
-Principal component analysis of a riboClass object
+Title
 }

@@ -210,6 +210,9 @@ update_ribo_count_with_matrix <- function(ribo, update_matrix) {
   
 }
 
+
+
+
 #' Regroup samples by condition and calculate mean for each condition
 #'
 #' @param ribo a riboClass object
@@ -261,4 +264,20 @@ ribo_remove_rna <- function(ribo, name_rna_to_remove) {
   
   return(ribo)
   
+}
+
+#' Display RNA names
+#'
+#' @param ribo a riboClass object
+#'
+#' @return
+#' A vector with actual RNA names
+#' @export
+#'
+#' @examples
+#' show_RNA_names(ribo = ribo)
+show_RNA_names <- function(ribo = NULL) {
+  if(is.null(ribo)) {stop("A ribo class object should be provided")}
+  RNA_names <- ribo[["rna_names"]][[2]]
+  return(RNA_names)
 }
