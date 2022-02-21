@@ -11,7 +11,7 @@
 subset_ribo <- function(ribo, positions_to_keep) {
   #TODO : accept df without named_position + our df
   ribo_data <- ribo[["counts"]]
-  position_df <- NULL
+  positions_df <- NULL
   if(is.data.frame(positions_to_keep)) {
     positions_df <- positions_to_keep
     positions_to_keep <- positions_to_keep[["named_position"]]
@@ -30,10 +30,11 @@ subset_ribo <- function(ribo, positions_to_keep) {
   #iterates through samples and keep only specified positions
   
   subsetted_ribo_data <- lapply(ribo_data, function(x) {
-    if (!is.null(position_df)) {
+    if (!is.null(positions_df)) {
+      x <- x[which(x[,"named_position"] %in% positions_df[,"named_position"]),]
+      
       if ("renamed_position" %in% colnames(positions_df)) {
-        x["renamed_position"] <-
-          positions_df[["renamed_position"]][match(x[["named_position"]], positions_df[["named_position"]])]
+        x["renamed_position"] <-  positions_df[["renamed_position"]][match(x[["named_position"]], positions_df[["named_position"]])]
         x["named_position"] <- x["renamed_position"]
         x <- subset(x, select = -c(renamed_position))
       }
