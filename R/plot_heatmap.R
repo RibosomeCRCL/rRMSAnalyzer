@@ -157,21 +157,13 @@ plot_heatmap_corr <- function(ribo, col_to_plot, cols_for_annotation, order_by_c
 }
 
 get_most_or_less_variant <- function(df = NULL, column_or_row = "row", n = 20, type_of_variant = "most") {
-  df <- as.data.frame(df)
-
-  if (column_or_row == "row") {
-    column_or_row <- 1
-  }
-
-  if (column_or_row == "column") {
-    column_or_row <- 2
-  }
-
+  
   if (is.null(df)) {
     stop("No matix in entry")
   }
-
-  var <- apply(df, column_or_row, var)
+  
+  df <- as.data.frame(df)
+  
   if (tolower(type_of_variant) == "most") {
     get_most_variant <- TRUE
   } else if (tolower(type_of_variant) == "less") {
@@ -179,5 +171,20 @@ get_most_or_less_variant <- function(df = NULL, column_or_row = "row", n = 20, t
   } else {
     stop("Unrecognized type of variants. Options are \"most\" or \"less\"")
   }
-  df[order(var, decreasing = get_most_variant)[1:n], ]
+  
+
+  if (column_or_row == "row") {
+    column_or_row <- 1
+    var <- apply(df, column_or_row, var)
+    df <- df[order(var, decreasing = get_most_variant)[1:n], ]
+  }
+
+  if (column_or_row == "column") {
+    column_or_row <- 2
+    var <- apply(df, column_or_row, var)
+    df <- df[,order(var, decreasing = get_most_variant)[1:n]]
+  }
+
+  return(df)
+  
 }
