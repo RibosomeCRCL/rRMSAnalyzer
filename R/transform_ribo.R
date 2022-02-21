@@ -16,7 +16,7 @@
 transform.ribo <- function(ribo, metadata_columns = NULL) {
   
   # First let's extract the data from ribo
-  # TODO this function should be simplified, 
+  # TODO aggregate_samples_by_col function should be simplified, 
   # specially the values_column parameter which should be only "Cscore" or "Counts"
   values_column <- "cscore_median"
   df.matrix <- aggregate_samples_by_col(ribo[["counts"]],values_column,position_to_rownames = T)
