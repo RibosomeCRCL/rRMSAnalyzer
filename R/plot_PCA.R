@@ -1,4 +1,4 @@
-  #' Principal component analysis of a riboClass object
+#' Principal component analysis of a riboClass object
 #'
 #' @param ribo 
 #' @param col_to_plot 
