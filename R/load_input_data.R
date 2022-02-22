@@ -41,13 +41,17 @@ read_counts <- function(counts_path,
   else {
     if(is.character(metadata)) {
     metadata <- read.csv(metadata, sep = metadata_sep)
+    rownames(metadata) <- metadata[,"samplename"]
     }
     names(metadata)[names(metadata) == metadata_sample_name_col] <- "samplename"
+    
+    rownames(metadata) <- metadata[,"samplename"]
     
     # read count data
     rna_counts_dt <- read_count_files(counts_path,count_sep,counts_header,
                                       counts_rna_col,counts_rnapos_col,counts_count_col,
                                       files_to_keep = as.character(metadata[,metadata_filename_col]))
+    # generate RNA names table
     rna_names_df <- generate_rna_names_table(rna_counts_dt[[1]])
     
     # Rename sample in counts list according to the names in metadata
