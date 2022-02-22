@@ -13,7 +13,7 @@
 
 
 
-transform.ribo <- function(ribo, metadata_columns = NULL) {
+transform_ribo <- function(ribo, metadata_columns = NULL) {
   
   # First let's extract the data from ribo
   # TODO aggregate_samples_by_col function should be simplified, 
