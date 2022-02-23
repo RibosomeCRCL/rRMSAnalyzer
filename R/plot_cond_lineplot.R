@@ -15,7 +15,7 @@ plot_lineplot <- function(ribo,value_col,metadata_col) {
     geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd), width=.1, position = position_dodge(0.1)) +
     geom_line(position = position_dodge(0.1)) +
     geom_point(position = position_dodge(0.1), size=3, shape=21, fill="white") + 
-    rotate_x_text(angle = 45)
+    rotate_x_text(angle = 90)
  
  return(lineplot)
 }
