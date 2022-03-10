@@ -111,31 +111,31 @@ aggregate_samples_by_col <- function(sample_list, col_to_keep, position_to_rowna
   
 }
 
-#' Update rna names
+#' Title
 #'
-#' @param sample_list
-#' @param rna_col 
-#' @param rna_names 
+#' @param ribo a riboclass object
+#' @param new_names the new names for your RNA
 #'
 #' @return
 #' @export
 #'
 #' @examples
-#' 
-#TODO : add "actual rna names" col
-update_riboclass_rna_names <- function(ribo) {
+update_riboclass_rna_names <- function(ribo,new_names) {
   
   sample_list <- ribo[["counts"]]
   rna_names <- ribo[["rna_names"]]
+  rna_names[3] <- new_names
   
+  #change the RNA names inside each sample
   sample_list_renamed <- lapply(sample_list, function(x) {
     x[,1] <- rna_names[,3][match(x[,1], rna_names[,2])]
     return(x)
   })
-  
+  rna_names[2] <- rna_names[3]
+  rna_names <- rna_names[,1:2]
+  # Update nomenclature according to the new RNAs
   sample_list_renamed <- generate_riboclass_named_position(sample_list_renamed,1,2)
-  rna_names[,2] <- rna_names[,3]
-  rna_names[,3] <- NA
+
   ribo[["counts"]] <- sample_list_renamed
   ribo[["rna_names"]] <- rna_names
   return(ribo)
@@ -150,8 +150,11 @@ update_riboclass_rna_names <- function(ribo) {
 #'
 #' @examples
 generate_rna_names_table <- function(count_df) {
-  rna_names <- unique(count_df[,1])
-  rna_names_df <- data.frame(original_name = rna_names, current_name =rna_names,new_rna_name = NA )
+  
+  rna_counts <- as.data.frame(table(count_df[,1]))
+  rna_counts <- rna_counts[order(rna_counts[2]),]
+  
+  rna_names_df <- data.frame(original_name = rna_counts[[1]], current_name =rna_counts[[1]])
   return(rna_names_df)
 }
 
