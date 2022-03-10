@@ -76,6 +76,7 @@ plot_PCA <- function(ribo, col_for_color = NULL, axis = c(1,2)) {
     labs(subtitle = paste(as.character(nrow(dudi.pca$tab)),"samples")) + 
     ylab(paste("PC", axis[2],":", round(dudi.pca$eig[axis[2]]/sum(dudi.pca$eig) * 100, 1), "%")) +
     xlab(paste("PC", axis[1],":", round(dudi.pca$eig[axis[1]]/sum(dudi.pca$eig) * 100, 1), "%"))
+  # TODO PCA legend should be according to metadata
     
   
   return(plot.pca)
