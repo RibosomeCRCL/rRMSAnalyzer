@@ -15,9 +15,18 @@ read_count_files <-
            header,
            rna_col,
            position_col,
-           count_col) {
+           count_col,
+           files_to_keep = NULL) {
+    
     rna_counts_fl <-
       list.files(path_to_files, recursive = T, full.names = T)
+    
+    # Check if there are files to keep
+    # if yes than keep only the needed files
+    if (!is.null(files_to_keep)) {
+      pat <- paste0("\\b(", paste(files_to_keep, collapse="|"), ")\\b")
+      rna_counts_fl <- rna_counts_fl[grep(pat, rna_counts_fl)]
+    }
     
     # 1) Check if there is any duplicated name in the filename list
     
