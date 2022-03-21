@@ -26,7 +26,7 @@ select_most_significant_sites <- function(df_of_kruskal = NULL, pCutoff = 1e-02,
 plot_most_significant_sites <- function(df_of_Cscores = NULL, df_of_kruskal = NULL, most_significant_sites = most_significant_sites) {
 
 
-   df_of_Cscores <- tidyr::pivot_longer(df_of_Cscores,cols = c(2:ncol(df_of_Cscores))) 
+   df_of_Cscores <- tidyr::pivot_longer(df_of_Cscores,cols = c(2:ncol(df_of_Cscores))) #TODO : sample count
    colnames(df_of_Cscores) <- c("siteID","group.id","Cscore")
    df_of_Cscores$group.id <- gsub("\\..*","",df_of_Cscores$group.id)
    
