@@ -37,17 +37,19 @@ read_count_files <-
     
     # 2) reorder cols for each count table and name them like this :
     # RNA | position_on_rna | count
+    # and add a siteID column with a default value of NA
     rna_counts_dt <-
       lapply(rna_counts_fl, read.csv, sep = sep, header = header)
     rna_counts_dt <- lapply(rna_counts_dt, function(x) {
       x <- x[, c(rna_col, position_col, count_col)]
-      colnames(x) <- c("RNA", "Position_on_RNA", "Count")
+      colnames(x) <- c("rna", "rnapos", "count")
+      x["site"] <- NA
       return(x)
     })
     
     # 3) combine both the RNA and genomic position columns to generate the column "named_position".
     rna_counts_dt <-
-      generate_riboclass_named_position(rna_counts_dt, "RNA", "Position_on_RNA")
+      generate_riboclass_named_position(rna_counts_dt, "rna", "rnapos")
     
    
     # 4) give a name for each element of the list
@@ -94,8 +96,10 @@ read_count_files <-
 #' @export
 #'
 #' @examples
-aggregate_samples_by_col <- function(sample_list, col_to_keep, position_to_rownames =F) {
-  
+extract_data <- function(sample_list, col, position_to_rownames =F) {
+  #TODO : sample_list -> ribo
+  #TODO : check if position_to_rownames is useful ? -> trash
+  #TODO : check if col exist
   #The rows of this matrix correspond to the positions on the rRNA
   sample_list_nm <- names(sample_list)
   position_list <- sample_list[[3]][,"named_position"]
@@ -131,7 +135,7 @@ aggregate_samples_by_col <- function(sample_list, col_to_keep, position_to_rowna
 #' @examples
 update_riboclass_rna_names <- function(ribo,new_names) {
   
-  sample_list <- ribo[["counts"]]
+  sample_list <- ribo[["data"]]
   rna_names <- ribo[["rna_names"]]
   rna_names[3] <- new_names
   
@@ -145,7 +149,7 @@ update_riboclass_rna_names <- function(ribo,new_names) {
   # Update nomenclature according to the new RNAs
   sample_list_renamed <- generate_riboclass_named_position(sample_list_renamed,1,2)
 
-  ribo[["counts"]] <- sample_list_renamed
+  ribo[["data"]] <- sample_list_renamed
   ribo[["rna_names"]] <- rna_names
   return(ribo)
 }
@@ -160,9 +164,8 @@ update_riboclass_rna_names <- function(ribo,new_names) {
 #' @examples
 generate_rna_names_table <- function(count_df) {
   
-  rna_counts <- as.data.frame(table(count_df[,1]))
-  rna_counts <- rna_counts[order(rna_counts[2]),]
-  
+   rna_counts <- as.data.frame(sort(table(count_df[,1])))
+
   rna_names_df <- data.frame(original_name = rna_counts[[1]], current_name =rna_counts[[1]])
   return(rna_names_df)
 }
@@ -201,7 +204,7 @@ update_ribo_count_with_matrix <- function(ribo, update_matrix) {
   #first, check if we have the sample name in our column
   update_df <- as.data.frame(update_matrix)
   col_names <- sort(names(update_df))
-  riboclass_names <- sort(names(ribo[["counts"]]))
+  riboclass_names <- sort(names(ribo[["data"]]))
   
   if(col_names != riboclass_names) {
     error("mismatch between samplenames and matrix's samples names")
@@ -209,13 +212,13 @@ update_ribo_count_with_matrix <- function(ribo, update_matrix) {
   
   # For each sample in the riboclass, replace count values with matrix's ones
   
-  count_list <- ribo[["counts"]]
+  count_list <- ribo[["data"]]
   
   for(sample in names(count_list)) {
     count_list[[sample]]["Count"] <- update_df[sample]
   }
   
-  ribo[["counts"]] <- count_list
+  ribo[["data"]] <- count_list
   
   return(ribo)
   
@@ -237,7 +240,7 @@ update_ribo_count_with_matrix <- function(ribo, update_matrix) {
 #' @examples
 mean_samples_by_conditon <- function(ribo,value, metadata_condition) {
   
-  ribo_list <- ribo[["counts"]]
+  ribo_list <- ribo[["data"]]
   ribo_names <- names(ribo_list)
   ribo_list_named <- lapply(ribo_names, function(x){
     ribo_list[[x]]["sample"] <- x

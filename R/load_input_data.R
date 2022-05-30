@@ -1,69 +1,85 @@
-#' Read ribomethseq count files and their associated metadata
+#' Read ribomethseq count files and their associated metadata and turn them into a riboclass.
+#' This should be considered as the entrypoint for the RMS package, as all other functions use the riboclass as an input.
 #' 
 #' @param counts_path: path to the data folder with the count files
 #' @param metadata: data frame or path to the CSV file containing metadata
 #' @param columns_names : list of names to set for each column (from left to right)
 #' @param count_sep: delimiter used in genomecov csv
 #' @param metadata_sep: delimiter used in metadata csv
-#' @param counts_header: boolean, specify if count files have a header or not. 
-#' @param counts_rna_col: name or position of the column containing the name of the RNA in counts data
-#' @param counts_rnapos_col: name or position of the column containing the position on an RNA in counts data
-#' @param metadata_filename_col: name or position of the column containing the filename
-#' @param metadata_sample_name_col: name or position of the column containing sample name
+#' @param count_header: boolean, specify if count files have a header or not. 
+#' @param count_rna: name or position of the column containing the name of the RNA in counts data
+#' @param count_rnapos: name or position of the column containing the position on an RNA in counts data
+#' @param metadata_filename: name or position of the column containing the filename
+#' @param metadata_samplename: name or position of the column containing sample name
 #' @return a riboclass
 #' @export
-read_counts <- function(counts_path,
-                        metadata=NA,
-                        count_sep="\t",
-                        metadata_sep=";",
-                        counts_header =F,
-                        counts_rna_col = 1,
-                        counts_rnapos_col = 2,
-                        counts_count_col = 3,
-                        metadata_filename_col= 1,
-                        metadata_sample_name_col = 2) {
+create_riboclass <- function(counts_path,
+                             metadata = NA,
+                             count_sep = "\t",
+                             metadata_sep = ";",
+                             count_header = FALSE,
+                             count_col = 3,
+                             count_rna = 1,
+                             count_rnapos = 2,
+                             metadata_filename = 1,
+                             metadata_samplename = 2) {
   
-
+  # named_position => default_posname
+  # col des positions connus => siteID
+  
   # read count files
-  #rna_counts_dt <- read_count_files(counts_path,count_sep,counts_header,counts_rna_col,counts_rnapos_col,counts_count_col)
+  #rna_counts_dt <- read_count_files(counts_path,count_sep,count_header,count_rna,count_rnapos,count_col)
   
   #create a table containing rna names
   
-  
+  #TODO rna_names -> rnaname
+  #TODO has_cscore -> check premier tableau
 
   
   #loading metadata
-  if(is.na(metadata)) {
-    metadata <- generate_metadata_df(counts_path,create_samplename_col = F)
-    rna_counts_dt <- read_count_files(counts_path,count_sep,counts_header,counts_rna_col,counts_rnapos_col,counts_count_col)
-    rna_names_df <- generate_rna_names_table(rna_counts_dt[[1]])
-  }
-  else {
+  if(!is.data.frame(metadata)) {
+    
     if(is.character(metadata)) {
-    metadata <- read.csv(metadata, sep = metadata_sep)
-    rownames(metadata) <- metadata[,"samplename"]
+      metadata <- read.csv(metadata, sep = metadata_sep)
+      rownames(metadata) <- metadata[,"samplename"]
     }
-    names(metadata)[names(metadata) == metadata_sample_name_col] <- "samplename"
+    else if (is.na(metadata)) {
+      
+      metadata <- generate_metadata_df(counts_path,create_samplename_col = F)
+      rna_counts_dt <- read_count_files(counts_path,count_sep,count_header,count_rna,count_rnapos,count_col)
+      rna_names_df <- generate_rna_names_table(rna_counts_dt[[1]])
+      
+    }
+    
+
+  }
+  else if(is.data.frame(metadata)) { 
+  
+    names(metadata)[names(metadata) == metadata_samplename] <- "samplename"
     
     rownames(metadata) <- metadata[,"samplename"]
     
     # read count data
-    rna_counts_dt <- read_count_files(counts_path,count_sep,counts_header,
-                                      counts_rna_col,counts_rnapos_col,counts_count_col,
-                                      files_to_keep = as.character(metadata[,metadata_filename_col]))
+    rna_counts_dt <- read_count_files(counts_path,count_sep,count_header,
+                                      count_rna,count_rnapos,count_col,
+                                      files_to_keep = as.character(metadata[,metadata_filename]))
     # generate RNA names table
     rna_names_df <- generate_rna_names_table(rna_counts_dt[[1]])
     
     # Rename sample in counts list according to the names in metadata
-    names(rna_counts_dt) <- metadata[,"samplename"][match(names(rna_counts_dt), metadata[,metadata_filename_col])]
+    names(rna_counts_dt) <- metadata[,"samplename"][match(names(rna_counts_dt), metadata[,metadata_filename])]
     
     # order samples by metadata
     
     rna_counts_dt <- rna_counts_dt[metadata[,"samplename"]]
   }
   
+  else {
+    stop("incorrect metadata given")
+  }
+  
   # Merge metadata and counts in the single named list.
-  return_list <- list(counts = rna_counts_dt, metadata = metadata,rna_names = rna_names_df, has_cscore = FALSE)
+  return_list <- list(data = rna_counts_dt, metadata = metadata,rna_names = rna_names_df, has_cscore = FALSE)
   class(return_list) <- "RiboClass" # TODO : create a real constructor
   return(return_list)
 }
