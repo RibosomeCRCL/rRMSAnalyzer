@@ -1,6 +1,6 @@
 #------------------------------------------
 
-#' Calculate both C-score and Z-score for one RNA of one sample.
+#' compute both C-score and Z-score for one RNA of one sample.
 #'
 #' @param ds dataframe of a given RNA for a given sample
 #' @param flanking the number of flanking position to use for the window
@@ -10,24 +10,34 @@
 #' @export
 #'
 #' @examples
-calculate_score_by_RNA <- function(ds, flanking=6, data_counts_col=4) {
+compute_rna_cscore <- function(ds, flanking=6, method) {
   # check that all parameters exist
   if (is.null(ds)) {stop("MISSING parameter. Please specify a data frame <ds>.")}
-
+  
+  # remove any cscore-related columns if they already exist
+ ds <- ds %>% dplyr::select(-dplyr::any_of(c("flanking_median","flanking_mad","flanking_mean","cscore")))
+  
+  # get the count column
+   data_counts_col <- "count"
   
   # compute scores
   for (i in (flanking + 1) : (dim(ds)[1] - flanking)){
     #TODO : selection mean/median
-    ds[i, "flanking_mean"] <- mean(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # mean
-    ds[i, "flanking_median"] <- median(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # median
-    ds[i, "flanking_mad"] <- mad(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # mad
     
+  if(method == "median") {
+    ds[i, "flanking_median"] <- median(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # median
+   # ds[i, "flanking_mad"] <- mad(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # mad
+   # TODO : remove flanking mad ? 
+    scorec_median_raw <- 1 - ds[, data_counts_col]/ds[, "flanking_median"]
+    ds[, "cscore"] <- ifelse(scorec_median_raw < 0, 0, scorec_median_raw)
   }
-  ds[, "dist_to_med_in_mad"] <- (ds[,"flanking_median"] - ds[, data_counts_col])/ds[,"flanking_mad"]
-  scorec_median_raw <- 1 - ds[, data_counts_col]/ds[, "flanking_median"]
-  scorec_mean_raw <- 1 - ds[, data_counts_col]/ds[, "flanking_mean"]
-  ds[, "cscore_median"] <- ifelse(scorec_median_raw < 0, 0, scorec_median_raw)
-  ds[, "cscore_mean"] <- ifelse(scorec_mean_raw < 0, 0, scorec_mean_raw)
+    
+ else if(method == "mean") {
+    ds[i, "flanking_mean"] <- mean(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # mean
+    scorec_mean_raw <- 1 - ds[, data_counts_col]/ds[, "flanking_mean"]
+    ds[, "cscore"] <- ifelse(scorec_mean_raw < 0, 0, scorec_mean_raw)
+ }
+  }
   
   return(ds)
 }
@@ -43,20 +53,20 @@ calculate_score_by_RNA <- function(ds, flanking=6, data_counts_col=4) {
 #' @export
 #'
 #' @examples
-calculate_score_by_sample <- function(sample_df=NULL,
-                                      data_rna_col = 1,
-                                      flanking=6, 
-                                      data_counts_col=3) {
-  
+compute_sample_cscore <- function(sample_df=NULL,
+                                      flanking=6,
+                                    method) 
+                                                   {
+  data_rna_col = "rna"
   sample_df[,data_rna_col] <- as.factor(sample_df[,data_rna_col])
   RNA_counts_list <- split(sample_df, sample_df[,data_rna_col])
-  sample_score <- lapply(RNA_counts_list, calculate_score_by_RNA, flanking = flanking, data_counts_col = data_counts_col)
+  sample_score <- lapply(RNA_counts_list, compute_rna_cscore, flanking , method)
   
   return(dplyr::bind_rows(sample_score))
   
 }
 
-#' Calculate score for a whole sample cohort
+#' compute score for a whole sample cohort
 #'
 #' @param ribo a riboclass object 
 #' @param flanking the window size around the position (the latter is excluded)
@@ -67,24 +77,29 @@ calculate_score_by_sample <- function(sample_df=NULL,
 #' @export
 #'
 #' @examples
-calculate_score <- function(ribo=NULL, flanking=6,
-                            data_rna_col = 1,
-                            data_counts_col=3,
-                            use_multithreads = F) {
+compute_cscore <- function(ribo=NULL, flanking=6,
+                            method = "median",
+                            use_multithreads = FALSE
+                            ) {
   
-  
+   # Check if a cscore calculation has been already done on the ribo
+   if( ribo["has_cscore"] == TRUE) {
+     print("the riboClass has already a computed cscore")
+   }
 
-    dt = ribo["counts"] #we only need the counts to calculate the score
+    dt = ribo["data"] #we only need the counts to compute the score
+
     
-  
    # Experimental : Multithreading is 3x faster than single-thread
    # TODO : implement 
-   if(use_multithreads) samples_czscore <- BiocParallel::bplapply(dt[["counts"]], calculate_score_by_sample, data_counts_col = data_counts_col, data_rna_col = data_rna_col)
-   else samples_czscore <- lapply(dt[["counts"]], calculate_score_by_sample, data_counts_col = data_counts_col, data_rna_col = data_rna_col)
+   if(use_multithreads) samples_czscore <- BiocParallel::bplapply(dt[["data"]], compute_sample_cscore, flanking, method)
+   else samples_czscore <- lapply(dt[["data"]], compute_sample_cscore, flanking, method)
 
-     ribo[["counts"]] <- samples_czscore
+     ribo[["data"]] <- samples_czscore
      ribo["cscore_window"] <- flanking
+     ribo["cscore_method"] <- method
      ribo["has_cscore"] <- TRUE
+
 
   return(ribo)
   
