@@ -88,27 +88,38 @@ read_count_files <-
 
 #' Aggregate results into a single matrix
 #'
-#' @param sample_list 
-#' @param col_to_keep 
+#' @param ribo
+#' @param col 
 #' @param position_to_rownames 
 #'
 #' @return
 #' @export
 #'
 #' @examples
-extract_data <- function(sample_list, col, position_to_rownames =F) {
+extract_data <- function(ribo, col = "cscore", position_to_rownames =F) {
   #TODO : sample_list -> ribo
   #TODO : check if position_to_rownames is useful ? -> trash
   #TODO : check if col exist
   #The rows of this matrix correspond to the positions on the rRNA
+  
+  
+   col <- tolower(col)
+   
+   if(!(col %in% colnames(ribo[["data"]][[1]]))) {
+     
+     stop(paste(col, "is not a column in the data !"))
+   }
+  
+  
+  sample_list <- ribo[["data"]]
   sample_list_nm <- names(sample_list)
   position_list <- sample_list[[3]][,"named_position"]
   matrix_all <- data.frame(named_position = position_list)
   
   for(sample_nm in sample_list_nm) {
     sample_df <- sample_list[[sample_nm]]
-    sample_df <- sample_df[,c("named_position",col_to_keep)]
-    matrix_all <- full_join(matrix_all,sample_df,by="named_position")
+    sample_df <- sample_df[,c("named_position",col)]
+    matrix_all <- dplyr::full_join(matrix_all,sample_df,by="named_position")
     names(matrix_all)[length(names(matrix_all))] <- sample_nm 
   }
   matrix_all <- matrix_all[match(position_list,matrix_all[,"named_position"]),]
