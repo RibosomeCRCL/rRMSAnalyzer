@@ -7,10 +7,9 @@
 #' @param data.counts.col column number where counts value are stored
 #'
 #' @return
-#' @export
 #'
 #' @examples
-compute_rna_cscore <- function(ds, flanking=6, method) {
+.compute_rna_cscore <- function(ds, flanking=6, method) {
   # check that all parameters exist
   if (is.null(ds)) {stop("MISSING parameter. Please specify a data frame <ds>.")}
   
@@ -25,7 +24,7 @@ compute_rna_cscore <- function(ds, flanking=6, method) {
     #TODO : selection mean/median
     
   if(method == "median") {
-    ds[i, "flanking_median"] <- median(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # median
+    ds[i, "flanking_median"] <- stats::median(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # median
    # ds[i, "flanking_mad"] <- mad(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # mad
    # TODO : remove flanking mad ? 
     scorec_median_raw <- 1 - ds[, data_counts_col]/ds[, "flanking_median"]
@@ -50,33 +49,41 @@ compute_rna_cscore <- function(ds, flanking=6, method) {
 #' @param flanking 
 #' @param data_counts_col 
 #' @return
-#' @export
 #'
 #' @examples
-compute_sample_cscore <- function(sample_df=NULL,
+.compute_sample_cscore <- function(sample_df=NULL,
                                       flanking=6,
                                     method) 
                                                    {
   data_rna_col = "rna"
   sample_df[,data_rna_col] <- as.factor(sample_df[,data_rna_col])
   RNA_counts_list <- split(sample_df, sample_df[,data_rna_col])
-  sample_score <- lapply(RNA_counts_list, compute_rna_cscore, flanking , method)
+  sample_score <- lapply(RNA_counts_list, .compute_rna_cscore, flanking , method)
   
   return(dplyr::bind_rows(sample_score))
   
 }
 
-#' compute score for a whole sample cohort
+#' compute c-score for a given riboclass
 #'
 #' @param ribo a riboclass object 
 #' @param flanking the window size around the position (the latter is excluded)
 #' @param data_counts_col Name or position of the column containing count values
 #' @param data_rna_col Name or position of the column containing the RNA
 #'
-#' @return
+#' @return a riboclass with c-score columns added in data
 #' @export
 #'
 #' @examples
+#' ribo_with_cscore <- compute_cscore(ribo)
+#' 
+#' @details 
+#'\if{html}{\figure{cscore.png}{c-score visualised}}
+#'\if{latex}{\figure{cscore.png}{options: width=0.5in}}' 
+#' 
+#' For each nucleotide position, a c-score is calculated by 
+#' 
+#' 
 compute_cscore <- function(ribo=NULL, flanking=6,
                             method = "median",
                             use_multithreads = FALSE
@@ -92,8 +99,8 @@ compute_cscore <- function(ribo=NULL, flanking=6,
     
    # Experimental : Multithreading is 3x faster than single-thread
    # TODO : implement 
-   if(use_multithreads) samples_czscore <- BiocParallel::bplapply(dt[["data"]], compute_sample_cscore, flanking, method)
-   else samples_czscore <- lapply(dt[["data"]], compute_sample_cscore, flanking, method)
+   if(use_multithreads) samples_czscore <- BiocParallel::bplapply(dt[["data"]], .compute_sample_cscore, flanking, method)
+   else samples_czscore <- lapply(dt[["data"]], .compute_sample_cscore, flanking, method)
 
      ribo[["data"]] <- samples_czscore
      ribo["cscore_window"] <- flanking
