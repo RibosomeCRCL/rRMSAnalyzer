@@ -10,7 +10,7 @@
 #' @examples subset_ribo(ribo, c("18S_15","5.8S_4")) # returns a riboClass with only 2 selected positions
 subset_ribo <- function(ribo, positions_to_keep) {
   #TODO : accept df without named_position + our df
-  ribo_data <- ribo[["counts"]]
+  ribo_data <- ribo[["data"]]
   positions_df <- NULL
   if(is.data.frame(positions_to_keep)) {
     positions_df <- positions_to_keep
@@ -54,7 +54,7 @@ subset_ribo <- function(ribo, positions_to_keep) {
     return(x)
   })
   
-  ribo[["counts"]] <- subsetted_ribo_data
+  ribo[["data"]] <- subsetted_ribo_data
   return(ribo)
 
   
