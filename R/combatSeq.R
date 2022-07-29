@@ -1,14 +1,20 @@
 
-#' Correct batch effect with ComBat seq method
+#' Correct batch effect with ComBatseq method
 #'
 #' @param ribo a riboclass
 #' @param batch name of the column having batch effect for each sample (inside riboClass's metadata)
-#'
-#' @return a riboClass with adjusted counts
+#' @param ... Parameters for sva's comBat_seq function. ?ComBat_seq for more details
+#' @return riboClass
 #' @export
+#' 
+#' @details 
+#' See sva's ComBat_seq documentation for more informations
+#'
+#' @references Yuqing Zhang, Giovanni Parmigiani, W Evan Johnson, ComBat-seq: batch effect adjustment for RNA-seq count data, NAR Genomics and Bioinformatics, Volume 2, Issue 3, 1 September 2020, lqaa078, https://doi.org/10.1093/nargab/lqaa078
+#'  
 #'
 #' @examples 
-adjust_bias <- function(ribo, batch) {
+adjust_bias <- function(ribo, batch,...) {
   # Get the count matrix.
   # example :
   #            VMT11.csv VMT12.csv VMT13.csv VMT14.csv VMT15.csv VMT16.csv
@@ -22,7 +28,7 @@ adjust_bias <- function(ribo, batch) {
   matrix_ribo <- extract_data(ribo,"count",position_to_rownames = T)
   #reorganize column according to metadata and convert DF to matrix (otherwise, ComBat_seq won't work)
   matrix_ribo <- as.matrix(matrix_ribo[,c(ribo[["metadata"]][["samplename"]])])
-  adjusted_matrix <- sva::ComBat_seq(matrix_ribo,batch = ribo[["metadata"]][[batch]])
+  adjusted_matrix <- sva::ComBat_seq(matrix_ribo,batch = ribo[["metadata"]][[batch]],...)
   
   ribo_updated <- update_ribo_count_with_matrix(ribo,adjusted_matrix)
   ribo_updated["combatSeq_count"] <- TRUE
