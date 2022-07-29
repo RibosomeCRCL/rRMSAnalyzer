@@ -15,8 +15,12 @@ subset_ribo <- function(ribo, positions_to_keep) {
   if(is.data.frame(positions_to_keep)) {
     positions_df <- positions_to_keep
     positions_to_keep <- positions_to_keep[["named_position"]]
+    if(is.null(positions_to_keep)) stop(paste("no position to keep ! Do you have a \"named_position\" column in your annotation data ?"))
     
+
   }
+  
+  
   
   #check if positions_to_keep contains only existing positions. Throw a warning if not.
   existing_positions <- ribo[[1]][[1]][["named_position"]]
