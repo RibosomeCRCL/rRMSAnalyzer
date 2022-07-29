@@ -9,7 +9,7 @@
 #' @return
 #'
 #' @examples
-read_count_files <-
+.read_count_files <-
   function(path_to_files,
            sep,
            header,
@@ -39,7 +39,7 @@ read_count_files <-
     # RNA | position_on_rna | count
     # and add a siteID column with a default value of NA
     rna_counts_dt <-
-      lapply(rna_counts_fl, read.csv, sep = sep, header = header)
+      lapply(rna_counts_fl, utils::read.csv, sep = sep, header = header)
     rna_counts_dt <- lapply(rna_counts_dt, function(x) {
       x <- x[, c(rna_col, position_col, count_col)]
       colnames(x) <- c("rna", "rnapos", "count")
@@ -49,7 +49,7 @@ read_count_files <-
     
     # 3) combine both the RNA and genomic position columns to generate the column "named_position".
     rna_counts_dt <-
-      generate_riboclass_named_position(rna_counts_dt, "rna", "rnapos")
+      .generate_riboclass_named_position(rna_counts_dt, "rna", "rnapos")
     
    
     # 4) give a name for each element of the list
@@ -88,11 +88,14 @@ read_count_files <-
 
 #' Aggregate results into a single matrix
 #'
-#' @param ribo
-#' @param col 
-#' @param position_to_rownames 
+#' For a given column in data, this function will generate a dataframe with all samples
+#' and all positions (if only_identified is false) or only positions with a siteID (if only_identified is true).
 #'
-#' @return
+#' @param ribo a riboclass object
+#' @param col column of data you want extract data from
+#' @param position_to_rownames should position be considered as a rowname ?
+#'
+#' @return a dataframe 
 #' @export
 #'
 #' @examples
@@ -100,6 +103,7 @@ extract_data <- function(ribo, col = "cscore", position_to_rownames =F) {
   #TODO : sample_list -> ribo
   #TODO : check if position_to_rownames is useful ? -> trash
   #TODO : check if col exist
+  #TODO : select only siteIdentified sites
   #The rows of this matrix correspond to the positions on the rRNA
   
   
@@ -135,16 +139,20 @@ extract_data <- function(ribo, col = "cscore", position_to_rownames =F) {
   
 }
 
-#' Title
+#' Rename RNAs in your riboclass
 #'
+#'  
+#' 
 #' @param ribo a riboclass object
-#' @param new_names the new names for your RNA
+#' @param new_names the new names for your RNA (by order of rna size)
+#'
+#' 
 #'
 #' @return
 #' @export
 #'
 #' @examples
-update_riboclass_rna_names <- function(ribo,new_names) {
+rename_rna <- function(ribo,new_names=c("5S","5.8S","18S","28S")) {
   
   sample_list <- ribo[["data"]]
   rna_names <- ribo[["rna_names"]]
@@ -158,7 +166,7 @@ update_riboclass_rna_names <- function(ribo,new_names) {
   rna_names[2] <- rna_names[3]
   rna_names <- rna_names[,1:2]
   # Update nomenclature according to the new RNAs
-  sample_list_renamed <- generate_riboclass_named_position(sample_list_renamed,1,2)
+  sample_list_renamed <- .generate_riboclass_named_position(sample_list_renamed,1,2)
 
   ribo[["data"]] <- sample_list_renamed
   ribo[["rna_names"]] <- rna_names
@@ -192,7 +200,7 @@ generate_rna_names_table <- function(count_df) {
 #' @export
 #'
 #' @examples
-generate_riboclass_named_position <- function(sample_count_list,rna_col,rnapos_col) {
+.generate_riboclass_named_position <- function(sample_count_list,rna_col,rnapos_col) {
   #combine the RNA name and the position on this RNA to form the row names.
   sample_count_list_named <- lapply(sample_count_list,function(x){ 
     x["named_position"] <-  paste(x[,rna_col], formatC(x[,rnapos_col],width = 4,flag = "0"), sep = "_"); x 
@@ -262,7 +270,7 @@ mean_samples_by_conditon <- function(ribo,value, metadata_condition) {
   
   metadata <- ribo[["metadata"]]
   ribo_concat[metadata_condition] <- metadata[,metadata_condition][match(ribo_concat[,"sample"], metadata[,"samplename"])]
-  ribo_condition <- ribo_concat %>% group_by(named_position, !!sym(metadata_condition)) %>% summarise(mean = mean(!!sym(value)), sd = sd(!!sym(value)))
+  ribo_condition <- ribo_concat %>% dplyr::group_by(named_position, !!sym(metadata_condition)) %>% dplyr::summarise(mean = mean(!!sym(value)), sd = stats::sd(!!sym(value)))
   return(ribo_condition)
 }
 

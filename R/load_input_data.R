@@ -1,22 +1,43 @@
+#' Create a riboClass from count files and metadata.
+#' 
+#' @description 
 #' Read ribomethseq count files and their associated metadata and turn them into a riboclass.
 #' This should be considered as the entrypoint for the RMS package, as all other functions use the riboclass as an input.
 #' 
-#' @param counts_path: path to the data folder with the count files
-#' @param metadata: data frame or path to the CSV file containing metadata
-#' @param columns_names : list of names to set for each column (from left to right)
-#' @param count_sep: delimiter used in genomecov csv
-#' @param metadata_sep: delimiter used in metadata csv
+#' 
+#' 
+#' @details 
+#' Count data is expected to have the following the format (columns ordering is not important)
+#' 
+#'| RNA | Position_on_RNA | count |
+#'|-----|-----------------|-------|
+#'| 18S | 1245            | 30492  |
+#'| 18S | 1246            | 19674  |
+#'| 18S | 1247            | 23673  |
+#' 
+#' @md
+#' 
+#' If given, the Metadata table must have a **filename **and a **samplename** columns.
+#' 
+#' The riboClass will contain the follwing elements : 
+#' 
+#' 
+#' @param count_path: path to the data folder containing count files
+#' @param metadata: data frame or path to a CSV file containing metadata
+#' @param count_sep: delimiter used in genomecov (csv file only)
+#' @param metadata_sep: delimiter used in metadata (csv file only)
 #' @param count_header: boolean, specify if count files have a header or not. 
+#' @param count_col: column containing count values
 #' @param count_rna: name or position of the column containing the name of the RNA in counts data.
 #' @param count_rnapos: name or position of the column containing the position on an RNA in counts data.
 #' @param metadata_filename: name or position of the column containing the filename
-#' @param metadata_samplename: name or position of the column containing sample name
+#' @param metadata_samplename: name or position of the column containing the sample name
 #' @return a riboclass
 #' @export
-create_riboclass <- function(counts_path,
+create_riboclass <- function(count_path,
                              metadata = NA,
                              count_sep = "\t",
-                             metadata_sep = ";",
+                             metadata_sep = ",",
                              count_header = FALSE,
                              count_col = 3,
                              count_rna = 1,
@@ -28,7 +49,7 @@ create_riboclass <- function(counts_path,
   # col des positions connus => siteID
   
   # read count files
-  #rna_counts_dt <- read_count_files(counts_path,count_sep,count_header,count_rna,count_rnapos,count_col)
+  #rna_counts_dt <- .read_count_files(count_path,count_sep,count_header,count_rna,count_rnapos,count_col)
   
   #create a table containing rna names
   
@@ -38,15 +59,15 @@ create_riboclass <- function(counts_path,
   
   #loading metadata
   if(is.na(metadata)) {
-    metadata <- generate_metadata_df(counts_path,create_samplename_col = F)
-    rna_counts_dt <- read_count_files(counts_path,count_sep,count_header,count_rna,count_rnapos,count_col)
+    metadata <- generate_metadata_df(count_path,create_samplename_col = F)
+    rna_counts_dt <- .read_count_files(count_path,count_sep,count_header,count_rna,count_rnapos,count_col)
     rna_names_df <- generate_rna_names_table(rna_counts_dt[[1]])
   }
   
   else {
     
     if(is.character(metadata)) {
-      metadata <- read.csv(metadata, sep = metadata_sep)
+      metadata <- utils::read.csv(metadata, sep = metadata_sep)
 
     }
     
@@ -59,7 +80,7 @@ create_riboclass <- function(counts_path,
     rownames(metadata) <- metadata[,"samplename"]
     
     # read count data
-    rna_counts_dt <- read_count_files(counts_path,count_sep,count_header,
+    rna_counts_dt <- .read_count_files(count_path,count_sep,count_header,
                                       count_rna,count_rnapos,count_col,
                                       files_to_keep = as.character(metadata[,metadata_filename]))
     
