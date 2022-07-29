@@ -14,8 +14,7 @@
   if (is.null(ds)) {stop("MISSING parameter. Please specify a data frame <ds>.")}
   
   # remove any cscore-related columns if they already exist
- ds <- ds %>% dplyr::select(-dplyr::any_of(c("flanking_median","flanking_mad","flanking_mean","cscore")))
-  
+  ds[,c("flanking_median","flanking_mad","flanking_mean","cscore")] <- list(NULL)
   # get the count column
    data_counts_col <- "count"
   
