@@ -23,7 +23,7 @@ keep_ribo_samples <- function(ribo = NULL, samples_to_keep = NULL) {
 }
 
 
-#' Delete samples from Riboclass object
+#' Remove samples from Riboclass object
 #'
 #' @param ribo 
 #' @param samples_to_delete A vector with the samples to keep
@@ -32,9 +32,9 @@ keep_ribo_samples <- function(ribo = NULL, samples_to_keep = NULL) {
 #' @export
 #'
 #' @examples
-#' ribo.test <- delete_ribo_samples(ribo = ribo, samples_to_keep = c("SAMPLE1", "SAMPLE2"))
+#' ribo.test <- remove_ribo_samples(ribo = ribo, samples_to_keep = c("SAMPLE1", "SAMPLE2"))
 
-delete_ribo_samples <- function(ribo = NULL, samples_to_delete = NULL) {
+remove_ribo_samples <- function(ribo = NULL, samples_to_delete = NULL) {
   
   if(all(samples_to_delete %in% names(ribo[["counts"]]))) {
     idx <- match(samples_to_delete, names(ribo[["counts"]]))
