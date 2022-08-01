@@ -61,7 +61,7 @@ create_riboclass <- function(count_path,
   if(is.na(metadata)) {
     metadata <- generate_metadata_df(count_path,create_samplename_col = F)
     rna_counts_dt <- .read_count_files(count_path,count_sep,count_header,count_rna,count_rnapos,count_col)
-    rna_names_df <- generate_rna_names_table(rna_counts_dt[[1]])
+    rna_names_df <- .generate_rna_names_table(rna_counts_dt[[1]])
   }
   
   else {
@@ -86,7 +86,7 @@ create_riboclass <- function(count_path,
     
     if(length(rna_counts_dt) == 0) stop(paste0("ERROR! No file has the filenames specified in your '",colnames(metadata[metadata_filename]),"' column"))
     # generate RNA names table
-    rna_names_df <- generate_rna_names_table(rna_counts_dt[[1]])
+    rna_names_df <- .generate_rna_names_table(rna_counts_dt[[1]])
     
     # Rename sample in counts list according to the names in metadata
     names(rna_counts_dt) <- metadata[,"samplename"][match(names(rna_counts_dt), metadata[,metadata_filename])]

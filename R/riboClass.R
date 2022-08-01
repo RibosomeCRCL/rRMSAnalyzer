@@ -178,10 +178,10 @@ rename_rna <- function(ribo,new_names=c("5S","5.8S","18S","28S")) {
 #' @param count_df 
 #'
 #' @return
-#' @export
+#' 
 #'
 #' @examples
-generate_rna_names_table <- function(count_df) {
+.generate_rna_names_table <- function(count_df) {
   
    rna_counts <- as.data.frame(sort(table(count_df[,1])))
 
@@ -197,7 +197,7 @@ generate_rna_names_table <- function(count_df) {
 #' @param rnapos_col 
 #'
 #' @return
-#' @export
+#' 
 #'
 #' @examples
 .generate_riboclass_named_position <- function(sample_count_list,rna_col,rnapos_col) {
