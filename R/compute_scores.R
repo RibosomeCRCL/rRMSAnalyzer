@@ -69,12 +69,12 @@
 #' @param flanking the window size around the position (the latter is excluded)
 #' @param data_counts_col Name or position of the column containing count values
 #' @param data_rna_col Name or position of the column containing the RNA
-#'
+#' @param core number of core to use in case of multithreading
 #' @return a riboclass with c-score columns added in data
 #' @export
 #'
 #' @examples
-#' ribo_with_cscore <- compute_cscore(ribo)
+#' ribo_with_cscore <- compute_cscore(ribo_toy)
 #' 
 #' @details 
 #'\if{html}{\figure{cscore.png}{c-score visualised}}
@@ -85,7 +85,8 @@
 #' 
 compute_cscore <- function(ribo=NULL, flanking=6,
                             method = "median",
-                            use_multithreads = FALSE
+                            use_multithreads = FALSE,
+                            core = 8
                             ) {
   
    # Check if a cscore calculation has been already done on the ribo
@@ -98,7 +99,7 @@ compute_cscore <- function(ribo=NULL, flanking=6,
     
    # Experimental : Multithreading is 3x faster than single-thread
    # TODO : implement 
-   if(use_multithreads) samples_czscore <- BiocParallel::bplapply(dt[["data"]], .compute_sample_cscore, flanking, method)
+   if(use_multithreads) samples_czscore <- parallel::mclapply(dt[["data"]], .compute_sample_cscore, flanking, method,mc.cores = core)
    else samples_czscore <- lapply(dt[["data"]], .compute_sample_cscore, flanking, method)
 
      ribo[["data"]] <- samples_czscore
