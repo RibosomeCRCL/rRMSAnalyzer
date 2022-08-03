@@ -11,13 +11,13 @@
 
 keep_ribo_samples <- function(ribo = NULL, samples_to_keep = NULL) {
   
-  if(all(samples_to_keep %in% names(ribo[["counts"]]))) {
+  if(all(samples_to_keep %in% names(ribo[["data"]]))) {
     
-    ribo[["counts"]] <- ribo[["counts"]][samples_to_keep]
+    ribo[["data"]] <- ribo[["data"]][samples_to_keep]
     ribo[["metadata"]] <- ribo[["metadata"]][match(samples_to_keep, rownames(ribo[["metadata"]])),]
     
   } else {
-    stop(paste("Samples name should be from", toString(names(ribo[["counts"]]))))
+    stop(paste("Samples name should be from", toString(names(ribo[["data"]]))))
   }
   return(ribo)
 }
@@ -36,13 +36,13 @@ keep_ribo_samples <- function(ribo = NULL, samples_to_keep = NULL) {
 
 remove_ribo_samples <- function(ribo = NULL, samples_to_delete = NULL) {
   
-  if(all(samples_to_delete %in% names(ribo[["counts"]]))) {
-    idx <- match(samples_to_delete, names(ribo[["counts"]]))
-    ribo[["counts"]] <- ribo[["counts"]][-idx]
+  if(all(samples_to_delete %in% names(ribo[["data"]]))) {
+    idx <- match(samples_to_delete, names(ribo[["data"]]))
+    ribo[["data"]] <- ribo[["data"]][-idx]
     ribo[["metadata"]] <- ribo[["metadata"]][-match(samples_to_delete, rownames(ribo[["metadata"]])),]
     
   } else {
-    stop(paste("Samples name should be from", toString(names(ribo[["counts"]]))))
+    stop(paste("Samples name should be from", toString(names(ribo[["data"]]))))
   }
   return(ribo)
 }
