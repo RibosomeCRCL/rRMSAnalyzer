@@ -25,15 +25,21 @@ adjust_bias <- function(ribo, batch,...) {
   # 18S_5         84       103       154       262       218       240
   # 18S_6        100       137       194       336       247       264
   
-  matrix_ribo <- extract_data(ribo,"count",position_to_rownames = T)
-  #reorganize column according to metadata and convert DF to matrix (otherwise, ComBat_seq won't work)
-  matrix_ribo <- as.matrix(matrix_ribo[,c(ribo[["metadata"]][["samplename"]])])
-  adjusted_matrix <- sva::ComBat_seq(matrix_ribo,batch = ribo[["metadata"]][[batch]],...)
-  
-  ribo_updated <- update_ribo_count_with_matrix(ribo,adjusted_matrix)
-  ribo_updated["combatSeq_count"] <- TRUE
-  ribo_updated["col_used_combatSeq"] <- batch
-  return(ribo_updated)
+  if(batch %in% colnames(ribo[["metadata"]])) {
+    matrix_ribo <- extract_data(ribo,"count",position_to_rownames = T)
+    #reorganize column according to metadata and convert DF to matrix (otherwise, ComBat_seq won't work)
+    matrix_ribo <- as.matrix(matrix_ribo[,c(ribo[["metadata"]][["samplename"]])])
+    adjusted_matrix <- sva::ComBat_seq(matrix_ribo,batch = ribo[["metadata"]][[batch]],...)
+    
+    ribo_updated <- update_ribo_count_with_matrix(ribo,adjusted_matrix)
+    ribo_updated["combatSeq_count"] <- TRUE
+    ribo_updated["col_used_combatSeq"] <- batch
+    return(ribo_updated)
+  }
+  else {
+    stop(paste0("\"",batch, "\" is not a valid metadata. Please check your batch parameter."))
+  }
+
   
 }
 
