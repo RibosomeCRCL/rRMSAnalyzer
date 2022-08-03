@@ -7,7 +7,7 @@
 #' @return a riboClass object with only selected positions for each sample.
 #' @export
 #'
-#' @examples subset_ribo(ribo, c("18S_15","5.8S_4")) # returns a riboClass with only 2 selected positions
+#' @examples subset_ribo(ribo_toy, c("NR_046235.3_18S_0681","NR_046235.3_18S_0682"))
 subset_ribo <- function(ribo, positions_to_keep) {
   #TODO : accept df without named_position + our df
   ribo_data <- ribo[["data"]]

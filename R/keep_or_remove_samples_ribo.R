@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' ribo.test <- keep_ribo_samples(ribo = ribo, samples_to_keep = c("SAMPLE1", "SAMPLE2"))
+#' ribo.test <- keep_ribo_samples(ribo = ribo_toy, samples_to_keep = c("4283", "3307"))
 
 keep_ribo_samples <- function(ribo = NULL, samples_to_keep = NULL) {
   
@@ -32,7 +32,7 @@ keep_ribo_samples <- function(ribo = NULL, samples_to_keep = NULL) {
 #' @export
 #'
 #' @examples
-#' ribo.test <- remove_ribo_samples(ribo = ribo, samples_to_keep = c("SAMPLE1", "SAMPLE2"))
+#' ribo.test <- remove_ribo_samples(ribo = ribo_toy, samples_to_delete = c("4283", "3307"))
 
 remove_ribo_samples <- function(ribo = NULL, samples_to_delete = NULL) {
   
