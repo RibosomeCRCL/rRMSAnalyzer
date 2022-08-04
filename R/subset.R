@@ -8,15 +8,17 @@
 #' @export
 #'
 #' @examples subset_ribo(ribo_toy, c("NR_046235.3_18S_0681","NR_046235.3_18S_0682"))
-subset_ribo <- function(ribo, positions_to_keep) {
+subset_ribo <- function(ribo, positions_to_keep, anno_rna, anno_pos) {
   #TODO : accept df without named_position + our df
   ribo_data <- ribo[["data"]]
   positions_df <- NULL
   if(is.data.frame(positions_to_keep)) {
+    if(!("named_position" %in% positions_to_keep)) { 
+      positions_to_keep <- generate_name_positions(positions_to_keep,anno_rna,anno_pos)
+    }
+    
     positions_df <- positions_to_keep
     positions_to_keep <- positions_to_keep[["named_position"]]
-    if(is.null(positions_to_keep)) stop(paste("no position to keep ! Do you have a \"named_position\" column in your annotation data ?"))
-    
 
   }
   
@@ -34,6 +36,8 @@ subset_ribo <- function(ribo, positions_to_keep) {
   #iterates through samples and keep only specified positions
   
   subsetted_ribo_data <- lapply(ribo_data, function(x) {
+    # fix R CMD check note due to the non-standard evaluation in the subset function call
+    renamed_position <- NULL 
     if (!is.null(positions_df)) {
       x <- x[which(x[,"named_position"] %in% positions_df[,"named_position"]),]
       
