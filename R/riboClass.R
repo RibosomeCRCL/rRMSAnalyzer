@@ -100,6 +100,8 @@
 #'
 #' @examples
 extract_data <- function(ribo, col = "cscore", position_to_rownames =F) {
+  
+  named_position <- NULL # NSE fix
   #TODO : sample_list -> ribo
   #TODO : check if position_to_rownames is useful ? -> trash
   #TODO : check if col exist
@@ -152,6 +154,8 @@ extract_data <- function(ribo, col = "cscore", position_to_rownames =F) {
 #' @export
 #'
 #' @examples
+#' ribo_toy <- rename_rna(ribo_toy ,c("5S","5.8S","18S","28S"))
+
 rename_rna <- function(ribo,new_names=c("5S","5.8S","18S","28S")) {
   
   sample_list <- ribo[["data"]]
@@ -217,7 +221,6 @@ rename_rna <- function(ribo,new_names=c("5S","5.8S","18S","28S")) {
 #' @return a riboclass with updated values
 #' @export
 #'
-#' @examples
 update_ribo_count_with_matrix <- function(ribo, update_matrix) {
   
   #first, check if we have the sample name in our column
@@ -226,7 +229,7 @@ update_ribo_count_with_matrix <- function(ribo, update_matrix) {
   riboclass_names <- sort(names(ribo[["data"]]))
   
   if(col_names != riboclass_names) {
-    error("mismatch between samplenames and matrix's samples names")
+    stop("mismatch between samplenames and matrix's samples names")
   }
   
   # For each sample in the riboclass, replace count values with matrix's ones
@@ -252,13 +255,15 @@ update_ribo_count_with_matrix <- function(ribo, update_matrix) {
 #' @param ribo a riboClass object
 #' @param metadata_condition condition to group samples by
 #' @param value value to calculate mean by condition
-#'
+#' 
+#' @importFrom dplyr %>%
+#' @importFrom rlang sym
 #' @return
 #' @export
 #'
-#' @examples
 mean_samples_by_conditon <- function(ribo,value, metadata_condition) {
   
+  named_position <- NULL # NSE fix
   ribo_list <- ribo[["data"]]
   ribo_names <- names(ribo_list)
   ribo_list_named <- lapply(ribo_names, function(x){
@@ -283,7 +288,6 @@ mean_samples_by_conditon <- function(ribo,value, metadata_condition) {
 #' @return a riboClass without the specified RNA
 #' @export
 #'
-#' @examples
 ribo_remove_rna <- function(ribo, name_rna_to_remove) {
   #TODO : use lapply instead
   for(name in names(ribo$counts)) {
