@@ -1,10 +1,13 @@
 #' Import and transform a list of count files for a riboClass
 #' @description This function should not be used by itself. It is better to generate a full riboClass.
+#'
 #' @param path_to_files path to the folder containing count files
 #' @param sep CSV seperator 
 #' @param rna_col position of the column containing RNA name
 #' @param position_col position of the column containing the genomic position
 #' @param count_col position of the column contaning the count for the given genomic position 
+#' @param header does the files contain an header ?
+#' @param files_to_keep if specified, only the file following files_to_keep will be kept
 #'
 #' @return
 #'
@@ -179,7 +182,7 @@ rename_rna <- function(ribo,new_names=c("5S","5.8S","18S","28S")) {
 
 #' Generate a table with current rna names for a given riboClass
 #' The table also contains 
-#' @param count_df 
+#' @param count_df a count file dataframe, containing a columns with rna names
 #'
 #' @return
 #' 
@@ -196,9 +199,9 @@ rename_rna <- function(ribo,new_names=c("5S","5.8S","18S","28S")) {
 #' Generate the default name for positions
 #' This function is used to generate the named_position column in a given sample.
 #' It is always called when generating a riboClass.
-#' @param sample_count_list 
-#' @param rna_col 
-#' @param rnapos_col 
+#' @param sample_count_list list of count dataframe (one sample = one count dataframe)
+#' @param rna_col name or position of the column containing RNA names
+#' @param rnapos_col name or position of the column containing position in RNA
 #'
 #' @return
 #' 
@@ -228,7 +231,7 @@ update_ribo_count_with_matrix <- function(ribo, update_matrix) {
   col_names <- sort(names(update_df))
   riboclass_names <- sort(names(ribo[["data"]]))
   
-  if(col_names != riboclass_names) {
+  if(!identical(col_names,riboclass_names)) {
     stop("mismatch between samplenames and matrix's samples names")
   }
   
@@ -282,8 +285,8 @@ mean_samples_by_conditon <- function(ribo,value, metadata_condition) {
 
 #' Remove a RNA among all samples
 #' 
-#' @param ribo 
-#' @param name_rna_to_remove 
+#' @param ribo a riboclass
+#' @param name_rna_to_remove name of the rna to remove
 #'
 #' @return a riboClass without the specified RNA
 #' @export
