@@ -1,5 +1,16 @@
 #' Create a riboClass from count files and metadata.
 #' 
+#' @param count_path path to the data folder containing count files
+#' @param metadata data frame or path to a CSV file containing metadata
+#' @param count_sep delimiter used in genomecov (csv file only)
+#' @param metadata_sep delimiter used in metadata (csv file only)
+#' @param count_header boolean, specify if count files have a header or not. 
+#' @param count_col column containing count values
+#' @param count_rna name or position of the column containing the name of the RNA in counts data.
+#' @param count_rnapos name or position of the column containing the position on an RNA in counts data.
+#' @param metadata_filename name or position of the column containing the filename
+#' @param metadata_samplename name or position of the column containing the sample name
+#'
 #' @description 
 #' Read ribomethseq count files and their associated metadata and turn them into a riboclass.
 #' This should be considered as the entrypoint for the RMS package, as all other functions use the riboclass as an input.
@@ -22,20 +33,10 @@
 #' The riboClass will contain the follwing elements : 
 #' 
 #' 
-#' @param count_path: path to the data folder containing count files
-#' @param metadata: data frame or path to a CSV file containing metadata
-#' @param count_sep: delimiter used in genomecov (csv file only)
-#' @param metadata_sep: delimiter used in metadata (csv file only)
-#' @param count_header: boolean, specify if count files have a header or not. 
-#' @param count_col: column containing count values
-#' @param count_rna: name or position of the column containing the name of the RNA in counts data.
-#' @param count_rnapos: name or position of the column containing the position on an RNA in counts data.
-#' @param metadata_filename: name or position of the column containing the filename
-#' @param metadata_samplename: name or position of the column containing the sample name
 #' @return a riboclass
 #' @export
 create_riboclass <- function(count_path,
-                             metadata = NA,
+                             metadata = NULL,
                              count_sep = "\t",
                              metadata_sep = ",",
                              count_header = FALSE,
@@ -58,7 +59,7 @@ create_riboclass <- function(count_path,
 
   
   #loading metadata
-  if(is.na(metadata)) {
+  if(is.null(metadata)) {
     metadata <- generate_metadata_df(count_path,create_samplename_col = F)
     rna_counts_dt <- .read_count_files(count_path,count_sep,count_header,count_rna,count_rnapos,count_col)
     rna_names_df <- .generate_rna_names_table(rna_counts_dt[[1]])
@@ -107,9 +108,9 @@ create_riboclass <- function(count_path,
 
 
 #' Generate a metadata dataframe, given a list of files
-#' @param counts_folder_path: the path where count files are stored
-#' @param create_samplename_col: generate a sample name col with filename by default
-#' @param stop_symbol: keep the filename until the stop symbol is reached
+#' @param counts_folder_path the path where count files are stored
+#' @param create_samplename_col generate a sample name col with filename by default
+#' @param stop_symbol keep the filename until the stop symbol is reached
 #' @export
 generate_metadata_df <- function(counts_folder_path,
                                  create_samplename_col=T,
@@ -140,6 +141,8 @@ generate_metadata_df <- function(counts_folder_path,
 #'
 #' @param sample_1 First sample to check against sample_2
 #' @param sample_2 Second sample to check against sample_1
+#' @param sample_1_name name of sample 1
+#' @param sample_2_name name of sample 2
 #'
 #' @return A boolean indicating if the two samples are identical.
 #' 
