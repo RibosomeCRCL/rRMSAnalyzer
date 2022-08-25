@@ -5,7 +5,7 @@
 #' @param ds dataframe of a given RNA for a given sample
 #' @param flanking the number of flanking position to use for the window
 #' @param data.counts.col column number where counts value are stored
-#'
+#' 
 #' @return
 #'
 #' @examples
@@ -64,7 +64,7 @@
 }
 
 #' compute c-score for a given riboclass
-#'
+#' 
 #' @param ribo a riboclass object 
 #' @param flanking the window size around the position (the latter is excluded)
 #' @param data_counts_col Name or position of the column containing count values
@@ -85,8 +85,7 @@
 #' 
 compute_cscore <- function(ribo=NULL, flanking=6,
                             method = "median",
-                            use_multithreads = FALSE,
-                            core = 8
+                            core = 1
                             ) {
   
    # Check if a cscore calculation has been already done on the ribo
@@ -99,7 +98,7 @@ compute_cscore <- function(ribo=NULL, flanking=6,
     
    # Experimental : Multithreading is 3x faster than single-thread
    # TODO : implement 
-   if(use_multithreads) samples_czscore <- parallel::mclapply(dt[["data"]], .compute_sample_cscore, flanking, method,mc.cores = core)
+   if(core > 1) samples_czscore <- parallel::mclapply(dt[["data"]], .compute_sample_cscore, flanking, method,mc.cores = core)
    else samples_czscore <- lapply(dt[["data"]], .compute_sample_cscore, flanking, method)
 
      ribo[["data"]] <- samples_czscore
