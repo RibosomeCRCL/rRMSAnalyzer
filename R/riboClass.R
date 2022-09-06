@@ -21,6 +21,8 @@
            count_col,
            files_to_keep = NULL) {
     
+    if(!dir.exists(path_to_files)) stop("the path given for the csv files does not exist or is not a directory !")
+    
     rna_counts_fl <-
       list.files(path_to_files, recursive = T, full.names = T)
     
@@ -254,7 +256,7 @@ update_ribo_count_with_matrix <- function(ribo, update_matrix) {
 
 
 #' Regroup samples by condition and calculate mean for each condition
-#'
+#' 
 #' @param ribo a riboClass object
 #' @param metadata_condition condition to group samples by
 #' @param value value to calculate mean by condition
@@ -263,7 +265,7 @@ update_ribo_count_with_matrix <- function(ribo, update_matrix) {
 #' @importFrom rlang sym
 #' @return
 #' @export
-#'
+#' 
 mean_samples_by_conditon <- function(ribo,value, metadata_condition) {
   
   named_position <- NULL # NSE fix
