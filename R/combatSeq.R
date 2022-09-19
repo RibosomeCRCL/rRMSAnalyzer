@@ -1,19 +1,23 @@
 
 #' Correct batch effect with ComBatseq method
-#'
-#' @param ribo a riboclass
-#' @param batch name of the column having batch effect for each sample (inside riboClass's metadata)
-#' @param ... Parameters for sva's comBat_seq function. ?ComBat_seq for more details
-#' @return riboClass
+#' 
+#' @param ribo a RiboClass object, see constructor : \code{\link{create_riboclass}}
+#' @param batch name of the column in metadata that contains the batch number.
+#' @param ... Parameters for sva's \code{\link[sva]{ComBat_seq}} function.
+#' @return RiboClass with adjusted values and recomputed cscore.
 #' @export
 #' 
 #' @details 
-#' See sva's ComBat_seq documentation for more informations
-#'
-#' @references Yuqing Zhang, Giovanni Parmigiani, W Evan Johnson, ComBat-seq: batch effect adjustment for RNA-seq count data, NAR Genomics and Bioinformatics, Volume 2, Issue 3, 1 September 2020, lqaa078, https://doi.org/10.1093/nargab/lqaa078
+#' You must have a column with the batch number for each sample in your RiboClass’s metadata.
 #'  
+#' @references Yuqing Zhang, Giovanni Parmigiani, W Evan Johnson, ComBat-seq: batch effect adjustment for RNA-seq count data, NAR Genomics and Bioinformatics, Volume 2, Issue 3, 1 September 2020, lqaa078, https://doi.org/10.1093/nargab/lqaa078
 #'
-#' @examples 
+#'
+#' @examples
+#' data("ribo_toy")
+#' ribo_toy_two <- keep_ribo_samples(ribo_toy,c("4283","RNA1","4272","RNA2"))
+#' ribo_toy_adjusted <- adjust_bias(ribo_toy_two,"run") 
+#' 
 adjust_bias <- function(ribo, batch,...) {
   # Get the count matrix.
   # example :
@@ -32,12 +36,23 @@ adjust_bias <- function(ribo, batch,...) {
     adjusted_matrix <- sva::ComBat_seq(matrix_ribo,batch = ribo[["metadata"]][[batch]],...)
     
     ribo_updated <- update_ribo_count_with_matrix(ribo,adjusted_matrix)
+    
+    if(ribo_updated[["has_cscore"]]) {
+      cat("Recalculating c-score using previously given parameters...\n")
+      cat(paste("c-score method :", ribo_updated[["cscore_method"]],"\n"))
+      cat(paste("flanking window :", ribo_updated[["cscore_window"]],"\n"))
+      
+      ribo_updated <- compute_cscore(ribo_updated, ribo_updated[["cscore_window"]],ribo_updated[["cscore_method"]],2)
+    }
+    
+
+    
     ribo_updated["combatSeq_count"] <- TRUE
     ribo_updated["col_used_combatSeq"] <- batch
     return(ribo_updated)
   }
   else {
-    stop(paste0("\"",batch, "\" is not a valid metadata. Please check your batch parameter."))
+    stop(paste0("\"",batch, "\" is not a valid metadata."))
   }
 
   
