@@ -1,15 +1,14 @@
-#' Transfrom ribo class data to ggplot data frame
+#' Transfrom RiboClass data to a ggplot-friendly data frame
+#' 
+#' Turn a riboClass into a dataframe. You can append some metadata columns if
+#' you need extra information for your ggplot.
 #'
-#' @param ribo 
-#' @param metadata_columns The metadata columns to keep when transforming
+#' @param ribo a RiboClass object
+#' @param metadata_col The metadata columns to add when transforming.
 #'
-#' @return
+#' @return a ggplot-friendly dataframe
 #' @export
 #' 
-
-
-
-
 format_to_plot <- function(ribo, metadata_col = NULL) {
   site <- NULL #NSE fix
   # First let's extract the data from ribo
@@ -29,7 +28,7 @@ format_to_plot <- function(ribo, metadata_col = NULL) {
   }
   else {
     # Check if the metadata_columns are numeric. 
-    # If yes than get the column names of the selected columns
+    # If yes then get the column names of the selected columns
     if (is.numeric(metadata_col)){
       metadata_columns <- colnames(ribo[["metadata"]][metadata_col])
     }

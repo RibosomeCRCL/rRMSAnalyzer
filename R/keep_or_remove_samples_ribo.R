@@ -1,9 +1,10 @@
 #' Keep only a selected number of samples
 #'
-#' @param ribo 
+#' @param ribo a RiboClass object, see constructor : 
+#' \code{\link{create_riboclass}}
 #' @param samples_to_keep A vector with the samples to keep
 #'
-#' @return
+#' @return a riboClass with only selected samples in data and metadata
 #' @export
 #'
 #' @examples
@@ -25,10 +26,10 @@ keep_ribo_samples <- function(ribo = NULL, samples_to_keep = NULL) {
 
 #' Remove samples from Riboclass object
 #'
-#' @param ribo 
-#' @param samples_to_delete A vector with the samples to keep
+#' @param ribo a RiboClass
+#' @param samples_to_delete A vector with the samples to remove
 #'
-#' @return
+#' @return a riboClass without the removed samples in data and metadata
 #' @export
 #'
 #' @examples

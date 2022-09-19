@@ -1,23 +1,23 @@
-#' Create a riboClass from count files and metadata.
+#' Create a RiboClass from count files and metadata.
 #' 
-#' @param count_path path to the data folder containing count files
-#' @param metadata data frame or path to a CSV file containing metadata
+#' @param count_path (required) path to the data folder containing count files
+#' @param metadata  data frame or path to a CSV file containing metadata.
 #' @param count_sep delimiter used in genomecov (for csv file only)
 #' @param metadata_sep delimiter used in metadata (for csv file only)
 #' @param count_header boolean, specify if count files have a header or not. 
-#' @param count_col column containing count values
-#' @param count_rna name or position of the column containing the name of the RNA in counts data.
-#' @param count_rnapos name or position of the column containing the position on an RNA in counts data.
-#' @param metadata_filename name or position of the column containing the filename
-#' @param metadata_samplename name or position of the column containing the sample name
+#' @param count_value column containing count values
+#' @param count_rnaid name or position of the column containing the name of the RNA in count data.
+#' @param count_pos name or position of the column containing the site's position in count data.
+#' @param metadata_key name or position of the column containing the samples' filename
+#' @param metadata_id if it exists, name or position of the column containing the sample name
 #'
 #' @description 
-#' Read ribomethseq count files and their associated metadata and turn them into a riboclass.
-#' __This is the entrypoint for the Riboscore package__, as all other functions use the riboclass as an input.
+#' Read ribomethseq count files and their associated metadata and turn them into a RiboClass.
+#' __This is the entrypoint for the Riboscore package__, as all other functions use the RiboClass as an input.
 #' 
 #' 
 #' @details
-#' The riboclass object is a S3 Class with three elements :
+#' The RiboClass object is a S3 Class with three elements :
 #' 
 #' 
 #'  __data__ : a list of dataframe, each corresponding to a sample.
@@ -25,7 +25,7 @@
 #' * rna : the name of the RNA for a given position
 #' * rnapos : the position __on the current RNA__
 #' * count : the number of read starting (5'end) or ending (3'end) at this position
-#' * site : the name of the site, which will be empty after the riboclass creation. To fill this column, use \code{\link{annotate_site}}.
+#' * site : the name of the site, which will be empty after the RiboClass creation. To fill this column, use \code{\link{annotate_site}}.
 #' 
 #' 
 #' __metadata__ : a dataframe containing all information related to each sample.
@@ -39,7 +39,7 @@
 #' the path given in __count_path__ should contains only necessary CSV files (one per sample).
 #' While the directory structure is not important, make sure each sample has an unique filename.
 #' 
-#' The path to the csv file or the dataframe given in __metadata__ must contains a filename column, as this will serve to link metadata with the dataframes in data during the riboclass creation.
+#' The path to the csv file or the dataframe given in __metadata__ must contains a filename column, as this will serve to link metadata with the dataframes in data during the RiboClass creation.
 #' 
 #' 
 #' @md
@@ -47,24 +47,24 @@
 #' @example 
 #' csv_files_path <- system.file("extdata", "miniglioma", package = "Riboscore")
 #' 
-#' @return a riboclass
+#' @return a RiboClass
 #' @export
 create_riboclass <- function(count_path,
                              metadata = NULL,
                              count_sep = "\t",
                              metadata_sep = ",",
                              count_header = FALSE,
-                             count_col = 3,
-                             count_rna = 1,
-                             count_rnapos = 2,
-                             metadata_filename = 1,
-                             metadata_samplename = 2) {
+                             count_value = 3,
+                             count_rnaid = 1,
+                             count_pos = 2,
+                             metadata_key = "filaname",
+                             metadata_id = NULL) {
   
   # named_position => default_posname
   # col des positions connus => siteID
   
   # read count files
-  #rna_counts_dt <- .read_count_files(count_path,count_sep,count_header,count_rna,count_rnapos,count_col)
+  #rna_counts_dt <- .read_count_files(count_path,count_sep,count_header,count_rnaid,count_pos,count_value)
   
   #create a table containing rna names
   
@@ -75,7 +75,7 @@ create_riboclass <- function(count_path,
   #loading metadata
   if(is.null(metadata)) {
     metadata <- generate_metadata_df(count_path,create_samplename_col = F)
-    rna_counts_dt <- .read_count_files(count_path,count_sep,count_header,count_rna,count_rnapos,count_col)
+    rna_counts_dt <- .read_count_files(count_path,count_sep,count_header,count_rnaid,count_pos,count_value)
     if(length(rna_counts_dt) == 0 ) stop("ERROR : no files were loaded")
     rna_names_df <- .generate_rna_names_table(rna_counts_dt[[1]])
   }
@@ -91,21 +91,21 @@ create_riboclass <- function(count_path,
       stop("metadata must be a dataframe or a path to a csv file !")
     }
     
-    names(metadata)[names(metadata) == metadata_samplename] <- "samplename"
+    names(metadata)[names(metadata) == metadata_id] <- "samplename"
     
     rownames(metadata) <- metadata[,"samplename"]
     
     # read count data
     rna_counts_dt <- .read_count_files(count_path,count_sep,count_header,
-                                       count_rna,count_rnapos,count_col,
-                                       files_to_keep = as.character(metadata[,metadata_filename]))
+                                       count_rnaid,count_pos,count_value,
+                                       files_to_keep = as.character(metadata[,metadata_key]))
     
-    if(length(rna_counts_dt) == 0) stop(paste0("ERROR! No file has the filenames specified in your '",colnames(metadata[metadata_filename]),"' column"))
+    if(length(rna_counts_dt) == 0) stop(paste0("ERROR! No file has the filenames specified in your '",colnames(metadata[metadata_key]),"' column"))
     # generate RNA names table
     rna_names_df <- .generate_rna_names_table(rna_counts_dt[[1]])
     
     # Rename sample in counts list according to the names in metadata
-    names(rna_counts_dt) <- metadata[,"samplename"][match(names(rna_counts_dt), metadata[,metadata_filename])]
+    names(rna_counts_dt) <- metadata[,"samplename"][match(names(rna_counts_dt), metadata[,metadata_key])]
     
     # order samples by metadata
     
@@ -125,16 +125,16 @@ create_riboclass <- function(count_path,
 }
 
 
-#' Import and transform a list of count files for a riboClass
+#' Import and transform a list of count files for a RiboClass
 #' @description 
-#' This internal function is used to generate the "data" part of the riboClass.
+#' This internal function is used to generate the "data" part of the RiboClass.
 #' It will read all CSV files and turn them into a list of dataframes.
 #'
 #' @param path_to_files path to the folder containing count files
 #' @param sep CSV seperator 
 #' @param rna_col position of the column containing RNA name
 #' @param position_col position of the column containing the genomic position
-#' @param count_col position of the column contaning the count for the given genomic position 
+#' @param count_value position of the column contaning the count for the given genomic position 
 #' @param header does the files contain an header ?
 #' @param files_to_keep if specified, only the file following files_to_keep will be kept
 #'
@@ -147,7 +147,7 @@ create_riboclass <- function(count_path,
            header,
            rna_col,
            position_col,
-           count_col,
+           count_value,
            files_to_keep = NULL) {
     
     if(!dir.exists(path_to_files)) stop("the path given for the csv files does not exist or is not a directory !")
@@ -175,7 +175,7 @@ create_riboclass <- function(count_path,
     rna_counts_dt <-
       lapply(rna_counts_fl, utils::read.csv, sep = sep, header = header)
     rna_counts_dt <- lapply(rna_counts_dt, function(x) {
-      x <- x[, c(rna_col, position_col, count_col)]
+      x <- x[, c(rna_col, position_col, count_value)]
       colnames(x) <- c("rna", "rnapos", "count")
       x["site"] <- NA
       return(x)
@@ -224,7 +224,7 @@ create_riboclass <- function(count_path,
 #' For a given column in data, this function will generate a dataframe with all samples
 #' and all positions (if only_annotated is false) or only positions with a siteID (if only_annotated is true).
 #'
-#' @param ribo a riboclass object
+#' @param ribo a RiboClass object
 #' @param col column in data you want extract data from (cscore or count).
 #' @param position_to_rownames if true, position will be included as a rowname. They will in a new column otherwise.
 #' @param only_annotated if true, return a dataframe with only annotated sites. Return all sites otherwise.
@@ -276,16 +276,16 @@ extract_data <- function(ribo, col = "cscore", position_to_rownames =F, only_ann
   
 }
 
-#' Rename RNAs in your riboclass
+#' Rename RNAs in your RiboClass
 #'
 #'  
 #' 
-#' @param ribo a riboclass object
+#' @param ribo a RiboClass object
 #' @param new_names the new names for your RNA (by order of rna size)
 #'
 #' 
 #'
-#' @return a riboClass with updated rna names in data.
+#' @return a RiboClass with updated rna names in data.
 #' @export
 #'
 #' @examples
@@ -312,7 +312,7 @@ rename_rna <- function(ribo,new_names=c("5S","5.8S","18S","28S")) {
   return(ribo)
 }
 
-#' (internal) Generate a table with former and current rna names for a given riboClass
+#' (internal) Generate a table with former and current rna names for a given RiboClass
 #' @param count_df a count file dataframe, containing a columns with rna names
 #'
 #' @return dataframe with former and current rna names
@@ -329,7 +329,7 @@ rename_rna <- function(ribo,new_names=c("5S","5.8S","18S","28S")) {
 
 #' Generate the default name for positions
 #' This function is used to generate the named_position column in a given sample.
-#' It is always called when generating a riboClass.
+#' It is always called when generating a RiboClass.
 #' @param sample_count_list list of count dataframe (one sample = one count dataframe)
 #' @param rna_col name or position of the column containing RNA names
 #' @param rnapos_col name or position of the column containing position in RNA
@@ -346,16 +346,15 @@ rename_rna <- function(ribo,new_names=c("5S","5.8S","18S","28S")) {
 }
 
 
-#' Update count values inside a riboclass with a matrix of values
+#' Update count values inside a RiboClass with a matrix of values
 #' 
-#' @param ribo a riboclass object
+#' @param ribo a RiboClass object
 #' @param update_matrix a position x sample matrix containing the new values 
 #'
-#' @return a riboclass with updated values
+#' @return a RiboClass with updated values
 #' @export
 #'
 update_ribo_count_with_matrix <- function(ribo, update_matrix) {
-  
   #first, check if we have the sample name in our column
   update_df <- as.data.frame(update_matrix)
   col_names <- sort(names(update_df))
@@ -365,7 +364,7 @@ update_ribo_count_with_matrix <- function(ribo, update_matrix) {
     stop("mismatch between samplenames and matrix's samples names")
   }
   
-  # For each sample in the riboclass, replace count values with matrix's ones
+  # For each sample in the RiboClass, replace count values with matrix's ones
   
   count_list <- ribo[["data"]]
   
@@ -388,7 +387,7 @@ update_ribo_count_with_matrix <- function(ribo, update_matrix) {
 #' @description An helper function that will give the mean of the cscore or count of all samples by condition, for each position. The standard deviation is also given.
 #' this can be used to create boxplot with ggplot.
 #'
-#' @param ribo a riboClass object
+#' @param ribo a RiboClass object
 #' @param metadata_condition name or position of the column __in metadata__ containing the condition
 #' @param value name or position of the column containing the values on which mean by condition is calculated.
 #' 
@@ -421,10 +420,10 @@ mean_samples_by_conditon <- function(ribo,value, metadata_condition) {
 
 #' Remove a RNA among all samples
 #' 
-#' @param ribo a riboclass
+#' @param ribo a RiboClass
 #' @param name_rna_to_remove name of the rna to remove
 #'
-#' @return a riboClass without the specified RNA
+#' @return a RiboClass without the specified RNA
 #' @export
 #'
 ribo_remove_rna <- function(ribo, name_rna_to_remove) {
@@ -445,7 +444,7 @@ ribo_remove_rna <- function(ribo, name_rna_to_remove) {
 
 #' Display RNA names
 #'
-#' @param ribo a riboClass object
+#' @param ribo a RiboClass object
 #'
 #' @return
 #' A vector with actual RNA names
@@ -459,10 +458,15 @@ show_RNA_names <- function(ribo = NULL) {
   return(RNA_names)
 }
 
-#' Print informations about the RiboClass
+#' print() to display basic informations about a RiboClass
 #'
+#' @param x a RiboClass
+#' @param ... base print params
+#'
+#' @return
 #' @export
-#'
+#' @keywords internal
+#' @examples
 print.RiboClass <- function(x,...){ 
   cat(as.character(paste("a RiboClass with", length(x[["data"]]),"samples and", nrow(x[["rna_names"]]), "RNA(s) :")))
    rna <- table(as.factor(x[["data"]][[1]][["rna"]]))

@@ -4,11 +4,11 @@
 #'
 #' @param ds dataframe of a given RNA for a given sample
 #' @param flanking the number of flanking position to use for the window
-#' @param data.counts.col column number where counts value are stored
+#' @param method either "median" or "mean", depending on how the cscore must be computed.
 #' 
-#' @return
-#'
-#' @examples
+#' @return a single RNA dataframe with cscore and flanking columns
+#' @keywords internal
+
 .compute_rna_cscore <- function(ds, flanking=6, method) {
   # check that all parameters exist
   if (is.null(ds)) {stop("MISSING parameter. Please specify a data frame <ds>.")}
@@ -41,15 +41,14 @@
 }
 
 
-#' Title
+#' compute cscore for a single sample
 #'
-#' @param sample_df 
-#' @param data_rna_col 
-#' @param flanking 
-#' @param data_counts_col 
-#' @return
+#' @param sample_df the whole a dataframe for a single sample (all rRNA combined)
+#' @param flanking the number of flanking position to use for the window
+#' @param method either "median" or "mean", depending how the cscore must be computed.
+#' @return a sample dataframe with cscore and flanking columns
 #'
-#' @examples
+#' @keywords internal
 .compute_sample_cscore <- function(sample_df=NULL,
                                       flanking=6,
                                     method) 
@@ -63,34 +62,43 @@
   
 }
 
-#' compute c-score for a given riboclass
+#' compute c-score for all samples in a riboclass
 #' 
-#' @param ribo a riboclass object 
+#' @description
+#' 
+#' The C-score corresponds to the 2'Ome level at a rRNA position known to be methylated. The C-score represents a drop in end read coverage at a given position compared to the environmental coverage as described by Birkedal et al, 2015. This score can have a value between **0** (never methylated) and **1** (always methylated).
+#' 
+#' In this package, the C-score is calculated for every position. As it can be useful to find positions not yet identified as methylated.
+#' 
+#' 
+#' For each RNA, The first and last positions cannot be calculated due to window's size. Their value will be NA instead.
+#' 
+#' @references Birkedal, U., Christensen-Dalsgaard, M., Krogh, N., Sabarinathan, R., Gorodkin, J. and Nielsen, H. (2015), Profiling of Ribose Methylations in RNA by High-Throughput Sequencing. Angew. Chem. Int. Ed., 54: 451-455. https://doi.org/10.1002/anie.201408362
+#' 
+#'
+#' @md
+#' @param ribo a riboclass object, see constructor : 
+#' \code{\link{create_riboclass}}
 #' @param flanking the window size around the position (the latter is excluded)
-#' @param data_counts_col Name or position of the column containing count values
-#' @param data_rna_col Name or position of the column containing the RNA
-#' @param core number of core to use in case of multithreading
-#' @return a riboclass with c-score columns added in data
+#' @param method either "median" or "mean", depending how the cscore must be computed.
+#' @param ncores number of ncores to use in case of multithreading
+#' @return a riboclass with c-score related columns appended to each sample's data.
 #' @export
 #'
 #' @examples
-#' ribo_with_cscore <- compute_cscore(ribo_toy)
-#' 
-#' @details 
-#'\if{html}{\figure{cscore.png}{c-score visualised}}
-#'\if{latex}{\figure{cscore.png}{options: width=0.5in}}' 
-#' 
-#' For each nucleotide position, a c-score is calculated by 
-#' 
+#' data("ribo_toy")
+#' ribo_subsetted <- keep_ribo_samples(ribo_toy,"4283")
+#' ribo_with_cscore_med <- compute_cscore(ribo_subsetted, ncores = 2)
+#' ribo_with_cscore_mean <- compute_cscore(ribo_subsetted, method = "mean", ncores = 2)
 #' 
 compute_cscore <- function(ribo=NULL, flanking=6,
                             method = "median",
-                            core = 1
+                            ncores = 1
                             ) {
   
    # Check if a cscore calculation has been already done on the ribo
    if( ribo["has_cscore"] == TRUE) {
-     print("the riboClass has already a computed cscore")
+     print("the RiboClass has already a computed cscore")
    }
 
     dt = ribo["data"] #we only need the counts to compute the score
@@ -98,7 +106,7 @@ compute_cscore <- function(ribo=NULL, flanking=6,
     
    # Experimental : Multithreading is 3x faster than single-thread
    # TODO : implement 
-   if(core > 1) samples_czscore <- parallel::mclapply(dt[["data"]], .compute_sample_cscore, flanking, method,mc.cores = core)
+   if(ncores > 1) samples_czscore <- parallel::mclapply(dt[["data"]], .compute_sample_cscore, flanking, method,mc.cores = ncores)
    else samples_czscore <- lapply(dt[["data"]], .compute_sample_cscore, flanking, method)
 
      ribo[["data"]] <- samples_czscore

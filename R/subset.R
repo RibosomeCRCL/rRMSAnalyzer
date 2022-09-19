@@ -1,10 +1,13 @@
 
 #' Keep only a subset of positions for all samples.
 #'
-#' @param ribo a riboClass object
+#' @param ribo a RiboClass object, see constructor : 
+#' \code{\link{create_riboclass}}
 #' @param positions_to_keep either a dataframe with a column "named_position" or a vector of named positions.
+#' @param anno_rna name or position of the column containing RNA names in annotation data
+#' @param anno_pos name or position of the column containing position in annotation data
 #'
-#' @return a riboClass object with only selected positions for each sample.
+#' @return a RiboClass object with only selected positions for each sample.
 #' @export
 #'
 #' @examples subset_ribo(ribo_toy, c("NR_046235.3_18S_0681","NR_046235.3_18S_0682"))

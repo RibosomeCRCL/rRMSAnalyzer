@@ -13,7 +13,7 @@
 #'   \item{Mode.of.coding}{how the SNORD is coded}
 #'   \item{SNORD.host.gene}{SNORD's host gene}
 #'   \item{Ensembl}{SNORD's Ensembl reference}
-#'   \item{Nucleotide}{}
+#'   \item{Nucleotide}{the nucleotide present at the position (A,T,G or C)}
 #'   ...
 #' }
 "human_methylated"
@@ -33,12 +33,23 @@
 #'   \item{Mode.of.coding}{how the SNORD is coded}
 #'   \item{SNORD.host.gene}{SNORD's host gene}
 #'   \item{Ensembl}{SNORD's Ensembl reference}
-#'   \item{Nucleotide}{}
+#'   \item{Nucleotide}{the nucleotide present at the position (A,T,G or C)}
 #'   ...
 #' }
 "human_suspected"
 
 #' RiboClass from a toy dataset
 #'
-#' A riboclass containing 10 samples + 2 reference RNA
+#' A riboclass containing 10 samples + 2 reference RNA.
+#' 
+#' Samples are from 4 different biological conditions ("condition" column in metadata). The sequencing has been 
+#' done in two different batches ("run" column in metadata).
+#' Both batches have the same reference RNA, to detect technical bias.
+#' 
+#' @format a RiboClass (S3 Class) with the following element
+#' \describe{
+#'   \item{data}{list of sample dataframe}
+#'   \item{metadata}{metadata dataframe of all samples}
+#'   \item{rna_names}{dataframe containing both original and modified RNAs' name}
+#'   }
 "ribo_toy"
