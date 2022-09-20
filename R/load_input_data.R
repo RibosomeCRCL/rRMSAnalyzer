@@ -10,7 +10,7 @@
 #' @details
 #' load_ribodata is a wrapper of \code{\link{create_riboclass}} and \code{\link{compute_cscore}}.
 #'
-#' @examples
+#'
 load_ribodata <- function(count_path,
                           metadata = NULL,
                           count_sep = "\t",

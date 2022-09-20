@@ -23,6 +23,9 @@ plot_PCA(
 
 \item{pca_object_only}{Return directly the full dudi.pca object, without generating the plot.}
 }
+\value{
+a ggplot or a dudi.pca object if pca_object_only is set to True.
+}
 \description{
 Principal component analysis of a RiboClass object
 }

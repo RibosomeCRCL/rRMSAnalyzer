@@ -9,6 +9,9 @@
 \arguments{
 \item{cscore.matrix}{matrix of c-score extracted from a riboClass with ' \code{\link{extract_data}}}
 }
+\value{
+dudi.pca object
+}
 \description{
 Compute PCA from a c-score matrix
 }

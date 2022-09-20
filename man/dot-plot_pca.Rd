@@ -15,6 +15,9 @@
 
 \item{axes}{two-element vector indicating which pair of principal components you want to show.}
 }
+\value{
+a ggplot
+}
 \description{
 Plot a dudi.pca object using factoextra
 }

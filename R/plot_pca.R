@@ -5,7 +5,7 @@
 #' @param axes two-element vector indicating which pair of principal components you want to show.
 #' @param only_annotated Use only annotated sites to plot PCA.
 #' @param pca_object_only Return directly the full dudi.pca object, without generating the plot.
-#' @return
+#' @return a ggplot or a dudi.pca object if pca_object_only is set to True.
 #' @export
 #'
 #' @examples 
@@ -39,7 +39,7 @@ plot_PCA <- function(ribo, color_col = NULL, axes = c(1,2), only_annotated=F, pc
 #' @keywords internal
 #'
 #' @param cscore.matrix matrix of c-score extracted from a riboClass with ' \code{\link{extract_data}}
-#' @return
+#' @return dudi.pca object
 #'
 .calculate_pca <- function(cscore.matrix = NULL) {
   pca.res <- ade4::dudi.pca(t(cscore.matrix[stats::complete.cases(cscore.matrix),]), 
@@ -58,7 +58,7 @@ plot_PCA <- function(ribo, color_col = NULL, axes = c(1,2), only_annotated=F, pc
 #' @param metadata metadata table from RiboClass
 #' @inheritParams plot_PCA
 #'
-#' @return
+#' @return a ggplot
 #'
 .plot_pca <- function(dudi.pca = NULL, metadata = NULL, color_col = NULL, axes = axes) {
   # col.by.com argument can be NULL if no metadata is given by the user

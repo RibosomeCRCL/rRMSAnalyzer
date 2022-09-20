@@ -40,12 +40,7 @@
 #' While the directory structure is not important, make sure each sample has an unique filename.
 #' 
 #' The path to the csv file or the dataframe given in __metadata__ must contains a filename column, as this will serve to link metadata with the dataframes in data during the RiboClass creation.
-#' 
-#' 
 #' @md
-#' 
-#' @example 
-#' csv_files_path <- system.file("extdata", "miniglioma", package = "Riboscore")
 #' 
 #' @return a RiboClass
 #' @export
@@ -463,10 +458,8 @@ show_RNA_names <- function(ribo = NULL) {
 #' @param x a RiboClass
 #' @param ... base print params
 #'
-#' @return
 #' @export
 #' @keywords internal
-#' @examples
 print.RiboClass <- function(x,...){ 
   cat(as.character(paste("a RiboClass with", length(x[["data"]]),"samples and", nrow(x[["rna_names"]]), "RNA(s) :")))
    rna <- table(as.factor(x[["data"]][[1]][["rna"]]))

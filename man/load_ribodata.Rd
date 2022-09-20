@@ -47,6 +47,9 @@ load_ribodata(
 
 \item{ncores}{number of ncores to use in case of multithreading}
 }
+\value{
+a RiboClass
+}
 \description{
 Import your count CSV files and the metadata to create a RiboClass.
 The RiboClass is used by Riboscore package for all analyses.
