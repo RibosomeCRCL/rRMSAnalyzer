@@ -2,7 +2,7 @@
 % Please edit documentation in R/load_input_data.R
 \name{generate_metadata_df}
 \alias{generate_metadata_df}
-\title{Generate a metadata dataframe, given a list of files}
+\title{Generate a metadata dataframe, given a path.}
 \usage{
 generate_metadata_df(
   counts_folder_path,
@@ -11,12 +11,21 @@ generate_metadata_df(
 )
 }
 \arguments{
-\item{counts_folder_path:}{the path where count files are stored}
+\item{counts_folder_path}{the path where count files are stored}
 
-\item{create_samplename_col:}{generate a sample name col with filename by default}
+\item{create_samplename_col}{generate a sample name col with filename by default}
 
-\item{stop_symbol:}{keep the filename until the stop symbol is reached}
+\item{stop_symbol}{keep the filename until the stop symbol is reached.}
 }
 \description{
-Generate a metadata dataframe, given a list of files
+Generate an "empty" dataframe with the required filename and samplename columns to include in a riboclass.
+You are free to add any other columns for your metadata.
+If you do not use stop_symbol, filename and samplename will be identical.
+Feel free to modify the latter.
+
+\strong{Do not modify the filename column, unless you have changed the filenames on disk.} Otherwise, it would prevent \code{\link{create_riboclass}} from linking data and metadata...
 }
+\details{
+stop_symbol is an "helper" parameter to automatically trim your filename into samplename.
+}
+\keyword{internal}

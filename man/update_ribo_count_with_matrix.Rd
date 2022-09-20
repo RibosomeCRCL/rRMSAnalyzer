@@ -2,18 +2,18 @@
 % Please edit documentation in R/riboClass.R
 \name{update_ribo_count_with_matrix}
 \alias{update_ribo_count_with_matrix}
-\title{Update count values inside a riboclass with a matrix of values}
+\title{Update count values inside a RiboClass with a matrix of values}
 \usage{
 update_ribo_count_with_matrix(ribo, update_matrix)
 }
 \arguments{
-\item{ribo}{a riboclass object}
+\item{ribo}{a RiboClass object}
 
 \item{update_matrix}{a position x sample matrix containing the new values}
 }
 \value{
-a riboclass with updated values
+a RiboClass with updated values
 }
 \description{
-Update count values inside a riboclass with a matrix of values
+Update count values inside a RiboClass with a matrix of values
 }

@@ -4,19 +4,24 @@
 \alias{subset_ribo}
 \title{Keep only a subset of positions for all samples.}
 \usage{
-subset_ribo(ribo, positions_to_keep)
+subset_ribo(ribo, positions_to_keep, anno_rna, anno_pos)
 }
 \arguments{
-\item{ribo}{a riboClass object}
+\item{ribo}{a RiboClass object, see constructor : 
+\code{\link{create_riboclass}}}
 
 \item{positions_to_keep}{either a dataframe with a column "named_position" or a vector of named positions.}
+
+\item{anno_rna}{name or position of the column containing RNA names in annotation data}
+
+\item{anno_pos}{name or position of the column containing position in annotation data}
 }
 \value{
-a riboClass object with only selected positions for each sample.
+a RiboClass object with only selected positions for each sample.
 }
 \description{
 Keep only a subset of positions for all samples.
 }
 \examples{
-subset_ribo(ribo, c("18S_15","5.8S_4")) # returns a riboClass with only 2 selected positions
+subset_ribo(ribo_toy, c("NR_046235.3_18S_0681","NR_046235.3_18S_0682"))
 }
