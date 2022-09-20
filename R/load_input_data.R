@@ -4,7 +4,11 @@
 #' @return
 #' @export
 #' 
-#' @description Riboscore's entrypoint. 
+#' @description Import your count CSV files and the metadata to create a RiboClass.
+#' The RiboClass is used by Riboscore package for all analyses. 
+#' 
+#' @details
+#' load_ribodata is a wrapper of \code{\link{create_riboclass}} and \code{\link{compute_cscore}}.
 #'
 #' @examples
 load_ribodata <- function(count_path,
@@ -12,11 +16,11 @@ load_ribodata <- function(count_path,
                           count_sep = "\t",
                           metadata_sep = ",",
                           count_header = FALSE,
-                          count_col = 3,
-                          count_rna = 1,
-                          count_rnapos = 2,
-                          metadata_filename = 1,
-                          metadata_samplename = 2,
+                          count_value = 3,
+                          count_rnaid = 1,
+                          count_pos = 2,
+                          metadata_key = "filename",
+                          metadata_id = NULL,
                           flanking=6,
                           method = "median",
                           ncores = 1) {
@@ -26,11 +30,11 @@ load_ribodata <- function(count_path,
                            count_sep,
                            metadata_sep,
                            count_header,
-                           count_col,
-                           count_rna,
-                           count_rnapos,
-                           metadata_filename,
-                           metadata_samplename)
+                           count_value,
+                           count_rnaid,
+                           count_pos,
+                           metadata_key,
+                           metadata_id)
   
   ribo <- compute_cscore(ribo,flanking,method,ncores)
   
@@ -45,7 +49,8 @@ load_ribodata <- function(count_path,
 #' @description 
 #' Generate an "empty" dataframe with the required filename and samplename columns to include in a riboclass.
 #' You are free to add any other columns for your metadata.
-#' If you do not use stop_symbol, filename and samplename will be identical. Feel free to modify the latter.
+#' If you do not use stop_symbol, filename and samplename will be identical.
+#' Feel free to modify the latter.
 #' 
 #' __Do not modify the filename column, unless you have changed the filenames on disk.__ Otherwise, it would prevent \code{\link{create_riboclass}} from linking data and metadata...
 #' 
@@ -56,6 +61,9 @@ load_ribodata <- function(count_path,
 #' @param counts_folder_path the path where count files are stored
 #' @param create_samplename_col generate a sample name col with filename by default
 #' @param stop_symbol keep the filename until the stop symbol is reached.
+#' 
+#' @keywords internal
+#' 
 #' @export
 generate_metadata_df <- function(counts_folder_path,
                                  create_samplename_col=T,
