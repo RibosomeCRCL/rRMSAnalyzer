@@ -1,23 +1,21 @@
-Package: RiboMethSeq
+Package: Riboscore
 Type: Package
-Title: Computation of scores to validate known or suspected and to
-        discover new methylation sites from sequencing count data
+Title: Computation of Scores to Validate Known or Suspected and to Discover New Methylation Sites from Sequencing Count Data
 Version: 0.3
-Date: 2019-01-31
-Author: Janice Kielbassa
+Date: 2022-08-01
+Author: Janice Kielbassa, Theo Combe, Hermes Paraqindes
 Maintainer: Theo COMBE <theo.combe@lyon.unicancer.fr>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
-biocViews:
-Depends: R (>= 3.5.0), corrplot, lattice, stringi, plyr, WriteXLS,
-        ggplot2, ggrepel, ggpubr, scales, dplyr, tidyr, factoextra, pheatmap, sva, ade4
-Imports: ggplot2, ggrepel, ggpubr, scales, dplyr, tidyr, factoextra, pheatmap, sva, ade4
+Description: A package dedicated to ribomethseq analysis. It contains a set of easy-to-use functions.
+License: GPL (>= 3)
+biocViews: sva
+Depends: R (>= 3.5.0)
+Imports: dplyr, stringr, tidyr, rlang, sva, factoextra, ade4, ggplot2
 LazyData: TRUE
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.1
 NeedsCompilation: no
 Packaged: 2019-02-04 13:27:40 UTC; janice
+Encoding: UTF-8
 Suggests: 
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-Encoding: UTF-8
