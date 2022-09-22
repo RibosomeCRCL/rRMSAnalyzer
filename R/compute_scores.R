@@ -1,5 +1,3 @@
-#------------------------------------------
-
 #' compute both C-score and Z-score for one RNA of one sample.
 #'
 #' @param ds dataframe of a given RNA for a given sample

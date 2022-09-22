@@ -1,4 +1,3 @@
-
 #' Keep only a subset of positions for all samples.
 #'
 #' @param ribo a RiboClass object, see constructor : 
