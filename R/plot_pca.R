@@ -34,20 +34,7 @@ plot_PCA <- function(ribo, color_col = NULL, axes = c(1,2), only_annotated=F, pc
   
 }
 
-#' Compute PCA from a c-score matrix
-#'
-#' @keywords internal
-#'
-#' @param cscore.matrix matrix of c-score extracted from a riboClass with ' \code{\link{extract_data}}
-#' @return dudi.pca object
-#'
-.calculate_pca <- function(cscore.matrix = NULL) {
-  pca.res <- ade4::dudi.pca(t(cscore.matrix[stats::complete.cases(cscore.matrix),]), 
-                      scannf = F, 
-                      nf = 5)
-  
-  return(pca.res)
-}
+
 
 
 #' Plot a dudi.pca object using factoextra

@@ -1,4 +1,3 @@
-
 #' Correct batch effect with ComBatseq method
 #' 
 #' @param ribo a RiboClass object, see constructor : \code{\link{create_riboclass}}
@@ -35,7 +34,7 @@ adjust_bias <- function(ribo, batch,...) {
     matrix_ribo <- as.matrix(matrix_ribo[,c(ribo[["metadata"]][["samplename"]])])
     adjusted_matrix <- sva::ComBat_seq(matrix_ribo,batch = ribo[["metadata"]][[batch]],...)
     
-    ribo_updated <- update_ribo_count_with_matrix(ribo,adjusted_matrix)
+    ribo_updated <- .update_ribo_count_with_matrix(ribo,adjusted_matrix)
     
     if(ribo_updated[["has_cscore"]]) {
       cat("Recalculating c-score using previously given parameters...\n")

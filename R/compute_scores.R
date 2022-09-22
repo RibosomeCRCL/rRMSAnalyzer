@@ -96,11 +96,6 @@ compute_cscore <- function(ribo=NULL, flanking=6,
                             ncores = 1
                             ) {
   
-   # Check if a cscore calculation has been already done on the ribo
-   if( ribo["has_cscore"] == TRUE) {
-     print("the RiboClass has already a computed cscore")
-   }
-
     dt = ribo["data"] #we only need the counts to compute the score
 
     
