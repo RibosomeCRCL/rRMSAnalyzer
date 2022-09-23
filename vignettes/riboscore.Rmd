@@ -1,7 +1,10 @@
 ---
 title: "riboscore"
+abstract: > 
+  RiboMethSeq is an innovative RNASeq-based approach that has been developed in 2015 to quantify rRNA 2'Ome at all the sites at once in yeast. RiboMethSeq is based on a partial alkaline hydrolysis. Since presence of 2’Ome on a nucleotide n protects its bond with the following n+1 nucleotide, it induces a drop in the number of reads starting at the n+1 position compared to the local coverage and thus allowing to calculate a 2’Ome level.
+  <br>Using 5'end count data as input, the package Riboscore provides a set of easy-to-use functions to compute c-score, adjust batch effect with ComBat-Seq and visualise your data with several plots.
 output:
-  rmarkdown::html_document:
+  rmarkdown::html_vignette:
     toc: true
     fig_width: 5
 vignette: >
@@ -25,8 +28,8 @@ library(Riboscore)
 
 You can install the latest riboscore version on CRAN with :
 
-```{r}
-# install.packages("riboscore")
+```{r, eval=FALSE}
+install.packages("riboscore")
 ```
 
 # Usage {#quickstart}
@@ -34,7 +37,7 @@ You can install the latest riboscore version on CRAN with :
 ```{r, eval = FALSE}
 library(Riboscore)
 ribo <- load_ribodata("/path/to/your/csvfiles/directory/",
-              "metadata.csv",
+              "path/to/metadata.csv",
               metadata_key = "filename",
               metadata_id = "samplename")
 
@@ -118,9 +121,9 @@ You can then add any column in your metadata.
 
 If you do not give any metadata in load_ribodata, an empty one will be created with filename and samplename columns pre-completed.
 
-## Sites annotation
+## Import new sites annotation
 
-When you first load your data into a RiboClass, your sites are not annotated. But maybe you want to annotate some of them.
+When you first load your data into a RiboClass, your sites are not annotated. But maybe you want to annotate some of them. You can use the [Annotations included with this package], or create your own :
 
 You need a dataframe with the following informations :
 
@@ -250,7 +253,7 @@ For some plots or functions, the RNA names can be important. This particulary th
 Before annotating our sites using human_methylated, let's check if our RiboClass's RNA names are the same as those in this dataset :
 
 ```{r}
-table(human_methylated$rRNA)
+cat("human_methylated's rna names :",unique(human_methylated$rRNA),"\n")
 cat("ribo's rna names :",ribo_adjusted$rna_names$current_name)
 ```
 
@@ -265,7 +268,9 @@ ribo_adjusted <- rename_rna(ribo_adjusted, c("5S","5.8S","18S","28S"))
 
 ## Annotate sites {#annotate-sites}
 
-We can annotate our sites with our *human_methylated* dataset :
+Among the thousands sites belonging to the rRNA, some of them are more particular than others. In our case, we are interested by sites that are known to be 2'O-methylated in the human model.
+
+We can annotate these sites with the included *human_methylated* dataset :
 
 ```{r}
 ribo_adjusted <- annotate_site(ribo_adjusted,
@@ -275,7 +280,9 @@ ribo_adjusted <- annotate_site(ribo_adjusted,
                                anno_value = "Nomenclature")
 ```
 
-This vignette has also some explanations on how to create your own sites annotation dataset with [Sites annotation].
+If there is a problem with the RNA names, you should check [Rename RNA].
+
+This vignette has also some explanations on how to create your own sites annotation dataset with [Import new sites annotation].
 
 ## Visualization with PCA
 
