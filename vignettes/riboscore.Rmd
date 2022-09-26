@@ -1,12 +1,15 @@
 ---
-title: "riboscore"
+title: "Riboscore : package to analyze RiboMethSeq count data"
+author: "Théo COMBE, Hermes PARAQINDES, Janisse KIELBASSA, Emilie THOMAS and Anthony FERRARI"
+date: "`r format(Sys.Date(), '%m/%d/%Y')`"
 abstract: > 
   RiboMethSeq is an innovative RNASeq-based approach that has been developed in 2015 to quantify rRNA 2'Ome at all the sites at once in yeast. RiboMethSeq is based on a partial alkaline hydrolysis. Since presence of 2’Ome on a nucleotide n protects its bond with the following n+1 nucleotide, it induces a drop in the number of reads starting at the n+1 position compared to the local coverage and thus allowing to calculate a 2’Ome level.
   <br>Using 5'end count data as input, the package Riboscore provides a set of easy-to-use functions to compute c-score, adjust batch effect with ComBat-Seq and visualise your data with several plots.
 output:
-  rmarkdown::html_vignette:
+    html_vignette:
     toc: true
     fig_width: 5
+    fig_height: 5
 vignette: >
   %\VignetteIndexEntry{riboscore}
   %\VignetteEngine{knitr::rmarkdown}
@@ -26,7 +29,7 @@ library(Riboscore)
 
 # Installation
 
-You can install the latest riboscore version on CRAN with :
+You can install the latest Riboscore version on CRAN with :
 
 ```{r, eval=FALSE}
 install.packages("riboscore")
@@ -36,6 +39,7 @@ install.packages("riboscore")
 
 ```{r, eval = FALSE}
 library(Riboscore)
+
 ribo <- load_ribodata("/path/to/your/csvfiles/directory/",
               "path/to/metadata.csv",
               metadata_key = "filename",
@@ -65,7 +69,7 @@ If you find a bug, or have a suggestion to improve the package, open a new issue
 
 # Acknowledgement
 
-I would like to thank
+We would like to thank
 
 # Funding
 
@@ -107,7 +111,11 @@ You can see a small example below :
 | 18S | 126             | 789         |
 | 18S | 127             | 1234        |
 
-(it is not necessary to have an header in your count files. You can give the column numbering if there is no header)
+(it is not necessary to have an header in your count files. You can give the column numbering if there is no header).
+
+The folder structure can be whatever you wish, as long as either the directory and its sub-directories contain the necessary CSV files.
+
+**If you do not specify metadata, Riboscore will try to get any CSV files.**
 
 ## Metadata
 
@@ -172,8 +180,8 @@ When load_ribodata is used, a c-score is automatically computed for all position
 You can modify directly the parameters related to this computation:
 
 ```{r, eval=FALSE}
-load_ribodata("/path/to/csv",
-              "metadata.csv",
+load_ribodata("/path/to/csv/",
+              "/path/to/metadata.csv",
               # everything below is linked to c-score computation
               flanking = 6, # window size
               method = "median", # use mean or median on window's values
@@ -203,27 +211,29 @@ We can spot a technical bias when we make a PCA of c-score for all genomic posit
 
 (see also [Visualization with PCA] for more usages)
 
-```{r fig.width = 5,fig.height=5}
+```{r}
 plot_PCA(ribo,"run")
 ```
 
-The sample should not be grouped by library or batch. Unfortunately, this is clearly visible on PC 1.
+The sample should not be grouped by library or batch. Unfortunately, this is clearly visible on PC 1. The following section will resolve this issue.
 
-We can fix this with ComBat-Seq. Riboscore has a wrapper to use this correction on a RiboClass : adjust_bias.
+## Batch effect adjustment
+
+If the sequencing has been done in several batches, a batch effect can occur. One way to remove this effect is by using ComBat-Seq adjustment. The Riboscore package has a wrapper to use this adjustment on a RiboClass : *adjust_bias*.
 
 ```{r}
 ribo_adjusted <- adjust_bias(ribo,"run")
 ```
 
-This will create a new RiboClass with adjusted count values. The c-score will be recomputed using the previous parameters given.
+This function will return a new RiboClass with adjusted count values. The c-score will be automatically recomputed using the previous parameters given.
 
-Now, if we redo the PCA :
+Now, if we redo the PCA, this time on our ComBat-Seq-adjusted RiboClass :
 
-```{r, fig.width=5,fig.height=5}
+```{r}
 plot_PCA(ribo_adjusted,"run")
 ```
 
-The bias on PC 1 is no longer there !
+The bias on PC 1 is no longer visible !
 
 ## Keep or remove samples
 
@@ -242,19 +252,28 @@ ribo_removed_samples <- remove_ribo_samples(ribo,c("938","2633"))
 print(ribo_removed_samples)
 ```
 
-in both cases, only the remaining samples' metadata are kept in the RiboClass object. You do not need to update by hand.
+in both cases, only the remaining samples' metadata are kept in the RiboClass object. You do not need to update it by hand.
 
 # Data exploration
 
+## Remove RNA
+
+You can remove a RNA among all your RiboClass' samples if it is not necessary for your analysis. Here, we do not need the 5S rRNA.
+
+```{r}
+ribo_adjusted <- remove_rna(ribo,"NR_023363.1_5S")
+print(ribo_adjusted)
+```
+
 ## Rename RNA
 
-For some plots or functions, the RNA names can be important. This particulary the case for site annotation.
+For some plots or functions, the RNA names can be important. **RNA names must match for sites annotation.**
 
 Before annotating our sites using human_methylated, let's check if our RiboClass's RNA names are the same as those in this dataset :
 
 ```{r}
 cat("human_methylated's rna names :",unique(human_methylated$rRNA),"\n")
-cat("ribo's rna names :",ribo_adjusted$rna_names$current_name)
+cat("ribo's rna names :",as.character(ribo_adjusted$rna_names$current_name))
 ```
 
 Our names are different ! We need to update them before annotation.
@@ -262,15 +281,15 @@ Our names are different ! We need to update them before annotation.
 **We can use rename_rna**. We give the new RNA names by size order :
 
 ```{r}
-ribo_adjusted <- rename_rna(ribo_adjusted, c("5S","5.8S","18S","28S"))
+ribo_adjusted <- rename_rna(ribo_adjusted, c("5.8S","18S","28S"))
 
 ```
 
-## Annotate sites {#annotate-sites}
+## Annotate RNA sites {#annotate-sites}
 
-Among the thousands sites belonging to the rRNA, some of them are more particular than others. In our case, we are interested by sites that are known to be 2'O-methylated in the human model.
+Among the thousands sites belonging to the rRNA, some of them are more particular than others. In our case, we are interested by 2'Ome sites in the human model.
 
-We can annotate these sites with the included *human_methylated* dataset :
+We can **annotate these sites with the included *human_methylated* dataset** :
 
 ```{r}
 ribo_adjusted <- annotate_site(ribo_adjusted,
@@ -288,15 +307,15 @@ This vignette has also some explanations on how to create your own sites annotat
 
 After annotating these sites, it would be interesting to plot them. This is possible with plot_PCA function, using *only_annotated* parameter. For our example, we will also color it by biological condition :
 
-```{r, fig.height=5,fig.width=5}
+```{r}
 plot_PCA(ribo_adjusted,
          color_col = "condition",
          only_annotated = T)
 ```
 
-By default, the axes for your PCA plot are PC 1 and PC 2. **The *axes* parameter lets you choose which principal component you want to plot.** Using our previous example, we will plot this time PC 1 and PC 3 :
+By default, the axes for your PCA plot are PC 1 and PC 2. **The *axes* parameter lets you choose which principal components you want to plot.** Using our previous example, we will plot this time PC 1 and PC 3 :
 
-```{r, fig.height=5,fig.width=5}
+```{r}
 plot_PCA(ribo_adjusted,
          color_col = "condition",
          axes = c(1,3),
@@ -335,18 +354,20 @@ ribo_df <- extract_data(ribo_adjusted,
 
 ### Export as a ggplot-ready dataframe
 
-**If you want a ggplot-ready dataframe**, you can use format_to_plot. With the RiboClass, you can add additionnal metadata column if necessary.
+**If you want a ggplot-ready dataframe**, you can use format_to_plot. With the RiboClass, you can add additional metadata column if necessary.
 
 ```{r}
 ggplot_table <- format_to_plot(ribo_adjusted,"condition")
-knitr::kable(ggplot_table[501:510,])
+knitr::kable(ggplot_table[501:510,],caption = "excerpt from the output dataframe")
 ```
 
 ### Export as a dataframe by condition
 
+This export can be used to compare the mean count or c-score for each position between conditions (or other metadata).
+
 ```{r}
 mean_tb <- mean_samples_by_conditon(ribo_adjusted,"cscore","condition")
-knitr::kable(mean_tb[501:510,])
+knitr::kable(mean_tb[501:510,],caption = "excerpt from the output dataframe")
 ```
 
 # Reference
