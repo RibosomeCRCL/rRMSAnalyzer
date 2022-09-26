@@ -7,9 +7,9 @@ abstract: >
   <br>Using 5'end count data as input, the package Riboscore provides a set of easy-to-use functions to compute c-score, adjust batch effect with ComBat-Seq and visualise your data with several plots.
 output:
     html_vignette:
-    toc: true
-    fig_width: 5
-    fig_height: 5
+      toc: true
+      fig_width: 5
+      fig_height: 5
 vignette: >
   %\VignetteIndexEntry{riboscore}
   %\VignetteEngine{knitr::rmarkdown}
