@@ -32,28 +32,3 @@ mean_samples_by_conditon <- function(ribo,value, metadata_condition) {
   ribo_condition <- ribo_concat %>% dplyr::group_by(named_position, !!sym(metadata_condition)) %>% dplyr::summarise(mean = mean(!!sym(value)), sd = stats::sd(!!sym(value)))
   return(ribo_condition)
 }
-
-
-#' Remove a RNA among all samples
-#' 
-#' @param ribo a RiboClass
-#' @param name_rna_to_remove name of the rna to remove
-#'
-#' @return a RiboClass without the specified RNA
-#' @export
-#'
-ribo_remove_rna <- function(ribo, name_rna_to_remove) {
-  #TODO : use lapply instead
-  for(name in names(ribo$counts)) {
-    
-    df <- ribo$counts[[name]]
-    df <- df[df["RNA"] != name_rna_to_remove,]
-    ribo$counts[[name]] <- df
-    
-  }
-  
-  
-  
-  return(ribo)
-  
-}
