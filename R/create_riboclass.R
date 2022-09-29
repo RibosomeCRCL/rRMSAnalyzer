@@ -78,7 +78,12 @@ create_riboclass <- function(count_path,
   else {
     
     if(is.character(metadata)) {
-      metadata <- utils::read.csv(metadata, sep = metadata_sep)
+      if (file.exists(metadata)) {
+        metadata <- utils::read.csv(metadata, sep = metadata_sep)
+      }
+      else {
+        stop("the path specified for metadata does not exist or is not a file !")
+      }
       
     }
     
@@ -86,16 +91,24 @@ create_riboclass <- function(count_path,
       stop("metadata must be a dataframe or a path to a csv file !")
     }
     
+    #rename the column specified in "samplename" to "samplename"
     names(metadata)[names(metadata) == metadata_id] <- "samplename"
     
     rownames(metadata) <- metadata[,"samplename"]
+    
+    
+    if(!(metadata_key %in% names(metadata))) stop(paste(metadata_key, " (metadata_key param) is not a column in metadata"))
+    if(!(metadata_id %in% names(metadata))) stop(paste(metadata_id, "(metadata_id param) is not a column in metadata"))
+    
     
     # read count data
     rna_counts_dt <- .read_count_files(count_path,count_sep,count_header,
                                        count_rnaid,count_pos,count_value,
                                        files_to_keep = as.character(metadata[,metadata_key]))
     
+    # stop if total mismatch between filenames and the filename column given in metadata
     if(length(rna_counts_dt) == 0) stop(paste0("ERROR! No file has the filenames specified in your '",colnames(metadata[metadata_key]),"' column"))
+    
     # generate RNA names table
     rna_names_df <- .generate_rna_names_table(rna_counts_dt[[1]])
     
@@ -109,14 +122,14 @@ create_riboclass <- function(count_path,
   }
   
   
-  # Merge metadata and counts in the single named list.
-  return_list <- list(data = rna_counts_dt, metadata = metadata,rna_names = rna_names_df, has_cscore = FALSE)
-  class(return_list) <- "RiboClass"
+  # Merge metadata and counts in RiboClass.
+  RiboClass <- list(data = rna_counts_dt, metadata = metadata,rna_names = rna_names_df, has_cscore = FALSE)
+  class(RiboClass) <- "RiboClass"
   
   cat("[SUCCESS] Your data have been imported and the following RiboClass has been created :\n")
-  print(return_list)
+  print(RiboClass)
   
-  return(return_list)
+  return(RiboClass)
 }
 
 
@@ -164,11 +177,19 @@ create_riboclass <- function(count_path,
     }
     
     
+
+    rna_counts_dt <-
+      lapply(rna_counts_fl, utils::read.csv, sep = sep, header = header)
+    
+    # check if there are less than 3 columns, which can happen when one fails to
+    # specify the correct seperator
+    if(ncol(rna_counts_dt[[1]]) < 3) {
+      stop("not enough columns in your count data !\n Check if you have specified the correct columns separator in count_sep")
+    }
+    
     # 2) reorder cols for each count table and name them like this :
     # RNA | position_on_rna | count
     # and add a siteID column with a default value of NA
-    rna_counts_dt <-
-      lapply(rna_counts_fl, utils::read.csv, sep = sep, header = header)
     rna_counts_dt <- lapply(rna_counts_dt, function(x) {
       x <- x[, c(rna_col, position_col, count_value)]
       colnames(x) <- c("rna", "rnapos", "count")

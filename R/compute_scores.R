@@ -93,7 +93,7 @@ compute_cscore <- function(ribo=NULL, flanking=6,
                             method = "median",
                             ncores = 1
                             ) {
-  
+    if(!(method %in% c("median","mean"))) stop("method can be either \"mean\" or \"median\"")
     dt = ribo["data"] #we only need the counts to compute the score
 
     
