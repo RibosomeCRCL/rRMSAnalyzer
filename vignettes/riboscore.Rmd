@@ -402,7 +402,7 @@ ribo_df <- extract_data(ribo_adjusted,
                         col = "cscore")
 ```
 
-By default, it will export c-score for all the genomic RNA positions. The user can export information related to the subset of annotated RNA 2’Ome sites by setting the only_annotated parameter to True.
+By default, it will export c-score for all the genomic RNA positions. The user can export information related to the subset of annotated RNA 2'Ome sites by setting the only_annotated parameter to True.
 ```{r}
 ribo_df <- extract_data(ribo_adjusted,
                         col = "cscore",
@@ -417,7 +417,7 @@ knitr::kable(ribo_df[1:10,],caption = "excerpt from the output dataframe")
 
 The user can export data as a ggplot-ready dataframe using the function format_to_plot. 
 
-By default, it will export c-score for all the genomic RNA positions. The user can export additional information present in the metadata by indicating the name of the column of interest. The user can export information related to the subset of annotated RNA 2’Ome sites by setting the only_annotated parameter to True.
+By default, it will export c-score for all the genomic RNA positions. The user can export additional information present in the metadata by indicating the name of the column of interest. The user can export information related to the subset of annotated RNA 2'Ome sites by setting the only_annotated parameter to True.
 Here is an example of ggplot-ready dataframe including the C-scores of all the genomic RNA positions as well as the condition related to the particular sample of interest:
 
 ```{r}
@@ -433,13 +433,13 @@ knitr::kable(ggplot_table[501:510,],caption = "excerpt from the output dataframe
 
 The user can export a dataframe compiling the mean C-scores of each position by specific conditions provided in the metadata dataframe using the mean_samples_by_conditon function. 
 
-By default, it will export for all the genomic RNA positions the name of the position, the mean and sd of the C-scores. The user can export mean and sd of “end count”. The user can export information related to the subset of annotated RNA 2’Ome sites by setting the only_annotated parameter to True.
+By default, it will export for all the genomic RNA positions the name of the position, the mean and sd of the C-scores. The user can export mean and sd of "end count". The user can export information related to the subset of annotated RNA 2'Ome sites by setting the only_annotated parameter to True.
 Here is an example of dataframe including the mean C-scores per conditions for all the genomic RNA positions:
 ```{r}
 mean_tb <- mean_samples_by_conditon(ribo_adjusted,
                                     value = "cscore",
                                     metadata_condition = "condition",
-                                    use_annot = T) # only_annotated
+                                    only_annotated = T)
 ```
 
 ```{r,echo=FALSE}
