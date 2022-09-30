@@ -37,7 +37,7 @@ adjust_bias <- function(ribo, batch,...) {
     ribo_updated <- .update_ribo_count_with_matrix(ribo,adjusted_matrix)
     
     if(ribo_updated[["has_cscore"]]) {
-      cat("Recalculating c-score using previously given parameters...\n")
+      cat("Recomputing c-score with the following parameters :\n")
       cat(paste("c-score method :", ribo_updated[["cscore_method"]],"\n"))
       cat(paste("flanking window :", ribo_updated[["cscore_window"]],"\n"))
       
