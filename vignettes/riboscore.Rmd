@@ -3,10 +3,9 @@ title: "Riboscore : package to analyze RiboMethSeq count data"
 author: "Théo COMBE, Hermes PARAQINDES, Janisse KIELBASSA, Emilie THOMAS and Anthony FERRARI"
 date: "`r format(Sys.Date(), '%m/%d/%Y')`"
 abstract: > 
-  RiboMethSeq is an innovative RNASeq-based approach that has been developed in 2015 to quantify rRNA 2'Ome at all the sites at once in yeast. RiboMethSeq is based on a partial alkaline hydrolysis. Since presence of 2’Ome on a nucleotide n protects its bond with the following n+1 nucleotide, it induces a drop in the number of reads starting at the n+1 position compared to the local coverage and thus allowing to calculate a 2’Ome level.
-  <br>Using 5'end count data as input, the package Riboscore provides a set of easy-to-use functions to compute c-score, adjust batch effect with ComBat-Seq and visualise your data with several plots.
+  RiboMethSeq is an innovative RNAseq-based approach, which has been developed in 2015 to analyze 2'O-ribose methylation (2'Ome) at all the sites of the ribosomal RNAs (rRNA) at once, in yeast [@birkedal2014]. RiboMethSeq approach was then transferred to human using the Illumina technology [@Marchand2016; @Erales2017; @Marcel2021]. Briefly, presence of 2'Ome protects the phosphodiester bond located at the 3' of the 2'Ome nucleotide from alkaline hydrolysis. Thus, the presence of 2'Ome at the given nucleotide n induces under-representation of RNA fragments starting at the nucleotide n+1  and an over-representation of RNA fragments ending at the nucleotide n-1, allowing to calculate a 2'Ome level at the corresponding nucleotide position n (or C-score) varying from 0 to 1 [@birkedal2014]. <br><br> This package can be used for any kind of RNA and organisms. The Riboscore package provides a set of easy-to-use functions to compute C-scores from RiboMethSeq end counts as input, adjust batch effect with ComBat-Seq, visualize your data and provide a table with the annotated human rRNA sites and their C-scores. Processing of the raw data to obtain end counts from sequencing data were previously described [@Marchand2016]. 
 output:
-    html_vignette:
+  html_document:
       toc: true
       fig_width: 5
       fig_height: 5
@@ -14,6 +13,7 @@ vignette: >
   %\VignetteIndexEntry{riboscore}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: references.bib
 ---
 
 ```{r, include = FALSE}
@@ -29,7 +29,7 @@ library(Riboscore)
 
 # Installation
 
-You can install the latest Riboscore version on CRAN with :
+You can install the latest Riboscore version on Bioconductor with :
 
 ```{r, eval=FALSE}
 install.packages("riboscore")
@@ -40,27 +40,20 @@ install.packages("riboscore")
 ```{r, eval = FALSE}
 library(Riboscore)
 
-ribo <- load_ribodata("/path/to/your/csvfiles/directory/",
-              "path/to/metadata.csv",
+ribo <- load_ribodata(
+              count_path ="/path/to/your/csvfiles/directory/",
+              metadata = "path/to/metadata.csv",
               metadata_key = "filename",
               metadata_id = "samplename")
 
-#recompute c-score using window's mean instead of median.
+# Compute the c-score using different parameters, including calculation of the local coverage using the mean instead of the median
 ribo <- compute_cscore(ribo, method = "mean")
 
-#Correct any technical biases with ComBat-Seq, using the library column in metadata
+# Adjust any technical biases using ComBat-Seq, thanks to the "library" column in metadata
 ribo <- adjust_bias(ribo,"library")
 
-# Make a PCA plot and color it by biological condition (column in metadata)
+# Plot a Principal Component Analysis (PCA) whose colors depend on the "condition" column in metadata
 plot_PCA(ribo,"biological_condition")
-```
-
-```{r,echo=FALSE}
-path <- system.file("extdata", package="Riboscore")
-ribo <- load_ribodata(paste0(path,"/miniglioma"),
-                      paste0(path,"/metadata.csv"),
-                      metadata_key = "filename",
-                      metadata_id = "samplename")
 ```
 
 # Help, bug reports and suggestions
@@ -91,109 +84,123 @@ It contains three main parts :
 
 Other elements in the riboClass serve to keep a tab on some function calls' parameters.
 
+Here is an example how to create a RiboClass using load_ribodata :
+
+(For the purpose of this example, all parameters are shown)
+
+```{r}
+path <- system.file("extdata", package="Riboscore")
+
+ribo <- load_ribodata(
+                      count_path = paste0(path,"/miniglioma"),
+                      metadata = paste0(path,"/metadata.csv"),
+                      count_sep = "\t",
+                      metadata_sep = ",",
+                      # count data parameters :
+                      count_header = FALSE,
+                      count_value = 3,
+                      count_rnaid = 1,
+                      count_pos = 2,
+                      # Metadata parameters :
+                      metadata_key = "filename",
+                      metadata_id = "samplename",
+                      # c-score parameters :
+                      flanking = 6,
+                      method = "median",
+                      ncores = 1)
+```
+
 ## GenomeCov-like Count data
 
-To use this package, you need the following columns :
+To use this package, the user should provide the 5', 3' or 5'/3' read end counts resulting from RiboMethSeq data for each sample. They should be formatted as followed :
 
-1.  The name of the RNA on which the 5'/3' end count has been done on
+1.  The **name of the RNA** on which the end counting has been performed
 
-2.  The position on the RNA
+2.  The **number of the position** on the RNA
 
-3.  The 5'/3' count on this position
+3.  The **value of the read end counts** at the position
 
 You can see a small example below :
 
-| RNA | Position on RNA | 5'end count |
-|-----|-----------------|-------------|
-| 18S | 123             | 3746        |
-| 18S | 124             | 345         |
-| 18S | 125             | 324         |
-| 18S | 126             | 789         |
-| 18S | 127             | 1234        |
+| RNA | Position on RNA | read end count |
+|-----|-----------------|----------------|
+| 18S | 123             | 3746           |
+| 18S | 124             | 345            |
+| 18S | 125             | 324            |
+| 18S | 126             | 789            |
+| 18S | 127             | 1234           |
 
-(it is not necessary to have an header in your count files. You can give the column numbering if there is no header).
+Note: it is not necessary to provide an header in the count files, because column index can be used in the function load_ribodata, using *count_value*, *count_rnaid* and *count_pos* parameters
 
 The folder structure can be whatever you wish, as long as either the directory and its sub-directories contain the necessary CSV files.
 
-**If you do not specify metadata, Riboscore will try to get any CSV files.**
+**If you do not specify metadata, Riboscore will try to fetch any CSV files in the folder specified by count_path parameter and its subfolders.**
 
 ## Metadata
 
-[Only two columns are necessary for your metadata :]{.underline}
+[Two columns are compulsory for the metadata dataframe:]{.underline}
 
-1.  filename : name of the csv file on disk. **Do not modify it unless the filename has changed on disk.**
+1.  filename: name of the csv file on disk containing the end counts described above. Do not modify it unless the filename has changed on disk.
 
-2.  samplename : sample name you want to see on your plots and analyses. You are free to modify this column, as long as your names are unique.
+2.  samplename: rename the samples, which will be analyzed and shown on the plots. This column could be modified, as long as the sample names are unique.
 
-You can then add any column in your metadata.
+Following these two compulsory columns, provide as many columns as needed for the analysis.
 
-If you do not give any metadata in load_ribodata, an empty one will be created with filename and samplename columns pre-completed.
+In the following example, let's imagine you have three samples, and thus three CSV files. Your metadata should look like this :
 
-## Import new sites annotation
++--------------+--------------+----------------------+
+| filename     | samplename   | biological condition |
+|              |              |                      |
+| (mandatory)  | (mandatory)  | (optionnal)          |
++==============+==============+======================+
+| sample1.csv  | sample 1     | condition 1          |
++--------------+--------------+----------------------+
+| sample2.csv  | sample 2     | condition 1          |
++--------------+--------------+----------------------+
+| sample3.csv  | sample 3     | condition 2          |
++--------------+--------------+----------------------+
 
-When you first load your data into a RiboClass, your sites are not annotated. But maybe you want to annotate some of them. You can use the [Annotations included with this package], or create your own :
+: Example of metadata that should be given to the package. The column "biological condition" serves as an example of a metadata column and is not mandatory.
 
-You need a dataframe with the following informations :
+Note: if no metadata are provided in load_ribodata, an empty metadata will be created with pre-completed filename and samplename columns. The column samplename will include the basename of filename
 
-1.  RNA name, **matching the RNA name in your RiboClass.**
+| filename    | samplename  |
+|-------------|-------------|
+| sample1.csv | sample1.csv |
+| sample2.csv | sample2.csv |
+| sample3.csv | sample3.csv |
 
-2.  Position on RNA.
-
-3.  Name you want to give to the site.
-
-You can see an example below :
-
-| Position | rRNA | Nomenclature |
-|----------|------|--------------|
-| 15       | 5.8S | Um14         |
-| 76       | 5.8S | Gm75         |
-| 28       | 18S  | Am27         |
-
-: Example of annotation in human_methylated
-
-Other columns in your annotation table will be ignored.
-
-You can annotate you sites with [Annotate sites](#annotate-sites).
-
-## Annotations included with this package
-
-This package includes two dataframes with sites annotation :
-
--   human_methylated, containing the 112 known methylation sites for Human.
-
--   human_suspected, containing the 17 sites that are possible methylation sites.
-
-You can annotate you sites with [Annotate sites](#annotate-sites).
+: Example of auto-generated metadata. Samplename will be identical to filename by default, but you can modify this column.
 
 # C-score calculation
 
 ## What is C-score
 
-This is a score that has been introduced by Birkedal et al. It corresponds to the 2'Ome level at a rRNA position known to be methylated. The C-score represents a drop in end read coverage at a given position compared to the environmental coverage as described by Birkedal et al, 2015. This score can have a value between **0** (never methylated) and **1** (always methylated).
+The C-score corresponds to the 2'Ome level at a RNA position. The C-score represents a drop in the end read coverage at a given position compared to the environmental coverage, as described by @birkedal2014. The C-score can be of 0 (i.e., no RNA molecule is 2'Ome at the position of interest), of 1 (i.e., all the RNA molecules are 2'Ome at the position of interest) and of ]0:1[ (i.e., a mix of un-methylated and methylated RNA molecules).
 
-Two different C-score can be found in literature, depending if the authors the median or the mean of the window's values. Both are implemented in this package.
+Different C-scores can be determined to obtain robust estimation of 2'Ome level depending on the parameters used to compute the local coverage. In particular, the computation method and the size of the local coverage can be changed.
+
+By default, the computation method of the local coverage corresponds to the **median** and the size of the local coverage corresponds to a **flanking region of** **6** (i.e., 6 nucleotides downstream the nucleotide n and 6 upstream the nucleotide n). This package offers the possibility to change these two parameters either when loading the data or during the analysis process
 
 ## C-score computation when loading data
 
-When load_ribodata is used, a c-score is automatically computed for all positions.
-
-You can modify directly the parameters related to this computation:
+When the function load_ribodata is used, a C-score is automatically computed for all genomic positions of the RNA. The C-score is computed using either the default parameters of the load_ribodata function or the user's parameters as followed:
 
 ```{r, eval=FALSE}
-load_ribodata("/path/to/csv/",
-              "/path/to/metadata.csv",
+load_ribodata(count.path = "/path/to/csv/",
+              metadata = "/path/to/metadata.csv",
               # everything below is linked to c-score computation
-              flanking = 6, # window size
-              method = "median", # use mean or median on window's values
+              flanking = 6, # flanking region size
+              method = "median", # use mean or median on flanking region's values
               ncores = 8 # number of CPU cores to use for computation
               )
 ```
 
 ## Update C-Score
 
-If you want to modify the how the c-score is computed and update the c-score in a RiboClass, you can use compute_cscore function.
+During the analysis, the parameters to compute the C-score can be modified using the compute_cscore function, which will automatically update the C-score in the RiboClass.
 
-In the following example, we modify both the window's size and the computation method (mean instead of median) :
+In the following example, both the flanking region's size of the local coverage and the computation method have been modified:
 
 ```{r,eval=FALSE}
 ribo <- compute_cscore(ribo,
@@ -205,39 +212,38 @@ It will return a RiboClass with the new c-score. Please note that it will overri
 
 # Quality control
 
-## Samples PCA for all positions
+## Identification of batch effect
 
-We can spot a technical bias when we make a PCA of c-score for all genomic positions and color it by library (or batch).
-
-(see also [Visualization with PCA] for more usages)
+Technical bias (i.e., batch effect) can be identified by plotting C-scores at all the genomic positions of the RNA for each sample on a PCA (see also [Visualization with PCA] for more usages).
 
 ```{r}
-plot_PCA(ribo,"run")
+plot_PCA(ribo = ribo,
+         color_col = "run")
 ```
 
-The sample should not be grouped by library or batch. Unfortunately, this is clearly visible on PC 1. The following section will resolve this issue.
+In this example, the technical replicates RNA1 and RNA2 included in library 1 and 2 respectively, are distant from each other on the PC1 axis. Moreover, the samples should not be grouped by library or batch. The following section will resolve this batch effect.
 
 ## Batch effect adjustment
 
-If the sequencing has been done in several batches, a batch effect can occur. One way to remove this effect is by using ComBat-Seq adjustment. The Riboscore package has a wrapper to use this adjustment on a RiboClass : *adjust_bias*.
+Batch effect of RiboMethSeq data can be adjusted using the ComBat-seq method (Paraqindes et al, in preparation); @zhang2020 . The Riboscore package includes a wrapper (adjust_bias) to perform ComBat-seq adjustment that will return a new RiboClass with adjusted end count values and C-scores automatically recomputed with the same setup parameters.
 
 ```{r}
 ribo_adjusted <- adjust_bias(ribo,"run")
 ```
 
-This function will return a new RiboClass with adjusted count values. The c-score will be automatically recomputed using the previous parameters given.
-
-Now, if we redo the PCA, this time on our ComBat-Seq-adjusted RiboClass :
+Batch effect adjustment can be verified using the plot_PCA function using the new RiboClass:
 
 ```{r}
 plot_PCA(ribo_adjusted,"run")
 ```
 
-The bias on PC 1 is no longer visible !
+After batch effect adjustment using ComBat-seq method, the two technical replicates RNA1 and RNA2 show reduced dispersion, and the samples are separated on the PCA axes independently of the library groups.
 
 ## Keep or remove samples
 
-If you want to analyze only a subset of samples, you can create a new RiboClass with keep_ribo_samples. In this example, we keep only the samples "2400" and "3307" :
+A sample subset can be easily analyzed by indicating the samples to keep or to remove. The user can thus create a new RiboClass object containing the data and metadata of the samples of interest.
+
+Here is an example to generate a new RiboClass by keeping two samples of interest ("2400" and "3307"):
 
 ```{r}
 ribo_2samples <- keep_ribo_samples(ribo_adjusted,c("938","2633"))
@@ -245,7 +251,7 @@ print(ribo_2samples)
 
 ```
 
-On the contrary, you can create a new RiboClass by removing some samples. Here, we remove "2400" and "3307" :
+Here is an example to generate a new RiboClass by removing two samples ("2400" and "3307"):
 
 ```{r}
 ribo_removed_samples <- remove_ribo_samples(ribo,c("938","2633"))
@@ -254,9 +260,11 @@ print(ribo_removed_samples)
 
 in both cases, only the remaining samples' metadata are kept in the RiboClass object. You do not need to update it by hand.
 
-# Data exploration
+# RNA annotation
 
-## Remove RNA
+## RNA manipulation
+
+### Remove RNA
 
 You can remove a RNA among all your RiboClass' samples if it is not necessary for your analysis. Here, we do not need the 5S rRNA.
 
@@ -265,25 +273,69 @@ ribo_adjusted <- remove_rna(ribo,"NR_023363.1_5S")
 print(ribo_adjusted)
 ```
 
-## Rename RNA
+### Rename RNA
 
-For some plots or functions, the RNA names can be important. **RNA names must match for sites annotation.**
+Annotation of rRNA 2'Ome sites using the lists provided by this package, requires the usage of specific RNA names.
 
-Before annotating our sites using human_methylated, let's check if our RiboClass's RNA names are the same as those in this dataset :
+Here is an example to check whether the RNA names provided by the user in the RiboClass match the ones used by this package :
 
 ```{r}
 cat("human_methylated's rna names :",unique(human_methylated$rRNA),"\n")
 cat("ribo's rna names :",as.character(ribo_adjusted$rna_names$current_name))
 ```
 
-Our names are different ! We need to update them before annotation.
+Here, the names are different and need to be updated before annotation.
 
-**We can use rename_rna**. We give the new RNA names by size order :
+The function rename_rna updates automatically the rRNA names that are given by rRNA size order:
 
 ```{r}
-ribo_adjusted <- rename_rna(ribo_adjusted, c("5.8S","18S","28S"))
+ribo_adjusted <- rename_rna(ribo_adjusted, c("5.8S","18S","28S")) # from the shortest RNA in our RiboClass to the longest !
 
 ```
+
+## RNA 2'Ome sites annotations
+
+### Included : Human 2'Ome Rrna sites annotations
+
+This package computes a C-score for each genomic position of the RNAs. The C-scores of the RNA 2'Ome sites of interest are then extracted using a list of annotated sites.
+
+By default, this package includes two dataframes including the positions and the annotations of the human rRNA 2'Ome sites:
+
+-   human_methylated: a dataframe, containing the 112 known 2'Ome sites for the human rRNAs.
+
+-   human_suspected: a dataframe, containing the 17 sites that are putative 2'Ome sites for the human rRNAs, as described in the litterature.
+
+### Customize 2'Ome sites annotations
+
+Instead of using the list of rRNA 2'Ome sites included with this package, the user can provide its own list and annotation using the function annotate_site.
+
+A dataframe with three compulsory columns should be provided:
+
+-   RNA name : the name of the RNA, matching the RNA name of the RiboClass.
+
+-   Position on RNA : the number of the position on the RNA.
+
+-   Nomenclature : the name given to the site of interest.
+
+You can see an example below :
+
+| Position | rRNA | Nomenclature |
+|----------|------|--------------|
+| 15       | 5.8S | Um14         |
+| 76       | 5.8S | Gm75         |
+| 28       | 18S  | Am27         |
+
+: Example of annotation in human_methylated
+
+```{r,eval=FALSE}
+ribo <- annotate_site(ribo,
+                      annot = my_new_annotation,
+                      anno_rna = "rRNA",
+                      anno_pos = "Position",
+                      anno_value = "Nomenclature")
+```
+
+Other columns in your annotation table will be ignored.
 
 ## Annotate RNA sites {#annotate-sites}
 
@@ -301,28 +353,34 @@ ribo_adjusted <- annotate_site(ribo_adjusted,
 
 If there is a problem with the RNA names, you should check [Rename RNA].
 
-This vignette has also some explanations on how to create your own sites annotation dataset with [Import new sites annotation].
+This vignette has also some explanations on how to create your own sites annotation dataset with [Customize 2'Ome sites annotations].
+
+# Data visualisation
 
 ## Visualization with PCA
 
-After annotating these sites, it would be interesting to plot them. This is possible with plot_PCA function, using *only_annotated* parameter. For our example, we will also color it by biological condition :
+The function plot_PCA that returns a ggplot has been implemented with several parameters for more flexibility:
+
+1.  **only_annotated**: plot samples based on the annotated RNA 2'Ome sites only to determine whether samples clustered depending on their rRNA 2'Ome profile.
+
+Here is an example comparing samples reflecting different biological conditions based on the rRNA 2'Ome profile of the provided human_methylated list:
 
 ```{r}
 plot_PCA(ribo_adjusted,
          color_col = "condition",
-         only_annotated = T)
+         only_annotated = TRUE)
 ```
 
-By default, the axes for your PCA plot are PC 1 and PC 2. **The *axes* parameter lets you choose which principal components you want to plot.** Using our previous example, we will plot this time PC 1 and PC 3 :
+2.  **axes**: by default, PC1 and PC2 axes are plotted. However, the user can choose the PCA axes of interest using the "axes" parameter.
 
 ```{r}
 plot_PCA(ribo_adjusted,
          color_col = "condition",
-         axes = c(1,3),
+         axes = c(2,3),
          only_annotated = T)
 ```
 
-If you to do more than what is given by plot_PCA, **you can return the full dudi.pca object instead of a ggplot** by setting *pca_object_only* to True :
+3.  **pca_object_only**: return the full dudi.pca object by setting pca_object_only to True:
 
 ```{r}
 pca <- plot_PCA(ribo_adjusted,
@@ -331,43 +389,61 @@ pca <- plot_PCA(ribo_adjusted,
          pca_object_only = T)
 ```
 
-## Export data
+# Export data
 
-If you want to use your results outside of this package, there are two ways to export your data :
+Data can be exported as two different objects.
 
-### Export as a single matrix
+## Export as a single matrix
 
-You can use extract_data to export your data as a single dataframe
+The user can export data as a single dataframe using the function extract_data.
 
 ```{r}
 ribo_df <- extract_data(ribo_adjusted,
                         col = "cscore")
 ```
 
-This will export all positions. If you want to export only annotated positions, you can set *only_annotated* parameter to True.
-
+By default, it will export c-score for all the genomic RNA positions. The user can export information related to the subset of annotated RNA 2’Ome sites by setting the only_annotated parameter to True.
 ```{r}
 ribo_df <- extract_data(ribo_adjusted,
                         col = "cscore",
                         only_annotated = T)
 ```
 
-### Export as a ggplot-ready dataframe
+```{r}
+knitr::kable(ribo_df[1:10,],caption = "excerpt from the output dataframe")
+```
 
-**If you want a ggplot-ready dataframe**, you can use format_to_plot. With the RiboClass, you can add additional metadata column if necessary.
+## Export as a ggplot-ready dataframe
+
+The user can export data as a ggplot-ready dataframe using the function format_to_plot. 
+
+By default, it will export c-score for all the genomic RNA positions. The user can export additional information present in the metadata by indicating the name of the column of interest. The user can export information related to the subset of annotated RNA 2’Ome sites by setting the only_annotated parameter to True.
+Here is an example of ggplot-ready dataframe including the C-scores of all the genomic RNA positions as well as the condition related to the particular sample of interest:
 
 ```{r}
 ggplot_table <- format_to_plot(ribo_adjusted,"condition")
+
+```
+
+```{r,echo=FALSE}
 knitr::kable(ggplot_table[501:510,],caption = "excerpt from the output dataframe")
 ```
 
-### Export as a dataframe by condition
+## Export as a dataframe by condition
 
-This export can be used to compare the mean count or c-score for each position between conditions (or other metadata).
+The user can export a dataframe compiling the mean C-scores of each position by specific conditions provided in the metadata dataframe using the mean_samples_by_conditon function. 
 
+By default, it will export for all the genomic RNA positions the name of the position, the mean and sd of the C-scores. The user can export mean and sd of “end count”. The user can export information related to the subset of annotated RNA 2’Ome sites by setting the only_annotated parameter to True.
+Here is an example of dataframe including the mean C-scores per conditions for all the genomic RNA positions:
 ```{r}
-mean_tb <- mean_samples_by_conditon(ribo_adjusted,"cscore","condition")
-knitr::kable(mean_tb[501:510,],caption = "excerpt from the output dataframe")
+mean_tb <- mean_samples_by_conditon(ribo_adjusted,
+                                    value = "cscore",
+                                    metadata_condition = "condition",
+                                    use_annot = T) # only_annotated
+```
+
+```{r,echo=FALSE}
+knitr::kable(mean_tb[1:10,],caption = "excerpt from the output dataframe")
 ```
 
 # Reference
