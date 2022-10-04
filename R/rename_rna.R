@@ -11,6 +11,7 @@
 #' @export
 #'
 #' @examples
+#' data("ribo_toy")
 #' ribo_toy <- rename_rna(ribo_toy ,c("5S","5.8S","18S","28S"))
 
 rename_rna <- function(ribo,new_names=c("5S","5.8S","18S","28S")) {

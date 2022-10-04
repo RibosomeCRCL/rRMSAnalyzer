@@ -30,5 +30,6 @@ a ggplot or a dudi.pca object if pca_object_only is set to True.
 Principal component analysis of a RiboClass object
 }
 \examples{
+data("ribo_toy")
 plot_PCA(ribo_toy,"run")
 }

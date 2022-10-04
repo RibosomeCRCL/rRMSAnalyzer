@@ -24,9 +24,7 @@
 #' 
 #' \url{https://github.com/...}
 #' 
-#' @references
 #'
-
 #'
 #' @author Théo COMBE, Hermes PARAQINDES, Janice KIELBASSA
 #' 

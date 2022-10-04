@@ -11,6 +11,13 @@ remove_rna(ribo, rna_to_remove)
 
 \item{rna_to_remove}{names of the RNA to remove}
 }
+\value{
+a RiboClass with the rna removed
+}
 \description{
 Remove one or more RNA among your RiboClass' samples
+}
+\examples{
+data("ribo_toy")
+ribo_toy <- remove_rna(ribo_toy, "NR_023363.1_5S")
 }

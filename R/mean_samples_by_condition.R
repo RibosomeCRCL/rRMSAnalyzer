@@ -6,16 +6,17 @@
 #' @param ribo a RiboClass object
 #' @param metadata_condition name or position of the column __in metadata__ containing the condition
 #' @param value name or position of the column containing the values on which mean by condition is calculated.
+#' @param only_annotated use annotation site name instead of default
 #' 
 #' @importFrom dplyr %>%
 #' @importFrom rlang sym
 #' @return a dataframe with the mean for each condition for a selected value
 #' @export
 #' @md
-#' @example 
+#' @examples
+#' data("ribo_toy")
 #' mean_df <- mean_samples_by_conditon(ribo_toy,"count","condition")
-#' 
-mean_samples_by_conditon <- function(ribo,value, metadata_condition) {
+mean_samples_by_conditon <- function(ribo,value, metadata_condition, only_annotated = F) {
   
   named_position <- NULL # NSE fix
   ribo_list <- ribo[["data"]]

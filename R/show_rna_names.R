@@ -7,6 +7,7 @@
 #' @export
 #'
 #' @examples
+#' data("ribo_toy")
 #' show_RNA_names(ribo = ribo_toy)
 show_RNA_names <- function(ribo = NULL) {
   if(is.null(ribo)) {stop("A ribo class object should be provided")}

@@ -18,5 +18,6 @@ a riboClass without the removed samples in data and metadata
 Remove samples from Riboclass object
 }
 \examples{
+data("ribo_toy")
 ribo.test <- remove_ribo_samples(ribo = ribo_toy, samples_to_delete = c("4283", "3307"))
 }

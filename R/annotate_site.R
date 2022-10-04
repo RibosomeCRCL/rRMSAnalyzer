@@ -14,6 +14,7 @@
 #'
 #' @examples
 #' data("ribo_toy")
+#' data("human_methylated")
 #' ribo_toy <- rename_rna(ribo_toy ,c("5S","5.8S","18S","28S"))
 #' ribo_toy <- annotate_site(ribo_toy,human_methylated,anno_value ="Nomenclature")
 #'

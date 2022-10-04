@@ -18,5 +18,6 @@ a RiboClass with updated rna names in data.
 Rename RNAs in your RiboClass
 }
 \examples{
+data("ribo_toy")
 ribo_toy <- rename_rna(ribo_toy ,c("5S","5.8S","18S","28S"))
 }

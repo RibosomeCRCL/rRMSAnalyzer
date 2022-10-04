@@ -9,6 +9,7 @@
 #' @export
 #'
 #' @examples 
+#' data("ribo_toy")
 #' plot_PCA(ribo_toy,"run")
 plot_PCA <- function(ribo, color_col = NULL, axes = c(1,2), only_annotated=F, pca_object_only = F) {
   

@@ -4,7 +4,7 @@
 \alias{mean_samples_by_conditon}
 \title{Regroup samples by condition and calculate mean for each condition}
 \usage{
-mean_samples_by_conditon(ribo, value, metadata_condition)
+mean_samples_by_conditon(ribo, value, metadata_condition, only_annotated = F)
 }
 \arguments{
 \item{ribo}{a RiboClass object}
@@ -12,6 +12,8 @@ mean_samples_by_conditon(ribo, value, metadata_condition)
 \item{value}{name or position of the column containing the values on which mean by condition is calculated.}
 
 \item{metadata_condition}{name or position of the column \strong{in metadata} containing the condition}
+
+\item{only_annotated}{use annotation site name instead of default}
 }
 \value{
 a dataframe with the mean for each condition for a selected value
@@ -19,4 +21,8 @@ a dataframe with the mean for each condition for a selected value
 \description{
 An helper function that will give the mean of the cscore or count of all samples by condition, for each position. The standard deviation is also given.
 this can be used to create boxplot with ggplot.
+}
+\examples{
+data("ribo_toy")
+mean_df <- mean_samples_by_conditon(ribo_toy,"count","condition")
 }

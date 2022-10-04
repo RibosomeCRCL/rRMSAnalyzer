@@ -23,5 +23,6 @@ a RiboClass object with only selected positions for each sample.
 Keep only a subset of positions for all samples.
 }
 \examples{
+data("ribo_toy")
 subset_ribo(ribo_toy, c("NR_046235.3_18S_0681","NR_046235.3_18S_0682"))
 }

@@ -3,10 +3,12 @@
 #' @param ribo a RiboClass
 #' @param rna_to_remove names of the RNA to remove
 #'
-#' @return
+#' @return a RiboClass with the rna removed
 #' @export
 #'
 #' @examples
+#' data("ribo_toy")
+#' ribo_toy <- remove_rna(ribo_toy, "NR_023363.1_5S")
 remove_rna <- function(ribo,rna_to_remove) {
   
   if(!(rna_to_remove %in% ribo[["rna_names"]][["current_name"]])) {

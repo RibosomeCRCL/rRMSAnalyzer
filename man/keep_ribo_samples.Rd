@@ -19,5 +19,6 @@ a riboClass with only selected samples in data and metadata
 Keep only a selected number of samples
 }
 \examples{
+data("ribo_toy")
 ribo.test <- keep_ribo_samples(ribo = ribo_toy, samples_to_keep = c("4283", "3307"))
 }

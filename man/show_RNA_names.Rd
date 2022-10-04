@@ -16,5 +16,6 @@ A vector with actual RNA names
 Display RNA names
 }
 \examples{
+data("ribo_toy")
 show_RNA_names(ribo = ribo_toy)
 }
