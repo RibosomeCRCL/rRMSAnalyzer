@@ -210,13 +210,13 @@ create_riboclass <- function(count_path,
     reference_sample_name <- names(rna_counts_dt)[1]
     
     sample_check_results <-
-      sapply(names(rna_counts_dt), function(x)
+      vapply(names(rna_counts_dt), function(x) {
         check_sample_positions(
           sample_1 = rna_counts_dt[[1]],
           sample_1_name = reference_sample_name,
           sample_2 = rna_counts_dt[[x]],
           sample_2_name = x
-        ))
+        )}, logical(1))
     
     failing_samples <-
       names(sample_check_results[which(sample_check_results == F)])
