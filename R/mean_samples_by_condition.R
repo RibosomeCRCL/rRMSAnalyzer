@@ -17,8 +17,9 @@
 #' data("ribo_toy")
 #' mean_df <- mean_samples_by_conditon(ribo_toy,"count","condition")
 mean_samples_by_conditon <- function(ribo,value, metadata_condition, only_annotated = F) {
-  
-  named_position <- NULL # NSE fix
+  #TODO Make a real if/else statement for only_annotated
+  named_position <- NULL # NSE fix # nolint
+  site <- NULL
   ribo_list <- ribo[["data"]]
   ribo_names <- names(ribo_list)
   ribo_list_named <- lapply(ribo_names, function(x){
@@ -30,6 +31,7 @@ mean_samples_by_conditon <- function(ribo,value, metadata_condition, only_annota
   
   metadata <- ribo[["metadata"]]
   ribo_concat[metadata_condition] <- metadata[,metadata_condition][match(ribo_concat[,"sample"], metadata[,"samplename"])]
-  ribo_condition <- ribo_concat %>% dplyr::group_by(named_position, !!sym(metadata_condition)) %>% dplyr::summarise(mean = mean(!!sym(value)), sd = stats::sd(!!sym(value)))
+  #TODO accept for all positions as well
+  ribo_condition <- ribo_concat %>% dplyr::group_by(site, !!sym(metadata_condition)) %>% dplyr::summarise(mean = mean(!!sym(value)), sd = stats::sd(!!sym(value)))
   return(ribo_condition)
 }
