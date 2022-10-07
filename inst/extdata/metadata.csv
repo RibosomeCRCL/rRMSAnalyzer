@@ -1,0 +1,15 @@
+samplename,condition,run,filename
+S1,cond1,L2,S1_5_counts.csv
+S2,cond2,L1,S2_5_counts.csv
+S3,cond2,L2,S3_5_counts.csv
+S4,cond2,L1,S4_5_counts.csv
+S5,cond2,L2,S5_5_counts.csv
+S6,cond2,L2,S6_5_counts.csv
+S7,cond2,L1,S7_5_counts.csv
+S8,cond1,L1,S8_5_counts.csv
+S9,cond1,L2,S9_5_counts.csv
+S10,cond1,L1,S10_5_counts.csv
+S11,cond1,L1,S11_5_counts.csv
+S12,cond1,L2,S12_5_counts.csv
+RNA1,RNA ref,L1,RNA1_5_counts.csv
+RNA2,RNA ref,L2,RNA2_5_counts.csv
