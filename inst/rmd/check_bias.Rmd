@@ -1,0 +1,34 @@
+---
+title: "Auto Batch effect finder"
+output: html_document
+date: "`r format(Sys.Date(), '%m/%d/%Y')`"
+
+params:
+    library_col: "library"
+---
+
+# Quality Control
+
+The quality control section reports different metrics to help in identifying outlier sample and/or batch effect. The quality control is performed using non-biological noise that corresponds to both end read counts (used to calculate the C-score) and the C-score itself at all the `r length(ribo[[1]][[1]][[1]])` genomic positions.
+
+## C-score: serie comparison
+
+Since more than 1.5% of the C-score corresponds to non-biological noise, normalisation during C-score calculation should limit the dispersion of the samples based on their C-score at all genomic positions in the whole series. **Here is given a Principal Component Analysis (PCA) plot that illustrates the distance between each sample based on its C-score at all genomic positions.** Color indicates distinct library. Moreover, this plot helps in identifying putative batch effect that can be corrected using the inter-normalization option (Combat-seq tool).
+
+```{r,echo=FALSE}
+plot_PCA(ribo_to_check,params$library_col)
+```
+
+By using the following command, the batch effect can be corrected :
+
+> ribo_corrected <- adjust_bias(ribo,"`r params$library_col`")
+
+```{r,include=FALSE}
+ribo_corrected <- adjust_bias(ribo_to_check,params$library_col)
+```
+
+This would give the following result :
+
+```{r,echo=FALSE}
+plot_PCA(ribo_corrected,params$library_col)
+```

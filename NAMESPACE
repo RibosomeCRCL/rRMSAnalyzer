@@ -3,6 +3,7 @@
 S3method(print,RiboClass)
 export(adjust_bias)
 export(annotate_site)
+export(batch_report)
 export(compute_cscore)
 export(create_riboclass)
 export(extract_data)
