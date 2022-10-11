@@ -69,9 +69,9 @@ create_riboclass <- function(count_path,
   
   #loading metadata
   if(is.null(metadata)) {
-    metadata <- generate_metadata_df(count_path,create_samplename_col = F)
+    metadata <- generate_metadata_df(count_path,create_samplename_col = FALSE)
     rna_counts_dt <- .read_count_files(count_path,count_sep,count_header,count_rnaid,count_pos,count_value)
-    if(length(rna_counts_dt) == 0 ) stop("ERROR : no files were loaded")
+    if(length(rna_counts_dt) == 0) stop("ERROR : no files were loaded")
     rna_names_df <- .generate_rna_names_table(rna_counts_dt[[1]])
   }
   
@@ -161,7 +161,7 @@ create_riboclass <- function(count_path,
     if(!dir.exists(path_to_files)) stop("the path given for the csv files does not exist or is not a directory !")
     
     rna_counts_fl <-
-      list.files(path_to_files, recursive = T, full.names = T)
+      list.files(path_to_files, recursive = TRUE, full.names = TRUE)
     
     # Check if there are files to keep
     # if yes than keep only the needed files
@@ -219,7 +219,7 @@ create_riboclass <- function(count_path,
         )}, logical(1))
     
     failing_samples <-
-      names(sample_check_results[which(sample_check_results == F)])
+      names(sample_check_results[which(sample_check_results == FALSE)])
     if (identical(failing_samples, character(0))) {
     }
     else {

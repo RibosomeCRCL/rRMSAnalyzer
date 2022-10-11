@@ -29,7 +29,7 @@ adjust_bias <- function(ribo, batch, ...) {
   # 18S_6        100       137       194       336       247       264
   
   if(batch %in% colnames(ribo[["metadata"]])) {
-    matrix_ribo <- extract_data(ribo,"count",position_to_rownames = T)
+    matrix_ribo <- extract_data(ribo,"count",position_to_rownames = TRUE)
     #reorganize column according to metadata and convert DF to matrix (otherwise, ComBat_seq won't work)
     matrix_ribo <- as.matrix(matrix_ribo[,c(ribo[["metadata"]][["samplename"]])])
     adjusted_matrix <- sva::ComBat_seq(matrix_ribo,batch = ribo[["metadata"]][[batch]],...)
@@ -51,7 +51,7 @@ adjust_bias <- function(ribo, batch, ...) {
     return(ribo_updated)
   }
   else {
-    stop(paste0("\"",batch, "\" is not a valid metadata."))
+    stop("\"",batch, "\" is not a valid metadata.")
   }
 
   

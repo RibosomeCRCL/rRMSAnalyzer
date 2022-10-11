@@ -19,7 +19,7 @@ keep_ribo_samples <- function(ribo = NULL, samples_to_keep = NULL) {
     ribo[["metadata"]] <- ribo[["metadata"]][match(samples_to_keep, rownames(ribo[["metadata"]])),]
     
   } else {
-    stop(paste("Samples name should be from", toString(names(ribo[["data"]]))))
+    stop("Samples name should be from ", toString(names(ribo[["data"]])))
   }
   return(ribo)
 }
@@ -45,7 +45,7 @@ remove_ribo_samples <- function(ribo = NULL, samples_to_delete = NULL) {
     ribo[["metadata"]] <- ribo[["metadata"]][-match(samples_to_delete, rownames(ribo[["metadata"]])),]
     
   } else {
-    stop(paste("Samples name should be from", toString(names(ribo[["data"]]))))
+    stop("Samples name should be from ", toString(names(ribo[["data"]])))
   }
   return(ribo)
 }

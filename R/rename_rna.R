@@ -20,7 +20,7 @@ rename_rna <- function(ribo,new_names=c("5S","5.8S","18S","28S")) {
   rna_names <- ribo[["rna_names"]]
   
   if(nrow(rna_names) != length(new_names)) {
-    stop(paste0("Different numbers of RNA names in your RiboClass (",nrow(rna_names),") and the list given (",length(new_names),")."))
+    stop("Different numbers of RNA names in your RiboClass (",nrow(rna_names),") and the list given (",length(new_names),").")
   }
   rna_names[3] <- new_names
   

@@ -13,7 +13,7 @@
 #' @examples
 #' data("ribo_toy")
 #' count_df <- extract_data(ribo_toy,"count")
-extract_data <- function(ribo, col = "cscore", position_to_rownames =F, only_annotated = F) {
+extract_data <- function(ribo, col = "cscore", position_to_rownames = FALSE, only_annotated = FALSE) {
   
   named_position <- NULL # NSE fix
   #TODO : sample_list -> ribo
@@ -27,7 +27,7 @@ extract_data <- function(ribo, col = "cscore", position_to_rownames =F, only_ann
   
   if(!(col %in% colnames(ribo[["data"]][[1]]))) {
     
-    stop(paste(col, "is not a column in the data !"))
+    stop(col, " is not a column in the data !")
   }
   
   sample_list <- ribo[["data"]]
