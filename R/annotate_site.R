@@ -27,7 +27,7 @@ annotate_site <- function(ribo, annot, anno_rna = 2, anno_pos = 1 , anno_value) 
   
   #Check if annot has the RNA as the RiboClass
  if(sum(!(annot[[anno_rna]] %in% ribo[["rna_names"]][["current_name"]])) != 0){
-   stop(paste("Mismatch between annot's RNA names and RiboClass's RNA names\n you can rename your RiboClass' RNAs with rename_rna"))
+   stop("Mismatch between annot's RNA names and RiboClass's RNA names\n you can rename your RiboClass' RNAs with rename_rna")
  }
   
   #check if annot contains only existing positions. Throw a warning if not.
