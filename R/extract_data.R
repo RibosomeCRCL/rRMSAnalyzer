@@ -65,8 +65,13 @@ extract_data <- function(ribo, col = "cscore", position_to_rownames = FALSE, onl
   
   if(position_to_rownames){
     
-    row.names(matrix_all) <- matrix_all[,"named_position"]
-    matrix_all <- subset(matrix_all,select = -named_position)
+    if(only_annotated) {
+      col_name <- "site"
+    } else {
+      col_name <- "named_position"
+    }
+    row.names(matrix_all) <- matrix_all[,col_name]
+    matrix_all[,col_name] <- NULL
   }
   
   return(matrix_all)
