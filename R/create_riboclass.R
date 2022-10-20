@@ -6,10 +6,10 @@
 #' @param metadata_sep delimiter used in metadata (for csv file only)
 #' @param count_header boolean, specify if count files have a header or not. 
 #' @param count_value column containing count values
-#' @param count_rnaid name or position of the column containing the name of the RNA in count data.
-#' @param count_pos name or position of the column containing the site's position in count data.
-#' @param metadata_key name or position of the column containing the samples' filename
-#' @param metadata_id if it exists, name or position of the column containing the sample name
+#' @param count_rnaid name or index of the column containing the name of the RNA in count data.
+#' @param count_pos name or index of the column containing the site's position in count data.
+#' @param metadata_key name or index of the column containing the samples' filename
+#' @param metadata_id if it exists, name or index of the column containing the sample name
 #'
 #' @description 
 #' Read ribomethseq count files and their associated metadata and turn them into a RiboClass.

@@ -11,9 +11,9 @@ It is always called when generating a RiboClass.}
 \arguments{
 \item{sample_count_list}{list of count dataframe (one sample = one count dataframe)}
 
-\item{rna_col}{name or position of the column containing RNA names}
+\item{rna_col}{name or index of the column containing RNA names}
 
-\item{rnapos_col}{name or position of the column containing position in RNA}
+\item{rnapos_col}{name or index of the column containing position in RNA}
 }
 \value{
 a list of sample data with the added "named_position" column

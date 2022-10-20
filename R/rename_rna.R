@@ -3,7 +3,7 @@
 #'  
 #' 
 #' @param ribo a RiboClass object
-#' @param new_names the new names for your RNA (by order of rna size)
+#' @param new_names the new names for your RNAs (by RNA size order)
 #'
 #' 
 #'

@@ -4,8 +4,8 @@
 #' this can be used to create boxplot with ggplot.
 #'
 #' @param ribo a RiboClass object
-#' @param metadata_condition name or position of the column __in metadata__ containing the condition
-#' @param value name or position of the column containing the values on which mean by condition is calculated.
+#' @param metadata_condition name or index of the column __in metadata__ containing the condition
+#' @param value name or index of the column containing the values on which mean by condition is calculated.
 #' @param only_annotated use annotation site name instead of default
 #' 
 #' @importFrom dplyr %>%

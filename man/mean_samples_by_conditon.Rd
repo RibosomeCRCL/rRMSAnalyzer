@@ -9,9 +9,9 @@ mean_samples_by_conditon(ribo, value, metadata_condition, only_annotated = F)
 \arguments{
 \item{ribo}{a RiboClass object}
 
-\item{value}{name or position of the column containing the values on which mean by condition is calculated.}
+\item{value}{name or index of the column containing the values on which mean by condition is calculated.}
 
-\item{metadata_condition}{name or position of the column \strong{in metadata} containing the condition}
+\item{metadata_condition}{name or index of the column \strong{in metadata} containing the condition}
 
 \item{only_annotated}{use annotation site name instead of default}
 }

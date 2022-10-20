@@ -12,11 +12,11 @@ annotate_site(ribo, annot, anno_rna = 2, anno_pos = 1, anno_value)
 
 \item{annot}{the dataframe containing your annotations}
 
-\item{anno_rna}{name or position of the column in annot containing RNAs' name}
+\item{anno_rna}{name or index of the column in annot containing RNAs' name}
 
-\item{anno_pos}{name or position of the column in annot containing site position inside RNA.}
+\item{anno_pos}{name or index of the column in annot containing site position inside RNA.}
 
-\item{anno_value}{name or position of the column in annot containing nomenclature to apply}
+\item{anno_value}{name or index of the column in annot containing nomenclature to apply}
 }
 \value{
 an annotated riboClass (the site column should be filled with name for known position)

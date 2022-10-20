@@ -12,9 +12,9 @@ subset_ribo(ribo, positions_to_keep, anno_rna, anno_pos)
 
 \item{positions_to_keep}{either a dataframe with a column "named_position" or a vector of named positions.}
 
-\item{anno_rna}{name or position of the column containing RNA names in annotation data}
+\item{anno_rna}{name or index of the column containing RNA names in annotation data}
 
-\item{anno_pos}{name or position of the column containing position in annotation data}
+\item{anno_pos}{name or index of the column containing position in annotation data}
 }
 \value{
 a RiboClass object with only selected positions for each sample.

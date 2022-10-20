@@ -4,7 +4,13 @@
 \alias{.plot_pca}
 \title{Plot a dudi.pca object using factoextra}
 \usage{
-.plot_pca(dudi.pca = NULL, metadata = NULL, color_col = NULL, axes = axes)
+.plot_pca(
+  dudi.pca = NULL,
+  metadata = NULL,
+  color_col = NULL,
+  axes = axes,
+  title = NULL
+)
 }
 \arguments{
 \item{dudi.pca}{a dudi.pca object generated with Ade4}

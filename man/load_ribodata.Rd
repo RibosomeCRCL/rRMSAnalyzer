@@ -33,19 +33,19 @@ load_ribodata(
 
 \item{count_value}{column containing count values}
 
-\item{count_rnaid}{name or position of the column containing the name of the RNA in count data.}
+\item{count_rnaid}{name or index of the column containing the name of the RNA in count data.}
 
-\item{count_pos}{name or position of the column containing the site's position in count data.}
+\item{count_pos}{name or index of the column containing the site's position in count data.}
 
-\item{metadata_key}{name or position of the column containing the samples' filename}
+\item{metadata_key}{name or index of the column containing the samples' filename}
 
-\item{metadata_id}{if it exists, name or position of the column containing the sample name}
+\item{metadata_id}{if it exists, name or index of the column containing the sample name}
 
-\item{flanking}{the window size around the position (the latter is excluded)}
+\item{flanking}{size of the local coverage.}
 
-\item{method}{either "median" or "mean", depending how the cscore must be computed.}
+\item{method}{computation method of the local coverage. Either "median" or "mean".}
 
-\item{ncores}{number of ncores to use in case of multithreading}
+\item{ncores}{number of cores to use in case of multithreading}
 }
 \value{
 a RiboClass

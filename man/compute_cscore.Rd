@@ -10,21 +10,19 @@ compute_cscore(ribo = NULL, flanking = 6, method = "median", ncores = 1)
 \item{ribo}{a riboclass object, see constructor :
 \code{\link{create_riboclass}}}
 
-\item{flanking}{the window size around the position (the latter is excluded)}
+\item{flanking}{size of the local coverage.}
 
-\item{method}{either "median" or "mean", depending how the cscore must be computed.}
+\item{method}{computation method of the local coverage. Either "median" or "mean".}
 
-\item{ncores}{number of ncores to use in case of multithreading}
+\item{ncores}{number of cores to use in case of multithreading}
 }
 \value{
 a riboclass with c-score related columns appended to each sample's data.
 }
 \description{
-The C-score corresponds to the 2'Ome level at a rRNA position known to be methylated. The C-score represents a drop in end read coverage at a given position compared to the environmental coverage as described by Birkedal et al, 2015. This score can have a value between \strong{0} (never methylated) and \strong{1} (always methylated).
-
 In this package, the C-score is calculated for every position. As it can be useful to find positions not yet identified as methylated.
 
-For each RNA, The first and last positions cannot be calculated due to window's size. Their value will be NA instead.
+For each RNA, The first and last positions cannot be calculated if the local coverage is shorter than the flanking argument. Their value will be NA instead.
 }
 \examples{
 data("ribo_toy")

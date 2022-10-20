@@ -9,9 +9,9 @@ generate_name_positions(df, rna, pos)
 \arguments{
 \item{df}{dataframe with both rna and pos columns}
 
-\item{rna}{name or position of rna column}
+\item{rna}{name or index of rna column}
 
-\item{pos}{name or position of position in rna column}
+\item{pos}{name or index of position in rna column}
 }
 \value{
 a dataframe

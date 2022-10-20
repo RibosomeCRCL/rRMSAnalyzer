@@ -7,8 +7,8 @@
 extract_data(
   ribo,
   col = "cscore",
-  position_to_rownames = F,
-  only_annotated = F
+  position_to_rownames = FALSE,
+  only_annotated = FALSE
 )
 }
 \arguments{

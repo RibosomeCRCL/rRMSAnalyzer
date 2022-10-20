@@ -8,8 +8,9 @@ plot_PCA(
   ribo,
   color_col = NULL,
   axes = c(1, 2),
-  only_annotated = F,
-  pca_object_only = F
+  only_annotated = FALSE,
+  pca_object_only = FALSE,
+  title = NULL
 )
 }
 \arguments{

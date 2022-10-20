@@ -1,12 +1,4 @@
-#' compute both C-score and Z-score for one RNA of one sample.
-#'
-#' @param ds dataframe of a given RNA for a given sample
-#' @param flanking the number of flanking position to use for the window
-#' @param method either "median" or "mean", depending on how the cscore must be computed.
-#' 
-#' @return a single RNA dataframe with cscore and flanking columns
-#' @keywords internal
-
+# (internal) Compute a c-score for all position of a single RNA
 .compute_rna_cscore <- function(ds, flanking=6, method) {
   # check that all parameters exist
   if (is.null(ds)) {stop("MISSING parameter. Please specify a data frame <ds>.")}
@@ -38,15 +30,7 @@
   return(ds)
 }
 
-
-#' compute cscore for a single sample
-#'
-#' @param sample_df the whole a dataframe for a single sample (all rRNA combined)
-#' @param flanking the number of flanking position to use for the window
-#' @param method either "median" or "mean", depending how the cscore must be computed.
-#' @return a sample dataframe with cscore and flanking columns
-#'
-#' @keywords internal
+# (internal) Compute c-score for a single sample
 .compute_sample_cscore <- function(sample_df=NULL,
                                       flanking=6,
                                     method) 
@@ -64,12 +48,11 @@
 #' 
 #' @description
 #' 
-#' The C-score corresponds to the 2'Ome level at a rRNA position known to be methylated. The C-score represents a drop in end read coverage at a given position compared to the environmental coverage as described by Birkedal et al, 2015. This score can have a value between **0** (never methylated) and **1** (always methylated).
+#  The C-score corresponds to the 2'Ome level at a RNA position. The C-score represents a drop in the end read coverage at a given position compared to the environmental coverage, as described by @birkedal2014. The C-score can be of 0 (i.e., no RNA molecule is 2'Ome at the position of interest), of 1 (i.e., all the RNA molecules are 2'Ome at the position of interest) and of ]0:1[ (i.e., a mix of un-methylated and methylated RNA molecules).
 #' 
 #' In this package, the C-score is calculated for every position. As it can be useful to find positions not yet identified as methylated.
 #' 
-#' 
-#' For each RNA, The first and last positions cannot be calculated due to window's size. Their value will be NA instead.
+#' For each RNA, The first and last positions cannot be calculated if the local coverage is shorter than the flanking argument. Their value will be NA instead.
 #' 
 #' @references Birkedal, U., Christensen-Dalsgaard, M., Krogh, N., Sabarinathan, R., Gorodkin, J. and Nielsen, H. (2015), Profiling of Ribose Methylations in RNA by High-Throughput Sequencing. Angew. Chem. Int. Ed., 54: 451-455. https://doi.org/10.1002/anie.201408362
 #' 
@@ -77,9 +60,9 @@
 #' @md
 #' @param ribo a riboclass object, see constructor : 
 #' \code{\link{create_riboclass}}
-#' @param flanking the window size around the position (the latter is excluded)
-#' @param method either "median" or "mean", depending how the cscore must be computed.
-#' @param ncores number of ncores to use in case of multithreading
+#' @param flanking size of the local coverage.
+#' @param method computation method of the local coverage. Either "median" or "mean".
+#' @param ncores number of cores to use in case of multithreading
 #' @return a riboclass with c-score related columns appended to each sample's data.
 #' @export
 #'
