@@ -9,7 +9,7 @@ rename_rna(ribo, new_names = c("5S", "5.8S", "18S", "28S"))
 \arguments{
 \item{ribo}{a RiboClass object}
 
-\item{new_names}{the new names for your RNA (by order of rna size)}
+\item{new_names}{the new names for your RNAs (by RNA size order)}
 }
 \value{
 a RiboClass with updated rna names in data.

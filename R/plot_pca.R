@@ -11,7 +11,7 @@
 #' @examples 
 #' data("ribo_toy")
 #' plot_PCA(ribo_toy,"run")
-plot_PCA <- function(ribo, color_col = NULL, axes = c(1,2), only_annotated=F, pca_object_only = F) {
+plot_PCA <- function(ribo, color_col = NULL, axes = c(1,2), only_annotated = FALSE, pca_object_only = FALSE) {
   
   if (is.null(ribo)) {stop("MISSING parameter: please provide a RiboClass!")}
   if (is(ribo) != "RiboClass") {stop("ribo argument is not a RiboClass!")}
@@ -20,7 +20,7 @@ plot_PCA <- function(ribo, color_col = NULL, axes = c(1,2), only_annotated=F, pc
   if (isFALSE(ribo$has_cscore)) {stop("You should calculate Cscores first using calculate_score funciton")}
 
   
-  pca_matrix <- extract_data(ribo,"cscore",position_to_rownames = T)
+  pca_matrix <- extract_data(ribo,"cscore",position_to_rownames = TRUE)
   
   if(only_annotated) pca_matrix <- pca_matrix[which(!is.na(ribo[["data"]][[1]][["site"]])),]
     

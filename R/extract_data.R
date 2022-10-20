@@ -15,7 +15,7 @@
 #' count_df <- extract_data(ribo_toy,"count")
 extract_data <- function(ribo, col = "cscore", position_to_rownames = FALSE, only_annotated = FALSE) {
   
-  named_position <- NULL # NSE fix
+  named_position <- NULL # NSE fix # nolint
   #TODO : sample_list -> ribo
   #TODO : check if position_to_rownames is useful ? -> trash
   #TODO : check if col exist

@@ -9,8 +9,7 @@ plot_PCA(
   color_col = NULL,
   axes = c(1, 2),
   only_annotated = FALSE,
-  pca_object_only = FALSE,
-  title = NULL
+  pca_object_only = FALSE
 )
 }
 \arguments{
