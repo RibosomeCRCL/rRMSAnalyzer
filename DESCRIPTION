@@ -1,16 +1,16 @@
 Package: Riboscore
 Type: Package
-Title: Computation of Scores to Validate Known or Suspected and to Discover New Methylation Sites from Sequencing Count Data
-Version: 0.3
-Date: 2022-08-01
+Title: Riboscore: package to analyze RiboMethSeq data
+Version: 1.0.0
+Date: 2022-10-18
 Author: Janice Kielbassa, Theo Combe, Hermes Paraqindes
 Maintainer: Theo COMBE <theo.combe@lyon.unicancer.fr>
 Description: A package dedicated to ribomethseq analysis. It contains a set of easy-to-use functions.
 License: GPL (>= 3)
 biocViews: sva
-Depends: R (>= 3.5.0)
-Imports: dplyr, stringr, tidyr, rlang, sva, factoextra, ade4, ggplot2
-LazyData: TRUE
+Depends: R (>= 3.5.0), ggplot2
+Imports: dplyr, stringr, tidyr, rlang, sva, factoextra, ade4
+LazyData: FALSE
 RoxygenNote: 7.2.1
 NeedsCompilation: no
 Packaged: 2019-02-04 13:27:40 UTC; janice
