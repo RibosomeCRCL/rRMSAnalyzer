@@ -12,6 +12,8 @@ report_qc(ribo, library_col, project_name = "", output_dir = getwd())
 \item{library_col}{library column in the metadata}
 
 \item{project_name}{Name of the project}
+
+\item{output_dir}{Path to output dir. Working directory is selected by default.}
 }
 \description{
 Generate html report about batch effect in the working directory

@@ -3,6 +3,7 @@
 #' @param ribo a riboclass
 #' @param library_col library column in the metadata
 #' @param project_name Name of the project
+#' @param output_dir Path to output dir. Working directory is selected by default.
 #' @export
 report_qc <- function(ribo, library_col, project_name = "", output_dir = getwd()) {
     ribo_name <- deparse(substitute(ribo))
