@@ -68,7 +68,7 @@
 #'
 #' @examples
 #' data("ribo_toy")
-#' ribo_subsetted <- keep_ribo_samples(ribo_toy,"4283")
+#' ribo_subsetted <- keep_ribo_samples(ribo_toy,"S1")
 #' ribo_with_cscore_med <- compute_cscore(ribo_subsetted, ncores = 2)
 #' ribo_with_cscore_mean <- compute_cscore(ribo_subsetted, method = "mean", ncores = 2)
 #' 

@@ -9,11 +9,11 @@ a RiboClass (S3 Class) with the following element
 \describe{
   \item{data}{list of sample dataframe}
   \item{metadata}{metadata dataframe of all samples}
-  \item{rna_names}{dataframe containing both original and modified RNAs' name}
+  \item{rna_names}{dataframe containing both original and modified RNAs name}
   }
 }
 \usage{
-ribo_toy
+data(ribo_toy)
 }
 \description{
 A riboclass containing 10 samples + 2 reference RNA.

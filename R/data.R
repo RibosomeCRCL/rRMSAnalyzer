@@ -45,11 +45,12 @@
 #' Samples are from 4 different biological conditions ("condition" column in metadata). The sequencing has been 
 #' done in two different batches ("run" column in metadata).
 #' Both batches have the same reference RNA, to detect technical bias.
+#' @usage data(ribo_toy)
 #' 
 #' @format a RiboClass (S3 Class) with the following element
 #' \describe{
 #'   \item{data}{list of sample dataframe}
 #'   \item{metadata}{metadata dataframe of all samples}
-#'   \item{rna_names}{dataframe containing both original and modified RNAs' name}
+#'   \item{rna_names}{dataframe containing both original and modified RNAs name}
 #'   }
 "ribo_toy"

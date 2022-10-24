@@ -19,5 +19,5 @@ Remove samples from Riboclass object
 }
 \examples{
 data("ribo_toy")
-ribo.test <- remove_ribo_samples(ribo = ribo_toy, samples_to_delete = c("4283", "3307"))
+ribo_test <- remove_ribo_samples(ribo = ribo_toy, samples_to_delete = c("S1", "S2"))
 }

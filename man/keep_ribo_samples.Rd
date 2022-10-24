@@ -20,5 +20,5 @@ Keep only a selected number of samples
 }
 \examples{
 data("ribo_toy")
-ribo.test <- keep_ribo_samples(ribo = ribo_toy, samples_to_keep = c("4283", "3307"))
+ribo_test <- keep_ribo_samples(ribo = ribo_toy, samples_to_keep = c("S1", "S2"))
 }

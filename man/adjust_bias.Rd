@@ -26,7 +26,7 @@ You must have a column with the batch number for each sample in your RiboClassâ€
 }
 \examples{
 data("ribo_toy")
-ribo_toy_two <- keep_ribo_samples(ribo_toy,c("4283","RNA1","4272","RNA2"))
+ribo_toy_two <- keep_ribo_samples(ribo_toy,c("S1","RNA1","S7","RNA2"))
 ribo_toy_adjusted <- adjust_bias(ribo_toy_two,"run") 
 
 }
