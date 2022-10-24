@@ -8,8 +8,8 @@ Maintainer: Theo COMBE <theo.combe@lyon.unicancer.fr>
 Description: A package dedicated to ribomethseq analysis. It contains a set of easy-to-use functions.
 License: GPL (>= 3)
 biocViews: sva
-Depends: R (>= 3.5.0), ggplot2
-Imports: dplyr, stringr, tidyr, rlang, sva, factoextra, ade4
+Depends: R (>= 3.5.0)
+Imports: dplyr, stringr, tidyr, rlang, sva, factoextra, ade4, ggplot2
 LazyData: FALSE
 RoxygenNote: 7.2.1
 NeedsCompilation: no

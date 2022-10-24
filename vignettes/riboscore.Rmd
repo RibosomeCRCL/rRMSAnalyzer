@@ -29,13 +29,10 @@ library(Riboscore)
 
 # Installation
 
-The latest version of Riboscore package can be installed from Bioconductor with :
+The latest version of Riboscore package can be installed from CRAN with :
 
 ```{r, eval=FALSE}
-if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-
-BiocManager::install("Riboscore")
+install.packages("riboscore")
 ```
 
 # Usage 
@@ -121,11 +118,11 @@ ribo <- load_ribodata(
 
 To use this package, the user should provide one csv file with the 5’, 3’ or 5’/3’ read end counts resulting from RiboMethSeq data per sample. The folder structure containing the csv files is not important, as long as either the directory and its sub-directories contain the necessary csv files. 
 
-1.  The **name of the RNA** on which the read end counting has been performed
+1.  The **name of the RNA** on which the read end counting has been performed.
 
-2.  The **number of the position** on the RNA
+2.  The **number of the position** on the RNA.
 
-3.  The **value of the read end counts** at the position
+3.  The **value of the read end counts** at the position.
 
 Here is an example :
 
@@ -137,7 +134,7 @@ Here is an example :
 | 18S | 126             | 789            |
 | 18S | 127             | 1234           |
 
-Note 1: it is not necessary to provide an header in the count files, because column index can be used in the function *load_ribodata*, using *count_value*, *count_rnaid* and *count_pos* parameters
+Note 1: it is not necessary to provide an header in the count files, because column index can be used in the function *load_ribodata*, using *count_value*, *count_rnaid* and *count_pos* parameters.
 
 Note 2: if no metadata is specified, Riboscore will try to fetch any csv files in the folder specified in count_path and its subfolders.
 
@@ -180,9 +177,9 @@ Here is an example of auto-generated metadata:
 
 RNA names are stored in an auto-generated dataframe when loading data. It contains two columns :
 
-1.  **original_name**: original name of each RNA (e.g NR_023363.1)
+1.  **original_name**: original name of each RNA (e.g NR_023363.1).
 
-2.  **current_name**: current name of each RNA, reflecting any user's change with *rename_rna* function (see [Rename RNA])
+2.  **current_name**: current name of each RNA, reflecting any user's change with *rename_rna* function (see [Rename RNA]).
 
 This dataframe is used to keep track of the original name, which often contains NCBI's accession ID.
 
@@ -204,7 +201,7 @@ The C-score corresponds to the 2'Ome level at a RNA position. The C-score repres
 
 Different C-scores can be determined to obtain robust estimation of 2'Ome level depending on the parameters used to compute the local coverage. In particular, the computation method and the size of the local coverage can be changed.
 
-By default, the computation method of the local coverage corresponds to the **median** and the size of the local coverage corresponds to a **flanking region of** **6** (i.e., 6 nucleotides downstream the nucleotide n and 6 upstream the nucleotide n). This package offers the possibility to change these two parameters either when loading the data or during the analysis process
+By default, the computation method of the local coverage corresponds to the **median** and the size of the local coverage corresponds to a **flanking region of** **6** (i.e., 6 nucleotides downstream the nucleotide n and 6 upstream the nucleotide n). This package offers the possibility to change these two parameters either when loading the data or during the analysis process.
 
 ## C-score computation when loading data
 
@@ -285,7 +282,7 @@ ribo_removed_samples <- remove_ribo_samples(ribo,c("S1","S1"))
 print(ribo_removed_samples)
 ```
 
-in both cases, only the remaining samples' metadata are kept in the RiboClass object. You do not need to update it by hand.
+In both cases, only the remaining samples' metadata are kept in the RiboClass object. You do not need to update it by hand.
 
 # RNA annotation
 
@@ -370,7 +367,7 @@ ribo_adjusted <- annotate_site(ribo_adjusted,
                                anno_value = "Nomenclature")
 ```
 
-Note: If an issue occurs during the annotation process, the user should check the [Rename RNA] section.
+Note: if an issue occurs during the annotation process, the user should check the [Rename RNA] section.
 
 This vignette has also some explanations on how to create your own sites annotation dataset with [Customize 2'Ome sites annotations].
 
@@ -393,7 +390,7 @@ plot_PCA(ribo_adjusted,
 ```{r}
 plot_PCA(ribo_adjusted,
          color_col = "condition",
-         axes = c(2,3),
+         axes = c(2,3), #PC2 and PC3 will be plotted
          only_annotated = TRUE)
 ```
 
