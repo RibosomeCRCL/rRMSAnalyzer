@@ -1,5 +1,6 @@
 #' Principal component analysis of a RiboClass object
 #'
+#' 
 #' @param ribo a RiboClass object
 #' @param color_col column in the metadata used for coloring the PCA.
 #' @param axes two-element vector indicating which pair of principal components you want to show.
@@ -14,7 +15,7 @@
 plot_PCA <- function(ribo, color_col = NULL, axes = c(1,2), only_annotated = FALSE, pca_object_only = FALSE) {
   
   if (is.null(ribo)) {stop("MISSING parameter: please provide a RiboClass!")}
-  if (is(ribo) != "RiboClass") {stop("ribo argument is not a RiboClass!")}
+  if (!inherits(ribo, "RiboClass")) {stop("ribo argument is not a RiboClass!")}
   
   
   if (isFALSE(ribo$has_cscore)) {stop("You should calculate Cscores first using calculate_score funciton")}
