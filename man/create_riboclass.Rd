@@ -13,7 +13,7 @@ create_riboclass(
   count_value = 3,
   count_rnaid = 1,
   count_pos = 2,
-  metadata_key = "filaname",
+  metadata_key = "filename",
   metadata_id = NULL
 )
 }

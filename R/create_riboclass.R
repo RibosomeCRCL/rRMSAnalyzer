@@ -52,7 +52,7 @@ create_riboclass <- function(count_path,
                              count_value = 3,
                              count_rnaid = 1,
                              count_pos = 2,
-                             metadata_key = "filaname",
+                             metadata_key = "filename",
                              metadata_id = NULL) {
   
   # named_position => default_posname
@@ -90,15 +90,14 @@ create_riboclass <- function(count_path,
     if(!is.data.frame(metadata)) {
       stop("metadata must be a dataframe or a path to a csv file !")
     }
+
+    if(!(metadata_key %in% names(metadata))) stop(paste(metadata_key, " (metadata_key param) is not a column in metadata"))
+    if(!(metadata_id %in% names(metadata))) stop(paste(metadata_id, "(metadata_id param) is not a column in metadata"))
     
-    #rename the column specified in "samplename" to "samplename"
+    #rename the column specified in "metadata_id" to "samplename"
     names(metadata)[names(metadata) == metadata_id] <- "samplename"
     
     rownames(metadata) <- metadata[,"samplename"]
-    
-    
-    if(!(metadata_key %in% names(metadata))) stop(paste(metadata_key, " (metadata_key param) is not a column in metadata"))
-    if(!(metadata_id %in% names(metadata))) stop(paste(metadata_id, "(metadata_id param) is not a column in metadata"))
     
     
     # read count data
