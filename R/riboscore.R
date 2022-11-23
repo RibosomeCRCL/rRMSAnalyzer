@@ -1,4 +1,4 @@
-#' RiboScore package for easy RiboMethSeq analysiss
+#' RiboScore package for easy RiboMethSeq analysis
 #' 
 #' The Riboscore package is designed to give easy-to-use functions
 #' dedicated to RiboMethSeq (RMS) analyses. All functions revolve

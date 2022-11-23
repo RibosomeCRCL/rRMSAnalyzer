@@ -16,10 +16,8 @@
 extract_data <- function(ribo, col = "cscore", position_to_rownames = FALSE, only_annotated = FALSE) {
   
   named_position <- NULL # NSE fix # nolint
-  #TODO : sample_list -> ribo
-  #TODO : check if position_to_rownames is useful ? -> trash
-  #TODO : check if col exist
-  #TODO : select only siteIdentified sites
+  #TODO : "Position to rownames" is probably not useful.
+
   #The rows of this matrix correspond to the positions on the rRNA
   
   

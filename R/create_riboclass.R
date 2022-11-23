@@ -1,11 +1,11 @@
 #' Create a RiboClass from count files and metadata.
 #' 
-#' @param count_path (required) path to the data folder containing count files
+#' @param count_path (required) path to the data folder containing count files.
 #' @param metadata  data frame or path to a CSV file containing metadata.
-#' @param count_sep delimiter used in genomecov (for csv file only)
-#' @param metadata_sep delimiter used in metadata (for csv file only)
+#' @param count_sep delimiter used in genomecov (for csv file only).
+#' @param metadata_sep delimiter used in metadata (for csv file only).
 #' @param count_header boolean, specify if count files have a header or not. 
-#' @param count_value column containing count values
+#' @param count_value name or index of the column containing count values.
 #' @param count_rnaid name or index of the column containing the name of the RNA in count data.
 #' @param count_pos name or index of the column containing the site's position in count data.
 #' @param metadata_key name or index of the column containing the samples' filename
@@ -54,17 +54,6 @@ create_riboclass <- function(count_path,
                              count_pos = 2,
                              metadata_key = "filename",
                              metadata_id = NULL) {
-  
-  # named_position => default_posname
-  # col des positions connus => siteID
-  
-  # read count files
-  #rna_counts_dt <- .read_count_files(count_path,count_sep,count_header,count_rnaid,count_pos,count_value)
-  
-  #create a table containing rna names
-  
-  #TODO rna_names -> rnaname
-  #TODO has_cscore -> check premier tableau
   
   
   #loading metadata

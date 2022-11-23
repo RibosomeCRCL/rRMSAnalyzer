@@ -44,7 +44,7 @@
   
 }
 
-#' compute c-score for all samples in a riboclass
+#' Compute c-score for all samples in a riboclass
 #' 
 #' @description
 #' 
@@ -62,8 +62,8 @@
 #' \code{\link{create_riboclass}}
 #' @param flanking size of the local coverage.
 #' @param method computation method of the local coverage. Either "median" or "mean".
-#' @param ncores number of cores to use in case of multithreading
-#' @return a riboclass with c-score related columns appended to each sample's data.
+#' @param ncores number of cores to use in case of multithreading.
+#' @return a riboclass with c-score columns appended to each sample's data.
 #' @export
 #'
 #' @examples
