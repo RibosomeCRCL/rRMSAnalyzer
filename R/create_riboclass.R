@@ -91,14 +91,22 @@ create_riboclass <- function(count_path,
       stop("metadata must be a dataframe or a path to a csv file !")
     }
 
-    if(!(metadata_key %in% names(metadata))) stop(paste(metadata_key, " (metadata_key param) is not a column in metadata"))
-    if(!(metadata_id %in% names(metadata))) stop(paste(metadata_id, "(metadata_id param) is not a column in metadata"))
-    
+    if(is.character(metadata_key) && !(metadata_key %in% names(metadata))) {
+      stop(paste(metadata_key, " (metadata_key param) is not a column in metadata"))
+    }
+
+    if(is.character(metadata_id) && !(metadata_id %in% names(metadata))) {
+      stop(paste(metadata_id, " (metadata_id param) is not a column in metadata"))
+    }
+
     #rename the column specified in "metadata_id" to "samplename"
-    names(metadata)[names(metadata) == metadata_id] <- "samplename"
+    if(is.character(metadata_id)) {
+      names(metadata)[names(metadata) == metadata_id] <- "samplename"
+    } else {
+      names(metadata)[metadata_id] <- "samplename"
+    }
     
     rownames(metadata) <- metadata[,"samplename"]
-    
     
     # read count data
     rna_counts_dt <- .read_count_files(count_path,count_sep,count_header,
