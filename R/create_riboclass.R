@@ -102,8 +102,6 @@ create_riboclass <- function(count_path,
                                        count_rnaid,count_pos,count_value,
                                        files_to_keep = as.character(metadata[,metadata_key]))
     
-    # stop if total mismatch between filenames and the filename column given in metadata
-    if(length(rna_counts_dt) == 0) stop(paste0("ERROR! No file has the filenames specified in your '",colnames(metadata[metadata_key]),"' column"))
     
     # generate RNA names table
     rna_names_df <- .generate_rna_names_table(rna_counts_dt[[1]])
@@ -172,10 +170,14 @@ create_riboclass <- function(count_path,
       stop("ERROR: some samples share the same filename!")
     }
     
-    
+    # Check if there is a mismatch between the filenames in metadata 
+    # and the filenames in the folder
     
     rna_counts_dt <-
       lapply(rna_counts_fl, utils::read.csv, sep = sep, header = header)
+    
+    # stop if total mismatch between filenames and the filename column given in metadata
+    if(length(rna_counts_dt) == 0) stop(paste0("ERROR! No file has the filenames specified in the metadata column specified by metadata_key"))
     
     # check if there are less than 3 columns, which can happen when one fails to
     # specify the correct seperator
