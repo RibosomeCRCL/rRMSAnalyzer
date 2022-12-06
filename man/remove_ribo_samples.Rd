@@ -7,12 +7,12 @@
 remove_ribo_samples(ribo = NULL, samples_to_delete = NULL)
 }
 \arguments{
-\item{ribo}{a RiboClass}
+\item{ribo}{A RiboClass.}
 
-\item{samples_to_delete}{A vector with the samples to remove}
+\item{samples_to_delete}{A vector with the samples to remove.}
 }
 \value{
-a riboClass without the removed samples in data and metadata
+A riboClass without the removed samples in data and metadata.
 }
 \description{
 Remove samples from Riboclass object

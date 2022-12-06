@@ -3,11 +3,11 @@
 #' For a given column in data, this function will generate a dataframe with all samples
 #' and all positions (if only_annotated is false) or only positions with a siteID (if only_annotated is true).
 #'
-#' @param ribo a RiboClass object
-#' @param col column in data you want extract data from (cscore or count).
-#' @param position_to_rownames if true, position will be included as a rowname. They will in a new column otherwise.
-#' @param only_annotated if true, return a dataframe with only annotated sites. Return all sites otherwise.
-#' @return a dataframe 
+#' @param ribo A RiboClass object.
+#' @param col Column in data you want extract data from (cscore or count).
+#' @param position_to_rownames If true, position will be included as a rowname. They will in a new column otherwise.
+#' @param only_annotated If true, return a dataframe with only annotated sites. Return all sites otherwise.
+#' @return A dataframe.
 #' @export
 #'
 #' @examples

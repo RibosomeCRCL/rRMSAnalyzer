@@ -2,16 +2,16 @@
 
 # Installation
 
-You can install the latest Riboscore version on CRAN with :
+You can install the latest rRMSAnalyzer version on CRAN with :
 
 ``` r
-install.packages("riboscore")
+install.packages("rRMSAnalyzer")
 ```
 
 # Usage
 
 ``` r
-library(Riboscore)
+library(rRMSAnalyzer)
 
 ribo <- load_ribodata("/path/to/your/csvfiles/directory/",
               "path/to/metadata.csv",
@@ -87,7 +87,7 @@ You can see a small example below :
 
 The folder structure can be whatever you wish, as long as either the directory and its sub-directories contain the necessary CSV files.
 
-**If you do not specify metadata, Riboscore will try to get any CSV files.**
+**If you do not specify metadata, rRMSAnalyzer will try to get any CSV files.**
 
 ## Metadata
 
@@ -193,7 +193,7 @@ The sample should not be grouped by library or batch. Unfortunately, this is cle
 
 ## Batch effect adjustment
 
-If the sequencing has been done in several batches, a batch effect can occur. One way to remove this effect is by using ComBat-Seq adjustment. The Riboscore package has a wrapper to use this adjustment on a RiboClass : *adjust_bias*.
+If the sequencing has been done in several batches, a batch effect can occur. One way to remove this effect is by using ComBat-Seq adjustment. The rRMSAnalyzer package has a wrapper to use this adjustment on a RiboClass : *adjust_bias*.
 
 ``` r
 ribo_adjusted <- adjust_bias(ribo,"run")

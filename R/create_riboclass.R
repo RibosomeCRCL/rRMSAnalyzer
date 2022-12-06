@@ -1,19 +1,19 @@
 #' Create a RiboClass from count files and metadata.
 #' 
 #' @param count_path (required) path to the data folder containing count files.
-#' @param metadata  data frame or path to a CSV file containing metadata.
-#' @param count_sep delimiter used in genomecov (for csv file only).
-#' @param metadata_sep delimiter used in metadata (for csv file only).
-#' @param count_header boolean, specify if count files have a header or not. 
-#' @param count_value name or index of the column containing count values.
-#' @param count_rnaid name or index of the column containing the name of the RNA in count data.
-#' @param count_pos name or index of the column containing the site's position in count data.
-#' @param metadata_key name or index of the column containing the samples' filename
-#' @param metadata_id if it exists, name or index of the column containing the sample name
+#' @param metadata  Data frame or path to a CSV file containing metadata.
+#' @param count_sep Delimiter used in genomecov (for csv file only).
+#' @param metadata_sep Delimiter used in metadata (for csv file only).
+#' @param count_header Boolean, specify if count files have a header or not.
+#' @param count_value Name or index of the column containing count values.
+#' @param count_rnaid Name or index of the column containing the name of the RNA in count data.
+#' @param count_pos Name or index of the column containing the site's position in count data.
+#' @param metadata_key Name or index of the column containing the samples' filename.
+#' @param metadata_id If it exists, name or index of the column containing the sample name
 #'
 #' @description 
 #' Read ribomethseq count files and their associated metadata and turn them into a RiboClass.
-#' __This is the entrypoint for the Riboscore package__, as all other functions use the RiboClass as an input.
+#' __This is the entrypoint for the rRMSAnalyzer package__, as all other functions use the RiboClass as an input.
 #' 
 #' 
 #' @details
@@ -42,7 +42,7 @@
 #' The path to the csv file or the dataframe given in __metadata__ must contains a filename column, as this will serve to link metadata with the dataframes in data during the RiboClass creation.
 #' @md
 #' 
-#' @return a RiboClass
+#' @return A RiboClass.
 #' @export
 create_riboclass <- function(count_path,
                              metadata = NULL,
@@ -173,7 +173,7 @@ create_riboclass <- function(count_path,
     }
     
     
-
+    
     rna_counts_dt <-
       lapply(rna_counts_fl, utils::read.csv, sep = sep, header = header)
     

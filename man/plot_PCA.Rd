@@ -9,22 +9,28 @@ plot_PCA(
   color_col = NULL,
   axes = c(1, 2),
   only_annotated = FALSE,
+  title = "default",
+  subtitle = "samples",
   pca_object_only = FALSE
 )
 }
 \arguments{
-\item{ribo}{a RiboClass object}
+\item{ribo}{A RiboClass object.}
 
-\item{color_col}{column in the metadata used for coloring the PCA.}
+\item{color_col}{Name of the column in the metadata used for coloring PCA inds.}
 
-\item{axes}{two-element vector indicating which pair of principal components you want to show.}
+\item{axes}{Two-element vector indicating which pair of principal components you want to show.}
 
-\item{only_annotated}{Use only annotated sites to plot PCA.}
+\item{only_annotated}{If TRUE, use only annotated sites to plot PCA.}
+
+\item{title}{tile to display on the plot. "default" for default title.}
+
+\item{subtitle}{subtitle to display on the plot. "samples" for number of samples. "none" for no subtitle.}
 
 \item{pca_object_only}{Return directly the full dudi.pca object, without generating the plot.}
 }
 \value{
-a ggplot or a dudi.pca object if pca_object_only is set to True.
+A ggplot or a dudi.pca object if pca_object_only is set to True.
 }
 \description{
 Principal component analysis of a RiboClass object

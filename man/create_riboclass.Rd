@@ -18,32 +18,32 @@ create_riboclass(
 )
 }
 \arguments{
-\item{count_path}{(required) path to the data folder containing count files}
+\item{count_path}{(required) path to the data folder containing count files.}
 
-\item{metadata}{data frame or path to a CSV file containing metadata.}
+\item{metadata}{Data frame or path to a CSV file containing metadata.}
 
-\item{count_sep}{delimiter used in genomecov (for csv file only)}
+\item{count_sep}{Delimiter used in genomecov (for csv file only).}
 
-\item{metadata_sep}{delimiter used in metadata (for csv file only)}
+\item{metadata_sep}{Delimiter used in metadata (for csv file only).}
 
-\item{count_header}{boolean, specify if count files have a header or not.}
+\item{count_header}{Boolean, specify if count files have a header or not.}
 
-\item{count_value}{column containing count values}
+\item{count_value}{Name or index of the column containing count values.}
 
-\item{count_rnaid}{name or index of the column containing the name of the RNA in count data.}
+\item{count_rnaid}{Name or index of the column containing the name of the RNA in count data.}
 
-\item{count_pos}{name or index of the column containing the site's position in count data.}
+\item{count_pos}{Name or index of the column containing the site's position in count data.}
 
-\item{metadata_key}{name or index of the column containing the samples' filename}
+\item{metadata_key}{Name or index of the column containing the samples' filename.}
 
-\item{metadata_id}{if it exists, name or index of the column containing the sample name}
+\item{metadata_id}{If it exists, name or index of the column containing the sample name}
 }
 \value{
-a RiboClass
+A RiboClass.
 }
 \description{
 Read ribomethseq count files and their associated metadata and turn them into a RiboClass.
-\strong{This is the entrypoint for the Riboscore package}, as all other functions use the RiboClass as an input.
+\strong{This is the entrypoint for the rRMSAnalyzer package}, as all other functions use the RiboClass as an input.
 }
 \details{
 The RiboClass object is a S3 Class with three elements :

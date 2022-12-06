@@ -1,46 +1,44 @@
 ---
-title: "Quality Control"
+title: "RMSAnalyzer : Quality Control Report"
 output: html_document
-date: "`r format(Sys.Date(), '%m/%d/%Y')`"
 
 params:
     library_col: "library"
     ribo_name: "ribo"
     project_name: "Unnamed project"
 ---
-# Project summary
+# 1.Project summary
 
 ---------------------------- <br> **Project name:** `r params$project_name` <br> **User name:** `r Sys.getenv("USERNAME")` <br> **Date/Time:** `r Sys.time()` <br> ---------------------------- <br>
 
 
-# Informations about the given RiboClass 
-
-## General informations
+## 1.1 General informations
 
 Name : **`r params$ribo_name`**. <br> Number of uploaded samples: **`r length(ribo_to_check[[1]])`** samples. <br> The following (r)RNA were used by your coverage tool: **`r as.character(ribo_to_check[["rna_names"]][["original_name"]])`** <br> There are **`r length(ribo_to_check[[1]][[1]][[1]])`** genomic positions.
 
+__**C-score**__ <br>
+Method of computation : **`r as.character(ribo_to_check["cscore_method"])`** <br>
+Window length : **`r as.character(ribo_to_check["cscore_window"])`**
+<br>
+__**ComBat-seq**__<br>
+ComBat-seq correction : **`r ifelse(is.null(ribo_to_check[["combatSeq_count"]]),"Absent","Found")`** <br>
+Metadata used for ComBat-seq : **`r ifelse(is.null(ribo_to_check[["col_used_combatSeq"]]),"None",as.character(ribo_to_check["col_used_combatSeq"]))`**
 
-## Metadata
+## 1.2 Metadata
 
 ```{r, echo=FALSE}
 DT::datatable(ribo_to_check[[2]])
 ```
  
 
-# Quality Control
+# 2. Quality Control
 
 The quality control section reports different metrics to help in identifying outlier sample and/or batch effect. The quality control is performed using non-biological noise that corresponds to both end read counts (used to calculate the C-score) and the C-score itself at all the `r length(ribo_to_check[[1]][[1]][[1]])` genomic positions.
 
-For some metrics, NA sites are excluded.
 
-## C-score: serie comparison
-
-Since more than 1.5% of the C-score corresponds to non-biological noise, normalisation during C-score calculation should limit the dispersion of the samples based on their C-score at all genomic positions in the whole series. **Here is given a Principal Component Analysis (PCA) plot that illustrates the distance between each sample based on its C-score at all genomic positions.** Color indicates distinct library. Moreover, this plot helps in identifying putative batch effect that can be corrected using the inter-normalization option (Combat-seq tool).
+Since more than 1.5% of the C-score corresponds to non-biological noise, normalisation during C-score calculation should limit the dispersion of the samples based on their C-score at all genomic positions in the whole series. **Here is given a Principal Component Analysis (PCA) plot that illustrates the distance between each sample based on its C-score at all genomic positions.** Color indicates distinct library. Moreover, this plot helps in identifying putative batch effect that can be corrected using the inter-normalization option (ComBat-seq tool).
 
 ```{r not corrected cscore PCA,echo=FALSE}
 plot_PCA(ribo_to_check,params$library_col)
 ```
 
-By using the following command, the batch effect can be corrected if present :
-
-` `r params$ribo_name` <- adjust_bias(`r params$ribo_name`,"`r params$library_col`")`

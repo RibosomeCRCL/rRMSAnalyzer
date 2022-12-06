@@ -7,14 +7,14 @@
 adjust_bias(ribo, batch, ...)
 }
 \arguments{
-\item{ribo}{a RiboClass object, see constructor : \code{\link{create_riboclass}}}
+\item{ribo}{a RiboClass object, see constructor : \code{\link{create_riboclass}}.}
 
-\item{batch}{name of the column in metadata that contains the batch number.}
+\item{batch}{Name of the column in metadata that contains the batch number.}
 
 \item{...}{Parameters for sva's \code{\link[sva]{ComBat_seq}} function.}
 }
 \value{
-RiboClass with adjusted read end count values and automatically recomputed C-scores
+RiboClass with adjusted read end count values and automatically recomputed C-scores.
 }
 \description{
 Batch effect of RiboMethSeq data can be adjusted using the ComBat-seq method. adjust_bias is a wrapper to perform ComBat-seq adjustment. 

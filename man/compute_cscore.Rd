@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_scores.R
 \name{compute_cscore}
 \alias{compute_cscore}
-\title{compute c-score for all samples in a riboclass}
+\title{Compute c-score for all samples in a riboclass}
 \usage{
 compute_cscore(ribo = NULL, flanking = 6, method = "median", ncores = 1)
 }
@@ -14,10 +14,10 @@ compute_cscore(ribo = NULL, flanking = 6, method = "median", ncores = 1)
 
 \item{method}{computation method of the local coverage. Either "median" or "mean".}
 
-\item{ncores}{number of cores to use in case of multithreading}
+\item{ncores}{number of cores to use in case of multithreading.}
 }
 \value{
-a riboclass with c-score related columns appended to each sample's data.
+a riboclass with c-score columns appended to each sample's data.
 }
 \description{
 In this package, the C-score is calculated for every position. As it can be useful to find positions not yet identified as methylated.

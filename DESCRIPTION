@@ -1,10 +1,10 @@
-Package: Riboscore
+Package: rRMSAnalyzer
 Type: Package
-Title: Riboscore: package to analyze RiboMethSeq data
+Title: rRMSAnalyzer: package to analyze RiboMethSeq data
 Version: 1.0.0
 Date: 2022-10-18
 Author: Janice Kielbassa, Theo Combe, Hermes Paraqindes
-Maintainer: Theo COMBE <theo.combe@lyon.unicancer.fr>
+Maintainer: Theo COMBE <epirnatools@lyon.unicancer.fr>
 Description: A package dedicated to ribomethseq analysis. It contains a set of easy-to-use functions.
 License: GPL (>= 3)
 biocViews: sva

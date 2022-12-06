@@ -12,16 +12,16 @@ extract_data(
 )
 }
 \arguments{
-\item{ribo}{a RiboClass object}
+\item{ribo}{A RiboClass object.}
 
-\item{col}{column in data you want extract data from (cscore or count).}
+\item{col}{Column in data you want extract data from (cscore or count).}
 
-\item{position_to_rownames}{if true, position will be included as a rowname. They will in a new column otherwise.}
+\item{position_to_rownames}{If true, position will be included as a rowname. They will in a new column otherwise.}
 
-\item{only_annotated}{if true, return a dataframe with only annotated sites. Return all sites otherwise.}
+\item{only_annotated}{If true, return a dataframe with only annotated sites. Return all sites otherwise.}
 }
 \value{
-a dataframe
+A dataframe.
 }
 \description{
 For a given column in data, this function will generate a dataframe with all samples

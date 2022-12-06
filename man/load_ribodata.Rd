@@ -21,38 +21,38 @@ load_ribodata(
 )
 }
 \arguments{
-\item{count_path}{(required) path to the data folder containing count files}
+\item{count_path}{(required) path to the data folder containing count files.}
 
-\item{metadata}{data frame or path to a CSV file containing metadata.}
+\item{metadata}{Data frame or path to a CSV file containing metadata.}
 
-\item{count_sep}{delimiter used in genomecov (for csv file only)}
+\item{count_sep}{Delimiter used in genomecov (for csv file only).}
 
-\item{metadata_sep}{delimiter used in metadata (for csv file only)}
+\item{metadata_sep}{Delimiter used in metadata (for csv file only).}
 
-\item{count_header}{boolean, specify if count files have a header or not.}
+\item{count_header}{Boolean, specify if count files have a header or not.}
 
-\item{count_value}{column containing count values}
+\item{count_value}{Name or index of the column containing count values.}
 
-\item{count_rnaid}{name or index of the column containing the name of the RNA in count data.}
+\item{count_rnaid}{Name or index of the column containing the name of the RNA in count data.}
 
-\item{count_pos}{name or index of the column containing the site's position in count data.}
+\item{count_pos}{Name or index of the column containing the site's position in count data.}
 
-\item{metadata_key}{name or index of the column containing the samples' filename}
+\item{metadata_key}{Name or index of the column containing the samples' filename.}
 
-\item{metadata_id}{if it exists, name or index of the column containing the sample name}
+\item{metadata_id}{If it exists, name or index of the column containing the sample name}
 
 \item{flanking}{size of the local coverage.}
 
 \item{method}{computation method of the local coverage. Either "median" or "mean".}
 
-\item{ncores}{number of cores to use in case of multithreading}
+\item{ncores}{number of cores to use in case of multithreading.}
 }
 \value{
 a RiboClass
 }
 \description{
 Import your count CSV files and the metadata to create a RiboClass.
-The RiboClass is used by Riboscore package for all analyses.
+The RiboClass is used by rRMSAnalyzer package for all analyses.
 }
 \details{
 load_ribodata is a wrapper of \code{\link{create_riboclass}} and \code{\link{compute_cscore}}.

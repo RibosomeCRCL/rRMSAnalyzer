@@ -1,16 +1,16 @@
 ---
-title: "Riboscore: package to analyze RiboMethSeq data"
+title: "rRMSAnalyzer: package to analyze RiboMethSeq data"
 author: "Théo COMBE, Hermes PARAQINDES, Janisse KIELBASSA, Emilie THOMAS, Anthony FERRARI and Virginie MARCEL"
 date: "`r format(Sys.Date(), '%m/%d/%Y')`"
 abstract: > 
-  RiboMethSeq is an innovative RNAseq-based approach, which has been developed in 2015 to analyze 2'O-ribose methylation (2'Ome) at all the sites of the ribosomal RNAs (rRNA) at once, in yeast [@birkedal2014]. RiboMethSeq approach was then transferred to human using the Illumina technology [@Marchand2016; @Erales2017; @Marcel2021]. Briefly, presence of 2'Ome protects the phosphodiester bond located at the 3' of the 2'Ome nucleotide from alkaline hydrolysis. Thus, the presence of 2'Ome at the given nucleotide n induces under-representation of RNA fragments starting at the nucleotide n+1  and an over-representation of RNA fragments ending at the nucleotide n-1, allowing to calculate a 2'Ome level at the corresponding nucleotide position n (or C-score) varying from 0 to 1 [@birkedal2014]. <br><br> The Riboscore package can be used for any kind of RNA and organisms. This package provides a set of easy-to-use functions to compute C-scores from RiboMethSeq read end counts as input, adjust batch effect with ComBat-Seq, visualize the data and provide a table with the annotated human rRNA sites and their C-scores. Processing of the raw data to obtain read end counts from sequencing data were previously described [@Marchand2016]. 
+  RiboMethSeq is an innovative RNAseq-based approach, which has been developed in 2015 to analyze 2'O-ribose methylation (2'Ome) at all the sites of the ribosomal RNAs (rRNA) at once, in yeast [@birkedal2014]. RiboMethSeq approach was then transferred to human using the Illumina technology [@Marchand2016; @Erales2017; @Marcel2021]. Briefly, presence of 2'Ome protects the phosphodiester bond located at the 3' of the 2'Ome nucleotide from alkaline hydrolysis. Thus, the presence of 2'Ome at the given nucleotide n induces under-representation of RNA fragments starting at the nucleotide n+1  and an over-representation of RNA fragments ending at the nucleotide n-1, allowing to calculate a 2'Ome level at the corresponding nucleotide position n (or C-score) varying from 0 to 1 [@birkedal2014]. <br><br> The rRMSAnalyzer package can be used for any kind of RNA and organisms. This package provides a set of easy-to-use functions to compute C-scores from RiboMethSeq read end counts as input, adjust batch effect with ComBat-Seq, visualize the data and provide a table with the annotated human rRNA sites and their C-scores. Processing of the raw data to obtain read end counts from sequencing data were previously described [@Marchand2016]. 
 output:
    html_vignette:
       toc: true
       fig_width: 5
       fig_height: 5
 vignette: >
-  %\VignetteIndexEntry{Riboscore: package to analyze RiboMethSeq data}
+  %\VignetteIndexEntry{rRMSAnalyzer: package to analyze RiboMethSeq data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: references.bib
@@ -24,21 +24,21 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup, include=FALSE}
-library(Riboscore)
+library(rRMSAnalyzer)
 ```
 
 # Installation
 
-The latest version of Riboscore package can be installed from CRAN with :
+The latest version of rRMSAnalyzer package can be installed from CRAN with :
 
 ```{r, eval=FALSE}
-install.packages("riboscore")
+install.packages("rRMSAnalyzer")
 ```
 
-# Usage 
+# Usage
 
 ```{r, eval = FALSE}
-library(Riboscore)
+library(rRMSAnalyzer)
 
 ribo <- load_ribodata(
               count_path = "/path/to/your/csvfiles/directory/",
@@ -84,14 +84,14 @@ It is a list containing three main elements, individually described below:
 
 3.  **RNA_names**: a dataframe, reporting the names of the RNA used in Data.
 
- Some main function calls’ parameters (such as the normalization method used for c-score computation) are also kept in the RiboClass object as a reminder.
+Some main function calls' parameters (such as the normalization method used for c-score computation) are also kept in the RiboClass object as a reminder.
 
 ## Loading data
 
 Here is an example, where all *load_ribodata* parameters are shown :
 
 ```{r}
-path <- system.file("extdata", package="Riboscore")
+path <- system.file("extdata", package="rRMSAnalyzer")
 
 ribo <- load_ribodata(
                       #data & metadata files path
@@ -116,7 +116,7 @@ ribo <- load_ribodata(
 
 ## Data
 
-To use this package, the user should provide one csv file with the 5’, 3’ or 5’/3’ read end counts resulting from RiboMethSeq data per sample. The folder structure containing the csv files is not important, as long as either the directory and its sub-directories contain the necessary csv files. 
+To use this package, the user should provide one csv file with the 5', 3' or 5'/3' read end counts resulting from RiboMethSeq data per sample. The folder structure containing the csv files is not important, as long as either the directory and its sub-directories contain the necessary csv files.
 
 1.  The **name of the RNA** on which the read end counting has been performed.
 
@@ -136,7 +136,7 @@ Here is an example :
 
 Note 1: it is not necessary to provide an header in the count files, because column index can be used in the function *load_ribodata*, using *count_value*, *count_rnaid* and *count_pos* parameters.
 
-Note 2: if no metadata is specified, Riboscore will try to fetch any csv files in the folder specified in count_path and its subfolders.
+Note 2: if no metadata is specified, rRMSAnalyzer will try to fetch any csv files in the folder specified in count_path and its subfolders.
 
 ## Metadata
 
@@ -172,7 +172,6 @@ Here is an example of auto-generated metadata:
 | sample2.csv | sample2.csv |
 | sample3.csv | sample3.csv |
 
-
 ## RNA names
 
 RNA names are stored in an auto-generated dataframe when loading data. It contains two columns :
@@ -185,13 +184,12 @@ This dataframe is used to keep track of the original name, which often contains 
 
 Here is an example:
 
-| original_name    | current_name  |
-|------------------|---------------|
-| NR_023363.1_5S   | 5S            |
-| NR_046235.3_5.8S | 5.8S          |
-| NR_046235.3_18S  | 18S           |
-| NR_046235.3_28S  | 28S           |
-
+| original_name    | current_name |
+|------------------|--------------|
+| NR_023363.1_5S   | 5S           |
+| NR_046235.3_5.8S | 5.8S         |
+| NR_046235.3_18S  | 18S          |
+| NR_046235.3_28S  | 28S          |
 
 # C-score calculation
 
@@ -248,7 +246,7 @@ In this example, the technical replicates RNA1 and RNA2 included in library 1 an
 
 ## Batch effect adjustment
 
-Batch effect of RiboMethSeq data can be adjusted using the ComBat-seq method (Paraqindes et al, in preparation; @zhang2020) . The Riboscore package includes a wrapper (adjust_bias) to perform ComBat-seq adjustment that will return a new RiboClass with adjusted read end count values and C-scores automatically recomputed with the same setup parameters.
+Batch effect of RiboMethSeq data can be adjusted using the ComBat-seq method (Paraqindes et al, in preparation; @zhang2020) . The rRMSAnalyzer package includes a wrapper (adjust_bias) to perform ComBat-seq adjustment that will return a new RiboClass with adjusted read end count values and C-scores automatically recomputed with the same setup parameters.
 
 ```{r}
 ribo_adjusted <- adjust_bias(ribo, batch = "run")
@@ -262,10 +260,11 @@ plot_PCA(ribo_adjusted,"run")
 
 After batch effect adjustment using ComBat-seq method, the two technical replicates RNA1 and RNA2 show reduced dispersion, and the samples are separated on the PCA axes independently of the library groups.
 
-# Sample manipulation 
+# Sample manipulation
+
 ## Keep or remove samples
 
-A sample subset can be easily analyzed by indicating the samples to keep or to remove. The user can thus create a new RiboClass object containing the data and metadata of the samples of interest. In both cases, only the remaining samples’ metadata are kept in the RiboClass object, so no manual updating is required. 
+A sample subset can be easily analyzed by indicating the samples to keep or to remove. The user can thus create a new RiboClass object containing the data and metadata of the samples of interest. In both cases, only the remaining samples' metadata are kept in the RiboClass object, so no manual updating is required.
 
 Here is an example to generate a new RiboClass by keeping two samples of interest ("S1" and "S2"):
 
@@ -290,9 +289,10 @@ In both cases, only the remaining samples' metadata are kept in the RiboClass ob
 
 ### Remove RNA
 
-A RNA subset can be easily analyzed by indicating the RNA to remove. The user can thus create a new RiboClass object containing the data of the RNAs of interest, without affecting the samples’ metadata. 
+A RNA subset can be easily analyzed by indicating the RNA to remove. The user can thus create a new RiboClass object containing the data of the RNAs of interest, without affecting the samples' metadata.
 
 Here is an example where the RNA 5S is removed:
+
 ```{r}
 ribo_adjusted <- remove_rna(ribo, rna_to_remove = "NR_023363.1_5S")
 print(ribo_adjusted)
@@ -323,9 +323,9 @@ ribo_adjusted <- rename_rna(ribo_adjusted,
 
 ## Annotation of RNA 2'Ome sites
 
-This package computes a C-score for each genomic position of the RNAs. The C-scores of the RNA 2’Ome sites of interest are then extracted using a list of annotated sites and the annotate function.
+This package computes a C-score for each genomic position of the RNAs. The C-scores of the RNA 2'Ome sites of interest are then extracted using a list of annotated sites and the annotate function.
 
-### Annotation included: Human 2’Ome rRNA sites 
+### Annotation included: Human 2'Ome rRNA sites
 
 By default, this package includes two dataframes including the positions and the annotations of the human rRNA 2'Ome sites:
 
@@ -333,7 +333,7 @@ By default, this package includes two dataframes including the positions and the
 
 -   human_suspected: a dataframe, containing the 17 sites that are putative 2'Ome sites for the human rRNAs, as described in the litterature.
 
-### Customize 2'Ome sites annotations
+### Customize 2'Ome sites annotations {#customize-2ome-sites-annotations}
 
 Instead of using the list of human rRNA 2'Ome sites included with this package, the user can provide its own list and annotation using the function annotate_site.
 
@@ -355,7 +355,7 @@ You can see an example below :
 
 ## Annotate RNA sites {#annotate-sites}
 
-The 2’Ome sites of interest can be annotated using the annotate function with either the provided annotations or customized ones.
+The 2'Ome sites of interest can be annotated using the annotate function with either the provided annotations or customized ones.
 
 Here is an example with the provided human methylated annotations:
 
@@ -369,7 +369,7 @@ ribo_adjusted <- annotate_site(ribo_adjusted,
 
 Note: if an issue occurs during the annotation process, the user should check the [Rename RNA] section.
 
-This vignette has also some explanations on how to create your own sites annotation dataset with [Customize 2'Ome sites annotations].
+This vignette has also some explanations on how to create your own sites annotation dataset with [Customize 2'Ome sites annotations](#customize-2ome-sites-annotations).
 
 # Data visualization with PCA
 
@@ -418,7 +418,7 @@ ribo_df <- extract_data(ribo_adjusted,
                         col = "cscore")
 ```
 
-The user can export data related to the subset of annotated RNA 2’Ome sites by setting the *only_annotated* parameter to True.
+The user can export data related to the subset of annotated RNA 2'Ome sites by setting the *only_annotated* parameter to True.
 
 ```{r}
 ribo_df <- extract_data(ribo_adjusted,
@@ -434,7 +434,7 @@ knitr::kable(ribo_df[1:10,1:4],caption = "excerpt from the output dataframe. S1,
 
 The user can export data as a ggplot-ready dataframe using the function format_to_plot.
 
-By default, it will export c-score for all the genomic RNA positions. The user can export additional information present in the metadata by indicating the name of the column of interest. The user can export information related to the subset of annotated RNA 2'Ome sites by setting the only_annotated parameter to True. 
+By default, it will export c-score for all the genomic RNA positions. The user can export additional information present in the metadata by indicating the name of the column of interest. The user can export information related to the subset of annotated RNA 2'Ome sites by setting the only_annotated parameter to True.
 
 Here is an example of ggplot-ready dataframe including the C-scores of all the genomic RNA positions as well as the condition related to the particular sample of interest:
 

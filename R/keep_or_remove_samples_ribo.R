@@ -27,10 +27,10 @@ keep_ribo_samples <- function(ribo = NULL, samples_to_keep = NULL) {
 
 #' Remove samples from Riboclass object
 #'
-#' @param ribo a RiboClass
-#' @param samples_to_delete A vector with the samples to remove
+#' @param ribo A RiboClass.
+#' @param samples_to_delete A vector with the samples to remove.
 #'
-#' @return a riboClass without the removed samples in data and metadata
+#' @return A riboClass without the removed samples in data and metadata.
 #' @export
 #'
 #' @examples

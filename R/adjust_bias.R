@@ -6,10 +6,10 @@
 #' It will return a new RiboClass with adjusted read end count values and C-scores automatically recomputed with the same setup parameters.
 #'
 #' 
-#' @param ribo a RiboClass object, see constructor : \code{\link{create_riboclass}}
-#' @param batch name of the column in metadata that contains the batch number.
+#' @param ribo a RiboClass object, see constructor : \code{\link{create_riboclass}}.
+#' @param batch Name of the column in metadata that contains the batch number.
 #' @param ... Parameters for sva's \code{\link[sva]{ComBat_seq}} function.
-#' @return RiboClass with adjusted read end count values and automatically recomputed C-scores 
+#' @return RiboClass with adjusted read end count values and automatically recomputed C-scores.
 #' @export
 #' 
 #' @details 

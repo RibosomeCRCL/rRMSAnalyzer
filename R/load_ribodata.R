@@ -5,7 +5,7 @@
 #' @export
 #' 
 #' @description Import your count CSV files and the metadata to create a RiboClass.
-#' The RiboClass is used by Riboscore package for all analyses. 
+#' The RiboClass is used by rRMSAnalyzer package for all analyses. 
 #' 
 #' @details
 #' load_ribodata is a wrapper of \code{\link{create_riboclass}} and \code{\link{compute_cscore}}.
