@@ -17,7 +17,44 @@ library(rRMSAnalyzer)
 
 # rRMSAnalyzer: package to analyze RiboMethSeq data
 
+R package that provides a set of easy-to-use functions to compute C-scores from RiboMethSeq read end counts as input, adjust batch effect with ComBat-Seq, visualize the data and provide a table with the annotated human rRNA sites and their C-scores.
 
+> **Note**
+> To obtain the RiboMethSeq read end counts from fastq files, you can use our [dedicated Nextflow pipeline]() !
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Help, bug reports and suggestions](#help--bug-reports-and-suggestions)
+- [Acknowledgements](#acknowledgements)
+- [Funding](#funding)
+- [Data](#data)
+  * [RiboClass](#riboclass)
+  * [Loading data](#loading-data)
+  * [Data](#data-1)
+  * [Metadata](#metadata)
+  * [RNA names](#rna-names)
+- [C-score calculation](#c-score-calculation)
+  * [What is C-score](#what-is-c-score)
+  * [C-score computation when loading data](#c-score-computation-when-loading-data)
+  * [C-score computation during the analysis process](#c-score-computation-during-the-analysis-process)
+- [Quality control](#quality-control)
+  * [Identification of batch effect](#identification-of-batch-effect)
+  * [Batch effect adjustment](#batch-effect-adjustment)
+- [Sample manipulation](#sample-manipulation)
+  * [Keep or remove samples](#keep-or-remove-samples)
+- [RNA annotation](#rna-annotation)
+  * [RNA manipulation](#rna-manipulation)
+    + [Remove RNA](#remove-rna)
+    + [Rename RNA](#rename-rna)
+  * [Annotation of RNA 2’Ome sites](#annotation-of-rna-2-ome-sites)
+    + [Annotation included: Human 2’Ome rRNA sites](#annotation-included--human-2-ome-rrna-sites)
+    + [Customize 2’Ome sites annotations](#customize-2-ome-sites-annotations)
+  * [Annotate RNA sites](#annotate-rna-sites)
+- [Data visualization with PCA](#data-visualization-with-pca)
+- [Export data](#export-data)
+  * [Export as a dataframe](#export-as-a-dataframe)
+  * [Export as a ggplot-ready dataframe](#export-as-a-ggplot-ready-dataframe)
+  * [Export as a dataframe by condition](#export-as-a-dataframe-by-condition)
 
 ## Installation
 
