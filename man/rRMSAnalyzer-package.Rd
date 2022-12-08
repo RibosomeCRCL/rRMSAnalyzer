@@ -3,7 +3,7 @@
 \docType{package}
 \name{rRMSAnalyzer-package}
 \alias{rRMSAnalyzer-package}
-\title{rRMSAnalyzer package for easy RiboMethSeq analysis}
+\title{rRMSAnalyzer package dedicated to analysis pf RiboMethSeq data}
 \description{
 The rRMSAnalyzer package is designed to give easy-to-use functions
 dedicated to RiboMethSeq (RMS) analyses. All functions revolve
@@ -14,9 +14,9 @@ metadata.
 The main functions are (in a standard workflow chronological order):
 
 \itemize{
-\item \code{\link{create_riboclass}} - import your data and create a riboClass. It is used by all other functions
-\item \code{\link{compute_cscore}} - compute C-score for all positions in your samples
-\item \code{\link{adjust_bias}} - adjust technical biases in your riboClass with combatSeq
+\item \code{\link{create_riboclass}} - import data and create a riboClass. It is used by all other functions
+\item \code{\link{compute_cscore}} - compute C-score for all genomic positions in your samples
+\item \code{\link{adjust_bias}} - adjust technical biases of your RiboMethSeq data with combatSeq
 \item \code{\link{extract_data}} - get a dataframe of c-score for all samples and all positions in your riboClass
 \item Plots, e.g.: \code{\link{plot_PCA}}.
 }
