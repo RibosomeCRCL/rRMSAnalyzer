@@ -17,10 +17,11 @@ library(rRMSAnalyzer)
 
 # rRMSAnalyzer: package to analyze RiboMethSeq data
 
-R package that provides a set of easy-to-use functions to compute C-scores from RiboMethSeq read end counts as input, adjust batch effect with ComBat-Seq, visualize the data and provide a table with the annotated human rRNA sites and their C-scores.
+RiboMethSeq is an RNAseq-based approach to analyze 2'O-ribose methylation (2'Ome).
+rRMSAnalyzer is an R package that provides a set of easy-to-use functions to compute C-scores from RiboMethSeq read end counts as input, adjust batch effect with ComBat-Seq, visualize the data and provide a table with the annotated human rRNA sites and their C-scores.
 
 > **Note**
-> To obtain the RiboMethSeq read end counts from fastq files, you can use our [dedicated Nextflow pipeline]() !
+> We have also developed a [dedicated Nextflow pipeline]() to process the data from sequencing output (fastq files) to useful raw data for rRMSAnalyzer (read end counts).
 
 - [Installation](#installation)
 - [Usage](#usage)
