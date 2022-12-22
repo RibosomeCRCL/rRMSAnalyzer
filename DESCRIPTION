@@ -2,7 +2,6 @@ Package: rRMSAnalyzer
 Type: Package
 Title: rRMSAnalyzer: package to analyze RiboMethSeq data
 Version: 1.0.0
-Date: 2022-10-18
 Author: Janice Kielbassa, Theo Combe, Hermes Paraqindes
 Maintainer: Theo COMBE <epirnatools@lyon.unicancer.fr>
 Description: A package dedicated to ribomethseq analysis. It contains a set of easy-to-use functions.
