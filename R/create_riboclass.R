@@ -209,7 +209,7 @@ create_riboclass <- function(count_path,
     
     sample_check_results <-
       vapply(names(rna_counts_dt), function(x) {
-        check_sample_positions(
+        .check_sample_positions(
           sample_1 = rna_counts_dt[[1]],
           sample_1_name = reference_sample_name,
           sample_2 = rna_counts_dt[[x]],

@@ -1,6 +1,4 @@
 #' Rename RNAs in your RiboClass
-#'
-#'  
 #' 
 #' @param ribo a RiboClass object
 #' @param new_names the new names for your RNAs (by RNA size order)

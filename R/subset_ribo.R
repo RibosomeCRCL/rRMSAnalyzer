@@ -18,7 +18,7 @@ subset_ribo <- function(ribo, positions_to_keep, anno_rna, anno_pos) {
   positions_df <- NULL
   if(is.data.frame(positions_to_keep)) {
     if(!("named_position" %in% positions_to_keep)) { 
-      positions_to_keep <- generate_name_positions(positions_to_keep,anno_rna,anno_pos)
+      positions_to_keep <- .generate_name_positions(positions_to_keep,anno_rna,anno_pos)
     }
     
     positions_df <- positions_to_keep

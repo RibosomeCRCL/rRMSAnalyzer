@@ -2,7 +2,7 @@
 % Please edit documentation in R/annotate_site.R
 \name{annotate_site}
 \alias{annotate_site}
-\title{annotate sites according to a dataframe containing annotation}
+\title{Annotate sites according to a dataframe containing annotation}
 \usage{
 annotate_site(ribo, annot, anno_rna = 2, anno_pos = 1, anno_value)
 }

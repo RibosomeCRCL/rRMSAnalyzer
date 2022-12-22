@@ -1,4 +1,4 @@
-#' annotate sites according to a dataframe containing annotation
+#' Annotate sites according to a dataframe containing annotation
 #' 
 #' This function will fill the "site" column in your riboclass's data with a nomenclature given in annot. 
 #' 
@@ -22,7 +22,7 @@ annotate_site <- function(ribo, annot, anno_rna = 2, anno_pos = 1 , anno_value) 
   ribo_data <- ribo[["data"]]
   
   if(!("named_position" %in% colnames(annot))) {
-    annot <- generate_name_positions(annot,anno_rna,anno_pos)
+    annot <- .generate_name_positions(annot,anno_rna,anno_pos)
   }
   
   #Check if annot has the RNA as the RiboClass

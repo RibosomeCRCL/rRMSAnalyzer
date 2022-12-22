@@ -1,12 +1,10 @@
-#' Check if two samples share the same positions
-#'
-#' @param sample_1 First sample to check against sample_2
-#' @param sample_2 Second sample to check against sample_1
-#' @param sample_1_name name of sample 1
-#' @param sample_2_name name of sample 2
-#' @keywords internal
-#' @return A boolean indicating if the two samples are identical.
-check_sample_positions <- function(sample_1, sample_2, sample_1_name, sample_2_name) {
+# Check if two samples share the same positions
+#   sample_1: First sample to check against sample_2
+#   sample_2 : Second sample to check against sample_1
+#   sample_1_name : name of sample 1
+#   sample_2_name : name of sample 2
+#  Returns A boolean indicating if the two samples are identical.
+.check_sample_positions <- function(sample_1, sample_2, sample_1_name, sample_2_name) {
   sample_size <- length(sample_1[, "named_position"])
   
   if (length(sample_2[, "named_position"]) == sample_size) {
