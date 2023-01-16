@@ -7,7 +7,7 @@ params:
     ribo_name: "ribo"
     project_name: "Unnamed project"
 ---
-# 1.Project summary
+# 1. Project summary
 
 ---------------------------- <br> **Project name:** `r params$project_name` <br> **User name:** `r Sys.getenv("USERNAME")` <br> **Date/Time:** `r Sys.time()` <br> ---------------------------- <br>
 
@@ -42,3 +42,5 @@ Since more than 1.5% of the C-score corresponds to non-biological noise, normali
 plot_PCA(ribo_to_check,params$library_col)
 ```
 
+-----------------------
+This report has been automatically generated with rRMSAnalyzer 1.0.
