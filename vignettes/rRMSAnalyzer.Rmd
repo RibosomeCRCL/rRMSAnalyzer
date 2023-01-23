@@ -95,8 +95,8 @@ path <- system.file("extdata", package="rRMSAnalyzer")
 
 ribo <- load_ribodata(
                       #data & metadata files path
-                      count_path = paste0(path,"/miniglioma"),
-                      metadata = paste0(path,"/metadata.csv"),
+                      count_path = file.path(path,"miniglioma/"),
+                      metadata = file.path(path,"metadata.csv"),
                       # data & metadata files separator
                       count_sep = "\t",
                       metadata_sep = ",",
