@@ -39,18 +39,14 @@ adjust_bias <- function(ribo, batch, ...) {
     #reorganize column according to metadata and convert DF to matrix (otherwise, ComBat_seq won't work)
     matrix_ribo <- as.matrix(matrix_ribo[,c(ribo[["metadata"]][["samplename"]])])
     adjusted_matrix <- sva::ComBat_seq(matrix_ribo,batch = ribo[["metadata"]][[batch]],...)
-    
     ribo_updated <- .update_ribo_count_with_matrix(ribo,adjusted_matrix)
     
     if(ribo_updated[["has_cscore"]]) {
       message("Recomputing c-score with the following parameters :",
       "\n- C-score method : ", ribo_updated[["cscore_method"]],
       "\n- Flanking window : ", ribo_updated[["cscore_window"]],"\n")
-      
       ribo_updated <- compute_cscore(ribo_updated, ribo_updated[["cscore_window"]],ribo_updated[["cscore_method"]],2)
     }
-    
-
     
     ribo_updated["combatSeq_count"] <- TRUE
     ribo_updated["col_used_combatSeq"] <- batch

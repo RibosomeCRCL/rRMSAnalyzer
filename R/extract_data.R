@@ -14,17 +14,13 @@
 #' data("ribo_toy")
 #' count_df <- extract_data(ribo_toy,"count")
 extract_data <- function(ribo, col = "cscore", position_to_rownames = FALSE, only_annotated = FALSE) {
+  #TODO : "Position to rownames" is probably not useful.
   
   named_position <- NULL # NSE fix # nolint
-  #TODO : "Position to rownames" is probably not useful.
-
   #The rows of this matrix correspond to the positions on the rRNA
-  
-  
   col <- tolower(col)
   
   if(!(col %in% colnames(ribo[["data"]][[1]]))) {
-    
     stop(col, " is not a column in the data !")
   }
   
@@ -35,7 +31,6 @@ extract_data <- function(ribo, col = "cscore", position_to_rownames = FALSE, onl
     df_sites <- df[which(!is.na(df[,"site"])),]
     position_list <- df_sites[,"site"]
     matrix_all <- data.frame(site = position_list)
-    
   }
   else {
   position_list <- sample_list[[3]][,"named_position"]
@@ -56,13 +51,9 @@ extract_data <- function(ribo, col = "cscore", position_to_rownames = FALSE, onl
     matrix_all <- dplyr::full_join(matrix_all,sample_df,by="named_position")
     names(matrix_all)[length(names(matrix_all))] <- sample_nm 
     matrix_all <- matrix_all[match(position_list,matrix_all[,"named_position"]),]
-    
+    }
   }
-  
-  }
-  
   if(position_to_rownames){
-    
     if(only_annotated) {
       col_name <- "site"
     } else {
@@ -71,8 +62,5 @@ extract_data <- function(ribo, col = "cscore", position_to_rownames = FALSE, onl
     row.names(matrix_all) <- matrix_all[,col_name]
     matrix_all[,col_name] <- NULL
   }
-  
   return(matrix_all)
-  
-  
 }

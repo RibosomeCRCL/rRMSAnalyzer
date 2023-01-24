@@ -10,12 +10,8 @@
   
   # compute scores
   for (i in (flanking + 1) : (dim(ds)[1] - flanking)){
-    #TODO : selection mean/median
-    
   if(method == "median") {
     ds[i, "flanking_median"] <- stats::median(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # median
-   # ds[i, "flanking_mad"] <- mad(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # mad
-   # TODO : remove flanking mad ? 
     scorec_median_raw <- 1 - ds[, data_counts_col]/ds[, "flanking_median"]
     ds[, "cscore"] <- ifelse(scorec_median_raw < 0, 0, scorec_median_raw)
   }
@@ -24,9 +20,8 @@
     ds[i, "flanking_mean"] <- mean(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # mean
     scorec_mean_raw <- 1 - ds[, data_counts_col]/ds[, "flanking_mean"]
     ds[, "cscore"] <- ifelse(scorec_mean_raw < 0, 0, scorec_mean_raw)
- }
+    }
   }
-  
   return(ds)
 }
 
@@ -89,9 +84,5 @@ compute_cscore <- function(ribo=NULL, flanking=6,
      ribo["cscore_window"] <- flanking
      ribo["cscore_method"] <- method
      ribo["has_cscore"] <- TRUE
-
-
-  return(ribo)
-  
-  
+     return(ribo)
 }

@@ -45,12 +45,10 @@ annotate_site <- function(ribo, annot, anno_rna = 2, anno_pos = 1 , anno_value) 
   
   else if (is.null(anno_value)){
     stop("the \"site\" column is missing in annotation data. Please add it with site names.")
-    
   }
 
   subsetted_ribo_data <- lapply(ribo_data, function(x) {
     x["site"] <-  annot[[anno_value]][match(x[["named_position"]], annot[["named_position"]])]
-    
     return(x)
   })
   

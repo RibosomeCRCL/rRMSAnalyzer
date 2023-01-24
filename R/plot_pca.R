@@ -14,28 +14,23 @@
 #' @examples 
 #' data("ribo_toy")
 #' plot_PCA(ribo_toy,"run")
-plot_PCA <- function(ribo, color_col = NULL, axes = c(1,2), only_annotated = FALSE, title = "default", subtitle = "samples", pca_object_only = FALSE) {
+plot_PCA <- function(ribo, color_col = NULL, axes = c(1,2),
+                     only_annotated = FALSE, title = "default",
+                     subtitle = "samples", pca_object_only = FALSE) {
   
   if (is.null(ribo)) {stop("MISSING parameter: please provide a RiboClass!")}
   if (!inherits(ribo, "RiboClass")) {stop("ribo argument is not a RiboClass!")}
-  
-  
-  if (isFALSE(ribo$has_cscore)) {stop("You should calculate Cscores first using calculate_score funciton")}
-
-  
+  if (isFALSE(ribo$has_cscore)) {
+      stop("You should calculate Cscores first using calculate_score funciton")}
   pca_matrix <- extract_data(ribo,"cscore",position_to_rownames = TRUE)
   
-  if(only_annotated) pca_matrix <- pca_matrix[which(!is.na(ribo[["data"]][[1]][["site"]])),]
-    
-  
+  if(only_annotated) pca_matrix <- pca_matrix[which(
+    !is.na(ribo[["data"]][[1]][["site"]])),]
   pca_calculated <- .calculate_pca(pca_matrix)
-  
   if(pca_object_only) return(pca_calculated)
-  
-  facto_pca <- .plot_pca(pca_calculated,ribo[["metadata"]],color_col, axes = axes, title = title, subtitle = subtitle)
-  
+  facto_pca <- .plot_pca(pca_calculated,ribo[["metadata"]],color_col,
+                         axes = axes, title = title, subtitle = subtitle)
   return(facto_pca)
-  
 }
 
 
@@ -90,8 +85,5 @@ plot_PCA <- function(ribo, color_col = NULL, axes = c(1,2), only_annotated = FAL
     ggplot2::labs(subtitle = plot_subtitle) + 
     ggplot2::ylab(paste("PC", axes[2],":", round(dudi.pca$eig[axes[2]]/sum(dudi.pca$eig) * 100, 1), "%")) +
     ggplot2::xlab(paste("PC", axes[1],":", round(dudi.pca$eig[axes[1]]/sum(dudi.pca$eig) * 100, 1), "%"))
-  # TODO PCA legend should be according to metadata
-  
-  
   return(plot.pca)
 }

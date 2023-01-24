@@ -30,7 +30,6 @@ generate_metadata_df <- function(counts_folder_path,
       sample_name <- stringr::str_extract(sample_name,
                                           paste0("^([^", stop_symbol,"])+"))
     }
-    
     metadata_template <- data.frame(filename = sample_filenames, samplename=sample_name)
   }
   else {
