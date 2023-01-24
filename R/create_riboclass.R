@@ -106,13 +106,17 @@ create_riboclass <- function(count_path,
     # generate RNA names table
     rna_names_df <- .generate_rna_names_table(rna_counts_dt[[1]])
     
+    # keep only metadatas that have associated data
+    
+    metadata <- metadata[which(metadata[,metadata_key] %in% names(rna_counts_dt)),]
     
     # Rename sample in counts list according to the names in metadata
     names(rna_counts_dt) <- metadata[,"samplename"][match(names(rna_counts_dt), metadata[,metadata_key])]
     
-    # order samples by metadata
+    # order samples by metadata and remove null samples
+    rna_counts_dt <- rna_counts_dt[metadata[,"samplename"]]  
+    rna_counts_dt <- rna_counts_dt[lengths(rna_counts_dt) != 0]
     
-    rna_counts_dt <- rna_counts_dt[metadata[,"samplename"]]    
     
   }
   
@@ -167,9 +171,7 @@ create_riboclass <- function(count_path,
       if(length(rna_count_fl_old)> length(rna_counts_fl)) {
         rna_count_missing <- rna_count_fl_old[which(
           !is.element(rna_count_fl_old,rna_counts_fl))]
-         message(paste("[ERROR] Missing metadata for :",basename(rna_count_missing),collapse = "\n"))
-        stop("Some samples have no associated metadata. Check if the filenames
-             in your metadata match the filenames on disk.")
+         message(paste("[WARNING] Missing metadata for :",basename(rna_count_missing),collapse = "\n"))
       }
       
     }

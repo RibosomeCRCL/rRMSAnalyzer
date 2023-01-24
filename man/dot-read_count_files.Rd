@@ -11,7 +11,7 @@
   rna_col,
   position_col,
   count_value,
-  files_to_keep = NULL
+  metadata_filenames = NULL
 )
 }
 \arguments{
@@ -27,7 +27,7 @@
 
 \item{count_value}{position of the column contaning the count for the given genomic position}
 
-\item{files_to_keep}{if specified, only the file following files_to_keep will be kept}
+\item{metadata_filenames}{Filenames in metadata to check against}
 }
 \value{
 a list of sample dataframes
