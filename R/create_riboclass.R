@@ -100,11 +100,12 @@ create_riboclass <- function(count_path,
     # read count data
     rna_counts_dt <- .read_count_files(count_path,count_sep,count_header,
                                        count_rnaid,count_pos,count_value,
-                                       files_to_keep = as.character(metadata[,metadata_key]))
+                                       metadata_filenames = as.character(metadata[,metadata_key]))
     
     
     # generate RNA names table
     rna_names_df <- .generate_rna_names_table(rna_counts_dt[[1]])
+    
     
     # Rename sample in counts list according to the names in metadata
     names(rna_counts_dt) <- metadata[,"samplename"][match(names(rna_counts_dt), metadata[,metadata_key])]
@@ -138,7 +139,7 @@ create_riboclass <- function(count_path,
 #' @param position_col position of the column containing the genomic position
 #' @param count_value position of the column contaning the count for the given genomic position 
 #' @param header does the files contain an header ?
-#' @param files_to_keep if specified, only the file following files_to_keep will be kept
+#' @param metadata_filenames Filenames in metadata to check against
 #'
 #' @return a list of sample dataframes
 #'
@@ -150,18 +151,27 @@ create_riboclass <- function(count_path,
            rna_col,
            position_col,
            count_value,
-           files_to_keep = NULL) {
+           metadata_filenames = NULL) {
     
     if(!dir.exists(path_to_files)) stop("the path given for the csv files does not exist or is not a directory !")
     
     rna_counts_fl <-
       list.files(path_to_files, recursive = TRUE, full.names = TRUE)
     
-    # Check if there are files to keep
-    # if yes than keep only the needed files
-    if (!is.null(files_to_keep)) {
-      pat <- paste0("\\b(", paste(files_to_keep, collapse="|"), ")\\b")
+    # Check if the filenames on disk match filenames in metadata. Fail otherwise.
+    if (!is.null(metadata_filenames)) {
+      pat <- paste0("\\b(", paste(metadata_filenames, collapse="|"), ")\\b")
+      rna_count_fl_old <- rna_counts_fl
       rna_counts_fl <- rna_counts_fl[grep(pat, rna_counts_fl)]
+      
+      if(length(rna_count_fl_old)> length(rna_counts_fl)) {
+        rna_count_missing <- rna_count_fl_old[which(
+          !is.element(rna_count_fl_old,rna_counts_fl))]
+         message(paste("[ERROR] Missing metadata for :",basename(rna_count_missing),collapse = "\n"))
+        stop("Some samples have no associated metadata. Check if the filenames
+             in your metadata match the filenames on disk.")
+      }
+      
     }
     
     # 1) Check if there is any duplicated name in the filename list
@@ -180,7 +190,7 @@ create_riboclass <- function(count_path,
     if(length(rna_counts_dt) == 0) stop(paste0("ERROR! No file has the filenames specified in the metadata column specified by metadata_key"))
     
     # check if there are less than 3 columns, which can happen when one fails to
-    # specify the correct seperator
+    # specify the correct separator
     if(ncol(rna_counts_dt[[1]]) < 3) {
       stop("not enough columns in your count data !\n Check if you have specified the correct columns separator in count_sep")
     }
