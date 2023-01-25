@@ -27,13 +27,13 @@ extract_data <- function(ribo, col = "cscore", position_to_rownames = FALSE, onl
   sample_list <- ribo[["data"]]
   sample_list_nm <- names(sample_list)
   if(only_annotated) {
-    df <- sample_list[[3]]
+    df <- sample_list[[1]]
     df_sites <- df[which(!is.na(df[,"site"])),]
     position_list <- df_sites[,"site"]
     matrix_all <- data.frame(site = position_list)
   }
   else {
-  position_list <- sample_list[[3]][,"named_position"]
+  position_list <- sample_list[[1]][,"named_position"]
   matrix_all <- data.frame(named_position = position_list)
   }
   
