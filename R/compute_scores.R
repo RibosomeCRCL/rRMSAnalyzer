@@ -1,112 +1,88 @@
-
-#--------------------------------------------------------------------------------
-# compute C-Score based on median
-#--------------------------------------------------------------------------------
-
-#' Computation of C- and Z-scores for genomic positions within a predefined window
-#'
-#' @param ds
-#' @param known.meth.vector
-#' @param suspected.meth.vector
-#' @param flanking
-#' @param data.counts.col
-#' @param data.position.col
-#'
-#' @return data frame with C-scores and Z-scores for each genomic postion
-#' @export compute.window.median.mad
-#'
-#' @examples compute.window.median.mad(ds, known.meth.vector, suspected.meth.vector)
-compute.window.median.mad <- function(ds=NULL, known.meth.vector=NULL, suspected.meth.vector=NULL, flanking=6, data.counts.col=4, data.position.col=1) {
-
+# (internal) Compute a c-score for all position of a single RNA
+.compute_rna_cscore <- function(ds, flanking=6, method) {
   # check that all parameters exist
   if (is.null(ds)) {stop("MISSING parameter. Please specify a data frame <ds>.")}
-  if (is.null(known.meth.vector)) {stop("MISSING PARAMETER in compute.window.median.mad(). Please specify <known.meth.vector>.")}
-  if (is.null(suspected.meth.vector)) {stop("MISSING PARAMETER in compute.window.median.mad(). Please specify <suspected.meth.vector>.")}
-
-  if (! is.null(known.meth.vector)) {
-    ds[, "meth"] <- ds[, data.position.col] %in% known.meth.vector
-  }
-  if (! is.null(suspected.meth.vector)) {
-    ds[, "suspected"] <- ds[, data.position.col] %in% suspected.meth.vector
-  }
-
-  ds[, "median"] <- NA
-  ds[, "mad"] <- NA
-
+  
+  # remove any cscore-related columns if they already exist
+  ds[,c("flanking_median","flanking_mad","flanking_mean","cscore")] <- list(NULL)
+  # get the count column
+   data_counts_col <- "count"
+  
   # compute scores
   for (i in (flanking + 1) : (dim(ds)[1] - flanking)){
-
-    ds[i, "median"] <- median(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data.counts.col]) # median
-    ds[i, "mad"] <- mad(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data.counts.col]) # mad
-
+  if(method == "median") {
+    ds[i, "flanking_median"] <- stats::median(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # median
+    scorec_median_raw <- 1 - ds[, data_counts_col]/ds[, "flanking_median"]
+    ds[, "cscore"] <- ifelse(scorec_median_raw < 0, 0, scorec_median_raw)
   }
-  ds[, "dist2medInMad"] <- (ds[,"median"] - ds[, data.counts.col])/ds[,"mad"]
-  scoreC.Median.raw <- 1 - ds[, data.counts.col]/ds[, "median"]
-  ds[, "ScoreC.Median.net"] <- ifelse(scoreC.Median.raw < 0, 0, scoreC.Median.raw)
-
+    
+ else if(method == "mean") {
+    ds[i, "flanking_mean"] <- mean(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # mean
+    scorec_mean_raw <- 1 - ds[, data_counts_col]/ds[, "flanking_mean"]
+    ds[, "cscore"] <- ifelse(scorec_mean_raw < 0, 0, scorec_mean_raw)
+    }
+  }
   return(ds)
 }
-#------------------------------------------
 
-
-
-#------------------------------------------
-# Compute Cscore and Zscore
-#------------------------------------------
-#' Computes C- and Z-scores of all samples of a given study
-#'
-#' @param all.samples
-#' @param annot: a data frame with general project informations. Must have columns specifying the project, rRNA, sample names, paths.
-#' @param annot.rna.col: a numerical value specifying the column of the rRNA in the annotation <annot>. Default is 4.
-#' @param species: a character string specifying the species. Default is "human". In this version of the R-packge, only "human" is supported.
-#' @param window.size
-#' @param data.position.col
-#' @param data.counts.col
-#' @param gc.probas.pos.col
-#' @param gc.probas.GC.col
-#'
-#' @return List of data frames. Each data frame is a sample (count table) for which the C- and Z-scores have been computed
-#' @export compute.cscore.zscore
-#'
-#' @examples compute.cscore.zscore(all.samples, annot)
-compute.cscore.zscore <- function(all.samples=NULL, annot=NULL, annot.rna.col=4, species = "human", verbose=FALSE, window.size=6, data.position.col=1, data.counts.col=4, gc.probas.pos.col=1, gc.probas.GC.col=7){
-
-  if (is.null(all.samples)) {stop("MISSING parameter. Please specify <all.samples>.")}
-  if (is.null(annot)) {stop("MISSING parameter. Please specify <all.samples>.")}
-  if (is.null(window.size)) {stop("MISSING PARAMETER. Please specify the window size for the score computation, <window.size>.")}
-  if (is.null(data.position.col)) {stop("MISSING PARAMETER. Please specify <data.position.col>.")}
-  #if ((gc.probas.pos.col)): --> position colum in  <wdw.probas>, internal data frame, used in <load.gc.content.for.human.ribosome()>
-  #if ((gc.probas.GC.col)): -->  GC column in <wdw.probas>, internal data frame, used in <load.gc.content.for.human.ribosome()>
-
-
-  if (tolower(species) == "human") {
-    gc.rna <- load.gc.content.for.human.ribosome(annot=annot, annot.rna.col=annot.rna.col)
-  } else if (tolower(species) == "mouse"){
-    gc.rna <- load.gc.content.for.mouse.ribosome(annot=annot, annot.rna.col=annot.rna.col)
-  } else {stop("ERROR. Unknown species. Pipeline is only working for human and mouse. Other organisms will be added soon.")}
-
-  pos.known.meth      <- gc.rna[[2]]
-  pos.suspected.meth  <- gc.rna[[3]]
-  gc.probas           <- gc.rna[[1]]
-
-  wdw.df.list <- lapply(all.samples, function(df){
-
-    gc <- gc.probas[match(df[, data.position.col], gc.probas[, gc.probas.pos.col]), gc.probas.GC.col ]
-    df <- cbind(df, gc)
-
-    df2 <- compute.window.median.mad(ds                    = df,
-                                     flanking              = window.size,
-                                     data.counts.col       = data.counts.col,
-                                     data.position.col     = data.position.col,
-                                     known.meth.vector     = pos.known.meth,
-                                     suspected.meth.vector = pos.suspected.meth)
-    df2
-  })
-  return(wdw.df.list)
+# (internal) Compute c-score for a single sample
+.compute_sample_cscore <- function(sample_df=NULL,
+                                      flanking=6,
+                                    method) 
+                                                   {
+  data_rna_col = "rna"
+  sample_df[,data_rna_col] <- as.factor(sample_df[,data_rna_col])
+  RNA_counts_list <- split(sample_df, sample_df[,data_rna_col])
+  sample_score <- lapply(RNA_counts_list, .compute_rna_cscore, flanking , method)
+  
+  return(dplyr::bind_rows(sample_score))
+  
 }
-#------------------------------------------
 
+#' Compute c-score for all samples in a riboclass
+#' 
+#' @description
+#' 
+#  The C-score corresponds to the 2'Ome level at a RNA position. The C-score represents a drop in the end read coverage at a given position compared to the environmental coverage, as described by @birkedal2014. The C-score can be of 0 (i.e., no RNA molecule is 2'Ome at the position of interest), of 1 (i.e., all the RNA molecules are 2'Ome at the position of interest) and of ]0:1[ (i.e., a mix of un-methylated and methylated RNA molecules).
+#' 
+#' In this package, the C-score is calculated for every position. As it can be useful to find positions not yet identified as methylated.
+#' 
+#' For each RNA, The first and last positions cannot be calculated if the local coverage is shorter than the flanking argument. Their value will be NA instead.
+#' 
+#' @references Birkedal, U., Christensen-Dalsgaard, M., Krogh, N., Sabarinathan, R., Gorodkin, J. and Nielsen, H. (2015), Profiling of Ribose Methylations in RNA by High-Throughput Sequencing. Angew. Chem. Int. Ed., 54: 451-455. https://doi.org/10.1002/anie.201408362
+#' 
+#'
+#' @md
+#' @param ribo a riboclass object, see constructor : 
+#' \code{\link{create_riboclass}}
+#' @param flanking size of the local coverage.
+#' @param method computation method of the local coverage. Either "median" or "mean".
+#' @param ncores number of cores to use in case of multithreading.
+#' @return a riboclass with c-score columns appended to each sample's data.
+#' @export
+#'
+#' @examples
+#' data("ribo_toy")
+#' ribo_subsetted <- keep_ribo_samples(ribo_toy,"S1")
+#' ribo_with_cscore_med <- compute_cscore(ribo_subsetted, ncores = 2)
+#' ribo_with_cscore_mean <- compute_cscore(ribo_subsetted, method = "mean", ncores = 2)
+#' 
+compute_cscore <- function(ribo=NULL, flanking=6,
+                            method = "median",
+                            ncores = 1
+                            ) {
+    if(!(method %in% c("median","mean"))) stop("method can be either \"mean\" or \"median\"")
+    dt = ribo["data"] #we only need the counts to compute the score
 
+    
+   # Experimental : Multithreading is 3x faster than single-thread
+   # TODO : implement 
+   if(ncores > 1) samples_czscore <- parallel::mclapply(dt[["data"]], .compute_sample_cscore, flanking, method,mc.cores = ncores)
+   else samples_czscore <- lapply(dt[["data"]], .compute_sample_cscore, flanking, method)
 
-
-
+     ribo[["data"]] <- samples_czscore
+     ribo["cscore_window"] <- flanking
+     ribo["cscore_method"] <- method
+     ribo["has_cscore"] <- TRUE
+     return(ribo)
+}
