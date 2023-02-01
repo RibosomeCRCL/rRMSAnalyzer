@@ -18,7 +18,7 @@
 #' ribo_toy <- rename_rna(ribo_toy ,c("5S","5.8S","18S","28S"))
 #' ribo_toy <- annotate_site(ribo_toy,human_methylated,anno_value ="Nomenclature")
 #'
-annotate_site <- function(ribo, annot, anno_rna = 2, anno_pos = 1 , anno_value) {
+annotate_site <- function(ribo, annot, anno_rna = 2, anno_pos = 1, anno_value = 3) {
   ribo_data <- ribo[["data"]]
   
   if(!("named_position" %in% colnames(annot))) {
