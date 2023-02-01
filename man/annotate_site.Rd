@@ -4,7 +4,7 @@
 \alias{annotate_site}
 \title{Annotate sites according to a dataframe containing annotation}
 \usage{
-annotate_site(ribo, annot, anno_rna = 2, anno_pos = 1, anno_value)
+annotate_site(ribo, annot, anno_rna = 2, anno_pos = 1, anno_value = 3)
 }
 \arguments{
 \item{ribo}{a riboclass object to annotate, see constructor : 
