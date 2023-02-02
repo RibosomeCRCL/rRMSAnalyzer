@@ -2,19 +2,19 @@
 % Please edit documentation in R/report_qc.R
 \name{report_qc}
 \alias{report_qc}
-\title{Generate html report about batch effect in the working directory}
+\title{Generate html report about possible batch effect for a given RiboClass.}
 \usage{
 report_qc(ribo, library_col, project_name = "", output_dir = getwd())
 }
 \arguments{
-\item{ribo}{a riboclass}
+\item{ribo}{A RiboClass.}
 
-\item{library_col}{library column in the metadata}
+\item{library_col}{Library/run column in the metadata.}
 
-\item{project_name}{Name of the project}
+\item{project_name}{Name of the project.}
 
 \item{output_dir}{Path to output dir. Working directory is selected by default.}
 }
 \description{
-Generate html report about batch effect in the working directory
+Generate html report about possible batch effect for a given RiboClass.
 }

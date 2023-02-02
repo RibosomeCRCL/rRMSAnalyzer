@@ -41,11 +41,11 @@ load_ribodata(
 
 \item{metadata_id}{If it exists, name or index of the column containing the sample name}
 
-\item{flanking}{size of the local coverage.}
+\item{flanking}{Size of the local coverage.}
 
-\item{method}{computation method of the local coverage. Either "median" or "mean".}
+\item{method}{Computation method of the local coverage. Either "median" or "mean".}
 
-\item{ncores}{number of cores to use in case of multithreading.}
+\item{ncores}{Number of cores to use in case of multithreading.}
 }
 \value{
 a RiboClass

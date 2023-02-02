@@ -1,8 +1,8 @@
-#' Generate html report about batch effect in the working directory
+#' Generate html report about possible batch effect for a given RiboClass.
 #' 
-#' @param ribo a riboclass
-#' @param library_col library column in the metadata
-#' @param project_name Name of the project
+#' @param ribo A RiboClass.
+#' @param library_col Library/run column in the metadata.
+#' @param project_name Name of the project.
 #' @param output_dir Path to output dir. Working directory is selected by default.
 #' @export
 report_qc <- function(ribo, library_col, project_name = "", output_dir = getwd()) {

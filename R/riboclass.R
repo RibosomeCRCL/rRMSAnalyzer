@@ -1,7 +1,7 @@
 #' print() to display basic informations about a RiboClass
 #'
 #' @param x a RiboClass
-#' @param ... base print params
+#' @param ... print() params
 #'
 #' @export
 #' @keywords internal

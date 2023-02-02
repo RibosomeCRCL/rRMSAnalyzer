@@ -2,11 +2,11 @@
 #'
 #' 
 #' @param ribo A RiboClass object.
-#' @param color_col Name of the column in the metadata used for coloring PCA inds.
+#' @param color_col Name of the column in the metadata used for coloring samples.
 #' @param axes Two-element vector indicating which pair of principal components you want to show.
 #' @param only_annotated If TRUE, use only annotated sites to plot PCA.
-#' @param title tile to display on the plot. "default" for default title.
-#' @param subtitle subtitle to display on the plot. "samples" for number of samples. "none" for no subtitle.
+#' @param title Title to display on the plot. "default" for default title.
+#' @param subtitle Subtitle to display on the plot. "samples" for number of samples. "none" for no subtitle.
 #' @param pca_object_only Return directly the full dudi.pca object, without generating the plot.
 #' @return A ggplot or a dudi.pca object if pca_object_only is set to True.
 #' @export

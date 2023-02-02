@@ -18,13 +18,13 @@
 
 \item{metadata}{metadata table from RiboClass}
 
-\item{color_col}{Name of the column in the metadata used for coloring PCA inds.}
+\item{color_col}{Name of the column in the metadata used for coloring samples.}
 
 \item{axes}{Two-element vector indicating which pair of principal components you want to show.}
 
-\item{title}{tile to display on the plot. "default" for default title.}
+\item{title}{Title to display on the plot. "default" for default title.}
 
-\item{subtitle}{subtitle to display on the plot. "samples" for number of samples. "none" for no subtitle.}
+\item{subtitle}{Subtitle to display on the plot. "samples" for number of samples. "none" for no subtitle.}
 }
 \value{
 a ggplot

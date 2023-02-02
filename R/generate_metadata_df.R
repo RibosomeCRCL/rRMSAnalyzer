@@ -12,9 +12,9 @@
 #' stop_symbol is an "helper" parameter to automatically trim your filename into samplename.
 #' 
 #' @md 
-#' @param counts_folder_path the path where count files are stored
-#' @param create_samplename_col generate a sample name col with filename by default
-#' @param stop_symbol keep the filename until the stop symbol is reached.
+#' @param counts_folder_path The path where count files are stored.
+#' @param create_samplename_col Generate a sample name col with filename by default
+#' @param stop_symbol Keep the filename until the stop symbol is reached.
 #' 
 #' @keywords internal
 generate_metadata_df <- function(counts_folder_path,

@@ -2,20 +2,20 @@
 % Please edit documentation in R/keep_or_remove_samples_ribo.R
 \name{remove_ribo_samples}
 \alias{remove_ribo_samples}
-\title{Remove samples from Riboclass object}
+\title{Remove samples from a Riboclass object}
 \usage{
 remove_ribo_samples(ribo = NULL, samples_to_delete = NULL)
 }
 \arguments{
-\item{ribo}{A RiboClass.}
+\item{ribo}{A RiboClass object.}
 
-\item{samples_to_delete}{A vector with the samples to remove.}
+\item{samples_to_delete}{A vector containing the names of samples to remove.}
 }
 \value{
-A riboClass without the removed samples in data and metadata.
+A RiboClass without the removed samples in data and metadata.
 }
 \description{
-Remove samples from Riboclass object
+Remove samples from a Riboclass object
 }
 \examples{
 data("ribo_toy")

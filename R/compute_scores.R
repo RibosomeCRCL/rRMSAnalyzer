@@ -53,12 +53,11 @@
 #' 
 #'
 #' @md
-#' @param ribo a riboclass object, see constructor : 
-#' \code{\link{create_riboclass}}
-#' @param flanking size of the local coverage.
-#' @param method computation method of the local coverage. Either "median" or "mean".
-#' @param ncores number of cores to use in case of multithreading.
-#' @return a riboclass with c-score columns appended to each sample's data.
+#' @param ribo A RiboClass object.
+#' @param flanking Size of the local coverage.
+#' @param method Computation method of the local coverage. Either "median" or "mean".
+#' @param ncores Number of cores to use in case of multithreading.
+#' @return A RiboClass with c-score columns appended to each sample's data.
 #' @export
 #'
 #' @examples

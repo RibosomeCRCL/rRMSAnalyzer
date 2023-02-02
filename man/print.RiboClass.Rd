@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{a RiboClass}
 
-\item{...}{base print params}
+\item{...}{print() params}
 }
 \description{
 print() to display basic informations about a RiboClass

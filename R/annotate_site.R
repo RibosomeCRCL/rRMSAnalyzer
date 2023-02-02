@@ -4,12 +4,12 @@
 #' 
 #' @param ribo a riboclass object to annotate, see constructor : 
 #' \code{\link{create_riboclass}}
-#' @param annot The dataframe containing your annotations.
+#' @param annot The dataframe containing annotations.
 #' @param anno_rna Name or index of the column in annot containing RNAs' name.
 #' @param anno_pos Name or index of the column in annot containing site position inside RNA.
-#' @param anno_value Bame or index of the column in annot containing nomenclature to apply.
+#' @param anno_value Name or index of the column in annot containing nomenclature to apply.
 #' 
-#' @return An annotated riboClass (the site column should be filled with name for known position).
+#' @return An annotated riboClass (the site column in data should be filled with names from annot_value for known position).
 #' @export
 #'
 #' @examples

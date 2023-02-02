@@ -17,15 +17,15 @@ plot_PCA(
 \arguments{
 \item{ribo}{A RiboClass object.}
 
-\item{color_col}{Name of the column in the metadata used for coloring PCA inds.}
+\item{color_col}{Name of the column in the metadata used for coloring samples.}
 
 \item{axes}{Two-element vector indicating which pair of principal components you want to show.}
 
 \item{only_annotated}{If TRUE, use only annotated sites to plot PCA.}
 
-\item{title}{tile to display on the plot. "default" for default title.}
+\item{title}{Title to display on the plot. "default" for default title.}
 
-\item{subtitle}{subtitle to display on the plot. "samples" for number of samples. "none" for no subtitle.}
+\item{subtitle}{Subtitle to display on the plot. "samples" for number of samples. "none" for no subtitle.}
 
 \item{pca_object_only}{Return directly the full dudi.pca object, without generating the plot.}
 }

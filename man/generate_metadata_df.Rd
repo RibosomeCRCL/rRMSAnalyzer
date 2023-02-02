@@ -11,11 +11,11 @@ generate_metadata_df(
 )
 }
 \arguments{
-\item{counts_folder_path}{the path where count files are stored}
+\item{counts_folder_path}{The path where count files are stored.}
 
-\item{create_samplename_col}{generate a sample name col with filename by default}
+\item{create_samplename_col}{Generate a sample name col with filename by default}
 
-\item{stop_symbol}{keep the filename until the stop symbol is reached.}
+\item{stop_symbol}{Keep the filename until the stop symbol is reached.}
 }
 \description{
 Generate an "empty" dataframe with the required filename and samplename columns to include in a riboclass.

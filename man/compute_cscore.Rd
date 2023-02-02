@@ -7,17 +7,16 @@
 compute_cscore(ribo = NULL, flanking = 6, method = "median", ncores = 1)
 }
 \arguments{
-\item{ribo}{a riboclass object, see constructor :
-\code{\link{create_riboclass}}}
+\item{ribo}{A RiboClass object.}
 
-\item{flanking}{size of the local coverage.}
+\item{flanking}{Size of the local coverage.}
 
-\item{method}{computation method of the local coverage. Either "median" or "mean".}
+\item{method}{Computation method of the local coverage. Either "median" or "mean".}
 
-\item{ncores}{number of cores to use in case of multithreading.}
+\item{ncores}{Number of cores to use in case of multithreading.}
 }
 \value{
-a riboclass with c-score columns appended to each sample's data.
+A RiboClass with c-score columns appended to each sample's data.
 }
 \description{
 In this package, the C-score is calculated for every position. As it can be useful to find positions not yet identified as methylated.
