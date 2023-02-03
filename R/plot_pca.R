@@ -22,10 +22,10 @@ plot_PCA <- function(ribo, color_col = NULL, axes = c(1,2),
   if (!inherits(ribo, "RiboClass")) {stop("ribo argument is not a RiboClass!")}
   if (isFALSE(ribo$has_cscore)) {
       stop("You should calculate Cscores first using calculate_score funciton")}
-  pca_matrix <- extract_data(ribo,"cscore",position_to_rownames = TRUE)
+  pca_matrix <- extract_data(ribo,"cscore",position_to_rownames = TRUE,
+                             only_annotated = only_annotated)
   
-  if(only_annotated) pca_matrix <- pca_matrix[which(
-    !is.na(ribo[["data"]][[1]][["site"]])),]
+
   pca_calculated <- .calculate_pca(pca_matrix)
   if(pca_object_only) return(pca_calculated)
   facto_pca <- .plot_pca(pca_calculated,ribo[["metadata"]],color_col,
