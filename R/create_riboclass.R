@@ -2,19 +2,20 @@
 #' 
 #' @param count_path (required) path to the data folder containing count files.
 #' @param metadata  Data frame or path to a CSV file containing metadata.
-#' @param count_sep Delimiter used in genomecov (for csv file only).
-#' @param metadata_sep Delimiter used in metadata (for csv file only).
+#' @param count_sep Delimiter used for the CSV files.
+#' @param metadata_sep Delimiter used in metadata (if imported from file).
 #' @param count_header Boolean, specify if count files have a header or not.
 #' @param count_value Name or index of the column containing count values.
 #' @param count_rnaid Name or index of the column containing the name of the RNA in count data.
 #' @param count_pos Name or index of the column containing the site's position in count data.
 #' @param metadata_key Name or index of the column containing the samples' filename.
-#' @param metadata_id If it exists, name or index of the column containing the sample name
+#' @param metadata_id If it exists, name or index of the column containing the sample name.
 #'
 #' @description 
-#' Read ribomethseq count files and their associated metadata and turn them into a RiboClass.
-#' __This is the entrypoint for the rRMSAnalyzer package__, as all other functions use the RiboClass as an input.
+#' Read ribomethseq count files and their associated metadata and merge them into a RiboClass.
+#' __This is the constructor of the RiboClass S3 class.__ All other functions use the RiboClass as an input.
 #' 
+#' The constructor cannot be called directly. To create a RiboClass, please use \code{\link{load_ribodata}}.
 #' 
 #' @details
 #' The RiboClass object is a S3 Class with three elements :
@@ -22,15 +23,15 @@
 #' 
 #'  __data__ : a list of dataframe, each corresponding to a sample.
 #' Each dataframe starts with the following columns : 
-#' * rna : the name of the RNA for a given position
-#' * rnapos : the position __on the current RNA__
-#' * count : the number of read starting (5'end) or ending (3'end) at this position
+#' * rna : the name of the RNA for a given position.
+#' * rnapos : the position __on the current RNA__.
+#' * count : the number of read starting (5'end) or ending (3'end) at this position.
 #' * site : the name of the site, which will be empty after the RiboClass creation. To fill this column, use \code{\link{annotate_site}}.
 #' 
 #' 
 #' __metadata__ : a dataframe containing all information related to each sample.
 #' This is particularly useful for technical biases correction (with \code{\link{adjust_bias}}) and plot functions (for coloring or add an extra layer of informations).
-#' If no metadata are given, an empty one will be generated. You can also generate an empty one by yourself using \code{\link{generate_metadata_df}}.
+#' If no metadata are given, an empty one will be generated.
 #' 
 #' __rna_names__ : a dataframe containing original and current rna names.
 #' The name of RNAs can be renamed for the sake of clarity on plots (with \code{\link{rename_rna}}), but the original ones can contain important information, like NCBI ID.
@@ -43,8 +44,8 @@
 #' @md
 #' 
 #' @return A RiboClass.
-#' @export
-create_riboclass <- function(count_path,
+#'  
+new_riboclass <- function(count_path,
                              metadata = NULL,
                              count_sep = "\t",
                              metadata_sep = ",",

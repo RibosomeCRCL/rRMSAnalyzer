@@ -25,9 +25,9 @@ load_ribodata(
 
 \item{metadata}{Data frame or path to a CSV file containing metadata.}
 
-\item{count_sep}{Delimiter used in genomecov (for csv file only).}
+\item{count_sep}{Delimiter used for the CSV files.}
 
-\item{metadata_sep}{Delimiter used in metadata (for csv file only).}
+\item{metadata_sep}{Delimiter used in metadata (if imported from file).}
 
 \item{count_header}{Boolean, specify if count files have a header or not.}
 
@@ -39,7 +39,7 @@ load_ribodata(
 
 \item{metadata_key}{Name or index of the column containing the samples' filename.}
 
-\item{metadata_id}{If it exists, name or index of the column containing the sample name}
+\item{metadata_id}{If it exists, name or index of the column containing the sample name.}
 
 \item{flanking}{Size of the local coverage.}
 
@@ -53,7 +53,12 @@ a RiboClass
 \description{
 Import your count CSV files and the metadata to create a RiboClass.
 The RiboClass is used by rRMSAnalyzer package for all analyses.
+
+\strong{This function serves as the entrypoint of rRMSAnalyzer.}
 }
 \details{
-load_ribodata is a wrapper of \code{\link{create_riboclass}} and \code{\link{compute_cscore}}.
+load_ribodata is a wrapper of \code{\link{new_riboclass}} and \code{\link{compute_cscore}}.
+}
+\seealso{
+new_riboclass
 }

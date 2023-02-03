@@ -1,5 +1,5 @@
 #' Load csv files from GenomeCov and their associated metadata. Create a RiboClass.
-#' @inheritParams create_riboclass
+#' @inheritParams new_riboclass
 #' @inheritParams compute_cscore
 #' @return a RiboClass
 #' @export
@@ -7,9 +7,12 @@
 #' @description Import your count CSV files and the metadata to create a RiboClass.
 #' The RiboClass is used by rRMSAnalyzer package for all analyses. 
 #' 
+#' __This function serves as the entrypoint of rRMSAnalyzer.__
+#' 
+#' @md
 #' @details
-#' load_ribodata is a wrapper of \code{\link{create_riboclass}} and \code{\link{compute_cscore}}.
-#'
+#' load_ribodata is a wrapper of \code{\link{new_riboclass}} and \code{\link{compute_cscore}}.
+#' @seealso new_riboclass  
 #'
 load_ribodata <- function(count_path,
                           metadata = NULL,
@@ -25,7 +28,7 @@ load_ribodata <- function(count_path,
                           method = "median",
                           ncores = 1) {
   
-  ribo <- create_riboclass(count_path,
+  ribo <- new_riboclass(count_path,
                            metadata,
                            count_sep,
                            metadata_sep,

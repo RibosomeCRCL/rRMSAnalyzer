@@ -8,7 +8,7 @@ annotate_site(ribo, annot, anno_rna = 2, anno_pos = 1, anno_value = 3)
 }
 \arguments{
 \item{ribo}{a riboclass object to annotate, see constructor : 
-\code{\link{create_riboclass}}}
+\code{\link{new_riboclass}}}
 
 \item{annot}{The dataframe containing annotations.}
 

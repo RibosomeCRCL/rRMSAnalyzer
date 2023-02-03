@@ -3,7 +3,7 @@
 #' This function will fill the "site" column in your riboclass's data with a nomenclature given in annot. 
 #' 
 #' @param ribo a riboclass object to annotate, see constructor : 
-#' \code{\link{create_riboclass}}
+#' \code{\link{new_riboclass}}
 #' @param annot The dataframe containing annotations.
 #' @param anno_rna Name or index of the column in annot containing RNAs' name.
 #' @param anno_pos Name or index of the column in annot containing site position inside RNA.

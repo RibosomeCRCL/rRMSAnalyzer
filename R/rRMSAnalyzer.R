@@ -2,13 +2,13 @@
 #' 
 #' The rRMSAnalyzer package is designed to give easy-to-use functions
 #' dedicated to RiboMethSeq (RMS) analyses. All functions revolve
-#' around the riboClass, a S3 class containing both RMS data and 
+#' around the riboClass, a S3 class containing both RMS data and samples 
 #' metadata.
 #'
 #' The main functions are (in a standard workflow chronological order):
 #'
 #' \itemize{
-#' \item \code{\link{create_riboclass}} - import data and create a riboClass. It is used by all other functions
+#' \item \code{\link{load_ribodata}} - import data and create a RiboClass. Objects of this class are used by all other functions
 #' \item \code{\link{compute_cscore}} - compute C-score for all genomic positions in your samples
 #' \item \code{\link{adjust_bias}} - adjust technical biases of your RiboMethSeq data with combatSeq
 #' \item \code{\link{extract_data}} - get a dataframe of c-score for all samples and all positions in your riboClass
@@ -22,7 +22,7 @@
 #'
 #' The code can be viewed at the GitHub repository :
 #' 
-#' \url{https://github.com/...}
+#' \url{https://github.com/RibosomeCRCL/rRMSAnalyzer}
 #' 
 #'
 #'

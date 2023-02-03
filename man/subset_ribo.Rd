@@ -8,7 +8,7 @@ subset_ribo(ribo, positions_to_keep, anno_rna, anno_pos)
 }
 \arguments{
 \item{ribo}{a RiboClass object, see constructor : 
-\code{\link{create_riboclass}}}
+\code{\link{new_riboclass}}}
 
 \item{positions_to_keep}{either a dataframe with a column "named_position" or a vector of named positions.}
 

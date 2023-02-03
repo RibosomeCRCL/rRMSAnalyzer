@@ -1,7 +1,7 @@
 #' Keep only a subset of positions for all samples.
 #'
 #' @param ribo a RiboClass object, see constructor : 
-#' \code{\link{create_riboclass}}
+#' \code{\link{new_riboclass}}
 #' @param positions_to_keep either a dataframe with a column "named_position" or a vector of named positions.
 #' @param anno_rna name or index of the column containing RNA names in annotation data
 #' @param anno_pos name or index of the column containing position in annotation data

@@ -19,13 +19,12 @@ generate_metadata_df(
 }
 \description{
 Generate an "empty" dataframe with the required filename and samplename columns to include in a riboclass.
-You are free to add any other columns for your metadata.
-If you do not use stop_symbol, filename and samplename will be identical.
-Feel free to modify the latter.
 
-\strong{Do not modify the filename column, unless you have changed the filenames on disk.} Otherwise, it would prevent \code{\link{create_riboclass}} from linking data and metadata...
+Names in the samplename column can be modified, as long as each sample has an unique name.
+
+\strong{The filename column cannot be modified, unless the filenames on disk have changed.} Otherwise, it would prevent \code{\link{new_riboclass}} from linking data and metadata...
 }
 \details{
-stop_symbol is an "helper" parameter to automatically trim your filename into samplename.
+stop_symbol is an "helper" parameter to automatically to trim filename for the samplename.
 }
 \keyword{internal}
