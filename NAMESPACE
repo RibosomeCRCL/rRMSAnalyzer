@@ -3,6 +3,7 @@
 S3method(print,RiboClass)
 export(adjust_bias)
 export(annotate_site)
+export(boxplot_count)
 export(compute_cscore)
 export(extract_data)
 export(format_to_plot)
