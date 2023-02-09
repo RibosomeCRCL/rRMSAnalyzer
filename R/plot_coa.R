@@ -12,7 +12,7 @@
   return(res_coa)
 }
 
-#' Correspondence analysis of a RiboClass object.
+#' Correspondence analysis of a RiboClass' counts.
 #'
 #' @param ribo A RiboClass object.
 #' @param color_col Name of the column in the metadata used for coloring samples.
@@ -77,6 +77,8 @@ plot_coa <- function(ribo,color_col = NULL, axes = c(1,2),only_annotated=FALSE, 
   
   plot.coa <- plot.coa + ggplot2::theme(text = ggplot2::element_text(size = 12)) 
   plot.coa <- plot.coa + ggplot2::labs(color = paste(color_colname),
-                                       subtitle = subtitle)
+                                       subtitle = subtitle) +
+  ggplot2::ylab(paste("Axis", axes[2],":", round(dudi.coa$eig[axes[2]]/sum(dudi.coa$eig) * 100, 1), "%")) +
+  ggplot2::xlab(paste("Axis", axes[1],":", round(dudi.coa$eig[axes[1]]/sum(dudi.coa$eig) * 100, 1), "%"))
     return(plot.coa) 
 } 

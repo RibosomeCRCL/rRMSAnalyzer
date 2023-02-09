@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_coa.R
 \name{plot_coa}
 \alias{plot_coa}
-\title{Correspondence analysis of a RiboClass object.}
+\title{Correspondence analysis of a RiboClass' counts.}
 \usage{
 plot_coa(
   ribo,
@@ -33,7 +33,7 @@ plot_coa(
 A ggplot or a dudi.coa object if object_only is set to True.
 }
 \description{
-Correspondence analysis of a RiboClass object.
+Correspondence analysis of a RiboClass' counts.
 }
 \examples{
 data("ribo_toy")
