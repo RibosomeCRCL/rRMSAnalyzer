@@ -4,7 +4,8 @@
 #' @param color_col Vector of the metadata columns’ name used for coloring samples.
 #' @param only_annotated Use only annotated sites (default = TRUE).
 #' @param title Title to display on the plot. "default" for default title.
-#' @inheritParams pheatmap::pheatmap
+#' @param cutree_rows number of clusters the rows are divided into, based on the hierarchical clustering (using cutree).
+#' @param cutree_cols number of clusters the columns are divided into, based on the hierarchical clustering (using cutree).
 #' @param ... Pheatmap’s parameters
 #' @return A ggplot object of a heatmap. The distance used is manhattan and the clustering method is Ward.D2. See pheatmap doc for more details
 #' @export
@@ -18,7 +19,7 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
   matrix <- extract_data(ribo, "cscore", position_to_rownames = T,
                          only_annotated = only_annotated)
   
-  .plot_heatmap_complex(matrix, ribo[["metadata"]], color_col = color_col,
+  .plot_heatmap(matrix, ribo[["metadata"]], color_col = color_col,
                 most_variant = FALSE, title = title, cutree_rows = cutree_rows,
                 cutree_cols = cutree_cols,...)
 }
@@ -32,11 +33,11 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
 #' @param most_variant select only the most variant positions (cannot be used from plot_heatmap())
 #'
 #' @return
-#'
+#' @keywords internal
 .plot_heatmap <- function(cscore_matrix = NULL, metadata = NULL,
-                          color_col = NULL, most_variant = F,
-                          only_annotated = TRUE,title="default",cutree_rows,
-                          cutree_cols, ...) {
+                                  color_col = NULL, most_variant = F,
+                                  only_annotated = TRUE,title="default",cutree_rows,
+                                  cutree_cols, ...) {
   
   # Get the most variant sites
   # TODO : create function
@@ -44,47 +45,17 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
   #   cscore_matrix <- get_most_or_less_variant(cscore_matrix)
   # }
   
-  if(is.null(color_col)) {
-    metadata_1 <- NULL
-
-  } else {
-    # rownames of metadata
-    rownames(metadata) <- metadata[["samplename"]]
-    # all character columns to factor columns
-    metadata[sapply(metadata, is.character)] <- lapply(
-      metadata[sapply(metadata, is.character)],
-      as.factor
-    )
-    
-    metadata_1 <- metadata[color_col]
-    metadata_1 <- data.frame(metadata_1)
-  }
-    
-  htmap <- pheatmap::pheatmap(cscore_matrix[complete.cases(cscore_matrix),],
-                              clustering_method = "ward.D2",
-                              clustering_distance_cols = "manhattan",
-                              clustering_distance_rows = "manhattan",
-                              #    color = viridis::magma(100),
-                              cutree_cols = cutree_cols,
-                              cutree_rows = cutree_rows,
-                              main = title,
-                              annotation_col = metadata_1,...
-  )
-  
-  return(htmap)
-}
-
-.plot_heatmap_complex <- function(cscore_matrix = NULL, metadata = NULL,
-                                  color_col = NULL, most_variant = F,
-                                  only_annotated = TRUE,title="default",cutree_rows,
-                                  cutree_cols, ...) {
   
   # The color palette is from pheatmap package
   # https://github.com/raivokolde/pheatmap
   heat_colors <- colorRampPalette(rev(RColorBrewer::brewer.pal(n = 7, name = "RdYlBu")))(100)
   
-  column_ha = ComplexHeatmap::HeatmapAnnotation(df = metadata[color_col])
-  
+  if(!is.null(color_col)) {
+    column_ha <- ComplexHeatmap::HeatmapAnnotation(df = metadata[color_col])
+  } else {
+    column_ha <- NULL
+  }
+  cscore_matrix <- as.matrix(cscore_matrix)
   ComplexHeatmap::Heatmap(cscore_matrix,col = heat_colors,name = "C-score",
                           row_title = "Position",column_title = "Sample", 
                           column_title_side = "bottom",
@@ -94,7 +65,8 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
                           clustering_method_columns = "ward.D2",
                           clustering_method_rows = "ward.D2",
                           row_split = 2, column_split = 3,
-                          top_annotation = column_ha, row_names_gp = grid::gpar(fontsize = 8))
+                          top_annotation = column_ha,
+                          row_names_gp = grid::gpar(fontsize = 6))
   
   
 }
