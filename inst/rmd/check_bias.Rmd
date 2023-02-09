@@ -39,7 +39,7 @@ The quality control section reports different metrics to help in identifying out
 Since more than 1.5% of the C-score corresponds to non-biological noise, normalisation during C-score calculation should limit the dispersion of the samples based on their C-score at all genomic positions in the whole series. **Here is given a Principal Component Analysis (PCA) plot that illustrates the distance between each sample based on its C-score at all genomic positions.** Color indicates distinct library. Moreover, this plot helps in identifying putative batch effect that can be corrected using the inter-normalization option (ComBat-seq tool).
 
 ```{r not corrected cscore PCA,echo=FALSE}
-plot_PCA(ribo_to_check,params$library_col)
+plot_pca(ribo_to_check,params$library_col)
 ```
 
 -----------------------

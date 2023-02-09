@@ -13,8 +13,8 @@
 #'
 #' @examples 
 #' data("ribo_toy")
-#' plot_PCA(ribo_toy,"run")
-plot_PCA <- function(ribo, color_col = NULL, axes = c(1,2),
+#' plot_pca(ribo_toy,"run")
+plot_pca <- function(ribo, color_col = NULL, axes = c(1,2),
                      only_annotated = FALSE, title = "default",
                      subtitle = "samples", pca_object_only = FALSE) {
   
@@ -42,7 +42,7 @@ plot_PCA <- function(ribo, color_col = NULL, axes = c(1,2),
 #'
 #' @param dudi.pca a dudi.pca object generated with Ade4
 #' @param metadata metadata table from RiboClass
-#' @inheritParams plot_PCA
+#' @inheritParams plot_pca
 #'
 #' @return a ggplot
 #'

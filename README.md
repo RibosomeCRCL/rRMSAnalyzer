@@ -85,7 +85,7 @@ ribo <- compute_cscore(ribo, method = "mean")
 ribo <- adjust_bias(ribo,"library")
 
 # Plot a Principal Component Analysis (PCA) whose colors depend on the "condition" column in metadata
-plot_PCA(ribo,"condition")
+plot_pca(ribo,"condition")
 ```
 
 ## Help, bug reports and suggestions
@@ -352,7 +352,7 @@ PCA (see also \[Visualization with PCA\] for more usages).
 Here is an example:
 
 ``` r
-plot_PCA(ribo = ribo,
+plot_pca(ribo = ribo,
          color_col = "run")
 ```
 
@@ -386,11 +386,11 @@ ribo_adjusted <- adjust_bias(ribo, batch = "run")
 #> - Flanking window : 6
 ```
 
-Batch effect adjustment can be verified using the plot_PCA function
+Batch effect adjustment can be verified using the plot_pca function
 using the new RiboClass:
 
 ``` r
-plot_PCA(ribo_adjusted,"run")
+plot_pca(ribo_adjusted,"run")
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
@@ -552,7 +552,7 @@ annotations](#customize-2ome-sites-annotations).
 
 ## Data visualization with PCA
 
-The function plot_PCA, which returns a ggplot, has been implemented with
+The function plot_pca, which returns a ggplot, has been implemented with
 several parameters for more flexibility:
 
 1.  **only_annotated**: plot samples based on the annotated RNA 2’Ome
@@ -564,7 +564,7 @@ conditions based on the rRNA 2’Ome profile of the provided
 human_methylated list:
 
 ``` r
-plot_PCA(ribo_adjusted,
+plot_pca(ribo_adjusted,
          color_col = "condition",
          only_annotated = TRUE)
 ```
@@ -575,7 +575,7 @@ plot_PCA(ribo_adjusted,
     user can choose the PCA axes of interest using the “axes” parameter.
 
 ``` r
-plot_PCA(ribo_adjusted,
+plot_pca(ribo_adjusted,
          color_col = "condition",
          axes = c(2,3), #PC2 and PC3 will be plotted
          only_annotated = TRUE)
@@ -587,7 +587,7 @@ plot_PCA(ribo_adjusted,
     pca_object_only to True:
 
 ``` r
-pca <- plot_PCA(ribo_adjusted,
+pca <- plot_pca(ribo_adjusted,
          color_col = "condition",
          only_annotated = TRUE,
          pca_object_only = TRUE)
@@ -651,18 +651,18 @@ particular sample of interest:
 ggplot_table <- format_to_plot(ribo_adjusted,"condition")
 ```
 
-|     | sampleID | Cscore             | condition |
-|:----|:---------|:-------------------|:----------|
-| 501 | RNA1     | 0                  | RNA ref   |
-| 502 | RNA1     | 0.282380396732789  | RNA ref   |
-| 503 | RNA1     | 0.110590988882387  | RNA ref   |
-| 504 | RNA1     | 0.615841584158416  | RNA ref   |
-| 505 | RNA1     | 0                  | RNA ref   |
-| 506 | RNA1     | 0                  | RNA ref   |
-| 507 | RNA1     | 0                  | RNA ref   |
-| 508 | RNA1     | 0.507692307692308  | RNA ref   |
-| 509 | RNA1     | 0.118110236220472  | RNA ref   |
-| 510 | RNA1     | 0.0637554585152839 | RNA ref   |
+|     | sampleID | siteID   |    Cscore | condition |
+|:----|:---------|:---------|----------:|:----------|
+| 501 | RNA1     | 18S_0501 | 0.0000000 | RNA ref   |
+| 502 | RNA1     | 18S_0502 | 0.2601804 | RNA ref   |
+| 503 | RNA1     | 18S_0503 | 0.0000000 | RNA ref   |
+| 504 | RNA1     | 18S_0504 | 0.3179712 | RNA ref   |
+| 505 | RNA1     | 18S_0505 | 0.5132894 | RNA ref   |
+| 506 | RNA1     | 18S_0506 | 0.6354548 | RNA ref   |
+| 507 | RNA1     | 18S_0507 | 0.0000000 | RNA ref   |
+| 508 | RNA1     | 18S_0508 | 0.0000000 | RNA ref   |
+| 509 | RNA1     | 18S_0509 | 0.0000000 | RNA ref   |
+| 510 | RNA1     | 18S_0510 | 0.9380812 | RNA ref   |
 
 Excerpt from the output ggplot-ready dataframe
 
@@ -690,15 +690,15 @@ mean_tb <- mean_samples_by_conditon(ribo_adjusted,
 
 | site       | condition |      mean |        sd |
 |:-----------|:----------|----------:|----------:|
+| 18S_Am1031 | RNA ref   | 0.9749922 | 0.0047461 |
 | 18S_Am1031 | cond1     | 0.9703699 | 0.0032725 |
 | 18S_Am1031 | cond2     | 0.9723714 | 0.0057723 |
-| 18S_Am1031 | RNA ref   | 0.9749922 | 0.0047461 |
+| 18S_Am1383 | RNA ref   | 0.9796876 | 0.0035939 |
 | 18S_Am1383 | cond1     | 0.9765212 | 0.0027083 |
 | 18S_Am1383 | cond2     | 0.9779684 | 0.0028759 |
-| 18S_Am1383 | RNA ref   | 0.9796876 | 0.0035939 |
+| 18S_Am159  | RNA ref   | 0.9684126 | 0.0022025 |
 | 18S_Am159  | cond1     | 0.9609920 | 0.0054882 |
 | 18S_Am159  | cond2     | 0.9623362 | 0.0065239 |
-| 18S_Am159  | RNA ref   | 0.9684126 | 0.0022025 |
-| 18S_Am166  | cond1     | 0.9791230 | 0.0027282 |
+| 18S_Am166  | RNA ref   | 0.9826490 | 0.0033169 |
 
 Excerpt from the output dataframe by condition

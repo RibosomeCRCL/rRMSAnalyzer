@@ -86,7 +86,7 @@ ribo <- compute_cscore(ribo, method = "mean")
 ribo <- adjust_bias(ribo,"library")
 
 # Plot a Principal Component Analysis (PCA) whose colors depend on the "condition" column in metadata
-plot_PCA(ribo,"condition")
+plot_pca(ribo,"condition")
 ```
 
 ## Help, bug reports and suggestions
@@ -269,7 +269,7 @@ Technical bias (i.e., batch effect) can be identified by plotting C-scores at al
 Here is an example:
 
 ```{r}
-plot_PCA(ribo = ribo,
+plot_pca(ribo = ribo,
          color_col = "run")
 ```
 
@@ -283,10 +283,10 @@ Batch effect of RiboMethSeq data can be adjusted using the ComBat-seq method (Pa
 ribo_adjusted <- adjust_bias(ribo, batch = "run")
 ```
 
-Batch effect adjustment can be verified using the plot_PCA function using the new RiboClass:
+Batch effect adjustment can be verified using the plot_pca function using the new RiboClass:
 
 ```{r}
-plot_PCA(ribo_adjusted,"run")
+plot_pca(ribo_adjusted,"run")
 ```
 
 After batch effect adjustment using ComBat-seq method, the two technical replicates RNA1 and RNA2 show reduced dispersion, and the samples are separated on the PCA axes independently of the library groups.
@@ -404,14 +404,14 @@ This vignette has also some explanations on how to create your own sites annotat
 
 ## Data visualization with PCA
 
-The function plot_PCA, which returns a ggplot, has been implemented with several parameters for more flexibility:
+The function plot_pca, which returns a ggplot, has been implemented with several parameters for more flexibility:
 
 1.  **only_annotated**: plot samples based on the annotated RNA 2'Ome sites only to determine whether samples clustered depending on their rRNA 2'Ome profile.
 
 Here is an example comparing samples reflecting different biological conditions based on the rRNA 2'Ome profile of the provided human_methylated list:
 
 ```{r}
-plot_PCA(ribo_adjusted,
+plot_pca(ribo_adjusted,
          color_col = "condition",
          only_annotated = TRUE)
 ```
@@ -419,7 +419,7 @@ plot_PCA(ribo_adjusted,
 2.  **axes**: by default, PC1 and PC2 axes are plotted. However, the user can choose the PCA axes of interest using the "axes" parameter.
 
 ```{r}
-plot_PCA(ribo_adjusted,
+plot_pca(ribo_adjusted,
          color_col = "condition",
          axes = c(2,3), #PC2 and PC3 will be plotted
          only_annotated = TRUE)
@@ -428,7 +428,7 @@ plot_PCA(ribo_adjusted,
 3.  **pca_object_only**: return the full dudi.pca object by setting pca_object_only to True:
 
 ```{r}
-pca <- plot_PCA(ribo_adjusted,
+pca <- plot_pca(ribo_adjusted,
          color_col = "condition",
          only_annotated = TRUE,
          pca_object_only = TRUE)

@@ -12,7 +12,7 @@
 #' \item \code{\link{compute_cscore}} - compute C-score for all genomic positions in your samples
 #' \item \code{\link{adjust_bias}} - adjust technical biases of your RiboMethSeq data with combatSeq
 #' \item \code{\link{extract_data}} - get a dataframe of c-score for all samples and all positions in your riboClass
-#' \item Plots, e.g.: \code{\link{plot_PCA}}.
+#' \item Plots, e.g.: \code{\link{plot_pca}}; \code{\link{plot_coa}} or \code{\link{plot_heatmap}}.
 #' }
 #' 
 #' To know how to start using this package, you can have a look at the vignette at 
