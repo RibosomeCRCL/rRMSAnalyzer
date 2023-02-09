@@ -1,0 +1,100 @@
+#' Plot heatmap for a riboclass object.
+#' @description This easy function will let you display an heatmap for any given column (count or c-score). You can add an additionnal layer of information with metadata columns.
+#' @param ribo A RiboClass object.
+#' @param color_col Vector of the metadata columns’ name used for coloring samples.
+#' @param only_annotated Use only annotated sites (default = TRUE).
+#' @param title Title to display on the plot. "default" for default title.
+#' @inheritParams pheatmap::pheatmap
+#' @param ... Pheatmap’s parameters
+#' @return A ggplot object of a heatmap. The distance used is manhattan and the clustering method is Ward.D2. See pheatmap doc for more details
+#' @export
+#'
+#' @examples 
+#' data("ribo_toy")
+#' plot_heatmap(ribo,  color_col = c("run","condition"), most_variant = TRUE)
+plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
+                         cutree_rows=4, cutree_cols=2,...) {
+  
+  matrix <- extract_data(ribo, "cscore", position_to_rownames = T,
+                         only_annotated = only_annotated)
+  
+  .plot_heatmap_complex(matrix, ribo[["metadata"]], color_col = color_col,
+                most_variant = FALSE, title = title, cutree_rows = cutree_rows,
+                cutree_cols = cutree_cols,...)
+}
+
+
+#' Internal function to plot heatmap.
+#'
+#' @param cscore_matrix c-score data for all samples as a matrix (from extract_data())
+#' @param metadata metadata for samples in cscore_matrix
+#' @inheritParams plot_heatmap
+#' @param most_variant select only the most variant positions (cannot be used from plot_heatmap())
+#'
+#' @return
+#'
+.plot_heatmap <- function(cscore_matrix = NULL, metadata = NULL,
+                          color_col = NULL, most_variant = F,
+                          only_annotated = TRUE,title="default",cutree_rows,
+                          cutree_cols, ...) {
+  
+  # Get the most variant sites
+  # TODO : create function
+  # if (most_variant) {
+  #   cscore_matrix <- get_most_or_less_variant(cscore_matrix)
+  # }
+  
+  if(is.null(color_col)) {
+    metadata_1 <- NULL
+
+  } else {
+    # rownames of metadata
+    rownames(metadata) <- metadata[["samplename"]]
+    # all character columns to factor columns
+    metadata[sapply(metadata, is.character)] <- lapply(
+      metadata[sapply(metadata, is.character)],
+      as.factor
+    )
+    
+    metadata_1 <- metadata[color_col]
+    metadata_1 <- data.frame(metadata_1)
+  }
+    
+  htmap <- pheatmap::pheatmap(cscore_matrix[complete.cases(cscore_matrix),],
+                              clustering_method = "ward.D2",
+                              clustering_distance_cols = "manhattan",
+                              clustering_distance_rows = "manhattan",
+                              #    color = viridis::magma(100),
+                              cutree_cols = cutree_cols,
+                              cutree_rows = cutree_rows,
+                              main = title,
+                              annotation_col = metadata_1,...
+  )
+  
+  return(htmap)
+}
+
+.plot_heatmap_complex <- function(cscore_matrix = NULL, metadata = NULL,
+                                  color_col = NULL, most_variant = F,
+                                  only_annotated = TRUE,title="default",cutree_rows,
+                                  cutree_cols, ...) {
+  
+  # The color palette is from pheatmap package
+  # https://github.com/raivokolde/pheatmap
+  heat_colors <- colorRampPalette(rev(RColorBrewer::brewer.pal(n = 7, name = "RdYlBu")))(100)
+  
+  column_ha = ComplexHeatmap::HeatmapAnnotation(df = metadata[color_col])
+  
+  ComplexHeatmap::Heatmap(cscore_matrix,col = heat_colors,name = "C-score",
+                          row_title = "Position",column_title = "Sample", 
+                          column_title_side = "bottom",
+                          cluster_rows = TRUE, cluster_columns = TRUE,
+                          clustering_distance_columns = "manhattan", 
+                          clustering_distance_rows = "manhattan",
+                          clustering_method_columns = "ward.D2",
+                          clustering_method_rows = "ward.D2",
+                          row_split = 2, column_split = 3,
+                          top_annotation = column_ha, row_names_gp = grid::gpar(fontsize = 8))
+  
+  
+}
