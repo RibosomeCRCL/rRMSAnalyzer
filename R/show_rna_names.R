@@ -10,7 +10,7 @@
 #' data("ribo_toy")
 #' show_rna_names(ribo = ribo_toy)
 show_rna_names <- function(ribo = NULL) {
-  if(is.null(ribo)) {stop("A ribo class object should be provided")}
+  if(class(ribo) != "RiboClass"){stop("A RiboClass object must be provided")}
   RNA_names <- ribo[["rna_names"]][[2]]
   return(RNA_names)
 }
