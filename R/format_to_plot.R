@@ -17,9 +17,9 @@ format_to_plot <- function(ribo, metadata_col = NULL, only_annotated = FALSE) {
                             only_annotated = only_annotated)
   # Add a new columns that correspond to rownames
   # TODO make sure that aggregate_samples_by_col returns the good rownames (with the site Name)
-  df.matrix$siteID <- rownames(df.matrix)
+  df.matrix$site <- rownames(df.matrix)
   # Transform the data with tidyr
-  df.tranform <- tidyr::gather(df.matrix, "sampleID", "Cscore", -siteID)
+  df.tranform <- tidyr::gather(df.matrix, "sample", "cscore", -site)
   
   if (is.null(metadata_col)) {
     # if no metadata, return the transformed data frame
