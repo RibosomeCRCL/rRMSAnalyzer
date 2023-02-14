@@ -6,7 +6,7 @@ Author: Janice Kielbassa, Theo Combe, Hermes Paraqindes
 Maintainer: Theo COMBE <epirnatools@lyon.unicancer.fr>
 Description: A package dedicated to ribomethseq analysis. It contains a set of easy-to-use functions.
 License: GPL (>= 3)
-biocViews: sva
+biocViews: sva, ComplexHeatmap
 Depends: R (>= 3.5.0)
 Imports: dplyr, stringr, tidyr, rlang, sva, factoextra, ade4, ggplot2
 LazyData: FALSE
