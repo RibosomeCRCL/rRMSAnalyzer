@@ -47,8 +47,7 @@
     ggplot2::ggtitle("RLE plot")+
     ggplot2::geom_hline(yintercept = 2*mad(rle_calc$value, na.rm = T), colour = "blue") + 
     ggplot2::geom_hline(yintercept = - 2*mad(rle_calc$value, na.rm = T), colour = "blue") +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(
-      colour = ifelse(rle_grouped$median < mad,"red","black"),angle = 90))
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
  
    return(rle.plot)
 }
