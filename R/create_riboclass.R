@@ -96,6 +96,13 @@ new_riboclass <- function(count_path,
       names(metadata)[metadata_id] <- "samplename"
     }
     
+    # Check if metadata has not duplicated filename or samplename
+    if(anyDuplicated(metadata[metadata_key])) 
+      stop("ERROR! Duplicated filename in metadata. Each sample must have an unique filename.")
+    
+    if(anyDuplicated(metadata["samplename"])) 
+      stop("ERROR! Duplicated samplename in metadata. Each sample must have an unique samplename.")
+    
     rownames(metadata) <- metadata[,"samplename"]
     
     # read count data
@@ -169,10 +176,10 @@ new_riboclass <- function(count_path,
       rna_count_fl_old <- rna_counts_fl
       rna_counts_fl <- rna_counts_fl[grep(pat, rna_counts_fl)]
       
-      if(length(rna_count_fl_old)> length(rna_counts_fl)) {
-        rna_count_missing <- rna_count_fl_old[which(
-          !is.element(rna_count_fl_old,rna_counts_fl))]
-         message(paste("[WARNING] Missing metadata for :",basename(rna_count_missing),collapse = "\n"))
+      if(length(metadata_filenames)> length(rna_counts_fl)) {
+        rna_count_missing <- metadata_filenames[which(
+          !is.element(metadata_filenames,basename(rna_counts_fl)))]
+         warning(paste("File",rna_count_missing,"does not exist. Typo in metadata ?",collapse = "\n"))
       }
       
     }
