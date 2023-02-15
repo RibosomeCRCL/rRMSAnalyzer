@@ -10,11 +10,12 @@
   values_to_plot,
   metadata,
   color_col = NA,
-  outlier
+  outlier,
+  horizontal
 )
 }
 \arguments{
-\item{matrix}{}
+\item{matrix}{Matrix of values}
 
 \item{values_col_name}{}
 
@@ -25,6 +26,9 @@
 \item{color_col}{}
 
 \item{outlier}{}
+}
+\value{
+ggplot boxplot
 }
 \description{
 (internal) plot boxplot for a given matrix of values

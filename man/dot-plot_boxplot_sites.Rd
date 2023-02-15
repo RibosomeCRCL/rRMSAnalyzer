@@ -4,28 +4,16 @@
 \alias{.plot_boxplot_sites}
 \title{Title}
 \usage{
-.plot_boxplot_sites(
-  matrix,
-  values_col_name,
-  values_to_plot,
-  metadata,
-  order_by,
-  outlier,
-  use_renamed_positions = T
-)
+.plot_boxplot_sites(matrix, values_to_plot, outlier, horizontal)
 }
 \arguments{
 \item{matrix}{}
 
-\item{values_col_name}{}
-
 \item{values_to_plot}{}
-
-\item{metadata}{}
 
 \item{outlier}{}
 
-\item{color_col}{}
+\item{values_col_name}{}
 }
 \description{
 Title

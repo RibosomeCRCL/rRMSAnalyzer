@@ -4,7 +4,7 @@
 \alias{boxplot_count}
 \title{Plot a boxplot of a RiboClass object’s counts.}
 \usage{
-boxplot_count(ribo, color_col = NA, outlier = T)
+boxplot_count(ribo, color_col = NA, outlier = TRUE, horizontal = FALSE)
 }
 \arguments{
 \item{ribo}{A RiboClass object.}
@@ -12,6 +12,8 @@ boxplot_count(ribo, color_col = NA, outlier = T)
 \item{color_col}{Name of the column in the metadata used for coloring samples.}
 
 \item{outlier}{Show boxplot outlier values.}
+
+\item{horizontal}{Show boxplot horizontally.}
 }
 \value{
 A ggplot object.
