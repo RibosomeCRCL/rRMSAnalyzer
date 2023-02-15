@@ -14,9 +14,9 @@
 #' data("ribo_toy")
 #' plot_heatmap(ribo,  color_col = c("run","condition"), most_variant = TRUE)
 plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
-                         cutree_rows=4, cutree_cols=2,...) {
+                         cutree_rows=4, cutree_cols=2, ...) {
   
-  matrix <- extract_data(ribo, "cscore", position_to_rownames = T,
+  matrix <- extract_data(ribo, "cscore", position_to_rownames = TRUE,
                          only_annotated = only_annotated)
   
   .plot_heatmap(matrix, ribo[["metadata"]], color_col = color_col,
@@ -32,11 +32,11 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
 #' @inheritParams plot_heatmap
 #' @param most_variant select only the most variant positions (cannot be used from plot_heatmap())
 #'
-#' @return
+#' @return ComplexHeatmap heatmap
 #' @keywords internal
 .plot_heatmap <- function(cscore_matrix = NULL, metadata = NULL,
-                                  color_col = NULL, most_variant = F,
-                                  only_annotated = TRUE,title="default",cutree_rows,
+                                  color_col = NULL, most_variant = FALSE,
+                                  title="default", cutree_rows,
                                   cutree_cols, ...) {
   
   # Get the most variant sites

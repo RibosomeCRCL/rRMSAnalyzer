@@ -8,8 +8,7 @@
   cscore_matrix = NULL,
   metadata = NULL,
   color_col = NULL,
-  most_variant = F,
-  only_annotated = TRUE,
+  most_variant = FALSE,
   title = "default",
   cutree_rows,
   cutree_cols,
@@ -25,8 +24,6 @@
 
 \item{most_variant}{select only the most variant positions (cannot be used from plot_heatmap())}
 
-\item{only_annotated}{Use only annotated sites (default = TRUE).}
-
 \item{title}{Title to display on the plot. "default" for default title.}
 
 \item{cutree_rows}{number of clusters the rows are divided into, based on the hierarchical clustering (using cutree).}
@@ -34,6 +31,9 @@
 \item{cutree_cols}{number of clusters the columns are divided into, based on the hierarchical clustering (using cutree).}
 
 \item{...}{Pheatmap’s parameters}
+}
+\value{
+ComplexHeatmap heatmap
 }
 \description{
 Internal function to plot heatmap.
