@@ -16,10 +16,9 @@ format_to_plot <- function(ribo, metadata_col = NULL, only_annotated = FALSE) {
   df.matrix <- extract_data(ribo,values_column,position_to_rownames = T,
                             only_annotated = only_annotated)
   # Add a new columns that correspond to rownames
-  # TODO make sure that aggregate_samples_by_col returns the good rownames (with the site Name)
-  df.matrix$siteID <- rownames(df.matrix)
+  df.matrix$site <- rownames(df.matrix)
   # Transform the data with tidyr
-  df.tranform <- tidyr::gather(df.matrix, "sampleID", "Cscore", -siteID)
+  df.tranform <- tidyr::gather(df.matrix, "sample", "cscore", -site)
   
   if (is.null(metadata_col)) {
     # if no metadata, return the transformed data frame
@@ -32,12 +31,11 @@ format_to_plot <- function(ribo, metadata_col = NULL, only_annotated = FALSE) {
       metadata_columns <- colnames(ribo[["metadata"]][metadata_col])
     }
     # Get the metadata
-    # TODO samplename column should always exists in metadata
     df.meta <- ribo[["metadata"]][c("samplename",metadata_col)]
     # if metadata is empty, return an error
     if (nrow(df.meta) == 0) { stop("No metadata found") }
     # Merge the metadata with the transformed data frame
-    df.tranform <- merge(df.tranform, df.meta, by.x = "sampleID", by.y = "samplename")
+    df.tranform <- merge(df.tranform, df.meta, by.x = "sample", by.y = "samplename")
     return(df.tranform)
   }
 }
