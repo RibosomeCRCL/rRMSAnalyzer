@@ -8,8 +8,8 @@
 #' @param count_value Name or index of the column containing count values.
 #' @param count_rnaid Name or index of the column containing the name of the RNA in count data.
 #' @param count_pos Name or index of the column containing the site's position in count data.
-#' @param metadata_key Name or index of the column containing the samples' filename.
-#' @param metadata_id If it exists, name or index of the column containing the sample name.
+#' @param metadata_key (required when metadata not null) Name or index of the column containing the samples' filename.
+#' @param metadata_id Name or index of the column containing the sample name.
 #'
 #' @description 
 #' Read ribomethseq count files and their associated metadata and merge them into a RiboClass.

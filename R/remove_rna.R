@@ -1,9 +1,9 @@
 #' Remove one or more RNA among your RiboClass' samples
 #'
-#' @param ribo A RiboClass.
-#' @param rna_to_remove Name(s) of the RNA(s) to remove.
+#' @param ribo A RiboClass object.
+#' @param rna_to_remove One RNA name or a vector of RNA names.
 #'
-#' @return a RiboClass with the RNA(s) removed
+#' @return A RiboClass with the RNA(s) removed in data and rna_names sections.
 #' @export
 #'
 #' @examples

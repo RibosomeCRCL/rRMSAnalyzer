@@ -1,11 +1,8 @@
-#' Rename RNAs in your RiboClass
+#' Rename RNAs in a RiboClass object
 #' 
-#' @param ribo a RiboClass object
-#' @param new_names the new names for your RNAs (by RNA size order)
-#'
-#' 
-#'
-#' @return a RiboClass with updated rna names in data.
+#' @param ribo A RiboClass object.
+#' @param new_names Vector of new RNA names (by RNA size order).
+#' @return a RiboClass with updated RNA names in both data and rna_names sections.
 #' @export
 #'
 #' @examples

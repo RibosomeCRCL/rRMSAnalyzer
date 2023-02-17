@@ -1,6 +1,6 @@
 #' Generate html report about possible batch effect for a given RiboClass.
 #' 
-#' @param ribo A RiboClass.
+#' @param ribo A RiboClass object.
 #' @param library_col Library/run column in the metadata.
 #' @param project_name Name of the project.
 #' @param output_dir Path to output dir. Working directory is selected by default.

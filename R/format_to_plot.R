@@ -1,12 +1,12 @@
-#' Transfrom RiboClass data to a ggplot-friendly data frame
+#' Transform RiboClass data to a "ggplot-friendly" data frame.
 #' 
-#' Turn a riboClass into a dataframe. You can append some metadata columns if
-#' you need extra information for your ggplot.
+#' Turn a riboClass into a dataframe that should be ready to be used in ggplot.
+#' Metadata columns can be added if extra informations are needed.
 #'
-#' @param ribo a RiboClass object.
-#' @param metadata_col The metadata columns to add when transforming.
+#' @param ribo A RiboClass object.
+#' @param metadata_col Metadata columns to add. Must be in RiboClass' metadata.
 #' @param only_annotated Keep only sites that have been annotated.
-#' @return A ggplot-friendly dataframe.
+#' @return A ggplot-friendly dataframe with the following columns : 1) site; 2) sample; 3) cscore; ...) any metadata added
 #' @export
 #' 
 format_to_plot <- function(ribo, metadata_col = NULL, only_annotated = FALSE) {
