@@ -55,6 +55,8 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
   } else {
     column_ha <- NULL
   }
+  
+  cscore_matrix <- na.omit(cscore_matrix)
   cscore_matrix <- as.matrix(cscore_matrix)
   ComplexHeatmap::Heatmap(cscore_matrix,col = heat_colors,name = "C-score",
                           row_title = "Position",column_title = "Sample", 
