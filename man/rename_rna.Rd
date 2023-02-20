@@ -2,20 +2,20 @@
 % Please edit documentation in R/rename_rna.R
 \name{rename_rna}
 \alias{rename_rna}
-\title{Rename RNAs in your RiboClass}
+\title{Rename RNAs in a RiboClass object}
 \usage{
 rename_rna(ribo, new_names = c("5S", "5.8S", "18S", "28S"))
 }
 \arguments{
-\item{ribo}{a RiboClass object}
+\item{ribo}{A RiboClass object.}
 
-\item{new_names}{the new names for your RNAs (by RNA size order)}
+\item{new_names}{Vector of new RNA names (by RNA size order).}
 }
 \value{
-a RiboClass with updated rna names in data.
+a RiboClass with updated RNA names in both data and rna_names sections.
 }
 \description{
-Rename RNAs in your RiboClass
+Rename RNAs in a RiboClass object
 }
 \examples{
 data("ribo_toy")

@@ -37,9 +37,9 @@ load_ribodata(
 
 \item{count_pos}{Name or index of the column containing the site's position in count data.}
 
-\item{metadata_key}{Name or index of the column containing the samples' filename.}
+\item{metadata_key}{(required when metadata not null) Name or index of the column containing the samples' filename.}
 
-\item{metadata_id}{If it exists, name or index of the column containing the sample name.}
+\item{metadata_id}{Name or index of the column containing the sample name.}
 
 \item{flanking}{Size of the local coverage.}
 

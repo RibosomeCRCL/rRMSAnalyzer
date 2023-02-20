@@ -7,7 +7,7 @@
 report_qc(ribo, library_col, project_name = "", output_dir = getwd())
 }
 \arguments{
-\item{ribo}{A RiboClass.}
+\item{ribo}{A RiboClass object.}
 
 \item{library_col}{Library/run column in the metadata.}
 

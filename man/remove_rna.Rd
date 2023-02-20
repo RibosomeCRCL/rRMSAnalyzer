@@ -7,12 +7,12 @@
 remove_rna(ribo, rna_to_remove)
 }
 \arguments{
-\item{ribo}{A RiboClass.}
+\item{ribo}{A RiboClass object.}
 
-\item{rna_to_remove}{Name(s) of the RNA(s) to remove.}
+\item{rna_to_remove}{One RNA name or a vector of RNA names.}
 }
 \value{
-a RiboClass with the RNA(s) removed
+A RiboClass with the RNA(s) removed in data and rna_names sections.
 }
 \description{
 Remove one or more RNA among your RiboClass' samples
