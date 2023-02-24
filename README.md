@@ -10,9 +10,10 @@ counts as input, adjust batch effect with ComBat-Seq, visualize the data
 and provide a table with the annotated human rRNA sites and their
 C-scores.
 
-> **Note** We have also developed a [dedicated Nextflow pipeline]() to
-> process the data from sequencing output (fastq files) to useful raw
-> data for rRMSAnalyzer (read end counts).
+> **Note** We have also developed a [dedicated Nextflow
+> pipeline](https://github.com/RibosomeCRCL/ribomethseq-nf) to process
+> the data from sequencing output (fastq files) to useful raw data for
+> rRMSAnalyzer (read end counts).
 
 - [Installation](#installation)
 - [Usage](#usage)
@@ -62,7 +63,7 @@ with :
 
 ``` r
 library(devtools)
-devtools::install_github("EPIRNAtools/rRMSAnalyzer")
+devtools::install_github("RibosomeCRCL/rRMSAnalyzer")
 ```
 
 ## Usage
@@ -651,18 +652,18 @@ particular sample of interest:
 ggplot_table <- format_to_plot(ribo_adjusted,"condition")
 ```
 
-|     | sampleID | Cscore             | condition |
-|:----|:---------|:-------------------|:----------|
-| 501 | RNA1     | 0                  | RNA ref   |
-| 502 | RNA1     | 0.282380396732789  | RNA ref   |
-| 503 | RNA1     | 0.110590988882387  | RNA ref   |
-| 504 | RNA1     | 0.615841584158416  | RNA ref   |
-| 505 | RNA1     | 0                  | RNA ref   |
-| 506 | RNA1     | 0                  | RNA ref   |
-| 507 | RNA1     | 0                  | RNA ref   |
-| 508 | RNA1     | 0.507692307692308  | RNA ref   |
-| 509 | RNA1     | 0.118110236220472  | RNA ref   |
-| 510 | RNA1     | 0.0637554585152839 | RNA ref   |
+|     | sample | site     |    cscore | condition |
+|:----|:-------|:---------|----------:|:----------|
+| 501 | RNA1   | 18S_0501 | 0.0000000 | RNA ref   |
+| 502 | RNA1   | 18S_0502 | 0.2601804 | RNA ref   |
+| 503 | RNA1   | 18S_0503 | 0.0000000 | RNA ref   |
+| 504 | RNA1   | 18S_0504 | 0.3179712 | RNA ref   |
+| 505 | RNA1   | 18S_0505 | 0.5132894 | RNA ref   |
+| 506 | RNA1   | 18S_0506 | 0.6354548 | RNA ref   |
+| 507 | RNA1   | 18S_0507 | 0.0000000 | RNA ref   |
+| 508 | RNA1   | 18S_0508 | 0.0000000 | RNA ref   |
+| 509 | RNA1   | 18S_0509 | 0.0000000 | RNA ref   |
+| 510 | RNA1   | 18S_0510 | 0.9380812 | RNA ref   |
 
 Excerpt from the output ggplot-ready dataframe
 
@@ -690,15 +691,15 @@ mean_tb <- mean_samples_by_conditon(ribo_adjusted,
 
 | site       | condition |      mean |        sd |
 |:-----------|:----------|----------:|----------:|
+| 18S_Am1031 | RNA ref   | 0.9749922 | 0.0047461 |
 | 18S_Am1031 | cond1     | 0.9703699 | 0.0032725 |
 | 18S_Am1031 | cond2     | 0.9723714 | 0.0057723 |
-| 18S_Am1031 | RNA ref   | 0.9749922 | 0.0047461 |
+| 18S_Am1383 | RNA ref   | 0.9796876 | 0.0035939 |
 | 18S_Am1383 | cond1     | 0.9765212 | 0.0027083 |
 | 18S_Am1383 | cond2     | 0.9779684 | 0.0028759 |
-| 18S_Am1383 | RNA ref   | 0.9796876 | 0.0035939 |
+| 18S_Am159  | RNA ref   | 0.9684126 | 0.0022025 |
 | 18S_Am159  | cond1     | 0.9609920 | 0.0054882 |
 | 18S_Am159  | cond2     | 0.9623362 | 0.0065239 |
-| 18S_Am159  | RNA ref   | 0.9684126 | 0.0022025 |
-| 18S_Am166  | cond1     | 0.9791230 | 0.0027282 |
+| 18S_Am166  | RNA ref   | 0.9826490 | 0.0033169 |
 
 Excerpt from the output dataframe by condition

@@ -21,7 +21,7 @@ RiboMethSeq is an RNAseq-based approach to analyze 2'O-ribose methylation (2'Ome
 rRMSAnalyzer is an R package that provides a set of easy-to-use functions to compute C-scores from RiboMethSeq read end counts as input, adjust batch effect with ComBat-Seq, visualize the data and provide a table with the annotated human rRNA sites and their C-scores.
 
 > **Note**
-> We have also developed a [dedicated Nextflow pipeline]() to process the data from sequencing output (fastq files) to useful raw data for rRMSAnalyzer (read end counts).
+> We have also developed a [dedicated Nextflow pipeline](https://github.com/RibosomeCRCL/ribomethseq-nf) to process the data from sequencing output (fastq files) to useful raw data for rRMSAnalyzer (read end counts).
 
 - [Installation](#installation)
 - [Usage](#usage)
@@ -63,7 +63,7 @@ The latest version of rRMSAnalyzer package can be installed from Github with :
 
 ```{r, eval=FALSE}
 library(devtools)
-devtools::install_github("EPIRNAtools/rRMSAnalyzer")
+devtools::install_github("RibosomeCRCL/rRMSAnalyzer")
 ```
 
 ## Usage
