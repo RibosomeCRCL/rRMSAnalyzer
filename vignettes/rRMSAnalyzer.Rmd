@@ -29,10 +29,11 @@ library(rRMSAnalyzer)
 
 # Installation
 
-The latest version of rRMSAnalyzer package can be installed from CRAN with :
+The latest version of rRMSAnalyzer package can be installed from Github with :
 
 ```{r, eval=FALSE}
-install.packages("rRMSAnalyzer")
+library(devtools)
+devtools::install_github("RibosomeCRCL/rRMSAnalyzer")
 ```
 
 # Usage
