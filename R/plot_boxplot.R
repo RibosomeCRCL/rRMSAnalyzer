@@ -95,7 +95,8 @@ boxplot_cscores <- function(ribo,outlier = TRUE, horizontal = FALSE) {
   
   matrix_melted <- reshape2::melt(matrix_inv, id.vars = id_vars,value.name = values_col_name)
   
-
+  matrix_melted[["Sample"]] <- factor(matrix_melted[["Sample"]],
+                                    levels =  unique(matrix_melted[["Sample"]])) 
   shape_outlier <- NA
   if(outlier) shape_outlier <- 19
   

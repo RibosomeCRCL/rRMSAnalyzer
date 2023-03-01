@@ -37,6 +37,7 @@
   outlier_shape=NA
   if(show_outlier) outlier_shape = 19
   mad <- - 2*mad(rle_calc$value, na.rm = T)
+  rle_calc[["key"]] <- factor(rle_calc[["key"]],levels = unique(rle_calc[["key"]]))
   rle_grouped <- rle_calc %>% dplyr::group_by(key) %>% dplyr::summarise(median = stats::median(value, na.rm = TRUE))
   
   rle.plot <- ggplot2::ggplot(rle_calc, ggplot2::aes(x = key, value)) + 
