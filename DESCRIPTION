@@ -2,7 +2,7 @@ Package: rRMSAnalyzer
 Type: Package
 Title: rRMSAnalyzer: package to analyze RiboMethSeq data
 Version: 1.0.0
-Author: Janice Kielbassa, Theo Combe, Hermes Paraqindes
+Author: Theo Combe, Hermes Paraqindes, Janice Kielbassa
 Maintainer: Theo COMBE <epirnatools@lyon.unicancer.fr>
 Description: A package dedicated to ribomethseq analysis. It contains a set of easy-to-use functions.
 License: GPL (>= 3)
@@ -10,9 +10,8 @@ biocViews: sva
 Depends: R (>= 3.5.0)
 Imports: dplyr, stringr, tidyr, rlang, sva, factoextra, ade4, ggplot2
 LazyData: FALSE
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 NeedsCompilation: no
-Packaged: 2019-02-04 13:27:40 UTC; janice
 Encoding: UTF-8
 Suggests: 
     knitr,
