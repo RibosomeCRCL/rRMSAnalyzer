@@ -27,7 +27,7 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
 
 #' Internal function to plot heatmap.
 #'
-#' @param cscore_matrix c-score data for all samples as a matrix (from extract_data())
+#' @param cscore_matrix Sites x Samples C-score matrix (output of extract_data()).
 #' @param metadata metadata for samples in cscore_matrix
 #' @inheritParams plot_heatmap
 #' @param most_variant select only the most variant positions (cannot be used from plot_heatmap())
@@ -48,10 +48,13 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
   
   # The color palette is from pheatmap package
   # https://github.com/raivokolde/pheatmap
-  heat_colors <- colorRampPalette(rev(RColorBrewer::brewer.pal(n = 7, name = "RdYlBu")))(100)
+  # heat_colors <- colorRampPalette(rev(RColorBrewer::brewer.pal(n = 7, name = "RdYlBu")))(100)
+  heat_colors <- hcl.colors(7,"inferno")
+  
   
   if(!is.null(color_col)) {
-    column_ha <- ComplexHeatmap::HeatmapAnnotation(df = metadata[color_col])
+    col <- generate_palette(metadata,color_col)
+    column_ha <- ComplexHeatmap::HeatmapAnnotation(df = metadata[color_col], col = col)
   } else {
     column_ha <- NULL
   }
@@ -66,7 +69,7 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
                           clustering_distance_rows = "manhattan",
                           clustering_method_columns = "ward.D2",
                           clustering_method_rows = "ward.D2",
-                          row_split = 2, column_split = 3,
+                          row_split = cutree_rows, column_split = cutree_cols,
                           top_annotation = column_ha,
                           row_names_gp = grid::gpar(fontsize = 6))
   

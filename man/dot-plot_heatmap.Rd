@@ -16,7 +16,7 @@
 )
 }
 \arguments{
-\item{cscore_matrix}{c-score data for all samples as a matrix (from extract_data())}
+\item{cscore_matrix}{Sites x Samples C-score matrix (output of extract_data()).}
 
 \item{metadata}{metadata for samples in cscore_matrix}
 
