@@ -11,7 +11,7 @@ plot_pca(
   only_annotated = FALSE,
   title = "default",
   subtitle = "samples",
-  pca_object_only = FALSE
+  object_only = FALSE
 )
 }
 \arguments{
@@ -27,10 +27,10 @@ plot_pca(
 
 \item{subtitle}{Subtitle to display on the plot. "samples" for number of samples. "none" for no subtitle.}
 
-\item{pca_object_only}{Return directly the full dudi.pca object, without generating the plot.}
+\item{object_only}{Return directly the full dudi.pca object, without generating the plot.}
 }
 \value{
-A ggplot or a dudi.pca object if pca_object_only is set to True.
+A ggplot or a dudi.pca object if object_only is set to True.
 }
 \description{
 Principal component analysis of a RiboClass object

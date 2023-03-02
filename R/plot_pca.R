@@ -7,8 +7,8 @@
 #' @param only_annotated If TRUE, use only annotated sites to plot PCA.
 #' @param title Title to display on the plot. "default" for default title.
 #' @param subtitle Subtitle to display on the plot. "samples" for number of samples. "none" for no subtitle.
-#' @param pca_object_only Return directly the full dudi.pca object, without generating the plot.
-#' @return A ggplot or a dudi.pca object if pca_object_only is set to True.
+#' @param object_only Return directly the full dudi.pca object, without generating the plot.
+#' @return A ggplot or a dudi.pca object if object_only is set to True.
 #' @export
 #'
 #' @examples 
@@ -16,21 +16,21 @@
 #' plot_pca(ribo_toy,"run")
 plot_pca <- function(ribo, color_col = NULL, axes = c(1,2),
                      only_annotated = FALSE, title = "default",
-                     subtitle = "samples", pca_object_only = FALSE) {
+                     subtitle = "samples", object_only = FALSE) {
   
   if (is.null(ribo)) {stop("MISSING parameter: please provide a RiboClass!")}
   if (!inherits(ribo, "RiboClass")) {stop("ribo argument is not a RiboClass!")}
   if (isFALSE(ribo$has_cscore)) {
       stop("You should calculate Cscores first using calculate_score function")}
   
-  check_metadata(ribo,color_col)
+  if(!is.null(color_col)) check_metadata(ribo,color_col)
   
   pca_matrix <- extract_data(ribo,"cscore",position_to_rownames = TRUE,
                              only_annotated = only_annotated)
   
 
   pca_calculated <- .calculate_pca(pca_matrix)
-  if(pca_object_only) return(pca_calculated)
+  if(object_only) return(pca_calculated)
   facto_pca <- .plot_pca(pca_calculated,ribo[["metadata"]],color_col,
                          axes = axes, title = title, subtitle = subtitle)
   return(facto_pca)

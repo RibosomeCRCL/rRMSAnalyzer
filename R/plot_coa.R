@@ -27,8 +27,8 @@
 #' @examples 
 #' data("ribo_toy")
 #' plot_coa(ribo = ribo_toy, color_col = "condition")
-plot_coa <- function(ribo,color_col = NULL, axes = c(1,2),only_annotated=FALSE, title="default", subtitle="default",object_only=FALSE) {
-  check_metadata(ribo,color_col)
+plot_coa <- function(ribo,color_col = NULL, axes = c(1,2), only_annotated=FALSE, title="default", subtitle="default", object_only=FALSE) {
+  if(!is.null(color_col)) check_metadata(ribo,color_col)
   
   coa_matrix <- extract_data(ribo,"count",position_to_rownames = T, only_annotated=only_annotated)
    
