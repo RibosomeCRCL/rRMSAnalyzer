@@ -21,7 +21,7 @@ extract_data(
 \item{only_annotated}{If true, return a dataframe with only annotated sites. Return all sites otherwise.}
 }
 \value{
-A dataframe.
+A position x samples dataframe. Position can be all or only annotated sites. A site column can be added if position_to_rownames = FALSE.
 }
 \description{
 For a given column in data, this function will generate a dataframe with all samples.

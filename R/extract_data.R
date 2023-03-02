@@ -7,7 +7,7 @@
 #' @param col Column in data you want extract data from (cscore or count).
 #' @param position_to_rownames If true, position will be included as a rowname. They will in a new column otherwise.
 #' @param only_annotated If true, return a dataframe with only annotated sites. Return all sites otherwise.
-#' @return A dataframe.
+#' @return A position x samples dataframe. Position can be all or only annotated sites. A site column can be added if position_to_rownames = FALSE.
 #' @export
 #'
 #' @examples

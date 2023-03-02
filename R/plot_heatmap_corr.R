@@ -19,14 +19,14 @@ plot_heatmap_corr <- function(ribo, values_col, color_col) {
 }
 #' Internal function of plot_heatmap_corr.
 #'
-#' @param cscore_matrix matrix of cscore
+#' @param cscore_matrix  Sites x Samples C-score matrix (output of extract_data()).
 #' @param metadata Metadata of samples in matrix
 #' @param color_col Vector of the metadata columns’ name used for coloring samples.
 #'
 #' @return ComplexHeatmap heatmap
 #' 
 .plot_heatmap_corr <- function(cscore_matrix = NULL, metadata = NULL,
-                               color_col = NA) {
+                               color_col = NULL) {
   
   # rownames of metadata
   rownames(metadata) <- metadata[, "samplename"]
@@ -40,7 +40,7 @@ plot_heatmap_corr <- function(ribo, values_col, color_col) {
   corr_matrix <- 1 - cor(cscore_matrix,use = "complete.obs")
   dist_cor <- as.dist(corr_matrix)
   metadata_1 <- NA
-  if(!is.na(color_col)) {
+  if(!is.null(color_col)) {
     metadata_1 <- metadata[color_col]
     metadata_1 <- data.frame(metadata_1)
     
