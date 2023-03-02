@@ -22,6 +22,9 @@ plot_pca <- function(ribo, color_col = NULL, axes = c(1,2),
   if (!inherits(ribo, "RiboClass")) {stop("ribo argument is not a RiboClass!")}
   if (isFALSE(ribo$has_cscore)) {
       stop("You should calculate Cscores first using calculate_score function")}
+  
+  check_metadata(ribo,color_col)
+  
   pca_matrix <- extract_data(ribo,"cscore",position_to_rownames = TRUE,
                              only_annotated = only_annotated)
   
