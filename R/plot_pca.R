@@ -84,7 +84,7 @@ plot_pca <- function(ribo, color_col = NULL, axes = c(1,2),
                                        labelsize = 4,
                                        axes = axes) + 
     ggplot2::theme_bw()+
-    ggplot2::theme(text = ggplot2::element_text(size = 16)) + 
+    ggplot2::theme(text = ggplot2::element_text(size = 12)) + 
     ggplot2::labs(subtitle = plot_subtitle) + 
     ggplot2::ylab(paste("PC", axes[2],":", round(dudi.pca$eig[axes[2]]/sum(dudi.pca$eig) * 100, 1), "%")) +
     ggplot2::xlab(paste("PC", axes[1],":", round(dudi.pca$eig[axes[1]]/sum(dudi.pca$eig) * 100, 1), "%"))
