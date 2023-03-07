@@ -400,7 +400,7 @@ plot_pca(ribo_adjusted,
 pca <- plot_pca(ribo_adjusted,
          color_col = "condition",
          only_annotated = TRUE,
-         pca_object_only = TRUE)
+         object_only = TRUE)
 ```
 
 # Export data

@@ -12,7 +12,10 @@
 #'
 #' @examples 
 #' data("ribo_toy")
-#' plot_heatmap(ribo,  color_col = c("run","condition"), most_variant = TRUE)
+#' data("human_methylated")#' 
+#' ribo_toy <- rename_rna(ribo_toy)
+#' ribo_toy <- annotate_site(ribo_toy,human_methylated)
+#' plot_heatmap(ribo_toy,  color_col = c("run","condition"), only_annotated=TRUE)
 plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
                          cutree_rows=4, cutree_cols=2, ...) {
   
