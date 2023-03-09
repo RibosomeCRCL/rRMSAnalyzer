@@ -10,6 +10,8 @@ plot_counts_fraction <- function(ribo = NULL) {
   
   all_data_sums$rna <- factor(all_data_sums$rna, levels = ribo$rna_names$current_name)
   
+  all_data_sums$samplesid <- factor(all_data_sums$samplesid, levels = names(ribo[["data"]]))
+  
   counts_plot <- ggplot(all_data_sums, aes(x = samplesid, y = sum.counts, fill = rna))
   
   counts_plot <- counts_plot + geom_bar(stat = "identity", position = "fill") +
