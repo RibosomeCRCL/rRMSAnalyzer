@@ -4,12 +4,14 @@
 \alias{adjust_bias}
 \title{Correct batch effect with ComBatseq method}
 \usage{
-adjust_bias(ribo, batch, ...)
+adjust_bias(ribo, batch, ncores, ...)
 }
 \arguments{
 \item{ribo}{a RiboClass object.}
 
 \item{batch}{Name of the column in metadata that contains the batch number.}
+
+\item{ncores}{Number of cores to use in case of multithreading.}
 
 \item{...}{Parameters to pass to sva's \code{\link[sva]{ComBat_seq}} function.}
 }

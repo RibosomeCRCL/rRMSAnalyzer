@@ -8,6 +8,7 @@
 #' 
 #' @param ribo a RiboClass object.
 #' @param batch Name of the column in metadata that contains the batch number.
+#' @param ncores Number of cores to use in case of multithreading.
 #' @param ... Parameters to pass to sva's \code{\link[sva]{ComBat_seq}} function.
 #' @return RiboClass with adjusted read end count values and automatically recomputed C-scores.
 #' @export
@@ -23,7 +24,7 @@
 #' ribo_toy_two <- keep_ribo_samples(ribo_toy,c("S1","RNA1","S7","RNA2"))
 #' ribo_toy_adjusted <- adjust_bias(ribo_toy_two,"run") 
 #' 
-adjust_bias <- function(ribo, batch, ...) {
+adjust_bias <- function(ribo, batch, ncores, ...) {
   # Get the count matrix.
   # example :
   #            VMT11.csv VMT12.csv VMT13.csv VMT14.csv VMT15.csv VMT16.csv
@@ -45,7 +46,7 @@ adjust_bias <- function(ribo, batch, ...) {
       message("Recomputing c-score with the following parameters :",
       "\n- C-score method : ", ribo_updated[["cscore_method"]],
       "\n- Flanking window : ", ribo_updated[["cscore_window"]],"\n")
-      ribo_updated <- compute_cscore(ribo_updated, ribo_updated[["cscore_window"]],ribo_updated[["cscore_method"]],2)
+      ribo_updated <- compute_cscore(ribo_updated, ribo_updated[["cscore_window"]],ribo_updated[["cscore_method"]],ncores)
     }
     
     ribo_updated["combatSeq_count"] <- TRUE
