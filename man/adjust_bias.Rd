@@ -4,7 +4,7 @@
 \alias{adjust_bias}
 \title{Correct batch effect with ComBatseq method}
 \usage{
-adjust_bias(ribo, batch, ncores, ...)
+adjust_bias(ribo, batch, ncores = 1, ...)
 }
 \arguments{
 \item{ribo}{a RiboClass object.}

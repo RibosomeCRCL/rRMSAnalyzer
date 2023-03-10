@@ -24,7 +24,7 @@
 #' ribo_toy_two <- keep_ribo_samples(ribo_toy,c("S1","RNA1","S7","RNA2"))
 #' ribo_toy_adjusted <- adjust_bias(ribo_toy_two,"run") 
 #' 
-adjust_bias <- function(ribo, batch, ncores, ...) {
+adjust_bias <- function(ribo, batch, ncores = 1, ...) {
   # Get the count matrix.
   # example :
   #            VMT11.csv VMT12.csv VMT13.csv VMT14.csv VMT15.csv VMT16.csv
