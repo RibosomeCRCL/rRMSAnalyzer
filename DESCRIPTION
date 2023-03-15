@@ -10,11 +10,13 @@ biocViews: sva, ComplexHeatmap
 Depends: R (>= 3.5.0)
 Imports: dplyr, stringr, tidyr, rlang, sva, factoextra, ade4, ggplot2
 LazyData: FALSE
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 NeedsCompilation: no
 Packaged: 2019-02-04 13:27:40 UTC; janice
 Encoding: UTF-8
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3
