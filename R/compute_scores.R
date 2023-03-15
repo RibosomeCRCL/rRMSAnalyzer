@@ -1,32 +1,43 @@
 # (internal) Compute a c-score for all position of a single RNA
-.compute_rna_cscore <- function(ds, flanking=6, method) {
+.compute_rna_cscore <- function(ds, flanking = 6, method) {
   # check that all parameters exist
-  if (is.null(ds)) {stop("MISSING parameter. Please specify a data frame <ds>.")}
+  if (is.null(ds)) {
+    stop("MISSING parameter. Please specify a data frame <ds>.")
+  }
   
   # remove any cscore-related columns if they already exist
-  ds[,c("flanking_median","flanking_mad","flanking_mean","cscore")] <- list(NULL)
+  ds[, c("flanking_median",
+         "flanking_mad",
+         "flanking_mean",
+         "cscore")] <- list(NULL)
   # get the count column
-   data_counts_col <- "count"
+  data_counts_col <- "count"
   
   # compute scores
-  for (i in (flanking + 1) : (dim(ds)[1] - flanking)){
-  if(method == "median") {
-    ds[i, "flanking_median"] <- stats::median(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # median
+  for (i in (flanking + 1):(dim(ds)[1] - flanking)) {
+    if (method == "median") {
+      ds[i, "flanking_median"] <-
+        stats::median(ds[c((i - flanking):(i - 1), (i + 1):(i + flanking)), data_counts_col]) # median
     }
     
- else if(method == "mean") {
-    ds[i, "flanking_mean"] <- mean(ds[c((i-flanking) : (i-1), (i+1) : (i + flanking)), data_counts_col]) # mean
- }
+    else if (method == "mean") {
+      ds[i, "flanking_mean"] <-
+        mean(ds[c((i - flanking):(i - 1), (i + 1):(i + flanking)), data_counts_col]) # mean
+    }
     
   }
-   if(method == "median") {
-     scorec_median_raw <- 1 - ds[, data_counts_col]/ds[, "flanking_median"]
-     ds[, "cscore"] <- ifelse(scorec_median_raw < 0, 0, scorec_median_raw)
-   }
-   else if(method == "mean") {
-     scorec_mean_raw <- 1 - ds[, data_counts_col]/ds[, "flanking_mean"]
-     ds[, "cscore"] <- ifelse(scorec_mean_raw < 0, 0, scorec_mean_raw)
-   }
+  
+  if (method == "median") {
+    scorec_median_raw <-
+      1 - ds[, data_counts_col] / ds[, "flanking_median"]
+    ds[, "cscore"] <-
+      ifelse(scorec_median_raw < 0, 0, scorec_median_raw)
+  }
+  else if (method == "mean") {
+    scorec_mean_raw <- 1 - ds[, data_counts_col] / ds[, "flanking_mean"]
+    ds[, "cscore"] <-
+      ifelse(scorec_mean_raw < 0, 0, scorec_mean_raw)
+  }
   return(ds)
 }
 
