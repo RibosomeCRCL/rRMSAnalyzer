@@ -13,7 +13,7 @@
 #' data("ribo_toy")
 #' plot_heatmap_corr(ribo_toy,"count","condition")
 #' 
-plot_heatmap_corr <- function(ribo, values_col, color_col) {
+plot_heatmap_corr <- function(ribo, values_col, color_col=NULL) {
   matrix <- extract_data(ribo, values_col, position_to_rownames = T)
   .plot_heatmap_corr(matrix, ribo[["metadata"]], color_col = color_col)
 }
@@ -25,42 +25,29 @@ plot_heatmap_corr <- function(ribo, values_col, color_col) {
 #'
 #' @return ComplexHeatmap heatmap
 #' 
-.plot_heatmap_corr <- function(cscore_matrix = NULL, metadata = NULL,
-                               color_col = NULL) {
+.plot_heatmap_corr <- function(cscore_matrix, metadata,
+                               color_col) {
   
-  # rownames of metadata
-  rownames(metadata) <- metadata[, "samplename"]
-  
-  # all character columns to factor columns
-  metadata[sapply(metadata, is.character)] <- lapply(
-    metadata[sapply(metadata, is.character)],
-    as.factor
-  )
-
-  corr_matrix <- 1 - cor(cscore_matrix,use = "complete.obs")
-  dist_cor <- as.dist(corr_matrix)
-  metadata_1 <- NA
   if(!is.null(color_col)) {
-    metadata_1 <- metadata[color_col]
-    metadata_1 <- data.frame(metadata_1)
-    
-  }
-  else {
-    metadata_1 <- NULL
+    col <- generate_palette(metadata,color_col)
+    column_ha <- ComplexHeatmap::HeatmapAnnotation(df = metadata[color_col], col = col)
+  } else {
+    column_ha <- NULL
   }
   
-  white_red <- colorRampPalette(c("white", "red"), interpolate = "linear")(100)
-
-    htmap <- ComplexHeatmap::pheatmap(corr_matrix,
-                                clustering_method = "ward.D2",
-                                cluster_rows = FALSE,
-                                clustering_distance_cols = dist_cor,
-                                clustering_distance_rows = dist_cor,
-                                color = white_red,
-                                breaks = seq(0, 1, by = 0.01),
-                                annotation_col = metadata_1,
-                                main = "Correlation-based distance heatmap"
-    )
+  white_red <- colorRamp2::colorRamp2(c(0,1),c("white", "red"))
   
-  return(htmap)
+   corr_matrix <- 1 - cor(cscore_matrix,use = "complete.obs")
+   dist_cor <- as.dist(corr_matrix)
+   
+  ComplexHeatmap::Heatmap(corr_matrix,col = white_red,name = "Correlation-based distance",
+                          row_title = "Sample",column_title = "Sample", 
+                          column_title_side = "bottom",
+                          cluster_rows = FALSE, cluster_columns = TRUE,
+                          clustering_distance_columns = "manhattan", 
+                          clustering_method_columns = "ward.D2",
+                          column_split = 3,
+                          top_annotation = column_ha,
+                          row_names_gp = grid::gpar(fontsize = 6))
+  
 }

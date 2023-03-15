@@ -6,7 +6,7 @@
 
 Shows the correlation \strong{distance} between samples.}
 \usage{
-plot_heatmap_corr(ribo, values_col, color_col)
+plot_heatmap_corr(ribo, values_col, color_col = NULL)
 }
 \arguments{
 \item{ribo}{A RiboClass object.}

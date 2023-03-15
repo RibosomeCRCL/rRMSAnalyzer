@@ -4,7 +4,7 @@
 \alias{.plot_heatmap_corr}
 \title{Internal function of plot_heatmap_corr.}
 \usage{
-.plot_heatmap_corr(cscore_matrix = NULL, metadata = NULL, color_col = NULL)
+.plot_heatmap_corr(cscore_matrix, metadata, color_col)
 }
 \arguments{
 \item{cscore_matrix}{Sites x Samples C-score matrix (output of extract_data()).}
