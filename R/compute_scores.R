@@ -13,28 +13,39 @@
   # get the count column
   data_counts_col <- "count"
   
-  # compute scores
-  for (i in (flanking + 1):(dim(ds)[1] - flanking)) {
-    if (method == "median") {
-      ds[i, "flanking_median"] <-
-        stats::median(ds[c((i - flanking):(i - 1), (i + 1):(i + flanking)), data_counts_col]) # median
-    }
-    
-    else if (method == "mean") {
-      ds[i, "flanking_mean"] <-
-        mean(ds[c((i - flanking):(i - 1), (i + 1):(i + flanking)), data_counts_col]) # mean
-    }
-    
+  ## c-score computation ##
+  count <- ds[, data_counts_col]
+  
+  # First, we compute the window around each position
+  # (The latter is excluded)
+  if (method == "median") {
+    flanking_values <-
+      sapply(seq(1 + flanking, length(count)), function(x) {
+        stats::median(count[c((x - flanking):(x - 1), (x + 1):(x + flanking))])
+      })
   }
+  else if (method == "mean") {
+    flanking_values <-
+      sapply(seq(1 + flanking, length(count)), function(x) {
+        mean(count[c((x - flanking):(x - 1), (x + 1):(x + flanking))])
+      })
+  }
+  # Because we started at the 1+flanking position, we append NA at the beginning
+  # to match the original vector's size.
+  flanking_values <-
+    append(flanking_values, rep(NA, flanking), after = 0)
   
   if (method == "median") {
+    ds[, "flanking_median"] <- flanking_values
     scorec_median_raw <-
       1 - ds[, data_counts_col] / ds[, "flanking_median"]
     ds[, "cscore"] <-
       ifelse(scorec_median_raw < 0, 0, scorec_median_raw)
   }
   else if (method == "mean") {
-    scorec_mean_raw <- 1 - ds[, data_counts_col] / ds[, "flanking_mean"]
+    ds[, "flanking_mean"] <- flanking_values
+    scorec_mean_raw <-
+      1 - ds[, data_counts_col] / ds[, "flanking_mean"]
     ds[, "cscore"] <-
       ifelse(scorec_mean_raw < 0, 0, scorec_mean_raw)
   }
