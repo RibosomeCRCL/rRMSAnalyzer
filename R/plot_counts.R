@@ -1,3 +1,15 @@
+#' Plot counts for a given position on a given RNA
+#'
+#' @param ribo A RiboClass object
+#' @param rna Name of RNA where the position is located
+#' @param pos Position on RNA on which the view will be centered
+#' @param samples Samples to display. "all" will display all samples.
+#' @param flanking Number of sites to display on the left/right of the selected position.
+#'
+#' @return
+#' @export
+#'
+#' @examples
 plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all", flanking = 6) {
   
   #Check for ribo
