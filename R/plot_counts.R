@@ -1,4 +1,4 @@
-plot_counts <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all", flanking = 6) {
+plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all", flanking = 6) {
   
   #Check for ribo
   if (is.null(ribo)) {stop("MISSING parameter: please provide a RiboClass!")}
