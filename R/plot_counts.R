@@ -1,4 +1,5 @@
 #' Plot counts for a given position on a given RNA
+#' 
 #'
 #' @param ribo A RiboClass object
 #' @param rna Name of RNA where the position is located
@@ -11,6 +12,7 @@
 #'
 #' @examples
 plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all", flanking = 6) {
+  new_position <- NULL
   
   #Check for ribo
   if (is.null(ribo)) {stop("MISSING parameter: please provide a RiboClass!")}
@@ -62,9 +64,10 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
     plot_to_return <- ggplot(data = count_transform) +
       geom_boxplot(aes(x = new_position, y = log10(count), group = new_position)) +
       geom_boxplot(data = count_transform[which(count_transform$new_position == pos),], 
-                   aes(x = new_position, y = log10(count), group = new_position), fill = "red") +
+                   aes(x = new_position, y = log10(count), group = new_position), fill = "lightgreen") +
       theme_bw() +
-      labs(title = paste("Count profile for ", samples),
+      labs(title = paste("Count profile for",length(ribo[["data"]]),"samples"),
+           subtitle = paste("RNA:",rna),
            y = "log10(count)",
            x = "Position") +
       scale_x_continuous(labels = min(count_transform$new_position):max(count_transform$new_position), 
@@ -77,7 +80,8 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
       geom_point(size = 3) +
       geom_line(aes(col = samples), linewidth = 2) +
       theme_bw() + 
-      labs(title = paste("Count profile for ", samples),
+      labs(title = paste("Count profile for",length(samples),"samples"),
+           subtitle = paste("RNA:",rna),
            y = "log10(count)",
            x = "position") +
       scale_x_continuous(labels = min(count_transform$new_position):max(count_transform$new_position), 
