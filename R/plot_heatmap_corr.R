@@ -38,7 +38,6 @@ plot_heatmap_corr <- function(ribo, values_col, color_col=NULL) {
   white_red <- colorRamp2::colorRamp2(c(0,1),c("white", "red"))
   
    corr_matrix <- 1 - cor(cscore_matrix,use = "complete.obs")
-   dist_cor <- as.dist(corr_matrix)
    
   ComplexHeatmap::Heatmap(corr_matrix,col = white_red,name = "Correlation-based distance",
                           row_title = "Sample",column_title = "Sample", 
