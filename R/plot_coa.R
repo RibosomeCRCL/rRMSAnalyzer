@@ -5,7 +5,7 @@
 #' @keywords internal
 #' 
 .compute_coa <- function(raw_counts = NULL){
-  res_coa <- ade4::dudi.coa(raw_counts[complete.cases(raw_counts),], 
+  res_coa <- ade4::dudi.coa(raw_counts[stats::complete.cases(raw_counts),], 
                             scannf = FALSE, 
                             nf = 5)
   

@@ -25,7 +25,7 @@ select_most_differential_sites <- function(df_of_kruskal = NULL, p_cutoff = 1e-0
 #' @keywords internal
 #'
 plot_most_differential_sites <- function(df_of_Cscores = NULL, df_of_kruskal = NULL, most_differential_sites = NULL) {
-
+   group.id <- Cscore <- p.adj <- NULL
 
    df_of_Cscores <- tidyr::pivot_longer(df_of_Cscores,cols = c(2:ncol(df_of_Cscores))) #TODO : sample count
    colnames(df_of_Cscores) <- c("site","group.id","Cscore")

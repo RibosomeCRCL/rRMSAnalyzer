@@ -9,7 +9,7 @@
 .compute_RLE <- function(mat = NULL){
   stopifnot(!is.null(mat))
   mat <- mat + 1
-  med <- apply(mat, 1, median)
+  med <- apply(mat, 1, stats::median)
   rle <- log2(mat/med)
   rle <- tidyr::gather(as.data.frame(rle))
   return(rle)

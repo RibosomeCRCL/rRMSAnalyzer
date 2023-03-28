@@ -12,7 +12,7 @@
 #'
 #' @examples
 plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all", flanking = 6) {
-  new_position <- NULL
+  new_position <- count <- NULL
   
   #Check for ribo
   if (is.null(ribo)) {stop("MISSING parameter: please provide a RiboClass!")}

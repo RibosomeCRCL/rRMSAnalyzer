@@ -12,15 +12,15 @@
 kruskal_test_on_cscores <- function(cscore_matrix = NULL, metadata = NULL, adjust_pvalues_method = "fdr", factor_column = NULL) {
   cscore_matrix <- as.data.frame(cscore_matrix) 
 
-  cscore_matrix <- cscore_matrix[complete.cases(cscore_matrix), match(metadata[,"samplename"], colnames(cscore_matrix))] # order column cscores as metadata
+  cscore_matrix <- cscore_matrix[stats::complete.cases(cscore_matrix), match(metadata[,"samplename"], colnames(cscore_matrix))] # order column cscores as metadata
   
   kruskal_test_pvalues <- apply(cscore_matrix, 1, function(x) {
-    kruskal.test(x ~ metadata[,factor_column])$p.value
+    stats::kruskal.test(x ~ metadata[,factor_column])$p.value
     }) # test each row and get p.value
  
 
   df_kruskal_pvalues <- data.frame(site = names(kruskal_test_pvalues), p.val = kruskal_test_pvalues, 
-                                   p.adj = p.adjust(kruskal_test_pvalues, method = adjust_pvalues_method))
+                                   p.adj = stats::p.adjust(kruskal_test_pvalues, method = adjust_pvalues_method))
   
   # Return a data frame with both raw and adjusted p-values.
   # Example :
