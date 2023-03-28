@@ -108,7 +108,12 @@ plot_diff_sites <- function(ribo, factor_column, p_cutoff = 1e-02, cscore_cutoff
   ribo_matrix_rn <- dplyr::select(ribo_matrix_rn,"site",tidyselect::everything())
   
   most_signi <- select_most_differential_sites(kruskal_df,p_cutoff = p_cutoff, cscore_cutoff = cscore_cutoff)
-  
+  if (length(most_signi) == 0) {
+    return(ggplot() + 
+      annotate("text", x = 4, y = 25, size=8,
+               label = "No differential site found !") + 
+      theme_void())
+  }
   return(plot_most_differential_sites(df_of_Cscores = ribo_matrix_rn,
                                      df_of_kruskal = kruskal_df,
                                      most_differential_sites = most_signi))

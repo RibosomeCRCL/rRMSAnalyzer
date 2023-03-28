@@ -96,6 +96,9 @@ wrapper_kruskal_test <- function(ribo = NULL,
 
   metadata <- ribo[["metadata"]]
   cscore_matrix <- extract_data(ribo, only_annotated = TRUE, position_to_rownames = TRUE)
+  if(nrow(cscore_matrix) == 0) {
+    stop("Please annotate your RiboClass before using plot_diff_sites")
+  }
   df_pval <- kruskal_test_on_cscores(cscore_matrix = cscore_matrix,
                                      metadata = metadata,
                                      factor_column = factor_column)
