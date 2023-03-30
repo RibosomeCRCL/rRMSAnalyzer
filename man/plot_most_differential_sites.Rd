@@ -15,7 +15,7 @@ plot_most_differential_sites(
 
 \item{df_of_kruskal}{Output of kruskal_test_on_cscores()}
 
-\item{most_differential_sites}{}
+\item{most_differential_sites}{A list of most differential sites. Output of select_most_differential_sites function.}
 }
 \description{
 Using dataframes obtained from

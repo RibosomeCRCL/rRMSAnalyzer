@@ -9,7 +9,7 @@ plot_rle(ribo, show_outlier = TRUE)
 \arguments{
 \item{ribo}{a RiboClass object.}
 
-\item{outlier}{Show boxplot outlier values.}
+\item{show_outlier}{Show boxplot outlier values.}
 }
 \value{
 A ggplot object. Samples with a median lower than median(RLE counts)-2*MAD (Median Absolute Deviation) are colored in red.

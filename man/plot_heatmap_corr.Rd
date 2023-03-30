@@ -11,6 +11,8 @@ plot_heatmap_corr(ribo, values_col, color_col = NULL)
 \arguments{
 \item{ribo}{A RiboClass object.}
 
+\item{values_col}{Name of the column containing the value (either count or cscore).}
+
 \item{color_col}{Vector of the metadata columns’ name used for coloring samples.}
 }
 \value{

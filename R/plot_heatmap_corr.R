@@ -5,7 +5,7 @@
 #' Shows the correlation **distance** between samples.
 #' @md
 #' @inheritParams plot_heatmap
-#'
+#' @param values_col Name of the column containing the value (either count or cscore).
 #' @return ComplexHeatmap object
 #' @export
 #'
@@ -37,7 +37,7 @@ plot_heatmap_corr <- function(ribo, values_col, color_col=NULL) {
   
   white_red <- colorRamp2::colorRamp2(c(0,1),c("white", "red"))
   
-   corr_matrix <- 1 - cor(cscore_matrix,use = "complete.obs")
+   corr_matrix <- 1 - stats::cor(cscore_matrix,use = "complete.obs")
    
   ComplexHeatmap::Heatmap(corr_matrix,col = white_red,name = "Correlation-based distance",
                           row_title = "Sample",column_title = "Sample", 

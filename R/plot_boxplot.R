@@ -23,10 +23,16 @@ boxplot_count <- function(ribo, color_col=NA,outlier = TRUE, horizontal = FALSE)
 #' Sites are sorted by 
 #' @inheritParams boxplot_count 
 #'
-#' @return
+#' @return a ggplot geom_boxplot
 #' @export
 #'
 #' @examples
+#' data("ribo_toy")
+#' data("human_methylated")
+#' ribo_toy <- rename_rna(ribo_toy)
+#' ribo_toy <- annotate_site(ribo_toy,human_methylated)
+#' boxplot_cscores(ribo_toy)
+#' 
 boxplot_cscores <- function(ribo,outlier = TRUE, horizontal = FALSE) {
   
   ribo_m <- extract_data(ribo,only_annotated = TRUE)
@@ -41,16 +47,17 @@ boxplot_cscores <- function(ribo,outlier = TRUE, horizontal = FALSE) {
                       horizontal = horizontal))
 }
 
-#' Title
+#' Internal function for boxplot_cscore
 #'
-#' @param matrix 
-#' @param values_col_name 
-#' @param values_to_plot 
-#' @param outlier 
+#' @param matrix Sites x Samples C-score/count matrix (output of extract_data()).
+#' @param values_to_plot Value to display in plot.
+#' @param outlier Show boxplot outlier values.
+#' @param horizontal Show boxplot horizontally.
 #'
-#' @return
+#' @return a ggplot object.
 #'
 .plot_boxplot_sites <- function(matrix,values_to_plot,outlier, horizontal) {
+  site <- NULL
   id_vars <- "site"
 
   
@@ -60,7 +67,7 @@ boxplot_cscores <- function(ribo,outlier = TRUE, horizontal = FALSE) {
   shape_outlier <- NA
   if(outlier) shape_outlier <- 19
   p <- ggplot2::ggplot( matrix_melted, ggplot2::aes(
-    x = reorder(site,!!rlang::sym(values_to_plot),na.rm = T),
+    x = stats::reorder(site,!!rlang::sym(values_to_plot),na.rm = T),
     y = !!rlang::sym(values_to_plot))) +
     ggplot2::geom_boxplot(outlier.shape = shape_outlier) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
@@ -73,12 +80,13 @@ boxplot_cscores <- function(ribo,outlier = TRUE, horizontal = FALSE) {
 
 #' (internal) plot boxplot for a given matrix of values
 #'
-#' @param matrix Matrix of values
-#' @param metadata 
-#' @param color_col 
-#' @param outlier 
-#' @param values_col_name 
-#' @param values_to_plot 
+#' @param matrix Sites x Samples C-score/count matrix (output of extract_data()).
+#' @param metadata Metadata of samples in matrix.
+#' @param color_col Name of the column in the metadata used for coloring samples.
+#' @param outlier Show boxplot outlier values.
+#' @param values_col_name Name of the column containing the value (either count or cscore).
+#' @param values_to_plot Value to display in plot.
+#' @param horizontal Show boxplot horizontally.
 #'
 #' @return ggplot boxplot
 #'

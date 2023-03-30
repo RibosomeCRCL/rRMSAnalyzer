@@ -56,7 +56,7 @@
 #' Relative Log Expression plot of a RiboClass object’s counts. 
 #'
 #' @param ribo a RiboClass object.
-#' @param outlier Show boxplot outlier values. 
+#' @param show_outlier Show boxplot outlier values. 
 #'
 #' @return A ggplot object. Samples with a median lower than median(RLE counts)-2*MAD (Median Absolute Deviation) are colored in red.
 #' @export

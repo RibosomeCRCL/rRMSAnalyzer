@@ -19,7 +19,7 @@ select_most_differential_sites <- function(df_of_kruskal = NULL, p_cutoff = 1e-0
 #' 
 #' @param df_of_Cscores Dataframe of positions x samples for c-score. Output of extract_data().
 #' @param df_of_kruskal Output of kruskal_test_on_cscores()
-#' @param most_differential_sites 
+#' @param most_differential_sites A list of most differential sites. Output of select_most_differential_sites function.
 #' @import ggplot2
 #' 
 #' @keywords internal
@@ -79,16 +79,21 @@ plot_most_differential_sites <- function(df_of_Cscores = NULL, df_of_kruskal = N
 #'
 #' Both the p-value cutoff and c-score range cutoff can be changed with p_cutoff and cscore_cutoff parameters respectively.
 #' @md
-#' @param ribo  
-#' @param factor_column 
+#' @param ribo A RiboClass object.
+#' @param factor_column Metadata column used to group samples by.
 #' @param p_cutoff Cutoff for the adjusted p-value of the kruskal-wallis test.
 #' @param cscore_cutoff Cutoff above which the max-min c-score range between conditions' mean is considered significant.
-#' @param adjust_pvalues_method 
-#' @return
+#' @param adjust_pvalues_method Method used to adjust p-value (one of p.adjust.methods)
+#' @return a ggplot object.
 #' @export
 #'
 #' @examples
-plot_diff_sites <- function(ribo, factor_column, p_cutoff = 1e-02, cscore_cutoff = 0.05,adjust_pvalues_method = "fdr") {
+#' data("ribo_toy")
+#' data("human_methylated")
+#' ribo_toy <- rename_rna(ribo_toy)
+#' ribo_toy <- annotate_site(ribo_toy,human_methylated)
+#' plot_diff_sites(ribo_toy,"condition", p_cutoff=0.1)
+plot_diff_sites <- function(ribo, factor_column, p_cutoff = 1e-02, cscore_cutoff = 0.05, adjust_pvalues_method = "fdr") {
   
   check_metadata(ribo,factor_column)
   ribo_matrix <- extract_data(ribo, only_annotated = TRUE, position_to_rownames = TRUE)

@@ -36,18 +36,14 @@ kruskal_test_on_cscores <- function(cscore_matrix = NULL, metadata = NULL, adjus
 
 
 
-#' Return the mean
+#' Return the range between conditions' mean
 #'
-#' @param cscore_matrix 
-#' @param metadata 
-#' @param order_by_col 
-#' @param factor_column 
+#' @inheritParams kruskal_test_on_cscores
 #'
 #' @keywords internal
-#' @return
+#' @return a dataframe with 1) annotated site name 2) range of mean between conditions for this site.
 #'
-#' @examples
-mean_max_difference <- function(cscore_matrix = NULL, metadata = NULL, factor_column = NULL) {
+get_range <- function(cscore_matrix = NULL, metadata = NULL, factor_column = NULL) {
   # TODO : rename this function ?
   
   cscore_matrix <- t(cscore_matrix)
@@ -55,7 +51,7 @@ mean_max_difference <- function(cscore_matrix = NULL, metadata = NULL, factor_co
     match(metadata[,"samplename"], rownames(cscore_matrix)),])
   
   # Aggregate each site, compute the mean according to factor_column 
-  df_mean_each_group <- aggregate(cscore_matrix,
+  df_mean_each_group <- stats::aggregate(cscore_matrix,
                                   list(metadata[,factor_column]), mean) 
   
   # compute the difference between the max - min group 
@@ -85,7 +81,7 @@ mean_max_difference <- function(cscore_matrix = NULL, metadata = NULL, factor_co
 #' 
 #' @param ribo a RiboClass
 #' @param adjust_pvalues_method p-value adjustment method (default : "fdr")
-#' @param factor_column which column to use for factoring
+#' @param factor_column Metadata column used to group samples by.
 #'
 #' @return A dataframe where each site is a row and with the following column :
 #'  1) site : name of the site; 2) p.val : raw p-value; 3) p.adj : adjusted p-value 4) mean_max_min_difference : range between conditions of mean c-score
@@ -103,7 +99,7 @@ wrapper_kruskal_test <- function(ribo = NULL,
                                      metadata = metadata,
                                      factor_column = factor_column)
 
-  df_min_max <- mean_max_difference(cscore_matrix = cscore_matrix,
+  df_min_max <- get_range(cscore_matrix = cscore_matrix,
                                     metadata = metadata,
                                     factor_column = factor_column)
 

@@ -12,7 +12,7 @@ generate_palette <- function(metadata,cols_to_use) {
     annot <- c()
     
     if(length(cond_names) > 9) {
-      palette <- hcl.colors(length(cond_names),"Grays")
+      palette <- grDevices::hcl.colors(length(cond_names),"Grays")
 
     } else {
       palette <- palettes[[1]]

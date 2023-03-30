@@ -15,17 +15,19 @@
 )
 }
 \arguments{
-\item{matrix}{Matrix of values}
+\item{matrix}{Sites x Samples C-score/count matrix (output of extract_data()).}
 
-\item{values_col_name}{}
+\item{values_col_name}{Name of the column containing the value (either count or cscore).}
 
-\item{values_to_plot}{}
+\item{values_to_plot}{Value to display in plot.}
 
-\item{metadata}{}
+\item{metadata}{Metadata of samples in matrix.}
 
-\item{color_col}{}
+\item{color_col}{Name of the column in the metadata used for coloring samples.}
 
-\item{outlier}{}
+\item{outlier}{Show boxplot outlier values.}
+
+\item{horizontal}{Show boxplot horizontally.}
 }
 \value{
 ggplot boxplot
