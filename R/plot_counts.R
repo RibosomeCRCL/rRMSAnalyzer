@@ -7,13 +7,13 @@
 #' @param samples Samples to display. "all" will display all samples.
 #' @param flanking Number of sites to display on the left/right of the selected position.
 #'
-#' @return a ggplot object.
+#' @return
 #' @export
 #'
 #' @examples
 #' data("ribo_toy")
-#' plot_counts_env(ribo_toy,"NR_046235.3_5.8S",14)
-
+#' ribo_toy <- rename_rna(ribo = ribo_toy)
+#' plot_counts_env(ribo = ribo_toy, rna = "5.8S", pos = 15)
 plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all", flanking = 6) {
   new_position <- count <- NULL
   
@@ -107,7 +107,25 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
            y = "log10(count)",
            x = "position") +
       scale_x_continuous(labels = min(count_transform$new_position):max(count_transform$new_position), 
-                         breaks = min(count_transform$new_position):max(count_transform$new_position))
+                         breaks = min(count_transform$new_position):max(count_transform$new_position)) +
+      {if (min(count_transform$count) < 100) geom_hline(yintercept = 2 ,
+                                                        linewidth = 1,
+                                                        linetype = "11",
+                                                        color = "red")} +
+      {if (min(count_transform$count) < 100) annotate("text", 
+                                                      label = "Coverage limit",
+                                                      x = pos - flanking + 1,
+                                                      y = 2 / 1.02,
+                                                      color = "red")} +
+      geom_hline(yintercept = median(log10(count_transform$count) , na.rm = TRUE),
+                 linewidth = 1,
+                 linetype = "11",
+                 color = "darkred") +
+      annotate("text", 
+               label = "Counts median",
+               x = pos - flanking + 1,
+               y = median(log10(count_transform$count) / 0.985, na.rm = TRUE),
+               color = "darkred")
   }
   
   return(plot_to_return)
