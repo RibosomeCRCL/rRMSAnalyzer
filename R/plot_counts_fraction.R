@@ -10,7 +10,7 @@
 #' plot_counts_fraction(ribo_toy)
 plot_counts_fraction <- function(ribo) {
   # NSE fix
-  samplesid <- rna <- count <- NULL
+  samplesid <- rna <- count <- sum.counts <- NULL
 
   all_data <- dplyr::bind_rows(ribo$data, .id = "samplesid")
   

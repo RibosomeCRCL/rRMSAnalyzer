@@ -13,15 +13,18 @@ plot_diff_sites(
 )
 }
 \arguments{
-\item{ribo}{}
+\item{ribo}{A RiboClass object.}
 
-\item{factor_column}{}
+\item{factor_column}{Metadata column used to group samples by.}
 
 \item{p_cutoff}{Cutoff for the adjusted p-value of the kruskal-wallis test.}
 
 \item{cscore_cutoff}{Cutoff above which the max-min c-score range between conditions' mean is considered significant.}
 
-\item{adjust_pvalues_method}{}
+\item{adjust_pvalues_method}{Method used to adjust p-value (one of p.adjust.methods)}
+}
+\value{
+a ggplot object.
 }
 \description{
 Display a boxplot between condition for each site where there is a sufficent difference between conditions.
@@ -37,4 +40,11 @@ above a certain cutoff.
 }
 
 Both the p-value cutoff and c-score range cutoff can be changed with p_cutoff and cscore_cutoff parameters respectively.
+}
+\examples{
+data("ribo_toy")
+data("human_methylated")
+ribo_toy <- rename_rna(ribo_toy)
+ribo_toy <- annotate_site(ribo_toy,human_methylated)
+plot_diff_sites(ribo_toy,"condition", p_cutoff=0.1)
 }

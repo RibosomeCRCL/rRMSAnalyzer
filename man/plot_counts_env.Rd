@@ -23,6 +23,13 @@ plot_counts_env(
 
 \item{flanking}{Number of sites to display on the left/right of the selected position.}
 }
+\value{
+a ggplot object.
+}
 \description{
 Plot counts for a given position on a given RNA
+}
+\examples{
+data("ribo_toy")
+plot_counts_env(ribo_toy,"NR_046235.3_5.8S",14)
 }

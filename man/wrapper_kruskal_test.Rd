@@ -15,7 +15,7 @@ wrapper_kruskal_test(
 
 \item{adjust_pvalues_method}{p-value adjustment method (default : "fdr")}
 
-\item{factor_column}{which column to use for factoring}
+\item{factor_column}{Metadata column used to group samples by.}
 }
 \value{
 A dataframe where each site is a row and with the following column :

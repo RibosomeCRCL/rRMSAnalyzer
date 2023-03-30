@@ -14,7 +14,18 @@ boxplot_cscores(ribo, outlier = TRUE, horizontal = FALSE)
 
 \item{horizontal}{Show boxplot horizontally.}
 }
+\value{
+a ggplot geom_boxplot
+}
 \description{
 Plot boxplot of annotated sites c-score.
 Sites are sorted by
+}
+\examples{
+data("ribo_toy")
+data("human_methylated")
+ribo_toy <- rename_rna(ribo_toy)
+ribo_toy <- annotate_site(ribo_toy,human_methylated)
+boxplot_cscores(ribo_toy)
+
 }

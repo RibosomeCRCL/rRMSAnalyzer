@@ -52,7 +52,7 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
   # The color palette is from pheatmap package
   # https://github.com/raivokolde/pheatmap
   # heat_colors <- colorRampPalette(rev(RColorBrewer::brewer.pal(n = 7, name = "RdYlBu")))(100)
-  heat_colors <- hcl.colors(7,"inferno")
+  heat_colors <- grDevices::hcl.colors(7,"inferno")
   
   
   if(!is.null(color_col)) {
@@ -62,7 +62,7 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
     column_ha <- NULL
   }
   
-  cscore_matrix <- na.omit(cscore_matrix)
+  cscore_matrix <- stats::na.omit(cscore_matrix)
   cscore_matrix <- as.matrix(cscore_matrix)
   ComplexHeatmap::Heatmap(cscore_matrix,col = heat_colors,name = "C-score",
                           row_title = "Position",column_title = "Sample", 

@@ -7,10 +7,12 @@
 #' @param samples Samples to display. "all" will display all samples.
 #' @param flanking Number of sites to display on the left/right of the selected position.
 #'
-#' @return
+#' @return a ggplot object.
 #' @export
 #'
 #' @examples
+#' data("ribo_toy")
+#' plot_counts_env(ribo_toy,"NR_046235.3_5.8S",14)
 plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all", flanking = 6) {
   new_position <- count <- NULL
   

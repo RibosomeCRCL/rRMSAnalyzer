@@ -2,19 +2,22 @@
 % Please edit documentation in R/plot_boxplot.R
 \name{.plot_boxplot_sites}
 \alias{.plot_boxplot_sites}
-\title{Title}
+\title{Internal function for boxplot_cscore}
 \usage{
 .plot_boxplot_sites(matrix, values_to_plot, outlier, horizontal)
 }
 \arguments{
-\item{matrix}{}
+\item{matrix}{Sites x Samples C-score/count matrix (output of extract_data()).}
 
-\item{values_to_plot}{}
+\item{values_to_plot}{Value to display in plot.}
 
-\item{outlier}{}
+\item{outlier}{Show boxplot outlier values.}
 
-\item{values_col_name}{}
+\item{horizontal}{Show boxplot horizontally.}
+}
+\value{
+a ggplot object.
 }
 \description{
-Title
+Internal function for boxplot_cscore
 }
