@@ -60,14 +60,28 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
   
   count_transform <- tidyr::gather(count_data[,-1], "samples", "count", -new_position)
   
+  
+  # check if there are other modifications in the window
+  
+  other_mod <- which(!is.na(ribo$data[[1]][which_positions[-ceiling(length(which_positions) / 2)],"site"]))
+  
+  other_mod_pos <- count_data$new_position[other_mod]
+  
+  
   # ggplot 
   
   if (samples[1] == "all") {
     
     plot_to_return <- ggplot(data = count_transform) +
       geom_boxplot(aes(x = new_position, y = log10(count), group = new_position)) +
+      geom_boxplot(data = count_transform[which(count_transform$new_position %in% other_mod_pos),], 
+                   aes(x = new_position, y = log10(count), group = new_position), 
+                   fill = "lightblue",
+                   width = 0.8) +
       geom_boxplot(data = count_transform[which(count_transform$new_position == pos),], 
-                   aes(x = new_position, y = log10(count), group = new_position), fill = "lightgreen") +
+                   aes(x = new_position, y = log10(count), group = new_position), 
+                   fill = "lightgreen",
+                   width = 0.8) +
       theme_bw() +
       labs(title = paste("Count profile for",length(ribo[["data"]]),"samples"),
            subtitle = paste("RNA:",rna),
@@ -125,7 +139,16 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
                label = "Counts median",
                x = pos - flanking + 1,
                y = median(log10(count_transform$count) / 0.985, na.rm = TRUE),
-               color = "darkred")
+               color = "darkred") + 
+      geom_vline(xintercept = other_mod_pos,
+                 linewidth = 1,
+                 linetype = "11",
+                 color = "lightblue") + 
+      geom_vline(xintercept = pos,
+                 linewidth = 1,
+                 linetype = "11",
+                 color = "lightgreen")
+      
   }
   
   return(plot_to_return)
