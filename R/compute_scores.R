@@ -74,6 +74,8 @@
 #' 
 #' In this package, the C-score is calculated for every position. As it can be useful to find positions not yet identified as methylated.
 #' 
+#' This function is called automatically when loading data or after adjusting biases in count data with combatSeq. You can still call it manually if you want to modify how the C-score is currently computed.
+#' 
 #' For each RNA, The first and last positions cannot be calculated if the local coverage is shorter than the flanking argument. Their value will be NA instead.
 #' 
 #' @references Birkedal, U., Christensen-Dalsgaard, M., Krogh, N., Sabarinathan, R., Gorodkin, J. and Nielsen, H. (2015), Profiling of Ribose Methylations in RNA by High-Throughput Sequencing. Angew. Chem. Int. Ed., 54: 451-455. https://doi.org/10.1002/anie.201408362

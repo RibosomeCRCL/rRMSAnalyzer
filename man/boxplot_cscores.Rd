@@ -3,7 +3,7 @@
 \name{boxplot_cscores}
 \alias{boxplot_cscores}
 \title{Plot boxplot of annotated sites c-score.
-Sites are sorted by}
+Sites are sorted by their median.}
 \usage{
 boxplot_cscores(ribo, outlier = TRUE, horizontal = FALSE)
 }
@@ -19,7 +19,7 @@ a ggplot geom_boxplot
 }
 \description{
 Plot boxplot of annotated sites c-score.
-Sites are sorted by
+Sites are sorted by their median.
 }
 \examples{
 data("ribo_toy")

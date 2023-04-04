@@ -30,7 +30,7 @@ plot_heatmap(
 \item{...}{Pheatmap’s parameters}
 }
 \value{
-A ggplot object of a heatmap. The distance used is manhattan and the clustering method is Ward.D2. See pheatmap doc for more details
+A ggplot object of a heatmap. The distance used is manhattan and the clustering method is Ward.D2. See ComplexHeatmap doc for more details
 }
 \description{
 This easy function will let you display an heatmap for any given column (count or c-score). You can add an additionnal layer of information with metadata columns.

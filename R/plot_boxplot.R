@@ -20,7 +20,7 @@ boxplot_count <- function(ribo, color_col=NA,outlier = TRUE, horizontal = FALSE)
 }
 
 #' Plot boxplot of annotated sites c-score.
-#' Sites are sorted by 
+#' Sites are sorted by their median.
 #' @inheritParams boxplot_count 
 #'
 #' @return a ggplot geom_boxplot
@@ -54,7 +54,8 @@ boxplot_cscores <- function(ribo,outlier = TRUE, horizontal = FALSE) {
 #' @param outlier Show boxplot outlier values.
 #' @param horizontal Show boxplot horizontally.
 #'
-#' @return a ggplot object.
+#' @return A ggplot object.
+#' @keywords internal
 #'
 .plot_boxplot_sites <- function(matrix,values_to_plot,outlier, horizontal) {
   site <- NULL
@@ -89,6 +90,7 @@ boxplot_cscores <- function(ribo,outlier = TRUE, horizontal = FALSE) {
 #' @param horizontal Show boxplot horizontally.
 #'
 #' @return ggplot boxplot
+#' @keywords internal
 #'
 .plot_boxplot_samples <- function(matrix,values_col_name,values_to_plot,
                                   metadata,color_col=NA,outlier, horizontal) {

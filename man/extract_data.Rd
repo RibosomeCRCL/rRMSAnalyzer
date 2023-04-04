@@ -25,7 +25,7 @@ A position x samples dataframe. Position can be all or only annotated sites. A s
 }
 \description{
 For a given column in data, this function will generate a dataframe with all samples.
-Exports all positions (if only_annotated is false) or only positions with a siteID (if only_annotated is true).
+Exports all positions (if only_annotated is false) or only annotated positions (if only_annotated is true).
 }
 \examples{
 data("ribo_toy")

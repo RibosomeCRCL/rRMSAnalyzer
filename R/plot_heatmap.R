@@ -7,7 +7,7 @@
 #' @param cutree_rows number of clusters the rows are divided into, based on the hierarchical clustering (using cutree).
 #' @param cutree_cols number of clusters the columns are divided into, based on the hierarchical clustering (using cutree).
 #' @param ... Pheatmap’s parameters
-#' @return A ggplot object of a heatmap. The distance used is manhattan and the clustering method is Ward.D2. See pheatmap doc for more details
+#' @return A ggplot object of a heatmap. The distance used is manhattan and the clustering method is Ward.D2. See ComplexHeatmap doc for more details
 #' @export
 #'
 #' @examples 

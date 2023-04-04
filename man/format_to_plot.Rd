@@ -17,6 +17,6 @@ format_to_plot(ribo, metadata_col = NULL, only_annotated = FALSE)
 A ggplot-friendly dataframe with the following columns : 1) site; 2) sample; 3) cscore; ...) any metadata added
 }
 \description{
-Turn a riboClass into a dataframe that should be ready to be used in ggplot.
+Turn a RiboClass into a dataframe that should be ready to be used in ggplot.
 Metadata columns can be added if extra informations are needed.
 }

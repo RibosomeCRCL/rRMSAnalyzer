@@ -16,8 +16,9 @@
 \item{horizontal}{Show boxplot horizontally.}
 }
 \value{
-a ggplot object.
+A ggplot object.
 }
 \description{
 Internal function for boxplot_cscore
 }
+\keyword{internal}

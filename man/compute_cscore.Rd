@@ -21,6 +21,8 @@ A RiboClass with c-score columns appended to each sample's data.
 \description{
 In this package, the C-score is calculated for every position. As it can be useful to find positions not yet identified as methylated.
 
+This function is called automatically when loading data or after adjusting biases in count data with combatSeq. You can still call it manually if you want to modify how the C-score is currently computed.
+
 For each RNA, The first and last positions cannot be calculated if the local coverage is shorter than the flanking argument. Their value will be NA instead.
 }
 \examples{

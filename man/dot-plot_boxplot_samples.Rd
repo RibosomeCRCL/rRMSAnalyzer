@@ -35,3 +35,4 @@ ggplot boxplot
 \description{
 (internal) plot boxplot for a given matrix of values
 }
+\keyword{internal}

@@ -24,6 +24,7 @@ plot_heatmap_corr <- function(ribo, values_col, color_col=NULL) {
 #' @param color_col Vector of the metadata columns’ name used for coloring samples.
 #'
 #' @return ComplexHeatmap heatmap
+#' @keywords internal
 #' 
 .plot_heatmap_corr <- function(cscore_matrix, metadata,
                                color_col) {

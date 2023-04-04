@@ -19,3 +19,4 @@ ComplexHeatmap heatmap
 \description{
 Internal function of plot_heatmap_corr.
 }
+\keyword{internal}

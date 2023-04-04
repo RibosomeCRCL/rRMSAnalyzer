@@ -2,7 +2,7 @@
 #'
 #' @keywords internal
 #'
-#' @param cscore.matrix matrix of c-score extracted from a riboClass with ' \code{\link{extract_data}}
+#' @param cscore.matrix matrix of c-score extracted from a RiboClass with ' \code{\link{extract_data}}
 #' @return dudi.pca object
 #'
 .calculate_pca <- function(cscore.matrix = NULL) {
