@@ -20,15 +20,15 @@
   # (The latter is excluded)
   if (method == "median") {
     flanking_values <-
-      sapply(seq(1 + flanking, length(count)), function(x) {
+      vapply(seq(1 + flanking, length(count)), function(x) {
         stats::median(count[c((x - flanking):(x - 1), (x + 1):(x + flanking))])
-      })
+      },numeric(1))
   }
   else if (method == "mean") {
     flanking_values <-
-      sapply(seq(1 + flanking, length(count)), function(x) {
+      vapply(seq(1 + flanking, length(count)), function(x) {
         mean(count[c((x - flanking):(x - 1), (x + 1):(x + flanking))])
-      })
+      },numeric(1))
   }
   # Because we started at the 1+flanking position, we append NA at the beginning
   # to match the original vector's size.
