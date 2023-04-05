@@ -6,7 +6,7 @@
 \usage{
 generate_metadata_df(
   counts_folder_path,
-  create_samplename_col = T,
+  create_samplename_col = TRUE,
   stop_symbol = NA
 )
 }

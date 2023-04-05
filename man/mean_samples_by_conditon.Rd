@@ -4,7 +4,12 @@
 \alias{mean_samples_by_conditon}
 \title{Regroup samples by condition and calculate mean for each condition}
 \usage{
-mean_samples_by_conditon(ribo, value, metadata_condition, only_annotated = F)
+mean_samples_by_conditon(
+  ribo,
+  value,
+  metadata_condition,
+  only_annotated = FALSE
+)
 }
 \arguments{
 \item{ribo}{a RiboClass object}

@@ -13,7 +13,7 @@ format_to_plot <- function(ribo, metadata_col = NULL, only_annotated = FALSE) {
   site <- NULL #NSE fix
   # First let's extract the data from ribo
   values_column <- "cscore"
-  df.matrix <- extract_data(ribo,values_column,position_to_rownames = T,
+  df.matrix <- extract_data(ribo,values_column,position_to_rownames = TRUE,
                             only_annotated = only_annotated)
   # Add a new columns that correspond to rownames
   df.matrix$site <- rownames(df.matrix)

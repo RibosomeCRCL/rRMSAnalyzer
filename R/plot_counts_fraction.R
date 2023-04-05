@@ -16,7 +16,7 @@ plot_counts_fraction <- function(ribo) {
   
   all_data_sums <- all_data |>
     dplyr::group_by(samplesid, rna) |>
-    dplyr::summarise(sum.counts = sum(count, na.rm = T),
+    dplyr::summarise(sum.counts = sum(count, na.rm = TRUE),
                      n0 = length(which(count < 5)))
   
   all_data_sums$rna <- factor(all_data_sums$rna, levels = ribo$rna_names$current_name)

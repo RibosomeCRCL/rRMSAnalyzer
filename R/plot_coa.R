@@ -27,10 +27,12 @@
 #' @examples 
 #' data("ribo_toy")
 #' plot_coa(ribo = ribo_toy, color_col = "condition")
-plot_coa <- function(ribo,color_col = NULL, axes = c(1,2), only_annotated=FALSE, title="default", subtitle="default", object_only=FALSE) {
+plot_coa <- function(ribo,color_col = NULL, axes = c(1,2), only_annotated=FALSE,
+                     title="default", subtitle="default", object_only=FALSE) {
   if(!is.null(color_col)) check_metadata(ribo,color_col)
   
-  coa_matrix <- extract_data(ribo,"count",position_to_rownames = T, only_annotated=only_annotated)
+  coa_matrix <- extract_data(ribo,"count",position_to_rownames = TRUE,
+                             only_annotated=only_annotated)
    
   coa_calculated <- .compute_coa(coa_matrix)
   
@@ -38,7 +40,8 @@ plot_coa <- function(ribo,color_col = NULL, axes = c(1,2), only_annotated=FALSE,
     return(coa_calculated)
   }
   
-  return(.plot_coa(coa_calculated,ribo[["metadata"]],color_col, axes = axes,title,subtitle))
+  return(.plot_coa(coa_calculated,ribo[["metadata"]],color_col, axes = axes,
+                   title, subtitle))
   
 }
 
@@ -50,10 +53,11 @@ plot_coa <- function(ribo,color_col = NULL, axes = c(1,2), only_annotated=FALSE,
 #' @return A ggplot object containing the COA
 #' @keywords internal
 #' 
-.plot_coa <- function(dudi.coa = NULL, metadata = NULL, color_col = NULL, axes = c(1,2), title="default",subtitle="default") {
+.plot_coa <- function(dudi.coa = NULL, metadata = NULL, color_col = NULL,
+                      axes = c(1,2), title="default",subtitle = "default") {
   if(is.null(color_col)) {
-    color_col = "Black"
-    color_colname = "Black"
+    color_col <- "Black"
+    color_colname <- "Black"
     }
   else {
     color_colname <- color_col
@@ -69,7 +73,7 @@ plot_coa <- function(ribo,color_col = NULL, axes = c(1,2), only_annotated=FALSE,
   }
   
   plot.coa <- factoextra::fviz_ca_col(dudi.coa, 
-                          repel = T,
+                          repel = TRUE,
                           col.col = color_col,
                           pointsize = 2,  #TODO : reduce size
                           labelsize = 4, 

@@ -34,9 +34,9 @@
   stopifnot(!is.null(mat))
   mat <- as.data.frame(mat)
   rle_calc <- .compute_RLE(mat = mat)
-  outlier_shape=NA
-  if(show_outlier) outlier_shape = 19
-  mad <- - 2*mad(rle_calc$value, na.rm = T)
+  outlier_shape <- NA
+  if(show_outlier) outlier_shape <- 19
+  mad <- - 2*mad(rle_calc$value, na.rm = TRUE)
   rle_calc[["key"]] <- factor(rle_calc[["key"]],levels = unique(rle_calc[["key"]]))
   rle_grouped <- rle_calc %>% dplyr::group_by(key) %>% dplyr::summarise(median = stats::median(value, na.rm = TRUE))
   
@@ -46,8 +46,10 @@
     ggplot2::ylab(paste0("RLE")) +
     ggplot2::xlab("Sample") +
     ggplot2::ggtitle("RLE plot")+
-    ggplot2::geom_hline(yintercept = 2*mad(rle_calc$value, na.rm = T), colour = "blue") + 
-    ggplot2::geom_hline(yintercept = - 2*mad(rle_calc$value, na.rm = T), colour = "blue") +
+    ggplot2::geom_hline(yintercept = 2*mad(rle_calc$value, na.rm = TRUE),
+                        colour = "blue") + 
+    ggplot2::geom_hline(yintercept = - 2*mad(rle_calc$value, na.rm = TRUE),
+                        colour = "blue") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
  
    return(rle.plot)
@@ -66,6 +68,6 @@
 #' plot_rle(ribo_toy)
 plot_rle <- function(ribo, show_outlier=TRUE) {
   
-  rle_matrix <- extract_data(ribo, col = "count",position_to_rownames = T)
+  rle_matrix <- extract_data(ribo, col = "count",position_to_rownames = TRUE)
   return(.plot_rle(rle_matrix,show_outlier = show_outlier,"count"))
 }

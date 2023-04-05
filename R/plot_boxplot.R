@@ -36,7 +36,7 @@ boxplot_count <- function(ribo, color_col=NA,outlier = TRUE, horizontal = FALSE)
 boxplot_cscores <- function(ribo,outlier = TRUE, horizontal = FALSE) {
   
   ribo_m <- extract_data(ribo,only_annotated = TRUE)
-  only_annotated = TRUE
+  only_annotated <- TRUE
   
   if(nrow(ribo_m) == 0) {
     stop("No annotated site found. Please use annotate_site() on your RiboClass before calling this function.")
@@ -68,7 +68,7 @@ boxplot_cscores <- function(ribo,outlier = TRUE, horizontal = FALSE) {
   shape_outlier <- NA
   if(outlier) shape_outlier <- 19
   p <- ggplot2::ggplot( matrix_melted, ggplot2::aes(
-    x = stats::reorder(site,!!rlang::sym(values_to_plot),na.rm = T),
+    x = stats::reorder(site,!!rlang::sym(values_to_plot),na.rm = TRUE),
     y = !!rlang::sym(values_to_plot))) +
     ggplot2::geom_boxplot(outlier.shape = shape_outlier) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +

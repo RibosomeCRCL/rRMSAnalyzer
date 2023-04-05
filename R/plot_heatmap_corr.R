@@ -14,7 +14,7 @@
 #' plot_heatmap_corr(ribo_toy,"count","condition")
 #' 
 plot_heatmap_corr <- function(ribo, values_col, color_col=NULL) {
-  matrix <- extract_data(ribo, values_col, position_to_rownames = T)
+  matrix <- extract_data(ribo, values_col, position_to_rownames = TRUE)
   .plot_heatmap_corr(matrix, ribo[["metadata"]], color_col = color_col)
 }
 #' Internal function of plot_heatmap_corr.

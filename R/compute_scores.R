@@ -57,7 +57,7 @@
                                       flanking=6,
                                     method) 
                                                    {
-  data_rna_col = "rna"
+  data_rna_col <- "rna"
   sample_df[,data_rna_col] <- as.factor(sample_df[,data_rna_col])
   RNA_counts_list <- split(sample_df, sample_df[,data_rna_col])
   sample_score <- lapply(RNA_counts_list, .compute_rna_cscore, flanking , method)
@@ -100,7 +100,7 @@ compute_cscore <- function(ribo=NULL, flanking=6,
                             ncores = 1
                             ) {
     if(!(method %in% c("median","mean"))) stop("method can be either \"mean\" or \"median\"")
-    dt = ribo["data"] #we only need the counts to compute the score
+    dt <- ribo["data"] #we only need the counts to compute the score
 
     
    # Experimental : Multithreading is 3x faster than single-thread

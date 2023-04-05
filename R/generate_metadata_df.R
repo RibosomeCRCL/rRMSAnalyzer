@@ -17,10 +17,10 @@
 #' 
 #' @keywords internal
 generate_metadata_df <- function(counts_folder_path,
-                                 create_samplename_col=T,
+                                 create_samplename_col=TRUE,
                                  stop_symbol=NA) {
   
-  sample_filenames <- basename(list.files(counts_folder_path, recursive = T))
+  sample_filenames <- basename(list.files(counts_folder_path, recursive = TRUE))
   
   if(create_samplename_col) {
     sample_name <- sample_filenames
