@@ -93,12 +93,18 @@ plot_most_differential_sites <- function(df_of_Cscores = NULL, df_of_kruskal = N
 #' ribo_toy <- rename_rna(ribo_toy)
 #' ribo_toy <- annotate_site(ribo_toy,human_methylated)
 #' plot_diff_sites(ribo_toy,"condition", p_cutoff=0.1)
-plot_diff_sites <- function(ribo, factor_column, p_cutoff = 1e-02, cscore_cutoff = 0.05, adjust_pvalues_method = "fdr") {
+plot_diff_sites <- function(ribo, factor_column,
+                            p_cutoff = 1e-02,
+                            cscore_cutoff = 0.05,
+                            adjust_pvalues_method = "fdr",
+                            object_only = FALSE) {
   
   check_metadata(ribo,factor_column)
   ribo_matrix <- extract_data(ribo, only_annotated = TRUE, position_to_rownames = TRUE)
   kruskal_df <- wrapper_kruskal_test(ribo, factor_column = factor_column)
-
+  
+ if(object_only) return(kruskal_df)
+  
   #we replace sample names with their group name (the values in factor_column) 
   new_colnames <- lapply(colnames(ribo_matrix), function(x) {
     x <- ribo[["metadata"]][[factor_column]][ribo$metadata$samplename == x]

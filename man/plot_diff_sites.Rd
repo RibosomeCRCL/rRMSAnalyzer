@@ -9,7 +9,8 @@ plot_diff_sites(
   factor_column,
   p_cutoff = 0.01,
   cscore_cutoff = 0.05,
-  adjust_pvalues_method = "fdr"
+  adjust_pvalues_method = "fdr",
+  object_only = FALSE
 )
 }
 \arguments{
