@@ -84,6 +84,7 @@ plot_most_differential_sites <- function(df_of_Cscores = NULL, df_of_kruskal = N
 #' @param p_cutoff Cutoff for the adjusted p-value of the kruskal-wallis test.
 #' @param cscore_cutoff Cutoff above which the max-min c-score range between conditions' mean is considered significant.
 #' @param adjust_pvalues_method Method used to adjust p-value (one of p.adjust.methods)
+#' @param object_only Return the results of the kruskal-wallis and C-score mean range in a dataframe directly.
 #' @return a ggplot object.
 #' @export
 #'

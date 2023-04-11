@@ -93,6 +93,7 @@ boxplot_cscores <- function(ribo,outlier = TRUE, horizontal = FALSE) {
 #'
 .plot_boxplot_samples <- function(matrix,values_col_name,
                                   metadata,color_col=NA,outlier, horizontal) {
+  Sample <- NULL
   id_vars <- "Sample"
   matrix <- log10(matrix)
   matrix_inv <- as.data.frame(t(matrix))

@@ -25,7 +25,7 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
   if(!(rna %in% ribo[["rna_names"]][["current_name"]])) {
     stop("the RNA names given do not exist in the RiboClass")
   }
-  # check for pos
+  # check for position
   if(!(is.numeric(pos))) {stop("pos should be a number")}
   if (table(ribo$data[[1]]$rna)[rna] < pos) {stop(paste(pos, " is higher than the lenth of", rna))}
   
@@ -98,14 +98,14 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
                                                       x = pos - flanking,
                                                       y = 2 / 1.02,
                                                       color = "red")} +
-      geom_hline(yintercept = median(log10(count_transform$count) , na.rm = TRUE),
+      geom_hline(yintercept = stats::median(log10(count_transform$count) , na.rm = TRUE),
                  linewidth = 1,
                  linetype = "11",
                  color = "darkred") +
       annotate("text", 
                label = "Counts median",
                x = pos - flanking,
-               y = median(log10(count_transform$count) / 0.985, na.rm = TRUE),
+               y = stats::median(log10(count_transform$count) / 0.985, na.rm = TRUE),
                color = "darkred")
       
 
@@ -131,14 +131,14 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
                                                       x = pos - flanking + 1,
                                                       y = 2 / 1.02,
                                                       color = "red")} +
-      geom_hline(yintercept = median(log10(count_transform$count) , na.rm = TRUE),
+      geom_hline(yintercept = stats::median(log10(count_transform$count) , na.rm = TRUE),
                  linewidth = 1,
                  linetype = "11",
                  color = "darkred") +
       annotate("text", 
                label = "Counts median",
                x = pos - flanking + 1,
-               y = median(log10(count_transform$count) / 0.985, na.rm = TRUE),
+               y = stats::median(log10(count_transform$count) / 0.985, na.rm = TRUE),
                color = "darkred") + 
       geom_vline(xintercept = other_mod_pos,
                  linewidth = 1,

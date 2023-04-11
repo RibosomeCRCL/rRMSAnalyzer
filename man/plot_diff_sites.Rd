@@ -23,6 +23,8 @@ plot_diff_sites(
 \item{cscore_cutoff}{Cutoff above which the max-min c-score range between conditions' mean is considered significant.}
 
 \item{adjust_pvalues_method}{Method used to adjust p-value (one of p.adjust.methods)}
+
+\item{object_only}{Return the results of the kruskal-wallis and C-score mean range in a dataframe directly.}
 }
 \value{
 a ggplot object.
