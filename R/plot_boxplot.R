@@ -13,8 +13,8 @@
 #' 
 boxplot_count <- function(ribo, color_col=NA,outlier = TRUE, horizontal = FALSE) {
   ribo_matrix <- extract_data(ribo,"count",position_to_rownames = TRUE)
-  return(.plot_boxplot_samples(ribo_matrix,"count","log10(count)",
-                               ribo[["metadata"]],color_col,outlier,horizontal = horizontal))
+  return(.plot_boxplot_samples(ribo_matrix,"count", ribo[["metadata"]],
+                               color_col,outlier,horizontal = horizontal))
 
   
 }
@@ -86,15 +86,15 @@ boxplot_cscores <- function(ribo,outlier = TRUE, horizontal = FALSE) {
 #' @param color_col Name of the column in the metadata used for coloring samples.
 #' @param outlier Show boxplot outlier values.
 #' @param values_col_name Name of the column containing the value (either count or cscore).
-#' @param values_to_plot Value to display in plot.
 #' @param horizontal Show boxplot horizontally.
 #'
 #' @return ggplot boxplot
 #' @keywords internal
 #'
-.plot_boxplot_samples <- function(matrix,values_col_name,values_to_plot,
+.plot_boxplot_samples <- function(matrix,values_col_name,
                                   metadata,color_col=NA,outlier, horizontal) {
   id_vars <- "Sample"
+  matrix <- log10(matrix)
   matrix_inv <- as.data.frame(t(matrix))
   matrix_inv <- tibble::rownames_to_column(matrix_inv, "Sample")
   
@@ -111,12 +111,12 @@ boxplot_cscores <- function(ribo,outlier = TRUE, horizontal = FALSE) {
   if(outlier) shape_outlier <- 19
   
   if(is.na(color_col)) {
-    p <- ggplot2::ggplot(matrix_melted, ggplot2::aes_string(x = "Sample", y = values_to_plot)) +
+    p <- ggplot2::ggplot(matrix_melted, ggplot2::aes(x = Sample, y = !!sym(values_col_name))) +
       ggplot2::geom_boxplot(outlier.shape = shape_outlier) + ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1))
    
   }
   else {
-  p <- ggplot2::ggplot(matrix_melted, ggplot2::aes_string(x = "Sample", y = values_to_plot,fill = color_col)) +
+  p <- ggplot2::ggplot(matrix_melted, ggplot2::aes(x = Sample, y = !!sym(values_col_name),fill = !!sym(color_col))) +
     ggplot2::geom_boxplot(outlier.shape = shape_outlier) + ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1))
  
   }
