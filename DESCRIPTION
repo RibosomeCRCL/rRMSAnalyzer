@@ -8,11 +8,10 @@ Description: A package dedicated to ribomethseq analysis. It contains a set of e
 License: GPL (>= 3)
 biocViews: sva, ComplexHeatmap
 Depends: R (>= 3.5.0)
-Imports: dplyr, stringr, tidyr, rlang, sva, factoextra, ade4, ggplot2
+Imports: dplyr, stringr, tidyr, rlang, sva, factoextra, ade4, ggplot2, ComplexHeatmap, colorRamp2
 LazyData: FALSE
 RoxygenNote: 7.2.3
 NeedsCompilation: no
-Packaged: 2019-02-04 13:27:40 UTC; janice
 Encoding: UTF-8
 Suggests: 
     knitr,
