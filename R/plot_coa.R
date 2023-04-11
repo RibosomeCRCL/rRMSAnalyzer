@@ -65,11 +65,12 @@ plot_coa <- function(ribo,color_col = NULL, axes = c(1,2), only_annotated=FALSE,
   }
   
   if(title == "default") {
-    title <- paste0("Correspondence analysis of count data on all genomic positions (",nrow(dudi.coa$tab),")")
+    title <- "Correspondance analysis from count data"
   }
   
   if(subtitle == "default") {
-    subtitle <- paste(ncol(dudi.coa$tab), "samples")
+    subtitle <- paste(ncol(dudi.coa$tab), "samples and",nrow(dudi.coa$tab),
+                      "positions")
   }
   
   plot.coa <- factoextra::fviz_ca_col(dudi.coa, 

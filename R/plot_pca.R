@@ -59,7 +59,7 @@ plot_pca <- function(ribo, color_col = NULL, axes = c(1,2),
   }
   # Plot title
   if(title == "default") {
-    plot_title <- paste("PCA of Cscore for", as.character(ncol(dudi.pca$tab)), "sites")
+    plot_title <- "Principal Component Analysis from C-score data"
   }
   else {
     plot_title <- title
@@ -67,7 +67,8 @@ plot_pca <- function(ribo, color_col = NULL, axes = c(1,2),
   # Plot subtitle
   
   if(subtitle == "samples") {
-   plot_subtitle <- paste(as.character(nrow(dudi.pca$tab)),"samples")
+   plot_subtitle <- paste(as.character(nrow(dudi.pca$tab)),"samples and",
+                          as.character(ncol(dudi.pca$tab)),"positions")
   }
   else if(subtitle == "none") {
     plot_subtitle <- ggplot2::waiver()
