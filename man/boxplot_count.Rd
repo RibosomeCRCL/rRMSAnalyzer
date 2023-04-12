@@ -19,7 +19,8 @@ boxplot_count(ribo, color_col = NA, outlier = TRUE, horizontal = FALSE)
 A ggplot object.
 }
 \description{
-This plot is useful to check if the samples are alike in their raw counts.
+This plot is useful to check if the samples are alike in their
+raw counts.
 }
 \examples{
 data("ribo_toy")

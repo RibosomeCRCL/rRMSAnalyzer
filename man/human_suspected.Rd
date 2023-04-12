@@ -3,7 +3,7 @@
 \docType{data}
 \name{human_suspected}
 \alias{human_suspected}
-\title{Suspected 2'OMe positions in Humans' rRNA}
+\title{Suspected 2'Ome positions in Humans' rRNA}
 \format{
 A data frame with 17 rows and 10 variables:
 \describe{
@@ -21,9 +21,9 @@ A data frame with 17 rows and 10 variables:
 }
 }
 \usage{
-human_suspected
+data(human_suspected)
 }
 \description{
-A dataset containing 17 2'OMe positions with associated data
+A dataset containing 17 2'Ome positions with associated data
 }
 \keyword{datasets}

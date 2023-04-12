@@ -19,8 +19,8 @@ data(ribo_toy)
 A riboclass containing 10 samples + 2 reference RNA.
 }
 \details{
-Samples are from 4 different biological conditions ("condition" column in metadata). The sequencing has been 
-done in two different batches ("run" column in metadata).
+Samples are from 4 different biological conditions ("condition" column in metadata).
+The sequencing has been done in two different batches ("run" column in metadata).
 Both batches have the same reference RNA, to detect technical bias.
 }
 \keyword{datasets}

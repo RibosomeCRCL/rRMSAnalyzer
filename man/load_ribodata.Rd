@@ -43,7 +43,7 @@ load_ribodata(
 
 \item{flanking}{Size of the local coverage.}
 
-\item{method}{Computation method of the local coverage. Either "median" or "mean".}
+\item{method}{Computation method of the local coverage. Either 'median' or 'mean'.}
 
 \item{ncores}{Number of cores to use in case of multithreading.}
 }

@@ -19,15 +19,18 @@ plot_pca(
 
 \item{color_col}{Name of the column in the metadata used for coloring samples.}
 
-\item{axes}{Two-element vector indicating which pair of principal components you want to show.}
+\item{axes}{Two-element vector indicating which pair of principal components 
+to show.}
 
 \item{only_annotated}{If TRUE, use only annotated sites to plot PCA.}
 
-\item{title}{Title to display on the plot. "default" for default title.}
+\item{title}{Title to display on the plot. 'default' for default title.}
 
-\item{subtitle}{Subtitle to display on the plot. "samples" for number of samples. "none" for no subtitle.}
+\item{subtitle}{Subtitle to display on the plot. 'samples' for number of
+samples. 'none' for no subtitle.}
 
-\item{object_only}{Return directly the full dudi.pca object, without generating the plot.}
+\item{object_only}{Return directly the full dudi.pca object, without
+generating the plot.}
 }
 \value{
 A ggplot or a dudi.pca object if object_only is set to True.
@@ -36,6 +39,6 @@ A ggplot or a dudi.pca object if object_only is set to True.
 Principal component analysis of a RiboClass object
 }
 \examples{
-data("ribo_toy")
-plot_pca(ribo_toy,"run")
+data('ribo_toy')
+plot_pca(ribo_toy,'run')
 }

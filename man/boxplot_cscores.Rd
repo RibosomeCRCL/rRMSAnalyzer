@@ -2,7 +2,8 @@
 % Please edit documentation in R/plot_boxplot.R
 \name{boxplot_cscores}
 \alias{boxplot_cscores}
-\title{Plot boxplot of annotated sites c-score.
+\title{Plot boxplot representing the C-score values of all samples for each
+individual annotated site.
 Sites are sorted by their median.}
 \usage{
 boxplot_cscores(ribo, outlier = TRUE, horizontal = FALSE)
@@ -18,7 +19,8 @@ boxplot_cscores(ribo, outlier = TRUE, horizontal = FALSE)
 a ggplot geom_boxplot
 }
 \description{
-Plot boxplot of annotated sites c-score.
+Plot boxplot representing the C-score values of all samples for each
+individual annotated site.
 Sites are sorted by their median.
 }
 \examples{

@@ -3,7 +3,7 @@
 \docType{package}
 \name{rRMSAnalyzer-package}
 \alias{rRMSAnalyzer-package}
-\title{rRMSAnalyzer package dedicated to analysis pf RiboMethSeq data}
+\title{rRMSAnalyzer package dedicated to analysis of RiboMethSeq data}
 \description{
 The rRMSAnalyzer package is designed to give easy-to-use functions
 dedicated to RiboMethSeq (RMS) analyses. All functions revolve
@@ -15,14 +15,14 @@ The main functions are (in a standard workflow chronological order):
 
 \itemize{
 \item \code{\link{load_ribodata}} - import data and create a RiboClass. Objects of this class are used by all other functions
-\item \code{\link{compute_cscore}} - compute C-score for all genomic positions in your samples
-\item \code{\link{adjust_bias}} - adjust technical biases of your RiboMethSeq data with combatSeq
-\item \code{\link{extract_data}} - get a dataframe of c-score for all samples and all positions in your RiboClass
+\item \code{\link{compute_cscore}} - compute C-score for all genomic positions in each sample
+\item \code{\link{adjust_bias}} - adjust technical biases of your RiboMethSeq data with ComBat-seq
+\item \code{\link{extract_data}} - get a dataframe of C-score for all samples and all positions in the RiboClass
 \item Plots, e.g.: \code{\link{plot_pca}}; \code{\link{plot_coa}} or \code{\link{plot_heatmap}}.
 }
 
-To know how to start using this package, you can have a look at the vignette at 
-\code{vignette("analyses-with-rRMSAnalyzer")}. It will give an example for most commands
+To know how to start using this package, have a look at the vignette at 
+\code{vignette("rRMSAnalyzer")}. It will give an example for most commands
 and a workflow.
 
 

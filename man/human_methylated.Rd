@@ -3,7 +3,7 @@
 \docType{data}
 \name{human_methylated}
 \alias{human_methylated}
-\title{Known 2'OMe positions in Humans' rRNA}
+\title{Known 2'Ome positions in Humans' rRNA}
 \format{
 A data frame with 112 rows and 10 variables:
 \describe{
@@ -21,9 +21,9 @@ A data frame with 112 rows and 10 variables:
 }
 }
 \usage{
-human_methylated
+data(human_methylated)
 }
 \description{
-A dataset containing 112 2'OMe positions with associated data
+A dataset containing 112 2'Ome positions with associated data
 }
 \keyword{datasets}

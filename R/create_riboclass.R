@@ -82,11 +82,11 @@ new_riboclass <- function(count_path,
     }
 
     if(is.character(metadata_key) && !(metadata_key %in% names(metadata))) {
-      stop(paste(metadata_key, " (metadata_key param) is not a column in metadata"))
+      stop(metadata_key, " (metadata_key param) is not a column in metadata")
     }
 
     if(is.character(metadata_id) && !(metadata_id %in% names(metadata))) {
-      stop(paste(metadata_id, " (metadata_id param) is not a column in metadata"))
+      stop(metadata_id, " (metadata_id param) is not a column in metadata")
     }
 
     #rename the column specified in "metadata_id" to "samplename"

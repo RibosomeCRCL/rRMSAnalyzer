@@ -1,7 +1,9 @@
-#' Known 2'OMe positions in Humans' rRNA
+#' Known 2'Ome positions in Humans' rRNA
 #'
-#' A dataset containing 112 2'OMe positions with associated data
-#'
+#' A dataset containing 112 2'Ome positions with associated data
+#' 
+#' @usage data(human_methylated)
+#' 
 #' @format A data frame with 112 rows and 10 variables:
 #' \describe{
 #'   \item{Position}{nucleotide position on rRNA}
@@ -18,9 +20,10 @@
 #' }
 "human_methylated"
 
-#' Suspected 2'OMe positions in Humans' rRNA
+#' Suspected 2'Ome positions in Humans' rRNA
 #'
-#' A dataset containing 17 2'OMe positions with associated data
+#' A dataset containing 17 2'Ome positions with associated data
+#' @usage data(human_suspected)
 #'
 #' @format A data frame with 17 rows and 10 variables:
 #' \describe{
@@ -42,8 +45,8 @@
 #'
 #' A riboclass containing 10 samples + 2 reference RNA.
 #' 
-#' Samples are from 4 different biological conditions ("condition" column in metadata). The sequencing has been 
-#' done in two different batches ("run" column in metadata).
+#' Samples are from 4 different biological conditions ("condition" column in metadata).
+#' The sequencing has been done in two different batches ("run" column in metadata).
 #' Both batches have the same reference RNA, to detect technical bias.
 #' @usage data(ribo_toy)
 #' 

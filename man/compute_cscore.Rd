@@ -11,7 +11,7 @@ compute_cscore(ribo = NULL, flanking = 6, method = "median", ncores = 1)
 
 \item{flanking}{Size of the local coverage.}
 
-\item{method}{Computation method of the local coverage. Either "median" or "mean".}
+\item{method}{Computation method of the local coverage. Either 'median' or 'mean'.}
 
 \item{ncores}{Number of cores to use in case of multithreading.}
 }
@@ -19,19 +19,26 @@ compute_cscore(ribo = NULL, flanking = 6, method = "median", ncores = 1)
 A RiboClass with c-score columns appended to each sample's data.
 }
 \description{
-In this package, the C-score is calculated for every position. As it can be useful to find positions not yet identified as methylated.
+In this package, the C-score is calculated for every position. As it can be
+useful to find positions not yet identified as methylated.
 
-This function is called automatically when loading data or after adjusting biases in count data with combatSeq. You can still call it manually if you want to modify how the C-score is currently computed.
+This function is called automatically when loading data or after adjusting
+biases in end read count data with ComBat-seq. It can be still called
+manually to modify how the C-score is currently computed.
 
-For each RNA, The first and last positions cannot be calculated if the local coverage is shorter than the flanking argument. Their value will be NA instead.
+For each RNA, the first and last positions cannot be calculated if the local
+coverage is shorter than the flanking argument. Their value will be NA instead.
 }
 \examples{
-data("ribo_toy")
-ribo_subsetted <- keep_ribo_samples(ribo_toy,"S1")
+data('ribo_toy')
+ribo_subsetted <- keep_ribo_samples(ribo_toy,'S1')
 ribo_with_cscore_med <- compute_cscore(ribo_subsetted, ncores = 2)
-ribo_with_cscore_mean <- compute_cscore(ribo_subsetted, method = "mean", ncores = 2)
+ribo_with_cscore_mean <- compute_cscore(ribo_subsetted, method = 'mean', ncores = 2)
 
 }
 \references{
-Birkedal, U., Christensen-Dalsgaard, M., Krogh, N., Sabarinathan, R., Gorodkin, J. and Nielsen, H. (2015), Profiling of Ribose Methylations in RNA by High-Throughput Sequencing. Angew. Chem. Int. Ed., 54: 451-455. https://doi.org/10.1002/anie.201408362
+Birkedal, U., Christensen-Dalsgaard, M., Krogh, N., Sabarinathan,
+R., Gorodkin, J. and Nielsen, H. (2015),
+Profiling of Ribose Methylations in RNA by High-Throughput Sequencing.
+Angew. Chem. Int. Ed., 54: 451-455. https://doi.org/10.1002/anie.201408362
 }

@@ -16,7 +16,8 @@
 \arguments{
 \item{matrix}{Sites x Samples C-score/count matrix (output of extract_data()).}
 
-\item{values_col_name}{Name of the column containing the value (either count or cscore).}
+\item{values_col_name}{Name of the column containing the value (either count
+or cscore).}
 
 \item{metadata}{Metadata of samples in matrix.}
 

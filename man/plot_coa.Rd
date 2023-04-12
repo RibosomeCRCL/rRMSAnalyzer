@@ -19,15 +19,18 @@ plot_coa(
 
 \item{color_col}{Name of the column in the metadata used for coloring samples.}
 
-\item{axes}{Two-element vector indicating which pair of COA components you want to show.}
+\item{axes}{Two-element vector indicating which pair of COA components
+to show.}
 
 \item{only_annotated}{If TRUE, use only annotated sites to plot COA.}
 
-\item{title}{Title to display on the plot. "default" for default title.}
+\item{title}{Title to display on the plot. 'default' for default title.}
 
-\item{subtitle}{Subtitle to display on the plot. "samples" for number of samples. "none" for no subtitle.}
+\item{subtitle}{Subtitle to display on the plot. 'samples' for number of
+samples. 'none' for no subtitle.}
 
-\item{object_only}{Return directly the full dudi.coa object, without generating the plot.}
+\item{object_only}{Return directly the full dudi.coa object, without
+generating the plot.}
 }
 \value{
 A ggplot or a dudi.coa object if object_only is set to True.
@@ -36,6 +39,6 @@ A ggplot or a dudi.coa object if object_only is set to True.
 Correspondence analysis of a RiboClass' counts.
 }
 \examples{
-data("ribo_toy")
-plot_coa(ribo = ribo_toy, color_col = "condition")
+data('ribo_toy')
+plot_coa(ribo = ribo_toy, color_col = 'condition')
 }

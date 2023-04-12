@@ -2,7 +2,7 @@
 % Please edit documentation in R/adjust_bias.R
 \name{adjust_bias}
 \alias{adjust_bias}
-\title{Correct batch effect with ComBatseq method}
+\title{Correct batch effect with ComBat-seq method}
 \usage{
 adjust_bias(ribo, batch, ...)
 }
@@ -25,9 +25,9 @@ It will return a new RiboClass with adjusted read end count values and C-scores 
 You must have a column with the batch number for each sample in your RiboClass’s metadata.
 }
 \examples{
-data("ribo_toy")
-ribo_toy_two <- keep_ribo_samples(ribo_toy,c("S1","RNA1","S7","RNA2"))
-ribo_toy_adjusted <- adjust_bias(ribo_toy_two,"run") 
+data('ribo_toy')
+ribo_toy_two <- keep_ribo_samples(ribo_toy,c('S1','RNA1','S7','RNA2'))
+ribo_toy_adjusted <- adjust_bias(ribo_toy_two,'run') 
 
 }
 \references{
