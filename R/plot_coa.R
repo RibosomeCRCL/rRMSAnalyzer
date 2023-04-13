@@ -1,16 +1,3 @@
-#' (internal) Correspondence Analysis computation function 
-#'
-#' @param raw_counts A matrix of counts, as exported by extract_data()
-#' @return A coa object
-#' @keywords internal
-#' 
-.compute_coa <- function(raw_counts = NULL) {
-  res_coa <- ade4::dudi.coa(raw_counts[stats::complete.cases(raw_counts),
-  ], scannf = FALSE, nf = 5)
-  
-  return(res_coa)
-}
-
 #' Correspondence analysis of a RiboClass' counts.
 #'
 #' @param ribo A RiboClass object.
@@ -48,6 +35,20 @@ plot_coa <- function(ribo, color_col = NULL, axes = c(1, 2),
                    color_col, axes = axes, title, subtitle))
   
 }
+
+#' (internal) Correspondence Analysis computation function 
+#'
+#' @param raw_counts A matrix of counts, as exported by extract_data()
+#' @return A coa object
+#' @keywords internal
+#' 
+.compute_coa <- function(raw_counts = NULL) {
+  res_coa <- ade4::dudi.coa(raw_counts[stats::complete.cases(raw_counts),
+  ], scannf = FALSE, nf = 5)
+  
+  return(res_coa)
+}
+
 
 #' (internal) Plot a coa object 
 #'
