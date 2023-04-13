@@ -121,18 +121,17 @@ boxplot_cscores <- function(ribo,outlier = TRUE, horizontal = FALSE) {
   
   if (is.na(color_col)) {
     p <- ggplot2::ggplot(matrix_melted,
-                         ggplot2::aes(x = Sample, y = !!sym(values_col_name))) +
-      ggplot2::geom_boxplot(outlier.shape = shape_outlier) +
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust = 1))
+                         ggplot2::aes(x = Sample, y = !!sym(values_col_name)))
   } else {
     p <- ggplot2::ggplot(matrix_melted,
                          ggplot2::aes(x = Sample, y = !!sym(values_col_name), 
-                                      fill = !!sym(color_col))) +
-      ggplot2::geom_boxplot(outlier.shape = shape_outlier) +
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5,
+                                      fill = !!sym(color_col)))
+  }
+  p <- p + ggplot2::geom_boxplot(outlier.shape = shape_outlier) + 
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5,
                                                          hjust = 1))
     
-  }
+  
   p <- p + ggplot2::geom_hline(yintercept = 2, colour = "blue")
   if (horizontal)
     p <- p + ggplot2::coord_flip()
