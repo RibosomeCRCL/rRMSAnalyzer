@@ -59,3 +59,61 @@ annotate_site <- function(ribo, annot, anno_rna = 2, anno_pos = 1, anno_value = 
   return(ribo)
   
 }
+
+#' Remove site annotations of a given RiboClass
+#'
+#' @param ribo A RiboClass object.
+#'
+#' @return A RiboClass object where all annotated position have been replaced by
+#' NA, the default value.
+#' @export
+#'
+#' @examples
+#' data('ribo_toy')
+#' remove_annotation(ribo_toy)
+remove_annotation <- function(ribo) {
+  ribo[["data"]] <- lapply(ribo[["data"]], function(x) {
+    x["site"] <- NA
+    return(x)
+  })
+  
+  return(ribo)
+}
+
+#' Keep only a subset of the current annotation
+#'
+#' @param ribo a RiboClass
+#' @param annotation_to_keep vector containing annotated sites'name to keep
+#'
+#' @return a RiboClass where only annotated sites within annotation_to_keep are
+#' still annotated.
+#' @export
+#'
+#' @examples
+#' data('ribo_toy')
+#' data('human_methylated')
+#' ribo_toy <- rename_rna(ribo_toy)
+#' ribo_toy <- annotate_site(ribo_toy,human_methylated)
+#' ribo_toy <- keep_selected_annotation(ribo_toy, c("28S_Am1310","28S_Cm2848"))
+#' 
+keep_selected_annotation <- function(ribo, annotation_to_keep) {
+  
+  sample_1 <- ribo[["data"]][[1]]
+  
+  current_annotation <- sample_1[which(!is.na(sample_1[["site"]])),
+                                 c("rnapos","rna","site")]
+  
+  ribo <- remove_annotation(ribo)
+  
+  new_annotation <- current_annotation[
+    which(current_annotation[["site"]] %in% annotation_to_keep),]
+  
+  if (nrow(new_annotation) == 0) {
+    stop("No currently annotated site matches with your subset!")
+  }
+  new_annotation <- .generate_name_positions(new_annotation, "rna", "rnapos")
+  ribo <- annotate_site(ribo,new_annotation)
+  
+  return(ribo)
+  
+}
