@@ -36,18 +36,22 @@ plot_heatmap_corr <- function(ribo, values_col, color_col=NULL) {
     column_ha <- NULL
   }
   
-  white_red <- colorRamp2::colorRamp2(c(0,1),c("white", "red"))
-  
-   corr_matrix <- 1 - stats::cor(cscore_matrix,use = "complete.obs")
+
+    corr_matrix <- stats::cor(cscore_matrix,use = "complete.obs")
+    pearson_color <- colorRamp2::colorRamp2(c(0,0.5,1),c("red","white", "blue"))
    
-  ComplexHeatmap::Heatmap(corr_matrix,col = white_red,name = "Correlation-based distance",
-                          row_title = "Sample",column_title = "Sample", 
-                          column_title_side = "bottom",
+ ht <- ComplexHeatmap::Heatmap(corr_matrix,col = pearson_color,name = "Pearson correlation",
+                          row_title = "Sample",column_title = "Pearson correlation between samples", 
+                          column_title_side = "top",
                           cluster_rows = FALSE, cluster_columns = TRUE,
-                          clustering_distance_columns = "manhattan", 
+                          clustering_distance_columns = "pearson", 
+                          heatmap_legend_param = list(
+                            legend_direction = "horizontal" ),
                           clustering_method_columns = "ward.D2",
                           column_split = 3,
                           top_annotation = column_ha,
                           row_names_gp = grid::gpar(fontsize = 6))
+  
+ ComplexHeatmap::draw(ht, heatmap_legend_side = "bottom")
   
 }
