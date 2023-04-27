@@ -24,8 +24,7 @@
 #' ribo_toy_adjusted <- adjust_bias(ribo_toy_two,'run') 
 #' 
 adjust_bias <- function(ribo, batch, ...) {
-
-  if (batch %in% colnames(ribo[["metadata"]])) {
+    check_metadata(ribo,batch)
     matrix_ribo <- extract_data(ribo, "count", position_to_rownames = TRUE)
     # reorganize column according to metadata and convert DF to
     # matrix (otherwise, ComBat_seq won't work)
@@ -46,9 +45,7 @@ adjust_bias <- function(ribo, batch, ...) {
     ribo_updated["combatSeq_count"] <- TRUE
     ribo_updated["col_used_combatSeq"] <- batch
     return(ribo_updated)
-  } else {
-    stop("\"", batch, "\" is not a valid metadata.")
-  }
+
   
 }
 
