@@ -6,12 +6,19 @@
 individual annotated site.
 Sites are sorted by their median.}
 \usage{
-boxplot_cscores(ribo, outlier = TRUE, horizontal = FALSE)
+boxplot_cscores(
+  ribo,
+  outlier = TRUE,
+  sort_by = c("iqr", "var"),
+  horizontal = FALSE
+)
 }
 \arguments{
 \item{ribo}{A RiboClass object.}
 
 \item{outlier}{Show boxplot outlier values.}
+
+\item{sort_by}{sort sites by variance ("var") or IQR ("iqr"). If neither is given, sites are sorted by median.}
 
 \item{horizontal}{Show boxplot horizontally.}
 }

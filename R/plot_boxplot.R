@@ -25,7 +25,7 @@ boxplot_count <- function(ribo, color_col = NA,
 #' individual annotated site.
 #' Sites are sorted by their median.
 #' @inheritParams boxplot_count 
-#'
+#' @param sort_by sort sites by variance ("var") or IQR ("iqr"). If neither is given, sites are sorted by median.
 #' @return a ggplot geom_boxplot
 #' @export
 #'
@@ -36,7 +36,7 @@ boxplot_count <- function(ribo, color_col = NA,
 #' ribo_toy <- annotate_site(ribo_toy,human_methylated)
 #' boxplot_cscores(ribo_toy)
 #' 
-boxplot_cscores <- function(ribo,outlier = TRUE, horizontal = FALSE) {
+boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("iqr","var"), horizontal = FALSE) {
   ribo_m <- extract_data(ribo,only_annotated = TRUE)
   
   if(nrow(ribo_m) == 0) {
@@ -44,7 +44,8 @@ boxplot_cscores <- function(ribo,outlier = TRUE, horizontal = FALSE) {
     }
   
   return(.plot_boxplot_sites(ribo_m,
-                      values_to_plot = "cscore",outlier = TRUE,
+                      values_to_plot = "cscore",outlier = TRUE, 
+                      sort_by = sort_by,
                       horizontal = horizontal))
 }
 
@@ -58,14 +59,37 @@ boxplot_cscores <- function(ribo,outlier = TRUE, horizontal = FALSE) {
 #' @return A ggplot object.
 #' @keywords internal
 #'
-.plot_boxplot_sites <- function(matrix, values_to_plot, outlier, horizontal) {
-  site <- NULL
+.plot_boxplot_sites <- function(matrix, values_to_plot, outlier, sort_by, horizontal) {
+  site <- cscore <- NULL
   id_vars <- "site"
-  matrix_melted <- reshape2::melt(matrix, id.vars = id_vars,
-                                  value.name = values_to_plot)
+  
+  if (tolower(sort_by) == "iqr") {
+    matrix_melted <- get_IQR(matrix)
+  } else if (tolower(sort_by) == "var")  {
+    matrix_melted <- get_IQR(matrix,"var")
+  }
+  
   shape_outlier <- NA
   if (outlier)
     shape_outlier <- 19
+  
+  if ((tolower(sort_by) %in% c("iqr","var"))) {
+  
+    method <- ifelse(tolower(sort_by) =="iqr","IQR","variance")
+  p <- ggplot(matrix_melted, aes(x = site, y = cscore)) +
+    geom_boxplot() +
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5,
+                                     hjust = 1),
+          legend.position = "top",
+          axis.title=element_text(size=14),
+          axis.text.y = element_text(size=12)) +
+    labs(x = paste0("Site (sorted by ",method,")"),
+         y = "C-score")
+  
+  } else {
+    matrix_melted <- reshape2::melt(matrix, id.vars = id_vars,
+                                    value.name = values_to_plot)
   p <- ggplot2::ggplot(matrix_melted,
                        ggplot2::aes(x = stats::reorder(site, 
                                                        !!rlang::sym(values_to_plot),
@@ -74,8 +98,9 @@ boxplot_cscores <- function(ribo,outlier = TRUE, horizontal = FALSE) {
     ggplot2::geom_boxplot(outlier.shape = shape_outlier) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5,
                                                        hjust = 1)) +
-    ggplot2::xlab("Site") +
+    ggplot2::xlab("Site (sorted by median)") +
     ggplot2::ylab("C-score")
+  }
   
   if (horizontal)
     p <- p + ggplot2::coord_flip()

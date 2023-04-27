@@ -4,7 +4,7 @@
 \alias{.plot_boxplot_sites}
 \title{Internal function for boxplot_cscore}
 \usage{
-.plot_boxplot_sites(matrix, values_to_plot, outlier, horizontal)
+.plot_boxplot_sites(matrix, values_to_plot, outlier, sort_by, horizontal)
 }
 \arguments{
 \item{matrix}{Sites x Samples C-score/count matrix (output of extract_data()).}
