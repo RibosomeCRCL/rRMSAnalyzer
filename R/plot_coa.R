@@ -69,13 +69,14 @@ plot_coa <- function(ribo, color_col = NULL, axes = c(1, 2),
     color_col <- as.factor(metadata[, color_col])
   }
   
+  
   if (title == "default") {
     title <- "Correspondance analysis from count data"
   }
   
   if (subtitle == "default") {
     subtitle <- paste(ncol(dudi.coa$tab), "samples and", nrow(dudi.coa$tab),
-                      "positions")
+                      "positions (all)")
   }
   
   plot.coa <- factoextra::fviz_ca_col(dudi.coa,
