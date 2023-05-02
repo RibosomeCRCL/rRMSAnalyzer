@@ -1,8 +1,15 @@
 check_metadata <- function(ribo,metadata_name) {
+  # Get metadata columns that do not exist in ribo's metadata.
+  unmatched_elts <- metadata_name[
+    which(!(metadata_name %in% colnames(ribo[["metadata"]])))
+    ]
   
-  if(!(metadata_name %in% colnames(ribo[["metadata"]]))) {
-    stop("The metadata column specified (",metadata_name,") does not exist.\n Available columns : ",
-         paste(colnames(ribo[["metadata"]]),collapse = ", "))
+  if(length(unmatched_elts) > 0) {
+    stop("The following metadata columns you have specified do not exist : \n- ",
+         paste(unmatched_elts,collapse = "\n- "),
+         "\n\n Available columns : ",
+       paste(colnames(ribo[["metadata"]]),collapse = ", "))
+    
   }
 }
 

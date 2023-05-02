@@ -19,6 +19,7 @@
 plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
                          cutree_rows=4, cutree_cols=2, ...) {
   
+  check_metadata(ribo,color_col)
   matrix <- extract_data(ribo, "cscore", position_to_rownames = TRUE,
                          only_annotated = only_annotated)
   
@@ -41,17 +42,7 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
                                   color_col = NULL, most_variant = FALSE,
                                   title="default", cutree_rows,
                                   cutree_cols, ...) {
-  
-  # Get the most variant sites
-  # TODO : create function
-  # if (most_variant) {
-  #   cscore_matrix <- get_most_or_less_variant(cscore_matrix)
-  # }
-  
-  
-  # The color palette is from pheatmap package
-  # https://github.com/raivokolde/pheatmap
-  # heat_colors <- colorRampPalette(rev(RColorBrewer::brewer.pal(n = 7, name = "RdYlBu")))(100)
+
   heat_colors <- grDevices::hcl.colors(7,"inferno")
   
   
