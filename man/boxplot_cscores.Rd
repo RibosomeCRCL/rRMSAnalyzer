@@ -9,7 +9,7 @@ Sites are sorted by their median.}
 boxplot_cscores(
   ribo,
   outlier = TRUE,
-  sort_by = c("iqr", "var"),
+  sort_by = c("median", "iqr", "var")[1],
   horizontal = FALSE
 )
 }

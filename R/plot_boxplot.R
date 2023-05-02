@@ -36,7 +36,7 @@ boxplot_count <- function(ribo, color_col = NA,
 #' ribo_toy <- annotate_site(ribo_toy,human_methylated)
 #' boxplot_cscores(ribo_toy)
 #' 
-boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("iqr","var"), horizontal = FALSE) {
+boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var")[1], horizontal = FALSE) {
   ribo_m <- extract_data(ribo,only_annotated = TRUE)
   
   if(nrow(ribo_m) == 0) {
@@ -63,11 +63,19 @@ boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("iqr","var"), horiz
   site <- cscore <- NULL
   id_vars <- "site"
   
-  if (tolower(sort_by) == "iqr") {
-    matrix_melted <- get_IQR(matrix)
-  } else if (tolower(sort_by) == "var")  {
-    matrix_melted <- get_IQR(matrix,"var")
-  }
+    if (tolower(sort_by) == "iqr") {
+      matrix_melted <- get_IQR(matrix)
+      
+    } else if(tolower(sort_by) == "median") {    
+      matrix_melted <- reshape2::melt(matrix, id.vars = id_vars,
+                                      value.name = values_to_plot)
+    } else if (tolower(sort_by) == "var")  {
+      matrix_melted <- get_IQR(matrix, "var")
+    } else {
+      stop("Choose either \"median\", \"iqr\" or \"var\" for sort_by param.\n  \"",
+           sort_by,"\" is not a valid argument.")
+    }
+  
   
   shape_outlier <- NA
   if (outlier)
