@@ -1,0 +1,219 @@
+---
+title: "Quality Control Report"
+output: 
+    html_document:
+        theme: cosmo
+        number_sections: true
+        toc: true
+        toc_float:
+            collapsed: true
+toc-title: "rRMSAnalyzer"
+    
+params:
+    library_col: "library"
+    condition_col: "condition"
+    ribo_name: "ribo"
+    project_name: "Unnamed project"
+---
+```{r include = FALSE}
+knitr::opts_chunk$set(echo=FALSE)
+
+all_sites <- length(ribo_to_check[[1]][[1]][[1]])
+
+# Get the number of valid sites
+ribom <- extract_data(ribo_to_check)
+valid_sites <- sum(complete.cases(ribom))
+
+```
+
+```{=html}
+<style type="text/css">
+  body{
+ font-family: Helvetica;    
+}
+
+details{
+background-color: #E4F3F3;
+}
+
+mark {
+  background-color: #FF91A4;
+  color: black;
+}
+
+</style>
+```
+<details>
+
+<summary>
+
+<b> ℹ️ Input data recapitulation </b>
+
+</summary>
+Project name : **`r params$project_name`**<br><br>
+User name : **`r Sys.getenv("USERNAME")`** <br>
+Date : **`r Sys.time()`**
+
+RiboClass Name : **`r params$ribo_name`**. <br> Number of uploaded samples: **`r length(ribo_to_check[[1]])`** samples. <br> RNA(s) used by the coverage tool: **`r as.character(ribo_to_check[["rna_names"]][["original_name"]])`** <br> There are **`r as.character(all_sites)`** genomic positions.
+
+
+__**C-score**__ <br>
+Method of computation : **`r as.character(ribo_to_check["cscore_method"])`** <br>
+Window length : **`r as.character(ribo_to_check["cscore_window"])`**<br>
+**`r as.character(valid_sites)`** genomic positions with a valid
+C-score in all samples.
+<br>
+<br>
+__**ComBat-seq**__<br>
+ComBat-seq correction ?
+**`r ifelse(is.null(ribo_to_check[["combatSeq_count"]]),"No","Yes")`** <br>
+Metadata used for ComBat-seq :
+**`r ifelse(is.null(ribo_to_check[["col_used_combatSeq"]]),"None",as.character(ribo_to_check["col_used_combatSeq"]))`**
+
+</details>
+
+# Introduction
+
+This report shows the quality control of the **`r params$project_name`** sequencing data using the rRMSanalyzer package. 
+
+The purpose of this step is to check that the generated data provide good quality C-score values that allow further analysis. To do this, it is necessary to check that the sequencing coverage is uniform and reproducible between samples, eliminating the possibility of biases due to sequencing and outlier samples.
+
+We use here the end read count data to ensure the quality of the sequencing coverage on the samples. We then use this measure to compare samples with each other.  We then finish with a cohort check using the C-score values.
+
+## Project
+
+This quality report is generated from the analysis of the **`r params$project_name`**, which is loaded inside the RiboClass object **`r params$ribo_name`**. The `r params$ribo_name` object was generated from **`r length(ribo_to_check[[1]])`** samples and **`r as.character(all_sites)`** genomic positions.
+
+The following (r)RNA were used by the coverage tool: **`r as.character(ribo_to_check[["rna_names"]][["original_name"]])`**
+
+## Method
+
+**C-score computation** : In the following analyses, the C-Score (Birkedal et al, 2015) was computed using the **`r as.character(ribo_to_check["cscore_method"])`** of the **`r as.character(ribo_to_check["cscore_window"])`** neighboring positions. In the end, there are **`r as.character(valid_sites)`** genomic positions with a valid C-score in all samples. C-score for genomic positions on RNA’s extremities cannot be computed, because of the lack of neighbors in the local window. 
+
+**Sequencing biases correction** : The possible technical biases found at the end of the sequencing step are corrected using the **ComBat-seq** method. In this analysis, the correction is **`r ifelse(is.null(ribo_to_check[["combatSeq_count"]]),"unused","used")`**. Here we used the variable "**`r ifelse(is.null(ribo_to_check[["col_used_combatSeq"]]),"None",as.character(ribo_to_check["col_used_combatSeq"]))`**" to perform this correction.
+
+## Metadata
+
+The following metadata are used in the project **`r params$project_name`** :
+
+```{r, echo=FALSE}
+create_dt(ribo_to_check[[2]])
+```
+ 
+# Global coverage
+
+In this section, we present quality control measures that are derived from the final read count data on all sequenced positions (i.e., global coverage data) to ensure consistent and reproducible sample coverage.
+
+##  Coverage distribution
+
+This image is a boxplot given the distribution of the absolute number of end read counts at each genomic positions for all individual samples. The blue line gives a minimal of 100 end read counts. Median below the blue line identifies putative outlier sample (highlighted in red).
+
+```{r boxplot2,warning=FALSE}
+rRMSAnalyzer::boxplot_count(ribo_to_check) + ggplot2::ggtitle("End read counts distribution by sample")
+```
+
+<mark> These threshold are used because, it is established <mark>(ref si il y en a une), by comparing the C-score at a given genomic position depending on the number of end read counts in its local environment, it appears , that a minimum coverage of 100 end read counts is required to reach a robust C-score. </mark>
+
+## Relative Log Coverage
+
+To ensure the reproducibility of the coverage across all samples, we compute the Relative Log Coverage with the following formula :
+
+$$\log_2(\frac{pos_{sample} + 1}{pos_{all}})$$
+
+
+Where :
+
+-   pos~sample~ : the end read count at a specific position for a specific sample.
+-   pos~all~ : the end read count **median of all samples** for the same specific position.
+
+This image shows the Relative Log Coverage plot given the variation of the end read counts to the sample median for each individual sample. The blue lines give median +/- 2mad variation. Median outside the blue lines identifies putative outlier sample. Sample that presents a lower or higher coverage compared to other samples might be considered as outlier.
+
+```{r}
+rRMSAnalyzer::plot_rle(ribo_to_check,show_outlier = T) + ggplot2::ggtitle("Relative Log Coverage")
+```
+
+## RNA fraction per sample
+
+The RNA count repartition is an indicator of RNA(s) that present a lower or higher coverage compared to other RNAs within the same sample. A sample that shows an unusual repartition might be considered with caution, as it could impact the C-score robustness. **The following image shows a stacked barplots representing end read count fractions of each RNA for each sample.** The end read count fractions represent the proportion of total end read counts for each RNA per sample. In the case of rRNAs, most end read counts are assigned to the longest rRNA, namely the 18S (~ 0.25) and the 28S (~ 0.50).
+
+```{r}
+rRMSAnalyzer::plot_counts_fraction(ribo_to_check) + ggplot2::ggtitle("RNA fraction per sample")
+```
+
+# Profiles comparison
+
+In this section, we will explore the difference between the samples still using the global coverage. By using such a global information, the technical variabilities are more visible than the biological variabilities, which allows us to highlight possible biases due to the experiment. Disctint coverage identifies putative outlier samples.
+
+## Correlation matrix
+
+To help identifying distinct coverage profile, coverage profiles are compared between two samples in the whole series. Two-by-two sample correlation of the coverage profile is calculated using a Pearson correlation based distance . **Here is given a heatmap that summarizes the correlation in the entire series**. The correlation value goes from -1 (anti-correlation) to 1 (correlation). A value of 0 indicates no correlation between two samples.
+
+```{r heatmap_corr}
+rRMSAnalyzer::plot_heatmap_corr(ribo_to_check,"Count")
+```
+
+## Correspondance analysis
+
+To identify distinct coverage profile, coverage profiles are compared between the whole series. **The image shows Correspondence Analysis (COA) plot that illustrates the distance between each sample based on its coverage profile**. Distant samples are putative outliers.
+
+```{r}
+rRMSAnalyzer::plot_coa(ribo_to_check,color_col = params$library_col)
+```
+
+# C-scores analysis
+
+## Principal component analysis 
+
+Principal Component Analysis (PCA) on C-scores helps in identifying putative batch effect that can be corrected using the inter-normalization option (ComBat-seq tool) [(Zhang et al, 2020 — PMID 33015620)](https://pubmed.ncbi.nlm.nih.gov/33015620/). The image shows a Principal Component Analysis (PCA) plot that illustrates the distance between each sample based on its C-score at all genomic positions.
+
+The samples are colored by library. Since more than 1.5% of the C-score corresponds to non-biological noise, normalization during C-score calculation should limit the dispersion of the samples based on their C-score at all genomic positions in the whole serie. 
+
+The PCA cannot use genomic positions with an invalid C-score.
+Thus, it uses **`r as.character(valid_sites)`** genomic positions instead of all **`r as.character(all_sites)`**.
+
+```{r not corrected cscore PCA,echo=FALSE}
+rRMSAnalyzer::plot_pca(ribo_to_check,params$library_col)
+```
+
+# About
+
+## Bibliography
+
+-   Yuqing Zhang, Giovanni Parmigiani, W Evan Johnson, ComBat-seq: batch effect adjustment for RNA-seq count data, NAR Genomics and Bioinformatics, Volume 2, Issue 3, 1 September 2020, lqaa078, [https://doi.org/10.1093/nargab/lqaa078](https://doi.org/10.1093/nargab/lqaa078)
+
+-   <mark> Marcel et al 2020, </mark>
+
+-   Birkedal, U., Christensen-Dalsgaard, M., Krogh, N., Sabarinathan, R., Gorodkin, J. and Nielsen, H. (2015), Profiling of Ribose Methylations in RNA by High-Throughput Sequencing. Angew. Chem. Int. Ed., 54: 451-455. https://doi.org/10.1002/anie.201408362
+
+## Citation
+**When using this report, please cite :**
+
+PARAQINDES et al. (2023), High grade adult-type diffuse gliomas reveal a disconnection between alterations of ribosome biogenesis and rRNA 2’O-ribose methylation. (in review)
+
+## License
+
+rRMSAnalyzer<br>
+Copyright (C) 2023 Centre de Recherche en Cancérologie de Lyon
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+## SessionInfo
+
+```{r,echo=TRUE}
+sessionInfo()
+```
+
+
+-----------------------
+This report has been automatically generated with [rRMSAnalyzer](https://github.com/RibosomeCRCL/rRMSAnalyzer) 2.0.0 (April 2023)
