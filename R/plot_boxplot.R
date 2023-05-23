@@ -136,7 +136,8 @@ boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var
   id_vars <- "Sample"
   matrix <- log10(matrix)
   matrix_inv <- as.data.frame(t(matrix))
-  matrix_inv <- tibble::rownames_to_column(matrix_inv, "Sample")
+ # matrix_inv <- tibble::rownames_to_column(matrix_inv, "Sample")
+  matrix_inv["Sample"] <- rownames(matrix_inv)
   
   if (!is.na(color_col)) {
     matrix_inv <- cbind(matrix_inv, metadata[color_col])

@@ -100,6 +100,8 @@ plot_diff_sites <- function(ribo, factor_column,
                             adjust_pvalues_method = "fdr",
                             object_only = FALSE) {
   
+  site <- NULL
+  
   check_metadata(ribo,factor_column)
   ribo_matrix <- extract_data(ribo, only_annotated = TRUE, position_to_rownames = TRUE)
   kruskal_df <- wrapper_kruskal_test(ribo, factor_column = factor_column)
@@ -117,7 +119,7 @@ plot_diff_sites <- function(ribo, factor_column,
   # Because ggplot is not a fan of rownames, we transfer the latter to its own column
   ribo_matrix_rn["site"] <- rownames(ribo_matrix)
   # Put sites column at first position.
-  ribo_matrix_rn <- dplyr::select(ribo_matrix_rn,"site",tidyselect::everything())
+  ribo_matrix_rn <- dplyr::relocate(ribo_matrix_rn,site)
   
   most_signi <- select_most_differential_sites(kruskal_df,p_cutoff = p_cutoff, cscore_cutoff = cscore_cutoff)
   if (length(most_signi) == 0) {
