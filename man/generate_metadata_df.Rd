@@ -4,18 +4,12 @@
 \alias{generate_metadata_df}
 \title{Generate a metadata dataframe, given a path.}
 \usage{
-generate_metadata_df(
-  counts_folder_path,
-  create_samplename_col = TRUE,
-  stop_symbol = NA
-)
+generate_metadata_df(counts_folder_path, create_samplename_col = TRUE)
 }
 \arguments{
 \item{counts_folder_path}{The path where count files are stored.}
 
 \item{create_samplename_col}{Generate a sample name col with filename by default}
-
-\item{stop_symbol}{Keep the filename until the stop symbol is reached.}
 }
 \description{
 Generate an "empty" dataframe with the required filename and samplename columns to include in a riboclass.
@@ -23,8 +17,5 @@ Generate an "empty" dataframe with the required filename and samplename columns 
 Names in the samplename column can be modified, as long as each sample has an unique name.
 
 \strong{The filename column cannot be modified, unless the filenames on disk have changed.} Otherwise, it would prevent \code{\link{new_riboclass}} from linking data and metadata...
-}
-\details{
-stop_symbol is an "helper" parameter to automatically to trim filename for the samplename.
 }
 \keyword{internal}
