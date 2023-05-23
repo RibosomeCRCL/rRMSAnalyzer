@@ -25,7 +25,8 @@ boxplot_count <- function(ribo, color_col = NA,
 #' individual annotated site.
 #' Sites are sorted by their median.
 #' @inheritParams boxplot_count 
-#' @param sort_by sort sites by variance ("var") or IQR ("iqr"). If neither is given, sites are sorted by median.
+#' @param sort_by Sort sites by median ("median", default) by variance ("var")
+#'  or IQR ("iqr").
 #' @return a ggplot geom_boxplot
 #' @export
 #'

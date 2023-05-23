@@ -18,7 +18,8 @@ boxplot_cscores(
 
 \item{outlier}{Show boxplot outlier values.}
 
-\item{sort_by}{sort sites by variance ("var") or IQR ("iqr"). If neither is given, sites are sorted by median.}
+\item{sort_by}{Sort sites by median ("median", default) by variance ("var")
+or IQR ("iqr").}
 
 \item{horizontal}{Show boxplot horizontally.}
 }
