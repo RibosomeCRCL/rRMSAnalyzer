@@ -30,18 +30,41 @@ annotate_site <- function(ribo, annot, anno_rna = 2, anno_pos = 1, anno_value = 
     annot <- .generate_name_positions(annot, anno_rna, anno_pos)
   }
   
-  # Check if annot has the RNA as the RiboClass
-  if (sum(!(annot[[anno_rna]] %in% ribo[["rna_names"]][["current_name"]])) != 0) {
-    stop("Mismatch between annot's RNA names and RiboClass's RNA names. You can rename your RiboClass' RNAs with rename_rna")
+  # Check if annot has the same RNA as the RiboClass
+  anno_rna_names <- unique(annot[[anno_rna]])
+  ribo_rna_names <- ribo[["rna_names"]][["current_name"]]
+  missing_rna_names <- anno_rna_names[which(anno_rna_names %in% ribo_rna_names == FALSE)]
+  
+  if (sum((anno_rna_names %in% ribo_rna_names)) == 0) {
+    
+    cli::cli_abort(c("Total mismatch in RNA names between annotation and your RiboClass !",
+                   "i" = "RiboClass RNA names : {.val {ribo_rna_names}}.",
+                   "i" = "Annotation RNA names : {.val {anno_rna_names}}.",
+                   ">" = "Rename the RNA in the annotation or the RiboClass.",
+                   " " = "(To rename RNA in a RiboClass, use {.fn rename_rna})."))
+  } 
+  else if(sum((anno_rna_names %in% ribo_rna_names) < length(ribo_rna_names))) {
+    
+    cli::cli_warn(c("Partial mismatch in RNA names between the annotation and your RiboClass !",
+                     "x" = "Unmatched RNA names :{.val {missing_rna_names}}.",
+                     "i" = "RiboClass RNA names : {.val {ribo_rna_names}}.",
+                     "i" = "Annotation RNA names : {.val {unique(anno_rna_names)}}.",
+                     ">" = "Make sure to have identical RNA names between the annotation and your RiboClass."))
+    
   }
   
   # check if annot contains only existing positions. Throw a
   # warning if not.
   existing_positions <- ribo[[1]][[1]][["named_position"]]
   if (!all(annot[["named_position"]] %in% existing_positions)) {
-    warning(paste("One or more of the given positions to annotate do not exist :",
-                  paste(annot[anno_value][!(annot["named_position"] %in% existing_positions)],
-                        collapse = "; ")))
+    
+    missing_positions <- annot[[anno_value]][which(annot[["named_position"]] %in% 
+                                               existing_positions == FALSE)]
+    len_missing <- length(missing_positions)
+    
+    cli::cli_warn(c("{len_missing} position{?s} in your annotation {?is/are} missing in your RiboClass !",
+                    "x" = "Missing positions : {.val {missing_positions}}."
+                    ))
   }
   
   if ("site" %in% colnames(annot)) {
@@ -109,7 +132,9 @@ keep_selected_annotation <- function(ribo, annotation_to_keep) {
     which(current_annotation[["site"]] %in% annotation_to_keep),]
   
   if (nrow(new_annotation) == 0) {
-    stop("No currently annotated site matches with your subset!")
+    cli::cli_abort(c("No currently annotated sites matches with your subset !",
+                     "i" = "Currently annotated sites : {.val {current_annotation[['site']]}}.",
+                     "i" = "Your subset : {.val {annotation_to_keep}}."))
   }
   new_annotation <- .generate_name_positions(new_annotation, "rna", "rnapos")
   ribo <- annotate_site(ribo,new_annotation)
