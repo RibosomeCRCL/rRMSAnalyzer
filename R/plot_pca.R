@@ -21,14 +21,23 @@ plot_pca <- function(ribo, color_col = NULL, axes = c(1, 2),
                      only_annotated = FALSE, title = "default",
                      subtitle = "samples", object_only = FALSE) {
   
-  if (is.null(ribo)) {
-    stop("MISSING parameter: please provide a RiboClass!")
+  if (missing(ribo)) {
+    cli::cli_abort(c(
+      "Missing argument : {.var ribo}",
+      "i" = "{.var ribo} only accepts a RiboClass object."
+    ))
   }
   if (!inherits(ribo, "RiboClass")) {
-    stop("ribo argument is not a RiboClass!")
+    cli::cli_abort(c(
+      "{.var ribo} must be a RiboClass object",
+      "x" = "You've supplied a {.cls {class(ribo)}}."
+    ))
   }
   if (isFALSE(ribo$has_cscore)) {
-    stop("You should calculate C-scores first using calculate_score function")
+    cli::cli_abort(c(
+      "No C-score found in the RiboClass supplied in {.var ribo}!",
+      "i" = "You can compute C-scores using compute_cscore function."
+      ))
   }
   
   if (!is.null(color_col))

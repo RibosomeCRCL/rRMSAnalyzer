@@ -24,7 +24,9 @@ extract_data <- function(ribo, col = "cscore",
   col <- tolower(col)
   
   if (!(col %in% colnames(ribo[["data"]][[1]]))) {
-    stop(col, " is not a column in the data !")
+    cli::cli_abort(c("Name supplied to {.var col} is not a column in the data",
+                   "i" = "Available columns: {.val {colnames(ribo[[\"data\"]][[1]])}}",
+                   "x" = "{.val {col}} is not a valid column"))
   }
   
   sample_list <- ribo[["data"]]

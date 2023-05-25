@@ -133,9 +133,6 @@ new_riboclass <- function(count_path,
   RiboClass <- list(data = rna_counts_dt, metadata = metadata,rna_names = rna_names_df, has_cscore = FALSE)
   class(RiboClass) <- "RiboClass"
   
-  message("[SUCCESS] Your data have been imported and the following RiboClass has been created :\n")
-  print(RiboClass)
-  
   return(RiboClass)
 }
 

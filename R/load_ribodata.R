@@ -40,7 +40,7 @@ load_ribodata <- function(count_path,
                            metadata_id)
   
   ribo <- compute_cscore(ribo,flanking,method,ncores)
-  
+  cli::cli_alert_success("Your data has been successfully loaded!")
   return(ribo)
   
 }
