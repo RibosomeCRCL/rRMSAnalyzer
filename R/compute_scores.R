@@ -24,18 +24,18 @@
       mean(count[c((x - flanking):(x - 1), (x + 1):(x + flanking))])
     }, numeric(1))
   }
-  # Because we started at the 1+flanking position, we append NA at
+  # Because we started at the 1+flanking position, we prepend NA at
   # the beginning to match the original vector's size.
-  flanking_values <- append(flanking_values, rep(NA, flanking), after = 0)
+  flanking_values <- c(rep(NA, flanking),flanking_values)
   
   if (method == "median") {
     ds[, "flanking_median"] <- flanking_values
     scorec_median_raw <- 1 - ds[, data_counts_col]/ds[, "flanking_median"]
-    ds[, "cscore"] <- ifelse(scorec_median_raw < 0, 0, scorec_median_raw)
+    ds[, "cscore"] <- pmax(scorec_median_raw,0)
   } else if (method == "mean") {
     ds[, "flanking_mean"] <- flanking_values
     scorec_mean_raw <- 1 - ds[, data_counts_col]/ds[, "flanking_mean"]
-    ds[, "cscore"] <- ifelse(scorec_mean_raw < 0, 0, scorec_mean_raw)
+    ds[, "cscore"] <- pmax(scorec_mean_raw,0)
   }
   return(ds)
 }

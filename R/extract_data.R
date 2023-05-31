@@ -32,32 +32,35 @@ extract_data <- function(ribo, col = "cscore",
   sample_list <- ribo[["data"]]
   sample_list_nm <- names(sample_list)
   if (only_annotated) {
+    # if only_annotated is TRUE, then we use the "site" column for our
+    # positions, as this column contains the annotated sites only.
     df <- sample_list[[1]]
     df_sites <- df[which(!is.na(df[, "site"])), ]
     position_list <- df_sites[, "site"]
     matrix_all <- data.frame(site = position_list)
+    positions <- "site"
   } else {
+    # When only_annotated is FALSE, we default to all positions in
+    # "named_position".
     position_list <- sample_list[[1]][, "named_position"]
     matrix_all <- data.frame(named_position = position_list)
+    positions <- "named_position"
+    
   }
   
   for (sample_nm in sample_list_nm) {
     sample_df <- sample_list[[sample_nm]]
     if (only_annotated) {
       sample_df <- sample_df[which(!is.na(sample_df[, "site"])), ]
-      sample_df <- sample_df[, c("site", col)]
-      matrix_all <- dplyr::full_join(matrix_all, sample_df, by = "site")
-      names(matrix_all)[length(names(matrix_all))] <- sample_nm
-      matrix_all <- matrix_all[match(position_list, matrix_all[, "site"]), ]
-    } else {
-      sample_df <- sample_df[, c("named_position", col)]
-      matrix_all <- dplyr::full_join(matrix_all, sample_df,
-                                     by = "named_position")
-      names(matrix_all)[length(names(matrix_all))] <- sample_nm
-      matrix_all <- matrix_all[match(position_list,
-                                     matrix_all[, "named_position"]),
-      ]
     }
+    sample_df <- sample_df[, c(positions, col)]
+    
+    matrix_all <- dplyr::full_join(matrix_all, sample_df,
+                                     by = positions)
+    matrix_all_len <- length(names(matrix_all))
+    names(matrix_all)[matrix_all_len] <- sample_nm
+    matrix_all <- matrix_all[match(position_list,matrix_all[, positions]),]
+    
   }
   if (position_to_rownames) {
     if (only_annotated) {
