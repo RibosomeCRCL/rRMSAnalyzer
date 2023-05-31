@@ -16,3 +16,4 @@ This function returns nothing if each string matches with a metadata.
 It will stop and display a formatted error message if one or more strings in
 the vector are not valid metadata.
 }
+\keyword{internal}
