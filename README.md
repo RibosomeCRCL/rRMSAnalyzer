@@ -10,12 +10,17 @@ rRMSAnalyzer is an R package that provides a set of easy-to-use
 functions to evaluate 2’Ome levels by computing C-scores from
 RiboMethSeq read end counts as input.
 
-Adjust for batch effect, provide visualization capabilities, provide a
-table of annotated human rRNA sites and allow export of a table of
-C-scores. The package provides a semi-automated quality control report,
-provides analysis capabilities (i.e., unsupervised and supervised
-analysis, identification of sites differentially 2’Ome between
-conditions).
+Available features (version 2) :
+
+  - C-score computation (using either mean or median for the window of
+    neighboring positions)
+  - Batch effect adjustment with CombatSeq
+  - Different visualizations to compare samples or sites
+  - Include a table of annotated human rRNA sites
+  - Export of computed C-scores into a dataframe
+  - Semi-automated quality control report
+
+These features are more explained in details here :
 
 > **Note** We have also developed a [dedicated Nextflow
 > pipeline](https://github.com/RibosomeCRCL/ribomethseq-nf) to process
@@ -59,7 +64,7 @@ plot_pca(ribo,"condition")
 
 The “getting started” is available on our website :
 
-A test dataset (ribo_toy) is included in the package.
+A test dataset (ribo\_toy) is included in the package.
 
 ## Help, bug reports and suggestions
 
@@ -76,6 +81,6 @@ suggestions.
 ## Funding
 
 This project has been funded by the French Cancer Institute (INCa, PLBIO
-2019-138 MARACAS), the SIRIC Program (INCa-DGOS-Inserm_12563 LyRICAN),
+2019-138 MARACAS), the SIRIC Program (INCa-DGOS-Inserm\_12563 LyRICAN),
 LabEX program (DEVweCan), the French association Ligue Nationale Contre
 le Cancer and Synergie Lyon Cancer Foundation.

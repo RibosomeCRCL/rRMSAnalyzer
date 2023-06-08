@@ -36,18 +36,13 @@ details{
 background-color: #E4F3F3;
 }
 
-mark {
-  background-color: #FF91A4;
-  color: black;
-}
-
 </style>
 ```
 <details>
 
 <summary>
 
-<b> ℹ️ Input data recapitulation </b>
+<b> ℹ️ Summary of input data </b>
 
 </summary>
 Project name : **`r params$project_name`**<br><br>
@@ -65,32 +60,32 @@ C-score in all samples.
 <br>
 <br>
 __**ComBat-seq**__<br>
-ComBat-seq correction ?
+ComBat-seq correction:
 **`r ifelse(is.null(ribo_to_check[["combatSeq_count"]]),"No","Yes")`** <br>
-Metadata used for ComBat-seq :
+Name of column in metadata used for ComBat-seq adjustment:
 **`r ifelse(is.null(ribo_to_check[["col_used_combatSeq"]]),"None",as.character(ribo_to_check["col_used_combatSeq"]))`**
 
 </details>
 
 # Introduction
 
-This report shows the quality control of the **`r params$project_name`** sequencing data using the rRMSanalyzer package. 
+## Content
 
-The purpose of this step is to check that the generated data provide good quality C-score values that allow further analysis. To do this, it is necessary to check that the sequencing coverage is uniform and reproducible between samples, eliminating the possibility of biases due to sequencing and outlier samples.
+This quality control (QC) reports different metrics to ensure that subsequent analyses are free from bias related to the riboMethSeq technology. 
 
-We use here the end read count data to ensure the quality of the sequencing coverage on the samples. We then use this measure to compare samples with each other.  We then finish with a cohort check using the C-score values.
+In this report, the end read count data is used to ensure the quality of the sequencing coverage on the samples. Then, this measure is used to ensure the technical homogeneity of the cohort by comparing samples with each other. QC verifies that the coverage is uniform and reproducible between samples, eliminating the possibility of biases due to sequencing and outlier samples. Finally, a cohort check using the C-score values is performed to verify that subsequent analyses will be free of biases that may affect biological conclusions.
 
 ## Project
 
-This quality report is generated from the analysis of the **`r params$project_name`**, which is loaded inside the RiboClass object **`r params$ribo_name`**. The `r params$ribo_name` object was generated from **`r length(ribo_to_check[[1]])`** samples and **`r as.character(all_sites)`** genomic positions.
+This QC report is generated from the analysis of the project **`r params$project_name`**, which is loaded inside the RiboClass object **`r params$ribo_name`**. This **`r params$ribo_name`** object was generated from **`r length(ribo_to_check[[1]])`** samples and **`r as.character(all_sites)`** genomic positions.
 
 The following (r)RNA were used by the coverage tool: **`r as.character(ribo_to_check[["rna_names"]][["original_name"]])`**
 
 ## Method
 
-**C-score computation** : In the following analyses, the C-Score (Birkedal et al, 2015) was computed using the **`r as.character(ribo_to_check["cscore_method"])`** of the **`r as.character(ribo_to_check["cscore_window"])`** neighboring positions. In the end, there are **`r as.character(valid_sites)`** genomic positions with a valid C-score in all samples. C-score for genomic positions on RNA’s extremities cannot be computed, because of the lack of neighbors in the local window. 
+**C-score computation** : In the following analyses, the C-Score was computed using the **`r as.character(ribo_to_check["cscore_method"])`** of the **`r as.character(ribo_to_check["cscore_window"])`** neighboring positions (Birkedal et al, 2015; Marcel et al, 2020). In the end, there are **`r as.character(valid_sites)`** genomic positions with a valid C-score in all samples. Of note, C-score for genomic positions on RNA’s extremities cannot be computed because of the lack of neighbors in the local window.
 
-**Sequencing biases correction** : The possible technical biases found at the end of the sequencing step are corrected using the **ComBat-seq** method. In this analysis, the correction is **`r ifelse(is.null(ribo_to_check[["combatSeq_count"]]),"unused","used")`**. Here we used the variable "**`r ifelse(is.null(ribo_to_check[["col_used_combatSeq"]]),"None",as.character(ribo_to_check["col_used_combatSeq"]))`**" to perform this correction.
+**Sequencing biases correction** : The possible technical biases induced by the sequencing step are corrected using the **ComBat-seq** method (Zhang et al, 2020; Paraqindes et al, 2023). In this analysis, the correction is **`r ifelse(is.null(ribo_to_check[["combatSeq_count"]]),"unused","used")`**. Here we used the variable "**`r ifelse(is.null(ribo_to_check[["col_used_combatSeq"]]),"None",as.character(ribo_to_check["col_used_combatSeq"]))`**" to perform this correction.
 
 ## Metadata
 
@@ -102,21 +97,21 @@ knitr::kable(ribo_to_check[[2]])
  
 # Global coverage
 
-In this section, we present quality control measures that are derived from the final read count data on all sequenced positions (i.e., global coverage data) to ensure consistent and reproducible sample coverage.
+In this section, we present QC measures that are derived from the end read count data on all sequenced positions (i.e., global coverage data) to ensure consistent and reproducible sample coverage. A good level of coverage is essential, because the level of methylation is estimated from its variations.
 
 ##  Coverage distribution
 
-This image is a boxplot given the distribution of the absolute number of end read counts at each genomic positions for all individual samples. The blue line gives a minimal of 100 end read counts. Median below the blue line identifies putative outlier sample (highlighted in red).
+The coverage distribution of absolute end read counts at each genomic positions is visuallized here using a boxplot for each individual samples, controlling for coverage variation. 
+
+Samples with a median coverage below 100 (the blue line), are highlighted in red and should be interpreted with caution or excluded from further analysis. This threshold ensures a level of precision within the percentage range for calculating the C-score, which is targeted for good quality analyses.
 
 ```{r boxplot2,warning=FALSE}
 rRMSAnalyzer::boxplot_count(ribo_to_check) + ggplot2::ggtitle("End read counts distribution by sample")
 ```
 
-<mark> These threshold are used because, it is established <mark>(ref si il y en a une), by comparing the C-score at a given genomic position depending on the number of end read counts in its local environment, it appears , that a minimum coverage of 100 end read counts is required to reach a robust C-score. </mark>
-
 ## Relative Log Coverage
 
-To ensure the reproducibility of the coverage across all samples, we compute the Relative Log Coverage with the following formula :
+The **Relative Log Coverage** (RLC)  is a measure to ensure  the reproducibility of the coverage across all samples.
 
 $$\log_2(\frac{pos_{sample} + 1}{pos_{all}})$$
 
@@ -126,7 +121,7 @@ Where :
 -   pos~sample~ : the end read count at a specific position for a specific sample.
 -   pos~all~ : the end read count **median of all samples** for the same specific position.
 
-This image shows the Relative Log Coverage plot given the variation of the end read counts to the sample median for each individual sample. The blue lines give median +/- 2mad variation. Median outside the blue lines identifies putative outlier sample. Sample that presents a lower or higher coverage compared to other samples might be considered as outlier.
+The following image shows the **Relative Log Coverage boxplot**. The blue lines give the median +/- 2mad variation. Median outside the blue lines identifies putative outlier sample (highlighted in red). Sample that presents a lower or higher coverage compared to other samples might be considered carefully or removed in the following biological analyses as an outlier sample.
 
 ```{r}
 rRMSAnalyzer::plot_rle(ribo_to_check,show_outlier = T) + ggplot2::ggtitle("Relative Log Coverage")
@@ -134,7 +129,7 @@ rRMSAnalyzer::plot_rle(ribo_to_check,show_outlier = T) + ggplot2::ggtitle("Relat
 
 ## RNA fraction per sample
 
-The RNA count repartition is an indicator of RNA(s) that present a lower or higher coverage compared to other RNAs within the same sample. A sample that shows an unusual repartition might be considered with caution, as it could impact the C-score robustness. **The following image shows a stacked barplots representing end read count fractions of each RNA for each sample.** The end read count fractions represent the proportion of total end read counts for each RNA per sample. In the case of rRNAs, most end read counts are assigned to the longest rRNA, namely the 18S (~ 0.25) and the 28S (~ 0.50).
+The repartition of RNA end read counts is an indicator of the RNA(s) that present a lower or higher coverage compared to the other RNAs within the same sample. A sample that shows an unusual repartition might be considered with caution, as it could impact the C-score robustness. The following image shows a stacked barplots representing end read count fractions of total end read counts for each RNA per sample. In the case of rRNAs, most end read counts are assigned to the longest rRNA, namely the 18S (~ 0.25) and the 28S (~ 0.50).
 
 ```{r}
 rRMSAnalyzer::plot_counts_fraction(ribo_to_check) + ggplot2::ggtitle("RNA fraction per sample")
@@ -142,11 +137,17 @@ rRMSAnalyzer::plot_counts_fraction(ribo_to_check) + ggplot2::ggtitle("RNA fracti
 
 # Profiles comparison
 
-In this section, we will explore the difference between the samples still using the global coverage. By using such a global information, the technical variabilities are more visible than the biological variabilities, which allows us to highlight possible biases due to the experiment. Disctint coverage identifies putative outlier samples.
+In this section, we explore the difference between the samples using global coverage and C-scores. By using such a global information, technical variabilities are more visible than biological variabilities, allowing us to highlight possible biases due to the experiment. 
+
+A sample with an atypical coverage pattern should be treated with caution or excluded from further analysis.
+
+It is possible for samples to cluster in sequencing batches. In this case, ComBat-seq correcting algorithm should be used to avoid biaise in subsequent analyses. 
+
+Of note, rRNA sequences are enriched in GC-stretches and in nucleotide repeats which introduces a bias during read alignment. The coverage profile is therefore not uniform, however, it will be typical of the rRNA sequence and reproducible across samples.
 
 ## Correlation matrix
 
-To help identifying distinct coverage profile, coverage profiles are compared between two samples in the whole series. Two-by-two sample correlation of the coverage profile is calculated using a Pearson correlation based distance . **Here is given a heatmap that summarizes the correlation in the entire series**. The correlation value goes from -1 (anti-correlation) to 1 (correlation). A value of 0 indicates no correlation between two samples.
+In order to identify distinct coverage profiles, coverage profiles are compared with one other within the cohort. Pairwise sample correlations of coverage profile are calculated using a Pearson correlation based distance. A heatmap is then generated that summarizes the correlation values for the entire series. These values goes from 0 (no correlation, indicated in red) to 1 (perfect correlation, indicated in blue). 
 
 ```{r heatmap_corr}
 rRMSAnalyzer::plot_heatmap_corr(ribo_to_check,"Count")
@@ -154,7 +155,7 @@ rRMSAnalyzer::plot_heatmap_corr(ribo_to_check,"Count")
 
 ## Correspondance analysis
 
-To identify distinct coverage profile, coverage profiles are compared between the whole series. **The image shows Correspondence Analysis (COA) plot that illustrates the distance between each sample based on its coverage profile**. Distant samples are putative outliers.
+To identify distinct coverage profile, we compare the coverage profiles of all samples in the series. The Correspondence Analysis (COA) plot shows the distance between each sample based on its coverage profile. Samples that are far appart are considered putative outliers. At this stage, it is possible to visualise the bias linked to the sequencing batch or to evaluate the performance of the ComBat-seq correction algorithm if it has been applied (Zhang et al, 2020; Paraqindes et al, in revision).
 
 ```{r}
 rRMSAnalyzer::plot_coa(ribo_to_check,color_col = params$library_col)
@@ -162,11 +163,13 @@ rRMSAnalyzer::plot_coa(ribo_to_check,color_col = params$library_col)
 
 # C-scores analysis
 
-## Principal component analysis 
+## Principal component analysis of C-scores
 
-Principal Component Analysis (PCA) on C-scores helps in identifying putative batch effect that can be corrected using the inter-normalization option (ComBat-seq tool) [(Zhang et al, 2020 — PMID 33015620)](https://pubmed.ncbi.nlm.nih.gov/33015620/). The image shows a Principal Component Analysis (PCA) plot that illustrates the distance between each sample based on its C-score at all genomic positions.
+In this section, Qcs are made from C-score measurements, which will be used in the subsequent analysis. This final QC will therefore check that the dataset is free of biases that could affect the biological conclusions.
 
-The samples are colored by library. Since more than 1.5% of the C-score corresponds to non-biological noise, normalization during C-score calculation should limit the dispersion of the samples based on their C-score at all genomic positions in the whole serie. 
+Since more than 1.5% of the C-score corresponds to non-biological noise, normalization during C-score calculation should limit the dispersion of the samples based on their C-score at all genomic positions in the whole serie. Thus, Principal Component Analysis (PCA) on C-scores helps to identify putative batch effect that can be corrected using the inter-normalization option (ComBat-seq tool) (Zhang et al, 2020; Paraqindes et al, 2023). 
+
+The image shows **a Principal Component Analysis (PCA) plot illustrating the distance between each sample based on its C-score at all genomic positions**. The samples are colored by library. 
 
 The PCA cannot use genomic positions with an invalid C-score.
 Thus, it uses **`r as.character(valid_sites)`** genomic positions instead of all **`r as.character(all_sites)`**.
@@ -188,7 +191,6 @@ rRMSAnalyzer::plot_pca(ribo_to_check,params$library_col)
 ## Citation
 **When using this report, please cite :**
 
-PARAQINDES et al. (2023), High grade adult-type diffuse gliomas reveal a disconnection between alterations of ribosome biogenesis and rRNA 2’O-ribose methylation. (in review)
 
 ## License
 
