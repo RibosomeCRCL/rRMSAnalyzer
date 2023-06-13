@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_sites.R
 \name{select_most_differential_sites}
 \alias{select_most_differential_sites}
-\title{Return a list of differential sites}
+\title{Return a list of differential sites.}
 \usage{
 select_most_differential_sites(
   df_of_kruskal = NULL,
@@ -13,15 +13,17 @@ select_most_differential_sites(
 \arguments{
 \item{df_of_kruskal}{Output of kruskal_test_on_cscores().}
 
-\item{p_cutoff}{Cutoff below which the kruskal-wallis test is considered significant for a given site.}
+\item{p_cutoff}{Cutoff below which the kruskal-wallis test is considered
+significant for a given site.}
 
-\item{cscore_cutoff}{Cutoff above which the max-min c-score range between conditions' mean is considered significant.}
+\item{cscore_cutoff}{Cutoff above which the max-min c-score range between
+conditions' mean is considered significant.}
 }
 \value{
 a vector of sites that are differentials
 }
 \description{
-Return a list of differential sites
+Return a list of differential sites.
 }
 \details{
 To be considered as differential, a site must follow two conditions :

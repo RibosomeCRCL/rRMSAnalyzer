@@ -61,7 +61,7 @@ new_riboclass <- function(count_path,
   if(is.null(metadata)) {
     metadata <- generate_metadata_df(count_path,create_samplename_col = FALSE)
     rna_counts_dt <- .read_count_files(count_path,count_sep,count_header,count_rnaid,count_pos,count_value)
-    if(length(rna_counts_dt) == 0) stop("ERROR : no files were loaded")
+    if(length(rna_counts_dt) == 0) stop("ERROR : no file was loaded")
     rna_names_df <- .generate_rna_names_table(rna_counts_dt[[1]])
   }
   

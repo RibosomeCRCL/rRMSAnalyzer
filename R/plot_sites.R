@@ -1,14 +1,19 @@
-#' Return a list of differential sites
+#' Return a list of differential sites.
+#' 
 #' @inherit plot_diff_sites details
 #' @param df_of_kruskal Output of kruskal_test_on_cscores().
-#' @param p_cutoff Cutoff below which the kruskal-wallis test is considered significant for a given site.
-#' @param cscore_cutoff Cutoff above which the max-min c-score range between conditions' mean is considered significant.
+#' @param p_cutoff Cutoff below which the kruskal-wallis test is considered
+#' significant for a given site.
+#' @param cscore_cutoff Cutoff above which the max-min c-score range between
+#' conditions' mean is considered significant.
 #'
 #' @return a vector of sites that are differentials
 #' @keywords internal
 
 select_most_differential_sites <- function(df_of_kruskal = NULL, p_cutoff = 1e-02, cscore_cutoff = 0.05){
-  most_differential_sites <- df_of_kruskal$site[which(df_of_kruskal$p.adj < p_cutoff & df_of_kruskal$mean_max_min_difference > cscore_cutoff )]
+  most_differential <- which(df_of_kruskal$p.adj < p_cutoff &
+                                     df_of_kruskal$mean_max_min_difference > cscore_cutoff )
+  most_differential_sites <- df_of_kruskal$site[most_differential]
   message(length(most_differential_sites), " significant sites found !")
   return(most_differential_sites)
 }
@@ -17,17 +22,23 @@ select_most_differential_sites <- function(df_of_kruskal = NULL, p_cutoff = 1e-0
 #' 
 #' Using dataframes obtained from
 #' 
-#' @param df_of_Cscores Dataframe of positions x samples for c-score. Output of extract_data().
+#' @param df_of_Cscores Dataframe of positions x samples for c-score.
+#'  Output of extract_data().
 #' @param df_of_kruskal Output of kruskal_test_on_cscores()
-#' @param most_differential_sites A list of most differential sites. Output of select_most_differential_sites function.
+#' @param most_differential_sites A list of most differential sites.
+#'  Output of select_most_differential_sites function.
 #' @import ggplot2
 #' 
 #' @keywords internal
 #'
-plot_most_differential_sites <- function(df_of_Cscores = NULL, df_of_kruskal = NULL, most_differential_sites = NULL) {
+plot_most_differential_sites <- function(df_of_Cscores = NULL,
+                                         df_of_kruskal = NULL,
+                                         most_differential_sites = NULL) {
    group.id <- Cscore <- p.adj <- NULL
 
-   df_of_Cscores <- tidyr::pivot_longer(df_of_Cscores,cols = c(2:ncol(df_of_Cscores))) #TODO : sample count
+   df_of_Cscores <- tidyr::pivot_longer(df_of_Cscores,
+                                        cols = c(2:ncol(df_of_Cscores)))
+   
    colnames(df_of_Cscores) <- c("site","group.id","Cscore")
    df_of_Cscores$group.id <- gsub("\\..*","",df_of_Cscores$group.id)
    
@@ -39,8 +50,9 @@ plot_most_differential_sites <- function(df_of_Cscores = NULL, df_of_kruskal = N
    # 4 Astrocytoma (A) 18S_Am99 0.9743840
    # 5 Astrocytoma (A) 18S_Am99 0.9460999
    # 6 Astrocytoma (A) 18S_Am99 0.9656156
-
-     p1 <- ggplot2::ggplot(df_of_Cscores[which(df_of_Cscores$site %in% most_differential_sites),], ggplot2::aes(x = group.id, y = Cscore, fill = group.id)) + 
+   
+   cscore_diff_sites <- df_of_Cscores[which(df_of_Cscores$site %in% most_differential_sites),]
+     p1 <- ggplot2::ggplot(cscore_diff_sites,ggplot2::aes(x = group.id, y = Cscore, fill = group.id)) + 
     geom_boxplot() +
     theme_bw() +
     theme(axis.text.x = element_blank(),

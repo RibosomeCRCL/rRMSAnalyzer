@@ -11,11 +11,13 @@ plot_most_differential_sites(
 )
 }
 \arguments{
-\item{df_of_Cscores}{Dataframe of positions x samples for c-score. Output of extract_data().}
+\item{df_of_Cscores}{Dataframe of positions x samples for c-score.
+Output of extract_data().}
 
 \item{df_of_kruskal}{Output of kruskal_test_on_cscores()}
 
-\item{most_differential_sites}{A list of most differential sites. Output of select_most_differential_sites function.}
+\item{most_differential_sites}{A list of most differential sites.
+Output of select_most_differential_sites function.}
 }
 \description{
 Using dataframes obtained from
