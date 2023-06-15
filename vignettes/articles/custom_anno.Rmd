@@ -9,8 +9,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Prelude
-
 Sites annotation is a way to mark sites of interest with a custom name. These annotated sites can be then plotted and analysed separately when the function has a only_annotated parameter.
 
 # A good annotation dataframe

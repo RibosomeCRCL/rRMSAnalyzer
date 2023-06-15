@@ -21,5 +21,5 @@ Compute IQR or variance for 2'Ome sites
 data("ribo_toy")
 ribo_matrix <- extract_data(ribo_toy,position_to_rownames = TRUE)
 ribo_matrix <- na.omit(ribo_matrix)
-get_IQR(ribo_matrix)
+IQR_df <- get_IQR(ribo_matrix)
 }
