@@ -12,13 +12,13 @@ RiboMethSeq read end counts as input.
 
 Available features (version 2) :
 
-  - C-score computation (using either mean or median for the window of
-    neighboring positions)
-  - Batch effect adjustment with CombatSeq
-  - Different visualizations to compare samples or sites
-  - Include a table of annotated human rRNA sites
-  - Export of computed C-scores into a dataframe
-  - Semi-automated quality control report
+- C-score computation (using either mean or median for the window of
+  neighboring positions)
+- Batch effect adjustment with CombatSeq
+- Different visualizations to compare samples or sites
+- Include a table of annotated human rRNA sites
+- Export of computed C-scores into a dataframe
+- Semi-automated quality control report
 
 These features are more explained in details here :
 
@@ -63,8 +63,9 @@ plot_pca(ribo,"condition")
 ## Getting started
 
 The “getting started” is available on our website :
+<https://ribosomecrcl.github.io/rRMSAnalyzer/>
 
-A test dataset (ribo\_toy) is included in the package.
+A test dataset (ribo_toy) is included in the package.
 
 ## Help, bug reports and suggestions
 
@@ -81,6 +82,6 @@ suggestions.
 ## Funding
 
 This project has been funded by the French Cancer Institute (INCa, PLBIO
-2019-138 MARACAS), the SIRIC Program (INCa-DGOS-Inserm\_12563 LyRICAN),
+2019-138 MARACAS), the SIRIC Program (INCa-DGOS-Inserm_12563 LyRICAN),
 LabEX program (DEVweCan), the French association Ligue Nationale Contre
 le Cancer and Synergie Lyon Cancer Foundation.

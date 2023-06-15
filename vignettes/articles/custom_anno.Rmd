@@ -1,0 +1,58 @@
+---
+title: "Create and use custom sites annotation"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Prelude
+
+Sites annotation is a way to mark sites of interest with a custom name. These annotated sites can be then plotted and analysed separately when the function has a only_annotated parameter.
+
+# A good annotation dataframe
+
+A good annotation dataframe must have the following columns :
+
+-   Position : position of the site **on the RNA**
+-   RNA : name of the RNA where the site of interest is located
+-   Nomenclature : Custom name for your site of interest
+
+Here is an example :
+
+| Position | rRNA | Nomenclature |
+|----------|------|--------------|
+| 15       | 5.8S | Um14         |
+| 76       | 5.8S | Gm75         |
+| 28       | 18S  | Am27         |
+
+(The columns ordering is not that important, but not respecting it will require extra arguments for the function call in next section)
+
+You are free to add other columns, as they will be ignored by rRMSAnalyzer.
+
+# Annotate sites with your custom dataframe
+
+First, check if your RNAs inside your RiboClass have the same name as your RNAs in your annotation dataframe.
+
+If not, you can use `rename_rna` to change the names inside the RiboClass or modify your annotation dataframe.
+
+When this is done. You can use annotate_site :
+```{r,eval=F}
+# In this example, ribo is the RiboClass we want to annotate
+ribo <- annotate_site(ribo,MyAnnotationDataframe)
+
+# If columns are not in the same order as the example table,
+# each column index or name must be precised then.
+
+ribo <- annotate_site(ribo,
+                      MyAnnotationDataframe,
+                      anno_rna = 3,
+                      anno_pos = 2,
+                      anno_value = 1)
+
+
+```
+

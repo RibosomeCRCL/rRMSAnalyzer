@@ -68,7 +68,7 @@ plot_pca(ribo,"condition")
 
 ## Getting started
 
-The "getting started" is available on our website :
+The "getting started" is available on our website : https://ribosomecrcl.github.io/rRMSAnalyzer/
 
 A test dataset (ribo_toy) is included in the package.
 

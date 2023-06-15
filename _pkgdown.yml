@@ -1,0 +1,58 @@
+url: https://ribosomecrcl.github.io/rRMSAnalyzer/
+template:
+  bootstrap: 5
+reference:
+- title: rRMSAnalyzer
+- contents: rRMSAnalyzer-package
+- title: Example data
+  desc: Example data shipped with rRMSAnalyzer.
+- contents: ribo_toy
+- title: Annotation data
+  desc: Annotation data shipped with rRMSAnalyzer.
+- contents:
+  - human_methylated
+  - human_suspected
+- title: RiboClass annotation
+  desc: Functions to add, remove or keep selected annotation in a RiboClass.
+- contents:
+  - annotate_site
+  - remove_annotation
+  - keep_selected_annotation
+- title: Data importation
+  desc: Import data to rRMSAnalyzer and generate a RiboClass.
+- contents:
+  - load_ribodata
+  - new_riboclass
+- title: C-score computation and adjustment
+  desc: Annotation data shipped with rRMSAnalyzer.
+- contents:
+  - compute_cscore
+  - adjust_bias
+- title: RiboClass customization
+  desc: Customize an already generated RiboClass, by renaming/removing RNA or remove
+    a sample.
+- contents:
+  - show_rna_names
+  - rename_rna
+  - remove_rna
+  - remove_ribo_samples
+  - keep_ribo_samples
+- title: Utils
+- contents:
+  - get_IQR
+  - get_variant_sites
+- title: Plots
+  desc: Different plots to show either samples and sites.
+- contents:
+  - starts_with("plot_")
+  - starts_with("boxplot_")
+- title: Export data
+  desc: Export data
+- contents:
+  - extract_data
+  - format_to_plot
+  - mean_samples_by_conditon
+- title: Reports
+  desc: Generate automated reports from a RiboClass
+- contents: starts_with("report_")
+

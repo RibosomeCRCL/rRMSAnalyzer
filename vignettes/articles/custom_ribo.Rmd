@@ -1,0 +1,80 @@
+---
+title: "Customizing a RiboClass"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Prelude
+```{r setup}
+library(rRMSAnalyzer)
+data("ribo_toy")
+```
+
+rRMSAnalyzer has a set of functions dedicated to modify a previously loaded RiboClass, both for samples and RNAs.
+
+In this article, you will find common ways to use them.
+
+# Functions to modify RNAs
+
+## Remove RNA
+
+A RNA subset can be easily analyzed by indicating the RNA to remove. The user can thus create a new RiboClass object containing the data of the RNAs of interest, without affecting the samples' metadata.
+
+Here is an example where the RNA 5S is removed:
+
+```{r}
+ribo_adjusted <- remove_rna(ribo_toy, rna_to_remove = "NR_023363.1_5S")
+print(ribo_adjusted)
+```
+
+## Rename RNA
+
+It is always better to have readable RNA names on plots. This section is very important for annotation of rRNA 2'Ome sites using an annotation dataframe. You RiboClass must shares the same RNA names with the latter.
+
+Here is an example to check whether the RNA names provided by the user in the RiboClass match the ones used by this package :
+
+```{r}
+data("human_methylated")
+cat("human_methylated's rna names: ", unique(human_methylated$rRNA),"\n")
+cat("ribo_toy's rna names: ", as.character(ribo_adjusted$rna_names$current_name))
+```
+
+In this example, the names are different and need to be updated before annotation.
+
+The function rename_rna updates automatically the rRNA names that are given by rRNA size order:
+
+```{r}
+ribo_adjusted <- rename_rna(ribo_adjusted,
+                            new_names = c("5.8S", "18S", "28S")) 
+                            # from the shortest RNA in our RiboClass to the longest.
+
+```
+
+# Functions to modify samples
+
+## Keep only a set samples
+
+A sample subset can be easily analyzed by indicating the samples to keep. The user can thus create a new RiboClass object containing the data and metadata of the samples of interest. Only the remaining samples' metadata are kept in the RiboClass object, so no manual updating is required.
+
+Here is an example to generate a new RiboClass by keeping two samples of interest ("S1" and "S2"):
+
+```{r}
+ribo_2samples <- keep_ribo_samples(ribo_adjusted,c("S1","S2"))
+print(ribo_2samples)
+
+```
+
+## Remove samples
+Unlike the previous section, samples indicated here will be removed from the RiboClass. The metadata will be updated accordingly. 
+
+Here is an example to generate a new RiboClass by removing two samples ("S1" and "S2"):
+
+```{r}
+ribo_removed_samples <- remove_ribo_samples(ribo_toy,c("S1","S1"))
+print(ribo_removed_samples)
+```
