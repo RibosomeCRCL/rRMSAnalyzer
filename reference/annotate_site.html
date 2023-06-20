@@ -35,6 +35,9 @@ is available."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/li
     <a class="dropdown-item" href="../articles/custom_ribo.html">Customizing a RiboClass</a>
   </div>
 </li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
+</li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -107,12 +110,6 @@ is available.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'human_methylated'</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ribo_toy</span> <span class="op">&lt;-</span> <span class="fu"><a href="rename_rna.html">rename_rna</a></span><span class="op">(</span><span class="va">ribo_toy</span> ,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5S'</span>,<span class="st">'5.8S'</span>,<span class="st">'18S'</span>,<span class="st">'28S'</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ribo_toy</span> <span class="op">&lt;-</span> <span class="fu">annotate_site</span><span class="op">(</span><span class="va">ribo_toy</span>,<span class="va">human_methylated</span>,anno_value <span class="op">=</span><span class="st">'Nomenclature'</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Partial mismatch in RNA names between the annotation and your RiboClass !</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Unmatched RNA names :<span style="color: #0000BB;">"5S"</span>.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> RiboClass RNA names : <span style="color: #0000BB;">"5S"</span>, <span style="color: #0000BB;">"5.8S"</span>, <span style="color: #0000BB;">"18S"</span>, and <span style="color: #0000BB;">"28S"</span>.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Annotation RNA names : <span style="color: #0000BB;">"5.8S"</span>, <span style="color: #0000BB;">"18S"</span>, and <span style="color: #0000BB;">"28S"</span>.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> → Make sure to have identical RNA names between the annotation and your</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   RiboClass.</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
