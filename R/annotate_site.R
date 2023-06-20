@@ -33,9 +33,6 @@ annotate_site <- function(ribo, annot, anno_rna = 2, anno_pos = 1, anno_value = 
   # Check if annot has the same RNA as the RiboClass
   anno_rna_names <- unique(annot[[anno_rna]])
   ribo_rna_names <- ribo[["rna_names"]][["current_name"]]
-  missing_anno_names <- anno_rna_names[which(anno_rna_names %in% ribo_rna_names == FALSE)]
-  missing_ribo_names <- ribo_rna_names[which(ribo_rna_names %in% anno_rna_names == FALSE)]
-  missing_names <- c(missing_anno_names,missing_ribo_names)
   if (sum((anno_rna_names %in% ribo_rna_names)) == 0) {
     
     cli::cli_abort(c("Total mismatch in RNA names between annotation and your RiboClass !",
@@ -44,15 +41,6 @@ annotate_site <- function(ribo, annot, anno_rna = 2, anno_pos = 1, anno_value = 
                    ">" = "Rename the RNA in the annotation or the RiboClass.",
                    " " = "(To rename RNA in a RiboClass, use {.fn rename_rna})."))
   } 
-  else if(sum((anno_rna_names %in% ribo_rna_names) < length(ribo_rna_names))) {
-    
-    cli::cli_warn(c("Partial mismatch in RNA names between the annotation and your RiboClass !",
-                     "x" = "Unmatched RNA names :{.val {missing_names}}.",
-                     "i" = "RiboClass RNA names : {.val {ribo_rna_names}}.",
-                     "i" = "Annotation RNA names : {.val {unique(anno_rna_names)}}.",
-                     ">" = "Make sure to have identical RNA names between the annotation and your RiboClass."))
-    
-  }
   
   # check if annot contains only existing positions. Throw a
   # warning if not.
