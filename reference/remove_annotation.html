@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rRMSAnalyzer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Remove site annotations of a given RiboClass</h1>
-      <small class="dont-index">Source: <a href="https://github.com/RibosomeCRCL/rRMSAnalyzer/blob/HEAD/R/annotate_site.R" class="external-link"><code>R/annotate_site.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/RibosomeCRCL/rRMSAnalyzer/blob/HEAD/R/site_annotation.R" class="external-link"><code>R/site_annotation.R</code></a></small>
       <div class="d-none name"><code>remove_annotation.Rd</code></div>
     </div>
 
@@ -61,13 +61,18 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">remove_annotation</span><span class="op">(</span><span class="va">ribo</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">remove_annotation</span><span class="op">(</span><span class="va">ribo</span>, annotation_to_remove <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>ribo</dt>
 <dd><p>A RiboClass object.</p></dd>
+
+
+<dt>annotation_to_remove</dt>
+<dd><p>Specific annotated sites to remove. If set to NULL,
+the function removes all annotations.</p></dd>
 
 </dl></div>
     <div class="section level2">
