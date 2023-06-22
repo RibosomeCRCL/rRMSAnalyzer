@@ -143,6 +143,9 @@ keep_selected_annotation <- function(ribo, annotation_to_keep) {
 #'
 #' @examples
 #' data("ribo_toy")
+#' data("human_methylated")
+#' ribo_toy <- rename_rna(ribo_toy)
+#' ribo_toy <- annotate_site(ribo_toy,human_methylated)
 #' get_annotation(ribo_toy)
 get_annotation <- function(ribo) {
   

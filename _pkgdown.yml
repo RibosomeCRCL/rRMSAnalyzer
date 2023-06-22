@@ -16,6 +16,7 @@ reference:
   desc: Functions to add, remove or keep selected annotation in a RiboClass.
 - contents:
   - annotate_site
+  - get_annotation
   - remove_annotation
   - keep_selected_annotation
 - title: Data importation

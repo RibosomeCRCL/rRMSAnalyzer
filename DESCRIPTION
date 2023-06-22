@@ -1,7 +1,7 @@
 Package: rRMSAnalyzer
 Type: Package
 Title: Package to Analyze RiboMethSeq Data
-Version: 2.0.0
+Version: 2.0.1
 Authors@R: c(
     person("Théo","Combe", email="epirnatools@lyon.unicancer.fr", role=c("aut","cre")),
     person("Hermes","Paraqindes", role="aut"),

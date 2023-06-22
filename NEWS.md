@@ -1,3 +1,11 @@
+# rRMSAnalyzer 2.0.1
+
+## New feature
+
+-   `get_annotation()` : get a dataframe with all current annotation in a RiboClass.
+
+-   `remove_annotation()` : Added a new parameter to select a subset of annotation to remove.
+
 # rRMSAnalyzer 2.0.0
 
 -   Added a `NEWS.md` file to track changes to the package.
