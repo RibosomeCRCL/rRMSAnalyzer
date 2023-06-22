@@ -70,6 +70,8 @@ annotate_site <- function(ribo, annot, anno_rna = 2, anno_pos = 1, anno_value = 
 #' Remove site annotations of a given RiboClass
 #'
 #' @param ribo A RiboClass object.
+#' @param annotation_to_remove Specific annotated sites to remove. If set to NULL,
+#' the function removes all annotations.
 #'
 #' @return A RiboClass object where all annotated position have been replaced by
 #' NA, the default value.
@@ -78,11 +80,21 @@ annotate_site <- function(ribo, annot, anno_rna = 2, anno_pos = 1, anno_value = 
 #' @examples
 #' data('ribo_toy')
 #' remove_annotation(ribo_toy)
-remove_annotation <- function(ribo) {
-  ribo[["data"]] <- lapply(ribo[["data"]], function(x) {
-    x["site"] <- NA
-    return(x)
-  })
+remove_annotation <- function(ribo, annotation_to_remove = NULL) {
+  if(is.null(annotation_to_remove)) {
+    
+    ribo[["data"]] <- lapply(ribo[["data"]], function(x) {
+      x["site"] <- NA
+      return(x)
+    })
+    
+  }
+  else {
+    current_annotation <- get_annotation(ribo)
+    new_annotation <- current_annotation[current_annotation[["site"]] %in% annotation_to_remove == FALSE,]
+    ribo <- keep_selected_annotation(ribo,new_annotation[["site"]])
+    
+  }
   
   return(ribo)
 }
@@ -105,13 +117,8 @@ remove_annotation <- function(ribo) {
 #' 
 keep_selected_annotation <- function(ribo, annotation_to_keep) {
   
-  sample_1 <- ribo[["data"]][[1]]
-  
-  current_annotation <- sample_1[which(!is.na(sample_1[["site"]])),
-                                 c("rnapos","rna","site")]
-  
+  current_annotation <- get_annotation(ribo)
   ribo <- remove_annotation(ribo)
-  
   new_annotation <- current_annotation[
     which(current_annotation[["site"]] %in% annotation_to_keep),]
   
@@ -124,5 +131,28 @@ keep_selected_annotation <- function(ribo, annotation_to_keep) {
   ribo <- annotate_site(ribo,new_annotation)
   
   return(ribo)
+  
+}
+
+#' Get annotation of a RiboClass
+#'
+#' @param ribo A RiboClass
+#'
+#' @return A dataframe with the rna name, the position on the rna and the annotated site.
+#' @export
+#'
+#' @examples
+#' data("ribo_toy")
+#' get_annotation(ribo_toy)
+get_annotation <- function(ribo) {
+  
+  sample_1 <- ribo[["data"]][[1]]
+  
+  current_annotation <- sample_1[which(!is.na(sample_1[["site"]])),
+                                 c("rnapos","rna","site")]
+  
+  rownames(current_annotation) <- NULL
+  
+  return(current_annotation)
   
 }
