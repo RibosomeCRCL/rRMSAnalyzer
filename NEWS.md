@@ -2,9 +2,9 @@
 
 ## New feature
 
--   `get_annotation()` : get a dataframe with all current annotation in a RiboClass.
+-   `get_annotation()`: get a dataframe with all current annotation in a RiboClass.
 
--   `remove_annotation()` : Added a new parameter to select a subset of annotation to remove.
+-   `remove_annotation()`: Added a new parameter to select a subset of annotation to remove.
 
 # rRMSAnalyzer 2.0.0
 
@@ -19,10 +19,10 @@
 ### Plots
 
 -   Correspondence analysis for samples' counts : `plot_coa()`
--   Heatmaps : `plot_heatmap()` and `plot_heatmap_corr()`
+-   Heatmaps: `plot_heatmap()` and `plot_heatmap_corr()`
 -   "Simple" boxplots : `boxplot_count()` (by sample) and `boxplot_cscores()` (by site)
 -   Boxplot comparing c-score by condition for sites considered as differential `plot_diff_sites()`
--   And others : `plot_counts_env()`, `plot_counts_fraction()`
+-   And others: `plot_counts_env()`, `plot_counts_fraction()`...
 
 ### Error messages
 
