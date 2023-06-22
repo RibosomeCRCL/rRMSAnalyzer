@@ -89,31 +89,31 @@ Virginie MARCEL</h4>
     
         <div class="abstract">
       <p class="abstract">Abstract</p>
-      <p>RiboMethSeq is an innovative RNAseq-based approach, which has
-      been developed in 2015 to analyze 2’O-ribose methylation (2’Ome)
-      at all the sites of the ribosomal RNAs (rRNA) at once, in yeast
-      <span class="citation">(Birkedal et al. 2014)</span>. RiboMethSeq
-      approach was then transferred to human using the Illumina
-      technology <span class="citation">(Marchand et al. 2016; Erales et
-      al. 2017; Marcel et al. 2021)</span>. Briefly, presence of 2’Ome
-      protects the phosphodiester bond located at the 3’ of the 2’Ome
-      nucleotide from alkaline hydrolysis. Thus, the presence of 2’Ome
-      at the given nucleotide n induces under-representation of RNA
-      fragments starting at the nucleotide n+1 and an
-      over-representation of RNA fragments ending at the nucleotide n-1,
-      allowing to calculate a 2’Ome level at the corresponding
-      nucleotide position n (or C-score) varying from 0 to 1 <span class="citation">(Birkedal et al. 2014)</span>. <br><br> The
-      rRMSAnalyzer package can be used for any kind of RNA and
-      organisms. This package provides a set of easy-to-use functions to
-      compute C-scores from RiboMethSeq read end counts as input, adjust
-      batch effect with ComBat-Seq, visualize the data and provide a
-      table with the annotated human rRNA sites and their C-scores.
-      Processing of the raw data to obtain read end counts from
-      sequencing data were previously described <span class="citation">(Marchand et al. 2016)</span>.</p>
+      <p>RiboMethSeq is an innovative RNAseq-based approach, which was
+      developed in 2015 to analyze 2’O-ribose methylation (2’Ome) at all
+      sites of ribosomal RNAs (rRNA) at once, in yeast <span class="citation">(Birkedal et al. 2014)</span>. This approach was
+      then transferred to human using the Illumina technology <span class="citation">(Marchand et al. 2016; Erales et al. 2017; Marcel
+      et al. 2021)</span>. Briefly, the presence of 2’Ome protects the
+      phosphodiester bond located at the 3’ of the 2’Ome nucleotide from
+      alkaline hydrolysis. Thus, the presence of 2’Ome at the given
+      nucleotide n induces under-representation of RNA fragments
+      starting at the nucleotide n+1 and an over-representation of RNA
+      fragments ending at the nucleotide n-1, allowing the extrapolation
+      of 2’Ome levels at the corresponding nucleotide position n (or
+      C-score) varying from 0 to 1 <span class="citation">(Birkedal et
+      al. 2014)</span>. <br><br> The rRMSAnalyzer package can be used
+      for any kind of RNA and with all organisms. This package provides
+      a set of user-friendly functions to compute C-scores from
+      RiboMethSeq read end counts as input, adjust batch effect with
+      ComBat-Seq, visualize the data and provide a table with the
+      annotated human rRNA sites and their C-scores. Processing of the
+      raw data to obtain read end counts from sequencing data was
+      previously described <span class="citation">(Marchand et al.
+      2016)</span>.</p>
     </div>
     
-<p>The rRMSAnalyzer package can be used for any type of RNA and
-organism. This package provides a set of easy-to-use functions to
+<p>The rRMSAnalyzer package can be used for any type of RNA and on all
+organism. This package provides a set of user-friendly functions to
 calculate C-scores from RiboMethSeq read end counts as input, perform
 quality control of the dataset, adjust for potential batch effects, and
 provide tools to visualize and analyze the data. In addition, a list of
@@ -177,24 +177,26 @@ Github with :</p>
 <div class="section level2">
 <h2 id="riboclass">RiboClass<a class="anchor" aria-label="anchor" href="#riboclass"></a>
 </h2>
-<p>RiboClass is the main class of the package that allows to store both
-the data matrices (counts and c-scores) and the associated metadata. It
-is automatically created when calling <em>load_ribodata</em> (see <a href="#loading-data">Loading data</a>).</p>
+<p>RiboClass is the main class of the package that enables the storage
+of both the data matrices (counts and c-scores) and the associated
+metadata. It is automatically created when calling
+<em>load_ribodata</em> (see <a href="#loading-data">Loading
+data</a>).</p>
 <p>It is a list containing three main elements, individually described
 below:</p>
 <ol style="list-style-type: decimal">
 <li><p><strong>Data</strong>: a list of dataframe, containing for each
 sample the 5’ and/or 3’ read-end counts provided by the user, and the
-calculated c-score.</p></li>
+calculated C-score.</p></li>
 <li><p><strong>Metadata</strong>: a dataframe, containing all the
 information related to the samples that can be provided by the
 user.</p></li>
 <li><p><strong>RNA_names</strong>: a dataframe, reporting the names of
 the RNA used in Data.</p></li>
 </ol>
-<p>Some main function calls’ parameters (such as the normalization
-method used for c-score computation) are also kept in the RiboClass
-object as a reminder.</p>
+<p>Some major function parameters (such as the normalization method used
+for c-score computation) are also kept in the RiboClass object as a
+reminder.</p>
 </div>
 <div class="section level2">
 <h2 id="loading-data">Loading data<a class="anchor" aria-label="anchor" href="#loading-data"></a>
@@ -212,7 +214,7 @@ important, as long as either the directory and its sub-directories
 contain the necessary csv/tsv files.</p>
 <ol style="list-style-type: decimal">
 <li><p>The <strong>name of the RNA</strong> on which the read end
-counting has been performed.</p></li>
+counting was performed.</p></li>
 <li><p>The <strong>number of the position</strong> on the RNA.</p></li>
 <li><p>The <strong>value of the read end counts</strong> at the
 position.</p></li>
@@ -252,7 +254,7 @@ position.</p></li>
 </tr>
 </tbody>
 </table>
-<p>Note 1: it is not necessary to provide an header in the count files,
+<p>Note 1: it is not necessary to provide a header in the count files,
 because column index can be used in the function <em>load_ribodata</em>,
 using <em>count_value</em>, <em>count_rnaid</em> and <em>count_pos</em>
 parameters.</p>
@@ -428,7 +430,7 @@ updated accordingly.</p>
 <h2 id="c-score-calculation">C-score calculation<a class="anchor" aria-label="anchor" href="#c-score-calculation"></a>
 </h2>
 <div class="section level3">
-<h3 id="what-is-c-score">What is C-score<a class="anchor" aria-label="anchor" href="#what-is-c-score"></a>
+<h3 id="what-is-a-c-score">What is a C-score ?<a class="anchor" aria-label="anchor" href="#what-is-a-c-score"></a>
 </h3>
 <p>The C-score is a metric, calculated from the RiboMethSeq sequencing
 data, used to evaluate the level of 2’O-ribose methylation (2’Ome) at a
@@ -450,7 +452,7 @@ region of 6</strong> (i.e., 6 nucleotides downstream the nucleotide n
 and 6 upstream the nucleotide n, where n is the nucleotid directly
 following the 2’Ome site of interest). This package provide the ability
 to change these two parameters either when loading the data or during
-the analysis process.</p>
+the analysis.</p>
 </div>
 <div class="section level3">
 <h3 id="c-score-computation-when-loading-data">C-score computation when loading data<a class="anchor" aria-label="anchor" href="#c-score-computation-when-loading-data"></a>
@@ -469,7 +471,7 @@ user-defined parameters as follows:</p>
 <span>              <span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="c-score-computation-during-the-analysis-process">C-score computation during the analysis process<a class="anchor" aria-label="anchor" href="#c-score-computation-during-the-analysis-process"></a>
+<h3 id="c-score-computation-during-the-analysis">C-score computation during the analysis<a class="anchor" aria-label="anchor" href="#c-score-computation-during-the-analysis"></a>
 </h3>
 <p>During the analysis, the C-score calculating parameters (method and
 size of the flanking region) can be modified using the
@@ -488,19 +490,19 @@ of the RiboClass.</strong></p>
 <div class="section level2">
 <h2 id="quality-control">Quality control<a class="anchor" aria-label="anchor" href="#quality-control"></a>
 </h2>
-<p>Due to technical limitations, it is sometimes necessary to make the
-wet-lab preparation of large cohort in several batches. The main risk
+<p>Due to technical limitations, it is sometimes necessary to conduct
+wet-lab preparations of large cohorts in several batches. The main risk
 when making several batches is to introduce <strong>technical
 biases</strong> or <strong>batch effect</strong> in the dataset.</p>
 <div class="section level3">
 <h3 id="quality-control-report">Quality control report<a class="anchor" aria-label="anchor" href="#quality-control-report"></a>
 </h3>
 <p>A quality control (QC) report can be performed. It uses several
-metrics to help identify outlier sample and/or batch effects, including
+metrics to help identify outlier samples and/or batch effects, including
 end read counts and the C-score itself at all the 7217 genomic
 positions. The QC verifies that the coverage is uniform and reproducible
-between samples, eliminating the possibility of biases due to sequencing
-and outlier samples.</p>
+between samples, eliminating the possibility of bias due to sequencing
+and outliers</p>
 <p>QC can be either performed using a panel of ready to use functions,
 which correspond to data visualization, or automatically.</p>
 <p>The automatic QC report can be generated using the report_qc
@@ -528,7 +530,7 @@ about samples batches is called “run”. The name is thus given to the
 </h3>
 <p>Technical bias (i.e., batch effect) can be identified by plotting
 C-scores at all the genomic positions of the RNA for each sample on a
-PCA (see also [Visualization with PCA] for more usages).</p>
+PCA (see also [Visualization with PCA] for more uses).</p>
 <p>Here is an example:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_pca.html">plot_pca</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo</span>,</span>
@@ -545,7 +547,7 @@ The following section will resolve this batch effect.</p>
 <p>Batch effect of RiboMethSeq data can be adjusted using the ComBat-seq
 method (Paraqindes et al, in revision; Zhang, et al, 2020). The
 rRMSAnalyzer package includes a wrapper (adjust_bias) to perform
-ComBat-seq adjustment which returns a new RiboClass with adjusted read
+ComBat-seq adjustment which provides a new RiboClass with adjusted read
 end count values and C-scores automatically recalculated with the same
 setup parameters.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -567,17 +569,17 @@ on the new RiboClass:</p>
 <p><img src="rRMSAnalyzer_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <p>After batch effect adjustment using ComBat-seq method, the two
 technical replicates RNA1 and RNA2 show reduced dispersion, and the
-samples are separated on the PCA axes independently of the library
-groups.</p>
+samples are separated on the PCA axes independently of the library they
+belong to.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="verifying-local-coverage">Verifying local coverage<a class="anchor" aria-label="anchor" href="#verifying-local-coverage"></a>
 </h2>
-<p>The C-score depends on the local coverage around the site of
-interest. For a simple visualization of the read end count coverage of
-the flanking region of a given genomic position of interest, use the
-plot_counts_env function. Two plotting methods are available:</p>
+<p>The C-score depends on the local coverage around the site. For a
+simple visualization of the read end count coverage of the flanking
+region of a given genomic position of interest, use the plot_counts_env
+function. Two plotting methods are available:</p>
 <ol style="list-style-type: decimal">
 <li>
 <strong>display all samples</strong> (default parameters): by
@@ -690,9 +692,9 @@ the rRNA size order:</p>
 </h3>
 <p>The rRMSAnalyzer package calculates a C-score for each genomic
 position of the RNAs. However, not every sites of the reference 2’Ome
-RNA is necessarily methylated. Therefore, it is expectated that the user
-provide a list of potentially methylated sites of interest, called
-“annotated sites”. This will make it easy to restrict further analysis
+RNA is necessarily methylated. Therefore, it is expected that the user
+provides a list of potentially methylated sites of interest, called
+“annotated sites”. This will make it easier to restrict further analysis
 to this list of sites.</p>
 <div class="section level4">
 <h4 id="included-annotation-human-2ome-rrna-sites">Included annotation : Human 2’Ome rRNA sites<a class="anchor" aria-label="anchor" href="#included-annotation-human-2ome-rrna-sites"></a>
@@ -710,13 +712,13 @@ litterature.</p></li>
 <div class="section level4">
 <h4 id="customize-2ome-sites-annotations">Customize 2’Ome sites annotations<a class="anchor" aria-label="anchor" href="#customize-2ome-sites-annotations"></a>
 </h4>
-<p>Instead of using the list of human rRNA 2’Ome sites provided with
-rRMSAnalyzer package, the user can provide his own list of annotated
+<p>Instead of using the list of human rRNA 2’Ome sites provided by the
+rRMSAnalyzer package, the user can provide their own list of annotated
 sites which will be attached to the RiboClass object using the
 annotate_site function (see 10.3 section : annotation of RNA sites).</p>
 <p>This annotate_site function expects an “annot” parameter which must
-be an object of type dataframe that contains the following three
-mandatory columns :</p>
+be a dataframe object that contains the following three mandatory
+columns :</p>
 <ul>
 <li><p><strong>RNA name</strong>: the name of the RNA, matching the RNA
 name of the RiboClass.</p></li>
@@ -767,8 +769,8 @@ annotations:</p>
 <span>                               anno_value <span class="op">=</span> <span class="st">"Nomenclature"</span><span class="op">)</span></span></code></pre></div>
 <p>Note : rRMSAnalyzer will display a warning message when there is a
 mismatch between the annot and RiboClass RNA names.</p>
-<p>This vignette has also some explanations on how to create your own
-sites annotation dataset with <a href="#customize-2ome-sites-annotations">Customize 2’Ome sites
+<p>This vignette also provides some explanations on how to create your
+own sites annotation dataset with <a href="#customize-2ome-sites-annotations">Customize 2’Ome sites
 annotations</a>.</p>
 </div>
 </div>
@@ -778,11 +780,11 @@ annotations</a>.</p>
 </h2>
 <p>To determine whether RNA 2’Ome profiles are different between
 conditions and identify the most variable RNA 2’Ome sites, several
-functions have been implemented to return a ggplot. Moreover, the
-parameter only_annotated, which is included in all the plot related
-functions, allows to plot only the annotated RNA 2’Ome sites of interest
-(i.e., with biological relevance) when returned as True. Here is a list
-of the implemented plots with the function name:</p>
+functions have been implemented to obtain a ggplot. Moreover, the
+parameter <code>only_annotated</code>, which is included in all the plot
+related functions, enables the plotting of only the annotated RNA 2’Ome
+sites of interest (i.e., with biological relevance) when set to true.
+Here is a list of the implemented plots with the function name:</p>
 <ul>
 <li>principal component analysis using the C-scores of the annotated RNA
 2’Ome sites (plot_pca)</li>
@@ -809,9 +811,8 @@ parameter.</p>
 <span>         axes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>, <span class="co">#PC2 and PC3 will be plotted</span></span>
 <span>         only_annotated <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="rRMSAnalyzer_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
-<p><strong>Note 2</strong> the <em>object_only</em> parameter returns
-the complete dudi.pca object by setting <em>object_only</em> to
-TRUE:</p>
+<p><strong>Note 2</strong> the function returns the complete dudi.pca
+object instead of the plot by setting <em>object_only</em> to TRUE:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_pca.html">plot_pca</a></span><span class="op">(</span><span class="va">ribo_adjusted</span>,</span>
 <span>         color_col <span class="op">=</span> <span class="st">"condition"</span>,</span>
@@ -822,7 +823,7 @@ TRUE:</p>
 <h2 id="analytic-functions-for-site-by-site-comparison-of-2ome-levels">Analytic functions for site-by-site comparison of 2’Ome levels<a class="anchor" aria-label="anchor" href="#analytic-functions-for-site-by-site-comparison-of-2ome-levels"></a>
 </h2>
 <p>Two cut-offs are currently used to identify RNA sites with
-significantly different 2’Ome level between biological conditions
+significantly different 2’Ome levelsè between biological conditions
 (Marcel et al , NAR Cancer 2021):</p>
 <ul>
 <li>statistical significance: a p-value &lt; 0.01 using Kruskal-Wallis
@@ -1040,10 +1041,10 @@ particular sample of interest:</p>
 <div class="section level3">
 <h3 id="export-as-a-dataframe-by-condition">Export as a dataframe by condition<a class="anchor" aria-label="anchor" href="#export-as-a-dataframe-by-condition"></a>
 </h3>
-<p>The <em>mean_samples_by_condition</em> function returns the
+<p>The <em>mean_samples_by_condition</em> function provdes the
 summarized values per modality of a variable in the metadata
 dataframe.</p>
-<p>By default, the function returns for all the genomic RNA positions
+<p>By default, the function provides for all the genomic RNA positions
 the name of the position, the mean and standard deviation (sd) of the
 C-scores. By using the value=”count” parameter, it is als possible to
 calculate these values from the read end counts. Calculations can be
