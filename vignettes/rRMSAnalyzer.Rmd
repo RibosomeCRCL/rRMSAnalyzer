@@ -41,7 +41,7 @@ We would like to thank all our collaborators for their advices and suggestions.
 
 # Funding
 
-This project has been funded by the French Cancer Institute (INCa, PLBIO 2019-138 MARACAS), the SIRIC Program (INCa-DGOS-Inserm_12563 LyRICAN) and Synergie Lyon Cancer Foundation.
+This project has been funded by the French Cancer Institute (INCa, PLBIO 2019-138 MARACAS), the SIRIC Program (INCa-DGOS-Inserm_12563 LyRICAN) and [Synergie Lyon Cancer Foundation](https://www.synergielyoncancer.fr).
 
 # Installation
 
