@@ -9,11 +9,12 @@ generate_palette <- function(metadata,cols_to_use) {
   palettes <- palettes_template
   for(column in cols_to_use) {
     cond_names <- unique(metadata[[column]])
+    if(is.numeric(cond_names)) col_is_numeric <- TRUE
     cond_names[which(is.na(cond_names))] <- "NA"
     annot <- c()
     
-    if(length(cond_names) > 9) {
-      palette <- grDevices::hcl.colors(length(cond_names),"Grays")
+    if(any(col_is_numeric,length(cond_names) > 9)) {
+      palette <- grDevices::hcl.colors(length(cond_names),"Light Grays")
 
     } else {
       palette <- palettes[[1]]
