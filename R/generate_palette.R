@@ -9,7 +9,7 @@ generate_palette <- function(metadata,cols_to_use) {
   palettes <- palettes_template
   for(column in cols_to_use) {
     cond_names <- unique(metadata[[column]])
-    if(is.numeric(cond_names)) col_is_numeric <- TRUE
+    col_is_numeric <- ifelse(is.numeric(cond_names),TRUE,FALSE)
     cond_names[which(is.na(cond_names))] <- "NA"
     annot <- c()
     
