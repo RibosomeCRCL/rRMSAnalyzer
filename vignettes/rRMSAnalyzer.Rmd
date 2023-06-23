@@ -480,7 +480,7 @@ pca <- plot_pca(ribo_adjusted,
 Two cut-offs are currently used to identify RNA sites with  significantly different 2’Ome levelsè between biological conditions (Marcel et al , NAR Cancer 2021):
 
 -   statistical significance: a p-value < 0.01 using Kruskal-Wallis test. 
--   biological significance: a ΔC-score (i.e., Median C-score~max~ – Median C-score~min~) > 0.05, indicating a variation of 5% of the RNA 2’Ome level between the conditions.
+-   biological significance: a ΔC-score (i.e., Mean C-score~max~ – Mean C-score~min~) > 0.05, indicating a variation of 5% of the RNA 2’Ome level between the conditions.
 
 The *plot_diff_sites* function displays only the RNA sites that meet these two cut-off criteria. It produces a boxplot visualizing the median C-scores per biological condition and the p-value.
 
