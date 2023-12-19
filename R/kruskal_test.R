@@ -22,7 +22,7 @@ kruskal_test_on_cscores <- function(cscore_matrix = NULL, metadata = NULL, adjus
   } 
   if (test_to_perform == "wilcox") {
     kruskal_test_pvalues <- apply(cscore_matrix, 1, function(x) {
-      stats::wilcox.test(x ~ metadata[,factor_column])$p.value # test each row and get p.value
+      stats::wilcox.test(x ~ metadata[,factor_column], exact = TRUE)$p.value # test each row and get p.value
     })
   }
    
