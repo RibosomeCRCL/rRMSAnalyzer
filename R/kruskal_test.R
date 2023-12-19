@@ -13,10 +13,19 @@ kruskal_test_on_cscores <- function(cscore_matrix = NULL, metadata = NULL, adjus
   cscore_matrix <- as.data.frame(cscore_matrix) 
 
   cscore_matrix <- cscore_matrix[stats::complete.cases(cscore_matrix), match(metadata[,"samplename"], colnames(cscore_matrix))] # order column cscores as metadata
+  test_to_perform <- ifelse(length(unique(metadata[,factor_column])) > 2, "kruskal", "wilcox")
   
-  kruskal_test_pvalues <- apply(cscore_matrix, 1, function(x) {
-    stats::kruskal.test(x ~ metadata[,factor_column])$p.value
-    }) # test each row and get p.value
+  if (test_to_perform == "kruskal") {
+    kruskal_test_pvalues <- apply(cscore_matrix, 1, function(x) {
+      stats::kruskal.test(x ~ metadata[,factor_column])$p.value
+    })
+  } 
+  if (test_to_perform == "wilcox") {
+    kruskal_test_pvalues <- apply(cscore_matrix, 1, function(x) {
+      stats::wilcox.test(x ~ metadata[,factor_column])$p.value # test each row and get p.value
+    })
+  }
+   
  
 
   df_kruskal_pvalues <- data.frame(site = names(kruskal_test_pvalues), p.val = kruskal_test_pvalues, 
