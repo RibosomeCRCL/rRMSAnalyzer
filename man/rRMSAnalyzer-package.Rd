@@ -2,6 +2,7 @@
 % Please edit documentation in R/rRMSAnalyzer.R
 \docType{package}
 \name{rRMSAnalyzer-package}
+\alias{rRMSAnalyzer}
 \alias{rRMSAnalyzer-package}
 \title{rRMSAnalyzer package dedicated to analysis of RiboMethSeq data}
 \description{
@@ -29,6 +30,15 @@ and a workflow.
 The code can be viewed at the GitHub repository :
 
 \url{https://github.com/RibosomeCRCL/rRMSAnalyzer}
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/RibosomeCRCL/rRMSAnalyzer}
+  \item \url{https://ribosomecrcl.github.io/rRMSAnalyzer/}
+  \item Report bugs at \url{https://github.com/RibosomeCRCL/rRMSAnalyzer/issues}
+}
+
 }
 \author{
 Théo COMBE, Hermes PARAQINDES, Janice KIELBASSA

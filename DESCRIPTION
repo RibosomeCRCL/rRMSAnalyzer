@@ -24,7 +24,7 @@ Depends: R (>= 3.5.0)
 Imports: dplyr, tidyr, rlang, cli, sva, factoextra, ade4, ggplot2, ComplexHeatmap, colorRamp2, reshape2, scales
 LazyData: FALSE
 biocViews:
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 NeedsCompilation: no
 Encoding: UTF-8
 Suggests: 

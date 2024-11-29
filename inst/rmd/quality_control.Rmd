@@ -110,6 +110,16 @@ The coverage distribution of absolute end read counts at each genomic positions 
 Samples with a median coverage below 100 (the blue line), are highlighted in red and should be interpreted with caution or excluded from further analysis. This threshold ensures a level of precision within the percentage range for calculating the C-score, which is targeted for good quality analyses.
 
 ```{r boxplot2,warning=FALSE}
+## calc
+ribo_matrix <- extract_data(ribo_to_check, "count", position_to_rownames = TRUE)
+medcov <- apply(ribo_matrix,2,function(x) median(x,na.rm=T))
+qcdata <- cbind(qcdata,median_coverange=medcov[rownames(qcdata)])
+qcdata$coverage_quality <- "ok"
+qcdata$coverage_quality[qcdata$median_coverange < 100] <- "warning"
+
+write.table(qcdata,file.path(output_dir,"quality_control.csv"),sep="\t",row.names=FALSE,quote = FALSE)
+
+## plot
 rRMSAnalyzer::boxplot_count(ribo_to_check) + ggplot2::ggtitle("End read counts distribution by sample")
 ```
 
