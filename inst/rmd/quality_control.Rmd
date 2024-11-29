@@ -23,7 +23,6 @@ all_sites <- length(ribo_to_check[[1]][[1]][[1]])
 # Get the number of valid sites
 ribom <- extract_data(ribo_to_check)
 valid_sites <- sum(complete.cases(ribom))
-
 ```
 
 ```{=html}
@@ -92,8 +91,13 @@ The following (r)RNA were used by the coverage tool: **`r as.character(ribo_to_c
 The following metadata are used in the project **`r params$project_name`** :
 
 ```{r, echo=FALSE}
-knitr::kable(ribo_to_check[[2]])
+qcdata <- ribo_to_check[[2]]
+knitr::kable(qcdata)
+
+
 ```
+ 
+
  
 # Global coverage
 
