@@ -93,8 +93,6 @@ The following metadata are used in the project **`r params$project_name`** :
 ```{r, echo=FALSE}
 qcdata <- ribo_to_check[[2]]
 knitr::kable(qcdata)
-
-
 ```
  
 
@@ -138,7 +136,20 @@ Where :
 The following image shows the **Relative Log Coverage boxplot**. The blue lines give the median +/- 2mad variation. Median outside the blue lines identifies putative outlier sample (highlighted in red). Sample that presents a lower or higher coverage compared to other samples might be considered carefully or removed in the following biological analyses as an outlier sample.
 
 ```{r}
-rRMSAnalyzer::plot_rle(ribo_to_check,show_outlier = T) + ggplot2::ggtitle("Relative Log Coverage")
+plot_rle <- rRMSAnalyzer::plot_rle(ribo_to_check,show_outlier = T) + ggplot2::ggtitle("Relative Log Coverage")
+mad <- plot_rle$plot_env$mad  
+median <- as.vector(plot_rle$plot_env$rle_grouped$median)
+keys <- as.vector(plot_rle$plot_env$rle_grouped$key)
+outlier_table <- data.frame(
+  key = keys,
+  median = median)
+outlier <- data.frame()
+for (i in 1:nrow(outlier_table)) {
+  if(outlier_table$median[i] < mad) {
+  outlier <- rbind(outlier, outlier_table[i,])
+  }
+}
+print(plot_rle)
 ```
 
 ## RNA fraction per sample
