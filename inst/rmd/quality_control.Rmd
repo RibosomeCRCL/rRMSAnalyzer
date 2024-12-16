@@ -191,15 +191,16 @@ rRMSAnalyzer::plot_heatmap_corr(ribo_to_check,"Count")
 To identify distinct coverage profile, we compare the coverage profiles of all samples in the series. The Correspondence Analysis (COA) plot shows the distance between each sample based on its coverage profile. Samples that are far appart are considered putative outliers. At this stage, it is possible to visualise the bias linked to the sequencing batch or to evaluate the performance of the ComBat-seq correction algorithm if it has been applied (Zhang et al, 2020; Paraqindes et al, in revision).
 
 ```{r}
+# Plot_coa by color_col specified in param
 plot_coa <- rRMSAnalyzer::plot_coa(ribo_to_check,color_col = params$library_col)
 print(plot_coa)
-# assign a color in ribo_to_check (=ribo object) if sample is an outlier
+# assign a name in ribo_to_check (=ribo object) if sample is an outlier
 ribo_to_check$metadata$color <- ifelse(
   ribo_to_check$metadata$samplename %in% outlier$key,
   "outlier",  # les échantillons dans outlier
   "normal"  # les autres échantillons
 )
-# Utiliser la colonne "color" dans le metadata pour colorier le plot
+# Plot_coa by outliers 
 plot_coa_binaire <- rRMSAnalyzer::plot_coa(ribo_to_check, color_col = "color")
 
 print(plot_coa_binaire)
