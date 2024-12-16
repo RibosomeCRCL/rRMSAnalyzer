@@ -131,17 +131,22 @@ boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var
 #' @keywords internal
 #'
 .plot_boxplot_samples <- function(matrix, values_col_name, metadata,
-                                  color_col = NA, outlier, horizontal) {
+                                  color_col = NA, outlier= TRUE, horizontal=TRUE) {
   Sample <- NULL
   id_vars <- "Sample"
   matrix <- log10(matrix)
   matrix_inv <- as.data.frame(t(matrix))
- # matrix_inv <- tibble::rownames_to_column(matrix_inv, "Sample")
+  # matrix_inv <- tibble::rownames_to_column(matrix_inv, "Sample")
   matrix_inv["Sample"] <- rownames(matrix_inv)
   
   if (!is.na(color_col)) {
     matrix_inv <- cbind(matrix_inv, metadata[color_col])
     id_vars <- c(color_col, "Sample")
+  }else{
+    # quality
+    matrix_inv <- cbind(matrix_inv, qc=0)
+    matrix_inv$qc[apply(matrix,2,median,"na.rm"=T)<=2] <- 1 
+    id_vars <- c("qc", "Sample")
   }
   
   matrix_melted <- reshape2::melt(matrix_inv, id.vars = id_vars,
@@ -155,8 +160,11 @@ boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var
     shape_outlier <- 19
   
   if (is.na(color_col)) {
+    
     p <- ggplot2::ggplot(matrix_melted,
-                         ggplot2::aes(x = Sample, y = !!sym(values_col_name)))
+                         ggplot2::aes(x = Sample, y = !!sym(values_col_name), 
+                                      fill = factor(qc))) + 
+      ggplot2::theme(legend.position="none")+ ggplot2::scale_fill_manual(values=c("white", "red"))
   } else {
     p <- ggplot2::ggplot(matrix_melted,
                          ggplot2::aes(x = Sample, y = !!sym(values_col_name), 
@@ -164,12 +172,14 @@ boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var
   }
   p <- p + ggplot2::geom_boxplot(outlier.shape = shape_outlier) + 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5,
-                                                         hjust = 1))
-    
+                                                       hjust = 1))
+  
   
   p <- p + ggplot2::geom_hline(yintercept = 2, colour = "blue")
+  
   if (horizontal)
     p <- p + ggplot2::coord_flip()
   
   return(p)
 }
+
