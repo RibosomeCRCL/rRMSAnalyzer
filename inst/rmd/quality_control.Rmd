@@ -136,19 +136,27 @@ Where :
 The following image shows the **Relative Log Coverage boxplot**. The blue lines give the median +/- 2mad variation. Median outside the blue lines identifies putative outlier sample (highlighted in red). Sample that presents a lower or higher coverage compared to other samples might be considered carefully or removed in the following biological analyses as an outlier sample.
 
 ```{r}
+#plot object extraction
 plot_rle <- rRMSAnalyzer::plot_rle(ribo_to_check,show_outlier = T) + ggplot2::ggtitle("Relative Log Coverage")
+# extraction of the median absolute deviation
 mad <- plot_rle$plot_env$mad  
+# extraction of the median for all samples
 median <- as.vector(plot_rle$plot_env$rle_grouped$median)
+# extraction of sample names
 keys <- as.vector(plot_rle$plot_env$rle_grouped$key)
+# creation of a data frame containing sample names and medians
 outlier_table <- data.frame(
   key = keys,
   median = median)
+# creation of the data frame outlier 
 outlier <- data.frame()
+# calculation of outlier 
 for (i in 1:nrow(outlier_table)) {
   if(outlier_table$median[i] < mad) {
   outlier <- rbind(outlier, outlier_table[i,])
   }
 }
+
 print(plot_rle)
 ```
 
