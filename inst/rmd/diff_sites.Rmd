@@ -48,125 +48,21 @@ Metadata used for ComBat-seq :
 
 </details>
 
-## Site-by-site analysis of rRNA 2'Ome
+## Site-by-site analysis of rRNA 2'Ome // on garde cette partie comme elle est.
 
-The alteration in rRNA 2'Ome is analysed site-by-site individually to identify significant alteration in rRNA 2'Ome level at particular site depending on the biological context.
+The alteration in rRNA 2'Ome is analysed site-by-site individually to identify significant alteration in rRNA 2'Ome level at particular site depending on the biological context. c'est le line plot. 
 
 ### Site-by-site analysis of all rRNA 2'Ome sites {.tabset}
 
 Mean comparison of C-score between biological conditions is performed for all rRNA 2'Ome sites.
 
-Here is given a line plot given the mean C-score and the standard deviation for each rRNA 2'Ome sites in the different biological context. Color indicates the different biological groups.
+Here is given a line plot given the mean C-score and the standard deviation for each rRNA 2'Ome sites in the different biological context. Color indicates the different biological groups. 
 
 ```{r}
 #plot_lineplot(ribo_meth,"cscore_median",params$biological_condition_col)
 ```
 
-Here is given an histo plot given the mean C-score and the standard deviation in the different biological context for each individual rRNA 2'Ome sites. Color indicates the different biological groups.
-
-
-### Site-by-site analysis of all significant rRNA 2'Ome sites {.tabset}
-
-
-# Site-by-site analysis of rRNA 2'Ome
-
-In this report, the alteration in rRNA 2'Ome is analysed site-by-site individually to identify significant alteration in rRNA 2'Ome level at particular site depending on the biological context.
-
-## Site-by-site analysis of all differential rRNA 2'Ome sites
-
-Mean comparison of C-score between biological conditions for significant rRNA 2'Ome sites is shown.
-
-First, mean comparison between biological conditions is performed for all the rRNA 2'Ome sites using non-parametric method of Kruskall Wallis. P-values are adjusted using the false discovery rate (fdr) method. 
-
-**Here is given a box plot given the C-score in the different biological context for each rRNA sites whose 2'Ome is significantly different between the biological conditions. Color indicates the different biological groups.**
-
-```{r}
-plot_diff_sites(ribo_to_check,factor_column = params$condition_col,p_cutoff = 0.1)
-```
-
-<br>
-**The following table shows both p-value (adjusted or not) from the Kruskal-Wallis test at each site and the range of conditions'mean for ALL annotated sites :**
-
-```{r}
-df_sites <- plot_diff_sites(ribo_to_check,factor_column = params$condition_col,object_only = TRUE)
-df_sites["range_mean"] <- df_sites["mean_max_min_difference"]
-df_sites["mean_max_min_difference"] <- NULL
-df_sites
-```
-
-```{r}
-#développé par Julie Radermecker (Jan 2024)
-
-install.packages("ComplexHeatmap")
-install.packages("viridisLite")
-install.packages("dyplr")
-install.packages("patchwork")
-install.packages("writexl")
-
-#7.0.2. Chargement des librairies (impératif)
-
-library(knitr)
-library(ggplot2)
-library(cowplot)
-library(ComplexHeatmap)
-library(viridis)
-library(dplyr)
-library(tidyr)
-library(patchwork)
-library(rRMSAnalyzer)
-library(writexl)
-data("human_methylated")
-
-# 7.1. Transformation du dataframe "ribo_df"
-
-new_metadata_sites <- ribo_df %>%
-  pivot_longer(cols = c("N3-GT2-JFH","N1-GT1-TN-Hi","N1-GT2-JFH","N3-GT1-TN-Hi",
-                        "N2-GT1-TN-Hi", "N2-GT2-JFH","N3-GT3-DBN", "N3-MOCK", 
-                        "N1-MOCK-P", "N1-GT1-DCV", "N2-MOCK-P", "N1-MOCK-SFV",
-                        "N2-GT3-DBN", "N3-GT1-P", "N2-MOCK-NP", "N1-MOCK-DCV", 
-                        "N2-GT1-NP", "N1-MOCK-NP", "N3-GT1-NP", "N1-MOCK",
-                        "N3-MOCK-P", "N1-GT1-SFV", "N2-GT1-P", "N1-GT1-P",
-                        "N2-MOCK", "N3-MOCK-NP", "N1-GT3-DBN", "N1-GT1-NP",
-                        "N1-MOCK-DMSO", "N2-GT1-DMSO", "N2-MOCK-SFV", 
-                        "N2-GT1-DCV", "N3-MOCK-DCV", "N3-MOCK-SFV",
-                        "N2-MOCK-DMSO", "N3-GT1-SFV", "N3-GT1-DMSO",
-                        "N3-MOCK-DMSO", "N3-GT1-DCV", "N2-MOCK-DCV", 
-                        "N2-GT1-SFV", "N1-GT1-DMSO"),
-               names_to = "sample_name", values_to = "cscore") %>% 
-  select(site, cscore, sample_name)
-
-write.csv(new_metadata_sites, "C:/Users/Allyson/Desktop/RibosOmics/HCV_Catez/HCV_Catez/score_per_site.csv")
-#remplacer les noms des échantillons, ici "L1-CTA/SNORD104" 
-
-#7.2. Calcul de la différence des médianes et des seuils GTF / MOCK
-metadata_data_total <- new_metadata_sites%>%
-  group_by(site) %>%
-  summarize(median_Cscore_metadata_ech_ctrl = median(cscore[sample_name %in% c("N3-MOCK", "N1-MOCK","N2-MOCK")]), # indiquer le nom de l'échantillon 
-            #si 1 seul échantillon == "samplename" / si >1 échantillon %in% c("samplename1", "samplename2")
-            median_Cscore_metadata_ech = median(cscore[sample_name %in% c("N1-GT1-TN-Hi","N3-GT1-TN-Hi", "N2-GT1-TN-Hi")]), # indiquer le nom de l'échantillon
-            #si 1 seul échantillon == "samplename" / si >1 échantillon %in% c("samplename1", "samplename2")
-            difference = median_Cscore_metadata_ech - median_Cscore_metadata_ech_ctrl)
-
-#7.2. Calcul de la différence des médianes et des seuils GT1 / Gt2/Gt3
-metadata_data_total <- new_metadata_sites%>%
-  group_by(site) %>%
-  summarize(median_Cscore_metadata_ech_ctrl = median(cscore[sample_name %in% c("N1-GT1-TN-Hi","N3-GT1-TN-Hi", 
-                                                                               "N2-GT1-TN-Hi")]), # indiquer le nom de l'échantillon 
-            #si 1 seul échantillon == "samplename" / si >1 échantillon %in% c("samplename1", "samplename2")
-            median_Cscore_metadata_ech = median(cscore[sample_name %in% c("N3-GT2-JFH","N1-GT2-JFH",
-                                                                          "N2-GT2-JFH","N3-GT3-DBN","N2-GT3-DBN",
-                                                                          "N1-GT3-DBN" )]), # indiquer le nom de l'échantillon
-            #si 1 seul échantillon == "samplename" / si >1 échantillon %in% c("samplename1", "samplename2")
-            difference = median_Cscore_metadata_ech - median_Cscore_metadata_ech_ctrl)
-
-
-metadata_data_total$difference_cat <- ifelse(abs(metadata_data_total$difference) < 0.05, "no", 
-                                             ifelse(metadata_data_total$difference > 0.05, "high",
-                                                    ifelse(metadata_data_total$difference < 0.05, "low", "ok")))
-
-metadata_data_total$site <- factor(metadata_data_total$site, levels = human_methylated$Nomenclature)
-
-#7.3. Graphique n°1: visualisation de la valeur absolue des Cscores
+Here is given an histo plot given the mean C-score and the standard deviation in the different biological context for each individual rRNA 2'Ome sites. Color indicates the different biological groups. Plot de Julie Herleinmecker
 
 part1 <- ggplot(metadata_data_total, aes(x=site, y=difference, label=site)) +
   geom_bar(stat='identity', aes(fill=difference_cat), width=.9) +
@@ -188,9 +84,6 @@ part1 <- ggplot(metadata_data_total, aes(x=site, y=difference, label=site)) +
   ylab(expression(paste("\u0394", " median C-score metadata (ech - ech_ctrl)"))) +
   coord_flip() +
   scale_y_continuous(sec.axis = sec_axis(trans = ~ ., name = NULL), limits = c(-1, 1))
-
-#7.4. Graphique n°2: visualisation des différences de Cscores 
-# /!\ Attention : Bien sélectionner les colonnes d'intérêts du fichier "metadata_data_total dans "c(1,3)",...  
 
 part2 <- ggplot(metadata_data_total) +
   labs(subtitle = "C-score") +
@@ -220,10 +113,33 @@ part2 <- ggplot(metadata_data_total) +
   scale_color_manual(values = c("Gt2/Gt3" = "cyan", "Gt1" = "gray"),
                      name = "Légende")
 
-#7.5. Combiner les graphiques 1 et 2 en une seule image 
-
 part1 + part2 + plot_layout(widths = c(2,1))
 
-# Pour un bon rendu, enregistrement en format 800 x 1400 
+### Site-by-site analysis of all significant rRNA 2'Ome sites {.tabset}
+
+
+# Site-by-site analysis of rRNA 2'Ome
+
+In this report, the alteration in rRNA 2'Ome is analysed site-by-site individually to identify significant alteration in rRNA 2'Ome level at particular site depending on the biological context.
+
+## Site-by-site analysis of all differential rRNA 2'Ome sites
+
+Mean comparison of C-score between biological conditions for significant rRNA 2'Ome sites is shown.
+
+First, mean comparison between biological conditions is performed for all the rRNA 2'Ome sites using non-parametric method of Kruskall Wallis. P-values are adjusted using the false discovery rate (fdr) method. 
+
+**Here is given a box plot given the C-score in the different biological context for each rRNA sites whose 2'Ome is significantly different between the biological conditions. Color indicates the different biological groups.**
+
+```{r}
+plot_diff_sites(ribo_to_check,factor_column = params$condition_col,p_cutoff = 0.1)
 ```
 
+<br>
+**The following table shows both p-value (adjusted or not) from the Kruskal-Wallis test at each site and the range of conditions'mean for ALL annotated sites :**
+
+```{r}
+df_sites <- plot_diff_sites(ribo_to_check,factor_column = params$condition_col,object_only = TRUE)
+df_sites["range_mean"] <- df_sites["mean_max_min_difference"]
+df_sites["mean_max_min_difference"] <- NULL
+df_sites
+```
