@@ -1,0 +1,229 @@
+---
+title: "Differential Sites"
+output: 
+    html_document:
+        theme: cosmo
+        number_sections: true
+        toc: true
+        toc_float:
+            collapsed: false
+toc-title: "rRMSAnalyzer"
+
+params:
+    library_col: "library"
+    condition_col: "condition"
+    ribo_name: "ribo"
+    project_name: "Unnamed project"
+---
+```{r include = FALSE}
+all_sites <- length(ribo_to_check[[1]][[1]][[1]])
+ribom <- extract_data(ribo_to_check)
+valid_sites <- sum(complete.cases(ribom))
+knitr::opts_chunk$set(echo=FALSE)
+```
+
+<details>
+
+<summary>
+
+<b> ℹ️ Input data recapitulation </b>
+
+</summary>
+Project name : **`r params$project_name`**<br><br>
+RiboClass Name : **`r params$ribo_name`**. <br> Number of uploaded samples: **`r length(ribo_to_check[[1]])`** samples. <br> RNA(s) used by the coverage tool: **`r as.character(ribo_to_check[["rna_names"]][["original_name"]])`** <br> There are **`r as.character(all_sites)`** genomic positions.
+
+
+__**C-score**__ <br>
+Method of computation : **`r as.character(ribo_to_check["cscore_method"])`** <br>
+Window length : **`r as.character(ribo_to_check["cscore_window"])`**<br>
+**`r as.character(valid_sites)`** genomic positions with a valid
+C-score in all samples.
+<br>
+<br>
+__**ComBat-seq**__<br>
+ComBat-seq correction ?
+**`r ifelse(is.null(ribo_to_check[["combatSeq_count"]]),"No","Yes")`** <br>
+Metadata used for ComBat-seq :
+**`r ifelse(is.null(ribo_to_check[["col_used_combatSeq"]]),"None",as.character(ribo_to_check["col_used_combatSeq"]))`**
+
+</details>
+
+## Site-by-site analysis of rRNA 2'Ome
+
+The alteration in rRNA 2'Ome is analysed site-by-site individually to identify significant alteration in rRNA 2'Ome level at particular site depending on the biological context.
+
+### Site-by-site analysis of all rRNA 2'Ome sites {.tabset}
+
+Mean comparison of C-score between biological conditions is performed for all rRNA 2'Ome sites.
+
+Here is given a line plot given the mean C-score and the standard deviation for each rRNA 2'Ome sites in the different biological context. Color indicates the different biological groups.
+
+```{r}
+#plot_lineplot(ribo_meth,"cscore_median",params$biological_condition_col)
+```
+
+Here is given an histo plot given the mean C-score and the standard deviation in the different biological context for each individual rRNA 2'Ome sites. Color indicates the different biological groups.
+
+
+### Site-by-site analysis of all significant rRNA 2'Ome sites {.tabset}
+
+
+# Site-by-site analysis of rRNA 2'Ome
+
+In this report, the alteration in rRNA 2'Ome is analysed site-by-site individually to identify significant alteration in rRNA 2'Ome level at particular site depending on the biological context.
+
+## Site-by-site analysis of all differential rRNA 2'Ome sites
+
+Mean comparison of C-score between biological conditions for significant rRNA 2'Ome sites is shown.
+
+First, mean comparison between biological conditions is performed for all the rRNA 2'Ome sites using non-parametric method of Kruskall Wallis. P-values are adjusted using the false discovery rate (fdr) method. 
+
+**Here is given a box plot given the C-score in the different biological context for each rRNA sites whose 2'Ome is significantly different between the biological conditions. Color indicates the different biological groups.**
+
+```{r}
+plot_diff_sites(ribo_to_check,factor_column = params$condition_col,p_cutoff = 0.1)
+```
+
+<br>
+**The following table shows both p-value (adjusted or not) from the Kruskal-Wallis test at each site and the range of conditions'mean for ALL annotated sites :**
+
+```{r}
+df_sites <- plot_diff_sites(ribo_to_check,factor_column = params$condition_col,object_only = TRUE)
+df_sites["range_mean"] <- df_sites["mean_max_min_difference"]
+df_sites["mean_max_min_difference"] <- NULL
+df_sites
+```
+
+```{r}
+#développé par Julie Radermecker (Jan 2024)
+
+install.packages("ComplexHeatmap")
+install.packages("viridisLite")
+install.packages("dyplr")
+install.packages("patchwork")
+install.packages("writexl")
+
+#7.0.2. Chargement des librairies (impératif)
+
+library(knitr)
+library(ggplot2)
+library(cowplot)
+library(ComplexHeatmap)
+library(viridis)
+library(dplyr)
+library(tidyr)
+library(patchwork)
+library(rRMSAnalyzer)
+library(writexl)
+data("human_methylated")
+
+# 7.1. Transformation du dataframe "ribo_df"
+
+new_metadata_sites <- ribo_df %>%
+  pivot_longer(cols = c("N3-GT2-JFH","N1-GT1-TN-Hi","N1-GT2-JFH","N3-GT1-TN-Hi",
+                        "N2-GT1-TN-Hi", "N2-GT2-JFH","N3-GT3-DBN", "N3-MOCK", 
+                        "N1-MOCK-P", "N1-GT1-DCV", "N2-MOCK-P", "N1-MOCK-SFV",
+                        "N2-GT3-DBN", "N3-GT1-P", "N2-MOCK-NP", "N1-MOCK-DCV", 
+                        "N2-GT1-NP", "N1-MOCK-NP", "N3-GT1-NP", "N1-MOCK",
+                        "N3-MOCK-P", "N1-GT1-SFV", "N2-GT1-P", "N1-GT1-P",
+                        "N2-MOCK", "N3-MOCK-NP", "N1-GT3-DBN", "N1-GT1-NP",
+                        "N1-MOCK-DMSO", "N2-GT1-DMSO", "N2-MOCK-SFV", 
+                        "N2-GT1-DCV", "N3-MOCK-DCV", "N3-MOCK-SFV",
+                        "N2-MOCK-DMSO", "N3-GT1-SFV", "N3-GT1-DMSO",
+                        "N3-MOCK-DMSO", "N3-GT1-DCV", "N2-MOCK-DCV", 
+                        "N2-GT1-SFV", "N1-GT1-DMSO"),
+               names_to = "sample_name", values_to = "cscore") %>% 
+  select(site, cscore, sample_name)
+
+write.csv(new_metadata_sites, "C:/Users/Allyson/Desktop/RibosOmics/HCV_Catez/HCV_Catez/score_per_site.csv")
+#remplacer les noms des échantillons, ici "L1-CTA/SNORD104" 
+
+#7.2. Calcul de la différence des médianes et des seuils GTF / MOCK
+metadata_data_total <- new_metadata_sites%>%
+  group_by(site) %>%
+  summarize(median_Cscore_metadata_ech_ctrl = median(cscore[sample_name %in% c("N3-MOCK", "N1-MOCK","N2-MOCK")]), # indiquer le nom de l'échantillon 
+            #si 1 seul échantillon == "samplename" / si >1 échantillon %in% c("samplename1", "samplename2")
+            median_Cscore_metadata_ech = median(cscore[sample_name %in% c("N1-GT1-TN-Hi","N3-GT1-TN-Hi", "N2-GT1-TN-Hi")]), # indiquer le nom de l'échantillon
+            #si 1 seul échantillon == "samplename" / si >1 échantillon %in% c("samplename1", "samplename2")
+            difference = median_Cscore_metadata_ech - median_Cscore_metadata_ech_ctrl)
+
+#7.2. Calcul de la différence des médianes et des seuils GT1 / Gt2/Gt3
+metadata_data_total <- new_metadata_sites%>%
+  group_by(site) %>%
+  summarize(median_Cscore_metadata_ech_ctrl = median(cscore[sample_name %in% c("N1-GT1-TN-Hi","N3-GT1-TN-Hi", 
+                                                                               "N2-GT1-TN-Hi")]), # indiquer le nom de l'échantillon 
+            #si 1 seul échantillon == "samplename" / si >1 échantillon %in% c("samplename1", "samplename2")
+            median_Cscore_metadata_ech = median(cscore[sample_name %in% c("N3-GT2-JFH","N1-GT2-JFH",
+                                                                          "N2-GT2-JFH","N3-GT3-DBN","N2-GT3-DBN",
+                                                                          "N1-GT3-DBN" )]), # indiquer le nom de l'échantillon
+            #si 1 seul échantillon == "samplename" / si >1 échantillon %in% c("samplename1", "samplename2")
+            difference = median_Cscore_metadata_ech - median_Cscore_metadata_ech_ctrl)
+
+
+metadata_data_total$difference_cat <- ifelse(abs(metadata_data_total$difference) < 0.05, "no", 
+                                             ifelse(metadata_data_total$difference > 0.05, "high",
+                                                    ifelse(metadata_data_total$difference < 0.05, "low", "ok")))
+
+metadata_data_total$site <- factor(metadata_data_total$site, levels = human_methylated$Nomenclature)
+
+#7.3. Graphique n°1: visualisation de la valeur absolue des Cscores
+
+part1 <- ggplot(metadata_data_total, aes(x=site, y=difference, label=site)) +
+  geom_bar(stat='identity', aes(fill=difference_cat), width=.9) +
+  scale_fill_manual(name="Difference of median C-score",
+                    labels = c("High", "Low", "No difference"),
+                    values = c("high"="red", "low"="blue", "no" = "darkgrey")) +
+  labs(subtitle="Difference of median C-score (Gt1 - Gt2/Gt3)", #à changer
+       title= "Figure") +
+  geom_hline(yintercept = 0.05, linetype = "11") +
+  geom_hline(yintercept = -0.05, linetype = "11") +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 8),
+        legend.position = "none",
+        plot.subtitle = element_text(hjust = 0.5),
+        panel.grid.minor = element_blank()) +
+  annotate("rect", ymin = -0.05, ymax = 0.05,
+           xmin = 0, xmax = 113, fill = "darkgrey", alpha = .2) +
+  xlab("rRNA 2'O-methylation sites") +
+  ylab(expression(paste("\u0394", " median C-score metadata (ech - ech_ctrl)"))) +
+  coord_flip() +
+  scale_y_continuous(sec.axis = sec_axis(trans = ~ ., name = NULL), limits = c(-1, 1))
+
+#7.4. Graphique n°2: visualisation des différences de Cscores 
+# /!\ Attention : Bien sélectionner les colonnes d'intérêts du fichier "metadata_data_total dans "c(1,3)",...  
+
+part2 <- ggplot(metadata_data_total) +
+  labs(subtitle = "C-score") +
+  geom_point(data = metadata_data_total[,c(1,3)],
+             aes(x = site, y = median_Cscore_metadata_ech, color = "Gt2/Gt3"), 
+             size = 2) +
+  geom_point(data = metadata_data_total[,c(1,2)],
+             aes(x = site, y = median_Cscore_metadata_ech_ctrl, color = "Gt1"),
+             size = 2) +
+  theme_bw() +
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        plot.subtitle = element_text(hjust = 0.5),
+        panel.grid.minor = element_blank()) +
+  geom_segment(data = metadata_data_total[which(metadata_data_total$site %in% c("28S_Am1310", "18S_Gm1447", "18S_Cm1272")), ], 
+               #changer les noms des sites d'intérêt
+               #si 1 site: [which(metada_data_total$site %in% "28S_Cm1327"), ]
+               #si >1 site: [which(metada_data_total$site %in% c("28S_Cm1327", "18S_Gm1447")),]
+               aes(x = site, y = median_Cscore_metadata_ech, xend = site, yend =
+                     median_Cscore_metadata_ech_ctrl),
+               color =  "red",
+               alpha = 1,
+               linewidth = 1) +
+  coord_flip() +
+  scale_y_continuous(sec.axis = sec_axis(trans = ~ ., name = NULL)) +
+  scale_color_manual(values = c("Gt2/Gt3" = "cyan", "Gt1" = "gray"),
+                     name = "Légende")
+
+#7.5. Combiner les graphiques 1 et 2 en une seule image 
+
+part1 + part2 + plot_layout(widths = c(2,1))
+
+# Pour un bon rendu, enregistrement en format 800 x 1400 
+```
+

@@ -1,0 +1,140 @@
+---
+title: "Analysis of rRNA 2'Ome profile"
+output: 
+    html_document:
+        theme: cosmo
+        number_sections: true
+        toc: true
+        toc_float:
+            collapsed: false
+toc-title: "rRMSAnalyzer"
+
+params:
+    library_col: "library"
+    condition_col: "condition"
+    ribo_name: "ribo"
+    project_name: "Unnamed project"
+---
+```{r include = FALSE}
+knitr::opts_chunk$set(echo=FALSE)
+
+all_sites <- length(ribo_to_check[[1]][[1]][[1]])
+
+# Get the number of valid sites
+ribom <- extract_data(ribo_to_check)
+valid_sites <- sum(complete.cases(ribom))
+
+```
+
+```{=html}
+<style type="text/css">
+  body{
+ font-family: Helvetica;    
+}
+
+details{
+background-color: #E4F3F3;
+}
+
+mark {
+  background-color: #FF91A4;
+  color: black;
+}
+
+</style>
+```
+<details>
+
+<summary>
+
+<b> ℹ️ Input data recapitulation </b>
+
+</summary>
+Project name : **`r params$project_name`**<br><br>
+RiboClass Name : **`r params$ribo_name`**. <br> Number of uploaded samples: **`r length(ribo_to_check[[1]])`** samples. <br> RNA(s) used by the coverage tool: **`r as.character(ribo_to_check[["rna_names"]][["original_name"]])`** <br> There are **`r as.character(all_sites)`** genomic positions.
+
+
+__**C-score**__ <br>
+Method of computation : **`r as.character(ribo_to_check["cscore_method"])`** <br>
+Window length : **`r as.character(ribo_to_check["cscore_window"])`**<br>
+**`r as.character(valid_sites)`** genomic positions with a valid
+C-score in all samples.
+<br>
+<br>
+__**ComBat-seq**__<br>
+ComBat-seq correction ?
+**`r ifelse(is.null(ribo_to_check[["combatSeq_count"]]),"No","Yes")`** <br>
+Metadata used for ComBat-seq :
+**`r ifelse(is.null(ribo_to_check[["col_used_combatSeq"]]),"None",as.character(ribo_to_check["col_used_combatSeq"]))`**
+
+</details>
+
+```{r}
+df_ribo <- ribo_to_check[[1]][[1]]
+
+df_ribo_annot <- df_ribo[which(!is.na(df_ribo["site"])),c("rna","rnapos","site","cscore")]
+```
+
+# Introduction
+
+This report shows the analysis of the 2'Ome for **`r nrow(df_ribo_annot)`** annotated sites. 
+
+The purpose of this step is to understand if the 2'Ome of these selected can differentiate samples according to their condition in the **`r params$condition_col`** metadata. First, a Principal Component Analysis (PCA) is realized with only annotated sites. Then a pearson-correlation clustering is done for both samples and annotated sites.
+
+The second part of this report analyze how much each of the **`r nrow(df_ribo_annot)`** annotated sites is variable, independently of the condition. Then, a PCA is done with the top 20 of most variable sites. This is to check if these variable sites alone explain how the samples are placed in the PCA.
+
+# All annotated sites
+
+The C-score corresponding from annotated sites are extracted from all the genomic positions to perform the biological analysis. The number of well identified and mapped rRNA 2'Ome sites is in constant evolution since some studies identifies novel rRNA 2'Ome sites depending on particular biological context (Jaafar et al, 2021 -- PMID 34440717). Different lists of rRNA 2'Ome sites can thus be used to extract C-score of interest. The following lists of rRNA 2'Ome sites are used in this analysis: <br>
+
+Here is a table, which summarizes the annotated rRNA 2'Ome sites in your RiboClass.
+
+```{r}
+knitr::kable(df_ribo_annot)
+```
+
+## Analysis of rRNA 2'Ome profile
+
+In this first analysis section, the alteration in rRNA 2'Ome is analysed globally, by comparing the rRNA 2'Ome profile encompassing the 2'Ome level of all the methylation site of interest.
+
+Here is given a Principal Component Analysis (PCA) plot that illustrates the distance between each sample based on its rRNA 2'Ome profile. The percentage in dimension 1 and 2 give the distance between samples, high percentage reflecting high distance. A PCA is given based on rRNA 2'Ome profiles of the annotated sites. Color indicates the different biological groups. Moreover, this plot helps in identifying putative batch effect that can be corrected using the inter-normalization option (ComBat-seq tool).
+
+```{r}
+rRMSAnalyzer::plot_pca(ribo_to_check,params$condition_col,only_annotated = TRUE)
+```
+
+## Analysis of rRNA 2'Ome profile (heatmap)
+
+Here is given an heatmap that illustrates the distance between each sample based on its rRNA 2'Ome profile, based on annotated sites. Color indicates the different biological groups. C-score is represented by colored square: 0 = no rRNA 2'Ome in a particular sample; 1 = all rRNA 2'Ome in a particular sample; ]0:1[ = a mix of un-methylated and methylated rRNA in a particular sample. Moreover, this plot helps in identifying putative batch effect that can be corrected using the inter-normalization option (Combat-seq tool). ]0:1[ = a mix of un-methylated and methylated rRNA in a particular sample.
+
+```{r,fig.height=12}
+rRMSAnalyzer::plot_heatmap(ribo_to_check,color_col = params$condition_col,only_annotated = TRUE)
+```
+
+# Variable sites
+
+In this second analysis section, the objective is (1) to identify the most variable rRNA 2’Ome sites in a particular biological condition as described in Marcel et al, 2020 (PMID 34316693), and (2) to determine whether the minimal rRNA 2’Ome profile composed of theses variable sites associate with biological context differentially from the whole rRNA 2’Ome profile. **This analysis is restricted to the annotated sites**.
+
+To identify the most variable rRNA 2’Ome sites, variability of the C-score among the biological samples is analysed. Here is given a boxplot representing the C-score values of all samples for each individual site that are representing in ascending IQR order.
+
+```{r,fig.width=13}
+rRMSAnalyzer::boxplot_cscores(ribo_to_check,sort_by = "iqr")
+```
+
+To determine whether usage of the most variable rRNA 2’Ome sites associate with biological context, previous analyses are performed (cf 3.2) using this minimal set of variable rRNA 2’Ome sites.
+
+Here is given a Principal Component Analysis (PCA) based on rRNA 2’Ome profile composed of the most variable rRNA 2’Ome sites. Color indicates the different biological groups.
+
+```{r}
+variant_sites <- rRMSAnalyzer::get_variant_sites(ribo_to_check)[["site"]]
+ribo_variant <- rRMSAnalyzer::keep_selected_annotation(ribo_to_check,variant_sites)
+
+plot_pca(ribo_variant,color_col = params$condition_col,only_annotated = TRUE)
+```
+
+Here is given an heatmap that illustrates the distance between each sample based on its rRNA 2’Ome profile, **and only on the 20 variant sites**. Color indicates the different biological groups. C-score is represented by colored square: 0 = no rRNA 2’Ome in a particular sample; 1 = all rRNA 2’Ome in a particular sample; ]0:1[ = a mix of un-methylated and methylated rRNA in a particular sample. Moreover, this plot helps in identifying putative batch effect that can be corrected using the inter-normalization option (Combat-seq tool). ]0:1[ = a mix of un-methylated and methylated rRNA in a particular sample.
+
+```{r}
+plot_heatmap(ribo_variant,color_col = params$condition_col,only_annotated = TRUE)
+```
+
