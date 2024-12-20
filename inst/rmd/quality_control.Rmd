@@ -115,6 +115,7 @@ qcdata <- cbind(qcdata,median_coverange=medcov[rownames(qcdata)])
 qcdata$coverage_quality <- "ok"
 qcdata$coverage_quality[qcdata$median_coverange < 100] <- "warning"
 
+output_dir <- "/home/bioinfo/Bureau/RMS/RMS_Git_change_plot_with_Emilie/rRMSAnalyzer"
 write.table(qcdata,file.path(output_dir,"quality_control.csv"),sep="\t",row.names=FALSE,quote = FALSE)
 
 ## plot
@@ -166,6 +167,8 @@ The repartition of RNA end read counts is an indicator of the RNA(s) that presen
 
 ```{r}
 rRMSAnalyzer::plot_counts_fraction(ribo_to_check) + ggplot2::ggtitle("RNA fraction per sample")
+
+
 ```
 
 # Profiles comparison
