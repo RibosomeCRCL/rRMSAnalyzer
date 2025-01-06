@@ -166,8 +166,6 @@ qcdata$rle_median_quality <- "ok"
 # add a threshold for outliers
 qcdata$rle_median_quality[qcdata$rle_median < mad] <- "warning" 
 
-output_dir <- "/home/bioinfo/Bureau/RMS/RMS_Git_change_plot_with_Emilie/rRMSAnalyzer"
-write.table(qcdata,file.path(output_dir,"quality_control.csv"),sep="\t",row.names=FALSE,quote = FALSE)
 print(plot_rle)
 ```
 
@@ -178,6 +176,11 @@ The repartition of RNA end read counts is an indicator of the RNA(s) that presen
 ```{r}
 rRMSAnalyzer::plot_counts_fraction(ribo_to_check) + ggplot2::ggtitle("RNA fraction per sample")
 
+#% de sous ARN théorique calculé à la main : 
+#28S : 70.26053
+#5.8S : 2.161863
+#5S : 1.676829
+#18S : 25.90078
 
 ```
 
@@ -234,6 +237,9 @@ Thus, it uses **`r as.character(valid_sites)`** genomic positions instead of all
 
 ```{r not corrected cscore PCA,echo=FALSE}
 rRMSAnalyzer::plot_pca(ribo_to_check,params$library_col)
+
+output_dir <- "/home/bioinfo/Bureau/RMS/RMS_Git_change_plot_with_Emilie/rRMSAnalyzer"
+write.table(qcdata,file.path(output_dir,"quality_control.csv"),sep="\t",row.names=FALSE,quote = FALSE)
 ```
 
 # About
