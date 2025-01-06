@@ -110,13 +110,14 @@ Samples with a median coverage below 100 (the blue line), are highlighted in red
 ```{r boxplot2,warning=FALSE}
 ## calc
 ribo_matrix <- extract_data(ribo_to_check, "count", position_to_rownames = TRUE)
-medcov <- apply(ribo_matrix,2,function(x) median(x,na.rm=T))
-qcdata <- cbind(qcdata,median_coverange=medcov[rownames(qcdata)])
-qcdata$coverage_quality <- "ok"
-qcdata$coverage_quality[qcdata$median_coverange < 100] <- "warning"
-
-output_dir <- "/home/bioinfo/Bureau/RMS/RMS_Git_change_plot_with_Emilie/rRMSAnalyzer"
-write.table(qcdata,file.path(output_dir,"quality_control.csv"),sep="\t",row.names=FALSE,quote = FALSE)
+#calculate median for all the column in the ribo_matrix df
+medcov <- apply(ribo_matrix,2,function(x) median(x,na.rm=T)) 
+# create a df like ribo_matrix and add median_coverage column
+qcdata <- cbind(qcdata,median_coverage=medcov[rownames(qcdata)]) 
+# add a quality column initialized at ok
+qcdata$coverage_quality <- "ok" 
+# add a threshold for outliers
+qcdata$coverage_quality[qcdata$median_coverage < 100] <- "warning" 
 
 ## plot
 rRMSAnalyzer::boxplot_count(ribo_to_check) + ggplot2::ggtitle("End read counts distribution by sample")
@@ -142,22 +143,31 @@ plot_rle <- rRMSAnalyzer::plot_rle(ribo_to_check,show_outlier = T) + ggplot2::gg
 # extraction of the median absolute deviation
 mad <- plot_rle$plot_env$mad  
 # extraction of the median for all samples
-median <- as.vector(plot_rle$plot_env$rle_grouped$median)
+rle_median <- as.vector(plot_rle$plot_env$rle_grouped$median)
 # extraction of sample names
 keys <- as.vector(plot_rle$plot_env$rle_grouped$key)
 # creation of a data frame containing sample names and medians
 outlier_table <- data.frame(
   key = keys,
-  median = median)
+  rle_median = median)
 # creation of the data frame outlier 
 outlier <- data.frame()
 # calculation of outliers 
 for (i in 1:nrow(outlier_table)) {
-  if(outlier_table$median[i] < mad) {
+  if(outlier_table$rle_median[i] < mad) {
   outlier <- rbind(outlier, outlier_table[i,])
   }
 }
 
+#incrementing the df qcdata with rle median
+qcdata$rle_median <- outlier_table$rle_median[match(qcdata$samplename, outlier_table$key)]
+# add a rle_median_quality column initialized at ok
+qcdata$rle_median_quality <- "ok" 
+# add a threshold for outliers
+qcdata$rle_median_quality[qcdata$rle_median < mad] <- "warning" 
+
+output_dir <- "/home/bioinfo/Bureau/RMS/RMS_Git_change_plot_with_Emilie/rRMSAnalyzer"
+write.table(qcdata,file.path(output_dir,"quality_control.csv"),sep="\t",row.names=FALSE,quote = FALSE)
 print(plot_rle)
 ```
 
