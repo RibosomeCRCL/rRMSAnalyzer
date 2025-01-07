@@ -174,14 +174,40 @@ print(plot_rle)
 The repartition of RNA end read counts is an indicator of the RNA(s) that present a lower or higher coverage compared to the other RNAs within the same sample. A sample that shows an unusual repartition might be considered with caution, as it could impact the C-score robustness. The following image shows a stacked barplots representing end read count fractions of total end read counts for each RNA per sample. In the case of rRNAs, most end read counts are assigned to the longest rRNA, namely the 18S (~ 0.25) and the 28S (~ 0.50).
 
 ```{r}
-rRMSAnalyzer::plot_counts_fraction(ribo_to_check) + ggplot2::ggtitle("RNA fraction per sample")
+plot_counts_fraction <- rRMSAnalyzer::plot_counts_fraction(ribo_to_check) + ggplot2::ggtitle("RNA fraction per sample")
 
+library(ggplot2)
+library(gridExtra)
 #% de sous ARN théorique calculé à la main : 
 #28S : 70.26053
 #5.8S : 2.161863
 #5S : 1.676829
 #18S : 25.90078
+#Création du data frame avec les noms des arn et leur fractions théoriques. 
+theorical_fraction <- data.frame(
+  sample = "theorical",
+  group = factor(unique(fraction$plot_env$all_data_sums$rna)),
+  value = (c("1.676829","25.90078", "70.26053", "2.161863"))
+)
+#conversion en valeur numérique pour le graphique
+theorical_fraction$value <- as.numeric(theorical_fraction$value)
+#conversion en %
 
+theorical_fraction$value <- (theorical_fraction$value/100)
+
+#création du plot pour la barre théorique
+theorical_counts_plot <- ggplot2::ggplot(theorical_fraction, aes(x = sample, y = value, fill = group))
+theorical_counts_plot <- theorical_counts_plot + 
+  ggplot2::geom_bar(stat = "identity", width = 0.1) +
+  ggplot2::scale_fill_brewer(palette = "Spectral") +
+  ggplot2::theme_bw() +
+  ggplot2::theme(axis.text.x = element_text(angle = 45, size = 7, hjust = 1)) +
+  labs(title = "Theorical counts distribution",
+       x = "Theorical",
+       y = "Counts fraction (%)") +
+  ggplot2::scale_y_continuous(limits = c(0, 1.01))
+# impression des deux graphiques cote à cote
+grid.arrange(plot_counts_fraction, theorical_counts_plot, ncol = 2)
 ```
 
 # Profiles comparison
