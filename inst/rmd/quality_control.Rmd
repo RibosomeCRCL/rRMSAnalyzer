@@ -186,7 +186,7 @@ library(gridExtra)
 #Création du data frame avec les noms des arn et leur fractions théoriques. 
 theorical_fraction <- data.frame(
   sample = "theorical",
-  group = factor(unique(fraction$plot_env$all_data_sums$rna)),
+  group = factor(unique(plot_counts_fraction$plot_env$all_data_sums$rna)),
   value = (c("1.676829","25.90078", "70.26053", "2.161863"))
 )
 #conversion en valeur numérique pour le graphique
@@ -198,14 +198,23 @@ theorical_fraction$value <- (theorical_fraction$value/100)
 #création du plot pour la barre théorique
 theorical_counts_plot <- ggplot2::ggplot(theorical_fraction, aes(x = sample, y = value, fill = group))
 theorical_counts_plot <- theorical_counts_plot + 
-  ggplot2::geom_bar(stat = "identity", width = 0.1) +
+  ggplot2::geom_bar(stat = "identity", width = 0.1) + # Ajuster la largeur
+  ggplot2::geom_text(aes(label = value), 
+                    position = position_stack(vjust = 0.5), # Centrer le texte dans chaque barre
+                    color = "black", size = 4) +
   ggplot2::scale_fill_brewer(palette = "Spectral") +
   ggplot2::theme_bw() +
-  ggplot2::theme(axis.text.x = element_text(angle = 45, size = 7, hjust = 1)) +
+  ggplot2::theme(axis.text.x = element_text(angle = 90, size = 10, hjust = 1),
+                 legend.position = "none") +
   labs(title = "Theorical counts distribution",
-       x = "Theorical",
-       y = "Counts fraction (%)") +
-  ggplot2::scale_y_continuous(limits = c(0, 1.01))
+       x = "Theorical bar",
+       y = "Theorical counts fraction (%)") +
+  ggplot2::scale_y_continuous(limits = c(-0.03, 1.01))
+
+theorical_counts_plot + 
+  ggplot2::theme(
+    plot.margin = ggplot2::unit(c(1, 50, 1, 0), "cm") # Ajuste les marges (haut, droite, bas, gauche)
+  )
 # impression des deux graphiques cote à cote
 grid.arrange(plot_counts_fraction, theorical_counts_plot, ncol = 2)
 ```
