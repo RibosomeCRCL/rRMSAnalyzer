@@ -264,6 +264,7 @@ plot_coa_binaire <- plot_coa_binaire +
 plot_coa <- rRMSAnalyzer::plot_coa(ribo_to_check,color_col = params$library_col)
 #print(plot_coa)
 
+plot_coa + plot_coa_binaire + plot_layout(widths = c(2,1))
 grid.arrange(plot_coa, plot_coa_binaire, ncol = 2)
 ```
 
