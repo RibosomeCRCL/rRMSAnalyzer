@@ -63,13 +63,50 @@ Here is given a line plot given the mean C-score and the standard deviation for 
 ```
 
 Here is given an histo plot given the mean C-score and the standard deviation in the different biological context for each individual rRNA 2'Ome sites. Color indicates the different biological groups. Plot de Julie Herleinmecker
+```{r}
+library(knitr)
+library(ggplot2)
+library(cowplot)
+library(ComplexHeatmap)
+library(viridis)
+library(dplyr)
+library(tidyr)
+library(patchwork)
+library(rRMSAnalyzer)
+library(writexl)
+data("human_methylated")
+
+
+# 7.1. Transformation du dataframe "ribo_df"
+
+new_metadata_sites <- ribo_to_check%>%
+  pivot_longer(cols = c("L1-CTA", "L1-SNORD104", "L2-CTA", "L2-SNORD104"), names_to = "sample_name", values_to = "cscore") %>% #remplacer les noms des échantillons, ici "L1-CTA/SNORD104" 
+  select(site, cscore, sample_name)
+
+#7.2. Calcul de la différence des médianes et des seuils
+
+metadata_data_total <- new_metadata_sites%>%
+  group_by(site) %>%
+  summarize(median_Cscore_metadata_ech_ctrl = median(cscore[sample_name == c("L1-CTA", "L2-CTA")]), # indiquer le nom de l'échantillon 
+            #si 1 seul échantillon == "samplename" / si >1 échantillon == c("samplename1", "samplename2")
+            median_Cscore_metadata_ech = median(cscore[sample_name == c("L1-SNORD104", "L2-SNORD104")]), # indiquer le nom de l'échantillon
+            #si 1 seul échantillon == "samplename" / si >1 échantillon == c("samplename1", "samplename2")
+            difference = median_Cscore_metadata_ech - median_Cscore_metadata_ech_ctrl)
+
+metadata_data_total$difference_cat <- ifelse(abs(metadata_data_total$difference) < 0.05, "no", 
+                                             ifelse(metadata_data_total$difference > 0.05, "high",
+                                                    ifelse(metadata_data_total$difference < 0.05, "low", "ok")))
+
+metadata_data_total$site <- factor(metadata_data_total$site, levels = human_methylated$Nomenclature)
+
+#7.3. Graphique n°1: visualisation de la valeur absolue des Cscores
 
 part1 <- ggplot(metadata_data_total, aes(x=site, y=difference, label=site)) +
   geom_bar(stat='identity', aes(fill=difference_cat), width=.9) +
   scale_fill_manual(name="Difference of median C-score",
                     labels = c("High", "Low", "No difference"),
                     values = c("high"="red", "low"="blue", "no" = "darkgrey")) +
-  labs(subtitle="Difference of median C-score (Gt1 - Gt2/Gt3)", #à changer
+  labs(subtitle="Difference of median C-score (LNA-SNORD - LNA-CTL)", #à changer
        title= "Figure") +
   geom_hline(yintercept = 0.05, linetype = "11") +
   geom_hline(yintercept = -0.05, linetype = "11") +
@@ -85,13 +122,16 @@ part1 <- ggplot(metadata_data_total, aes(x=site, y=difference, label=site)) +
   coord_flip() +
   scale_y_continuous(sec.axis = sec_axis(trans = ~ ., name = NULL), limits = c(-1, 1))
 
+#7.4. Graphique n°2: visualisation des différences de Cscores 
+# /!\ Attention : Bien sélectionner les colonnes d'intérêts du fichier "metadata_data_total dans "c(1,3)",...  
+
 part2 <- ggplot(metadata_data_total) +
   labs(subtitle = "C-score") +
   geom_point(data = metadata_data_total[,c(1,3)],
-             aes(x = site, y = median_Cscore_metadata_ech, color = "Gt2/Gt3"), 
+             aes(x = site, y = median_Cscore_metadata_ech, color = "LNA-SNORD"), 
              size = 2) +
   geom_point(data = metadata_data_total[,c(1,2)],
-             aes(x = site, y = median_Cscore_metadata_ech_ctrl, color = "Gt1"),
+             aes(x = site, y = median_Cscore_metadata_ech_ctrl, color = "LNA-CTA"),
              size = 2) +
   theme_bw() +
   theme(axis.title.y = element_blank(),
@@ -99,9 +139,9 @@ part2 <- ggplot(metadata_data_total) +
         axis.ticks.y = element_blank(),
         plot.subtitle = element_text(hjust = 0.5),
         panel.grid.minor = element_blank()) +
-  geom_segment(data = metadata_data_total[which(metadata_data_total$site %in% c("28S_Am1310", "18S_Gm1447", "18S_Cm1272")), ], 
+  geom_segment(data = metadata_data_total[which(metadata_data_total$site == "28S_Cm1327"), ], 
                #changer les noms des sites d'intérêt
-               #si 1 site: [which(metada_data_total$site %in% "28S_Cm1327"), ]
+               #si 1 site: [which(metada_data_total$site == "28S_Cm1327"), ]
                #si >1 site: [which(metada_data_total$site %in% c("28S_Cm1327", "18S_Gm1447")),]
                aes(x = site, y = median_Cscore_metadata_ech, xend = site, yend =
                      median_Cscore_metadata_ech_ctrl),
@@ -110,10 +150,17 @@ part2 <- ggplot(metadata_data_total) +
                linewidth = 1) +
   coord_flip() +
   scale_y_continuous(sec.axis = sec_axis(trans = ~ ., name = NULL)) +
-  scale_color_manual(values = c("Gt2/Gt3" = "cyan", "Gt1" = "gray"),
+  scale_color_manual(values = c("ech" = "cyan", "ech_ctrl" = "gray"),
                      name = "Légende")
 
+#7.5. Combiner les graphiques 1 et 2 en une seule image 
+
 part1 + part2 + plot_layout(widths = c(2,1))
+
+# Pour un bon rendu, enregistrement en format 800 x 1400 
+
+
+```
 
 ### Site-by-site analysis of all significant rRNA 2'Ome sites {.tabset}
 
