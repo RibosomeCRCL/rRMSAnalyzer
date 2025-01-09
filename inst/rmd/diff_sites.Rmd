@@ -61,6 +61,50 @@ Here is given a line plot given the mean C-score and the standard deviation for 
 
 ```{r}
 #plot_lineplot(ribo_meth,"cscore_median",params$biological_condition_col)
+
+#est-ce qu'on veut vraiment faire ce line plot sachant qu'il dit quasiement la meme chose que le suivant ?? 
+
+library(ggplot2)
+ 
+# Get the data from the web !
+# ctrl <- read.table("http://www.sr.bham.ac.uk/~ajrs/papers/sanderson06/mean_Tprofile-CC.txt" ,  header=TRUE)
+# t <- read.table("http://www.sr.bham.ac.uk/~ajrs/papers/sanderson06/mean_Tprofile-nCC.txt" , header=TRUE)
+# CC$type <- "Cool core"
+# nCC$type <- "Non-cool core"
+# A <- rbind(CC, nCC)
+ 
+ 
+# Make the plot
+ggplot(data=ribo, aes(x=named_position, y=`N3-GT2-JFH`, ymin=0, ymax=1.0, fill=`RNA-ref-2`, linetype=`RNA-ref-2`)) + 
+ geom_line() + 
+ geom_ribbon(alpha=0.5) + 
+ scale_x_log10() + 
+ scale_y_log10() + 
+ xlab("Position") + 
+ ylab("c-score")
+
+
+
+
+
+
+stats <- ribo %>%
+  group_by(named_position, condition) %>%
+  summarise(
+    median = median(c_score),
+    q25 = quantile(c_score, 0.25),
+    q75 = quantile(c_score, 0.75)
+  )
+
+# Tracé
+ggplot(stats, aes(x = named_position, y = median, linetype = condition, fill = condition)) +
+  geom_line() +
+  geom_ribbon(aes(ymin = q25, ymax = q75), alpha = 0.3) +
+  scale_x_continuous() +
+  scale_y_continuous(limits = c(0, 1)) +
+  xlab("Position") +
+  ylab("C-score") +
+  theme_bw()
 ```
 
 Here is given an histo plot given the mean C-score and the standard deviation in the different biological context for each individual rRNA 2'Ome sites. Color indicates the different biological groups. Plot de Julie Herleinmecker

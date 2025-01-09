@@ -149,7 +149,7 @@ keys <- as.vector(plot_rle$plot_env$rle_grouped$key)
 # creation of a data frame containing sample names and medians
 outlier_table <- data.frame(
   key = keys,
-  rle_median = median)
+  rle_median = rle_median)
 # creation of the data frame outlier 
 outlier <- data.frame()
 # calculation of outliers 
@@ -252,7 +252,8 @@ ribo_to_check$metadata$outlier_level <- qcdata$total_outliers
 #Plot_coa for outliers
 plot_coa_binaire <- rRMSAnalyzer::plot_coa(ribo_to_check, color_col = "outlier_level")
 plot_coa_binaire <- plot_coa_binaire + 
-   ggplot2::scale_color_manual(values = c("0" = "darkgrey", "1" = "#F8A31B", "2" = "#F27314", "3" = "#E25033", "4" = "#AA3929"))
+   ggplot2::scale_color_manual(values = c("0" = "darkgrey", "1" = "#9FE2BF", "2" = "#40E0D0", "3" = "#6495ED"))
+
 #print(plot_coa_binaire)
 
 
@@ -261,10 +262,22 @@ plot_coa_binaire <- plot_coa_binaire +
 
 #Plot_coa for batch effect
 # Plot_coa by color_col specified in param
-plot_coa <- rRMSAnalyzer::plot_coa(ribo_to_check,color_col = params$library_col)
+plot_coa <- rRMSAnalyzer::plot_coa(ribo_to_check,color_col = params$library_col)+ 
+  scale_color_manual(values = c("L1" = "#00FFFF", "L2" = "orange", "L3" = "purple", "L4" = "#808000", "L5" = "#000080", "L6" = "pink", "L7" = "#FF00FF", "L8" = "#CCCCFF", "L9" = "#9FE2BF", "L10" = "#DFFF00", "L11" = "#DFAF00", "L12" = "#DFDF00"))
+
 #print(plot_coa)
 
-plot_coa + plot_coa_binaire + plot_layout(widths = c(2,1))
+#interactive graphs
+#install.packages("gridExtra")
+# library(gridExtra)
+# #install.packages("plotly")
+# library(plotly)
+# 
+# plotly(plot_coa)
+
+#plot_coa + plot_coa_binaire + plot_layout(widths = c(2,1))
+
+#print both graphs in one
 grid.arrange(plot_coa, plot_coa_binaire, ncol = 2)
 ```
 
@@ -282,12 +295,14 @@ The PCA cannot use genomic positions with an invalid C-score.
 Thus, it uses **`r as.character(valid_sites)`** genomic positions instead of all **`r as.character(all_sites)`**.
 
 ```{r not corrected cscore PCA,echo=FALSE}
-rRMSAnalyzer::plot_pca(ribo_to_check,params$library_col)
+rRMSAnalyzer::plot_pca(ribo_to_check,params$library_col)+ 
+   ggplot2::scale_color_manual(values = c("L1" = "#00FFFF", "L2" = "orange", "L3" = "purple", "L4" = "#808000", "L5" = "#000080", "L6" = "pink", "L7" = "#FF00FF", "L8" = "#CCCCFF", "L9" = "#9FE2BF", "L10" = "#DFFF00", "L11" = "#DFAF00", "L12" = "#DFDF00"))
 ```
 
 ```{r write table}
 output_dir <- "/home/bioinfo/Bureau/RMS/RMS_Git_change_plot_with_Emilie/rRMSAnalyzer"
 write.table(qcdata,file.path(output_dir,"quality_control.csv"),sep="\t",row.names=FALSE,quote = FALSE)
+knitr::kable(qcdata)
 ```
 
 # About
