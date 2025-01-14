@@ -62,8 +62,6 @@ Here is given a line plot given the mean C-score and the standard deviation for 
 ```{r}
 #plot_lineplot(ribo_meth,"cscore_median",params$biological_condition_col)
 
-#est-ce qu'on veut vraiment faire ce line plot sachant qu'il dit quasiement la meme chose que le suivant ?? 
-
 library(ggplot2)
  
 # Get the data from the web !
@@ -73,7 +71,6 @@ library(ggplot2)
 # nCC$type <- "Non-cool core"
 # A <- rbind(CC, nCC)
  
- 
 # Make the plot
 ggplot(data=ribo, aes(x=named_position, y=`N3-GT2-JFH`, ymin=0, ymax=1.0, fill=`RNA-ref-2`, linetype=`RNA-ref-2`)) + 
  geom_line() + 
@@ -82,10 +79,6 @@ ggplot(data=ribo, aes(x=named_position, y=`N3-GT2-JFH`, ymin=0, ymax=1.0, fill=`
  scale_y_log10() + 
  xlab("Position") + 
  ylab("c-score")
-
-
-
-
 
 
 stats <- ribo %>%
@@ -120,7 +113,7 @@ library(patchwork)
 library(rRMSAnalyzer)
 library(writexl)
 data("human_methylated")
-# prend en entrée une riboclass annotée
+# prend en entrée une riboclass annotée (load ribo data , then adjust them, then rename it, then annotate_site)
 ribo_df <- extract_data(ribo_adj_annot,
                         col = "cscore",
                         only_annotated = TRUE)
@@ -151,9 +144,8 @@ part1 <- ggplot(metadata_data_total, aes(x=site, y=difference, label=site)) +
   geom_bar(stat='identity', aes(fill=difference_cat), width=.9) +
   scale_fill_manual(name="Difference of median C-score",
                     labels = c("High", "Low", "No difference"),
-                    values = c("high"="red", "low"="blue", "no" = "darkgrey")) +
-  labs(subtitle="Difference of median C-score (Gt1 - Gt2/Gt3)", #à changer
-       title= "Figure") +
+                    values = c("high"="red", "low"="blue", "no" = "grey")) +
+  labs(title= "representation of differential mediane cscore across conditions") +
   geom_hline(yintercept = 0.05, linetype = "11") +
   geom_hline(yintercept = -0.05, linetype = "11") +
   theme_bw() +
@@ -164,15 +156,14 @@ part1 <- ggplot(metadata_data_total, aes(x=site, y=difference, label=site)) +
   annotate("rect", ymin = -0.05, ymax = 0.05,
            xmin = 0, xmax = 113, fill = "darkgrey", alpha = .2) +
   xlab("rRNA 2'O-methylation sites") +
-  ylab(expression(paste("\u0394", " median C-score metadata (ech - ech_ctrl)"))) +
+  ylab(expression(paste("\u0394", " mediane cscore (Gt1–Gt2)"))) +
   coord_flip() +
-  scale_y_continuous(sec.axis = sec_axis(trans = ~ ., name = NULL), limits = c(-1, 1))
+  scale_y_continuous(sec.axis = sec_axis(trans = ~ ., name = NULL, breaks = NULL), limits = c(-1, 1))
 
 #7.4. Graphique n°2: visualisation des différences de Cscores 
 # /!\ Attention : Bien sélectionner les colonnes d'intérêts du fichier "metadata_data_total dans "c(1,3)",...  
 
 part2 <- ggplot(metadata_data_total) +
-  labs(subtitle = "C-score") +
   geom_point(data = metadata_data_total[,c(1,3)],
              aes(x = site, y = median_Cscore_metadata_ech, color = "Gt2/Gt3"), 
              size = 2) +
@@ -191,13 +182,13 @@ part2 <- ggplot(metadata_data_total) +
                #si >1 site: [which(metada_data_total$site %in% c("28S_Cm1327", "18S_Gm1447")),]
                aes(x = site, y = median_Cscore_metadata_ech, xend = site, yend =
                      median_Cscore_metadata_ech_ctrl),
-               color =  "red",
+               color =  "coral4",
                alpha = 1,
                linewidth = 1) +
   coord_flip() +
-  scale_y_continuous(sec.axis = sec_axis(trans = ~ ., name = NULL)) +
-  scale_color_manual(values = c("Gt2/Gt3" = "cyan", "Gt1" = "gray"),
-                     name = "Légende")
+  scale_y_continuous(sec.axis = sec_axis(trans = ~ ., name = NULL, breaks = NULL)) +
+  scale_color_manual(values = c("Gt2/Gt3" = "bisque2", "Gt1" = "bisque4"),
+                     name = "conditions")
 
 #7.5. Combiner les graphiques 1 et 2 en une seule image 
 
