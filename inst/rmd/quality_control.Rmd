@@ -234,7 +234,52 @@ Of note, rRNA sequences are enriched in GC-stretches and in nucleotide repeats w
 In order to identify distinct coverage profiles, coverage profiles are compared with one other within the cohort. Pairwise sample correlations of coverage profile are calculated using a Pearson correlation based distance. A heatmap is then generated that summarizes the correlation values for the entire series. These values goes from 0 (no correlation, indicated in red) to 1 (perfect correlation, indicated in blue). 
 
 ```{r heatmap_corr}
-rRMSAnalyzer::plot_heatmap_corr(ribo_to_check,"Count")
+plot_heatmap_corr <- rRMSAnalyzer::plot_heatmap_corr(ribo_to_check,"Count")
+
+
+
+
+
+# TEST New heatmap with outlier_level
+library(ComplexHeatmap)
+library(dplyr)
+
+corr_matrix <- extract_data(ribo_to_check, "Count")
+corr_matrix <- corr_matrix[, -1]
+corr_matrix <- cor(corr_matrix, use = "complete.obs")
+pearson_color <- colorRamp2::colorRamp2(c(0,0.5,1),c("red","white", "blue"))
+
+
+# Préparer les annotations
+row_annotation <- HeatmapAnnotation(
+  outlier_level = qcdata$total_outliers,
+  col = list(outlier_level = c("0" = "darkgrey", "1" = "#9FE2BF", "2" = "#40E0D0", "3" = "#6495ED"))
+)
+
+#créer un vecteur pour la couleur suivant le niveau d'outlier 
+column_colors <- ifelse(qcdata$total_outliers > 0, "red", "black")
+
+# Plot de la heatmap avec annotations
+Heatmap(
+  corr_matrix,col = pearson_color,
+  top_annotation = row_annotation,
+  name = "Pearson correlation",
+  row_title = "Sample",
+  column_title = "Pearson correlation between samples", 
+  column_title_side = "top",
+  cluster_rows = FALSE, cluster_columns = TRUE,
+  clustering_distance_columns = "pearson", 
+  heatmap_legend_param = list(
+  legend_direction = "horizontal" ),
+  clustering_method_columns = "ward.D2",
+  column_split = 3,
+  row_names_gp = grid::gpar(fontsize = 6),
+  rect_gp = gpar(col = "black", lwd = 0.2),
+  column_dend_side = "bottom",
+  column_dend_height = unit(1, "cm"),
+  column_dend_gp = gpar(col = "red"),
+  column_names_gp = gpar(col = column_colors)
+)
 ```
 
 ## Correspondance analysis
