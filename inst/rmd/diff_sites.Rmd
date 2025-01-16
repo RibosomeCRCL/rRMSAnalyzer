@@ -62,84 +62,70 @@ Here is given a line plot given the mean C-score and the standard deviation for 
 ```{r}
 #plot_lineplot(ribo_meth,"cscore_median",params$biological_condition_col)
 
-#Test 1
 library(ggplot2)
 library(dplyr)
+library(plotly)
+#Formatage des données
+df_of_Cscores <- tidyr::pivot_longer(ribom, cols = c(2:ncol(ribom)))
 
-# Convertir les données en format long
-ribo_long <- ribo_df %>%
-  pivot_longer(cols = -site, names_to = "condition", values_to = "c_score") 
+#formatage colonnes
+colnames(df_of_Cscores) <- c("site","group.id","Cscore")
+df_of_Cscores$group.id <- gsub("^N[0-9]+-","",df_of_Cscores$group.id) #changer la regex suivant le formatage des données
 
+#human_methylated
+df_of_Cscores <- df_of_Cscores %>%
+  mutate(site = as.character(site))
 
-# Filtrer pour les deux conditions souhaitées
-ribo_filtered <- ribo_long %>%
-  filter(condition %in% c("N3-GT2-JFH", "N1-GT1-TN-Hi"))
+human_methylated <- human_methylated %>%
+  mutate(NR_046235.Numbering = as.character(NR_046235.Numbering))
 
-# Calculer les statistiques pour les quartiles
-stats <- ribo_long %>%
-  group_by(site, condition) %>%
-  summarise(
-    median = median(c_score, na.rm = TRUE),
-    q25 = quantile(c_score, 0.25, na.rm = TRUE),
-    q75 = quantile(c_score, 0.75, na.rm = TRUE),
-    .groups = "drop"
-  )
+# Ajout d'une colonne temporaire contenant les nombres finaux des sites de df_of_Cscores
+df_of_Cscores <- df_of_Cscores %>%
+  mutate(site_number = stringr::str_extract(site, "\\d+$"))  # Extraire le nombre final de 'site'
 
-# Tracer le graphique
-ggplot(stats, aes(x = site, y = median, color = condition, fill = condition)) +
-  geom_line(size = 1) +  # Lignes
-  geom_ribbon(aes(ymin = q25, ymax = q75), alpha = 0.3) +  # Ruban pour les quartiles
-  scale_x_discrete(expand = c(0, 0)) +  # Échelle x basée sur les sites (discrets)
-  scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +  # Limites pour y
-  labs(
-    x = "Position (site)",
-    y = "C-score",
-    color = "Condition",
-    fill = "Condition"
-  ) +
-  theme_bw() +
-  theme(
-    legend.position = "top",
-    legend.title = element_blank(),
-    axis.text.x = element_text(angle = 45, hjust = 1)  # Rotation des labels des positions
-  )
+# Jointure entre les deux data frames en comparant les colonnes 'site_number' et 'NR_046235.Numbering'
+df_of_Cscores <- df_of_Cscores %>%
+  inner_join(human_methylated, by = c("site_number" = "NR_046235.Numbering"))
 
+# Supprimer les colonnes inutiles
+df_of_Cscores <- df_of_Cscores[, -c(4:ncol(df_of_Cscores))]
 
-
-
-#test 2 
-
-# 1. Extraction des données de la RiboClass
-ribo_df_test2 <- as.data.frame(ribo_adj_annot[[1]])  # Transforme RiboClass en data frame
-metadata <- ribo_adj_annot[[2]]  
-
-ribo_df_test2 <- extract_data(ribo_adj_annot, "cscore", position_to_rownames = TRUE)
-
-# Ajout des métadonnées aux colonnes du ribo_df_test2
-colnames(ribo_df_test2)[-1] <- metadata$condition # marche pas, il faut trouver une solution pour ressortir les conditions ~ cscores ~ position
 
 # 2. Transformation en long format et agrégation par groupe
-ribo_long_test2 <- ribo_df_test2 %>%
-  pivot_longer(-site, names_to = "condition", values_to = "c_score") %>%
-  left_join(metadata, by = c("condition" = "condition")) %>%
-  group_by(site, Groupe) %>%
+df_of_Cscores <- df_of_Cscores %>%
+  group_by(site, group.id) %>%
   summarise(
-    median_cscore = median(c_score, na.rm = TRUE),
-    q25 = quantile(c_score, 0.25, na.rm = TRUE),
-    q75 = quantile(c_score, 0.75, na.rm = TRUE),
+    median_cscore = median(Cscore, na.rm = TRUE),
+    q25 = quantile(Cscore, 0.25, na.rm = TRUE),
+    q75 = quantile(Cscore, 0.75, na.rm = TRUE),
     .groups = "drop"
   )
 
 # 3. Tracé du graphique
-ggplot(ribo_long_test2, aes(x = site, y = median_cscore, group = Groupe, color = Groupe, fill = Groupe)) +
+ggplot(df_of_Cscores, aes(x = site, y = median_cscore, group = group.id, color = group.id, fill = group.id)) +
   geom_line() +
-  geom_ribbon(aes(ymin = q25, ymax = q75), alpha = 0.3) +
+  geom_ribbon(aes(ymin = q25, ymax = q75), alpha = 0.1) +
   scale_x_discrete(guide = guide_axis(angle = 90)) +  # Rotation des étiquettes si besoin
   scale_y_continuous(limits = c(0, 1)) +
   xlab("Position") +
   ylab("C-score") +
   theme_bw() +
   ggtitle("C-score par groupe avec quartiles")
+   
+df_filtered <- df_of_Cscores[df_of_Cscores$group.id == "MOCK-DCV", ]
+
+
+ggplot(df_of_Cscores, aes(x = site, y = median_cscore, group = group.id, color = group.id, fill = group.id)) + # remplacer df_filtered par df_of_Cscores
+  geom_line(aes(color = group.id)) +
+  geom_ribbon(aes(ymin = q25, ymax = q75), alpha = 0.5) +
+  scale_x_discrete(guide = guide_axis(angle = 90)) +
+  scale_y_continuous(limits = c(0, 1)) +
+  xlab("Position") +
+  ylab("C-score") +
+  theme_bw() +
+  ggtitle("C-score par groupe avec quartiles")
+  #facet_wrap(~ group.id, scales = "free_y") # séparer ou non les échantillons
+
 ```
 
 Here is given an histo plot given the mean C-score and the standard deviation in the different biological context for each individual rRNA 2'Ome sites. Color indicates the different biological groups. Plot de Julie Herleinmecker
