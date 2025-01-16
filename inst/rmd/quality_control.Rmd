@@ -173,7 +173,7 @@ print(plot_rle)
 
 The repartition of RNA end read counts is an indicator of the RNA(s) that present a lower or higher coverage compared to the other RNAs within the same sample. A sample that shows an unusual repartition might be considered with caution, as it could impact the C-score robustness. The following image shows a stacked barplots representing end read count fractions of total end read counts for each RNA per sample. In the case of rRNAs, most end read counts are assigned to the longest rRNA, namely the 18S (~ 0.25) and the 28S (~ 0.50).
 
-```{r}
+```{r, fig.asp = 0.8, fig.width = 10}
 plot_counts_fraction <- rRMSAnalyzer::plot_counts_fraction(ribo_to_check) + ggplot2::ggtitle("RNA fraction per sample")
 
 library(ggplot2)
@@ -198,7 +198,7 @@ theorical_fraction$value <- (theorical_fraction$value/100)
 #création du plot pour la barre théorique
 theorical_counts_plot <- ggplot2::ggplot(theorical_fraction, aes(x = sample, y = value, fill = group))
 theorical_counts_plot <- theorical_counts_plot + 
-  ggplot2::geom_bar(stat = "identity", width = 0.1) + # Ajuster la largeur
+  ggplot2::geom_bar(stat = "identity", width = 0.1) + # Ajuster la largeure de la barre 
   ggplot2::geom_text(aes(label = value), 
                     position = position_stack(vjust = 0.5), # Centrer le texte dans chaque barre
                     color = "black", size = 4) +
@@ -216,7 +216,7 @@ theorical_counts_plot +
     plot.margin = ggplot2::unit(c(1, 50, 1, 0), "cm") # Ajuste les marges (haut, droite, bas, gauche)
   )
 # impression des deux graphiques cote à cote
-grid.arrange(plot_counts_fraction, theorical_counts_plot, ncol = 2)
+grid.arrange(plot_counts_fraction, theorical_counts_plot, ncol = 2, widths = c(3, 1))
 ```
 
 # Profiles comparison
@@ -235,20 +235,20 @@ In order to identify distinct coverage profiles, coverage profiles are compared 
 
 ```{r heatmap_corr}
 plot_heatmap_corr <- rRMSAnalyzer::plot_heatmap_corr(ribo_to_check,"Count")
+```
 
 
 
-
-
+```{r heatmap_v2, fig.asp = 0.9, fig.width = 15}
 # TEST New heatmap with outlier_level
 library(ComplexHeatmap)
 library(dplyr)
-
-corr_matrix <- extract_data(ribo_to_check, "Count")
+corr_matrix <- extract_data(ribo, "Count")
 corr_matrix <- corr_matrix[, -1]
 corr_matrix <- cor(corr_matrix, use = "complete.obs")
 pearson_color <- colorRamp2::colorRamp2(c(0,0.5,1),c("red","white", "blue"))
 
+qcdata$total_outliers <- as.character(qcdata$total_outliers)
 
 # Préparer les annotations
 row_annotation <- HeatmapAnnotation(
@@ -260,7 +260,7 @@ row_annotation <- HeatmapAnnotation(
 column_colors <- ifelse(qcdata$total_outliers > 0, "red", "black")
 
 # Plot de la heatmap avec annotations
-Heatmap(
+x <- Heatmap(
   corr_matrix,col = pearson_color,
   top_annotation = row_annotation,
   name = "Pearson correlation",
@@ -273,20 +273,21 @@ Heatmap(
   legend_direction = "horizontal" ),
   clustering_method_columns = "ward.D2",
   column_split = 3,
-  row_names_gp = grid::gpar(fontsize = 6),
+  row_names_gp = grid::gpar(fontsize = 16),
   rect_gp = gpar(col = "black", lwd = 0.2),
   column_dend_side = "bottom",
   column_dend_height = unit(1, "cm"),
   column_dend_gp = gpar(col = "red"),
-  column_names_gp = gpar(col = column_colors)
+  column_names_gp = gpar(col = column_colors, fontsize = 16)
 )
+print(x)
 ```
 
 ## Correspondance analysis
 
 To identify distinct coverage profile, we compare the coverage profiles of all samples in the series. The Correspondence Analysis (COA) plot shows the distance between each sample based on its coverage profile. Samples that are far appart are considered putative outliers. At this stage, it is possible to visualise the bias linked to the sequencing batch or to evaluate the performance of the ComBat-seq correction algorithm if it has been applied (Zhang et al, 2020; Paraqindes et al, in revision).
 
-```{r}
+```{r, fig.asp = 1, fig.width = 15}
 #incrementing qcdata
 #calculate the number of fold the sample is an outlier
 qcdata$total_outliers <- rowSums(qcdata[, c("coverage_quality", "rle_median_quality")] == "warning")
@@ -323,7 +324,7 @@ plot_coa <- rRMSAnalyzer::plot_coa(ribo_to_check,color_col = params$library_col)
 #plot_coa + plot_coa_binaire + plot_layout(widths = c(2,1))
 
 #print both graphs in one
-grid.arrange(plot_coa, plot_coa_binaire, ncol = 2)
+grid.arrange(plot_coa, plot_coa_binaire, ncol = 1)
 ```
 
 # C-scores analysis

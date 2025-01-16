@@ -62,42 +62,84 @@ Here is given a line plot given the mean C-score and the standard deviation for 
 ```{r}
 #plot_lineplot(ribo_meth,"cscore_median",params$biological_condition_col)
 
+#Test 1
 library(ggplot2)
- 
-# Get the data from the web !
-# ctrl <- read.table("http://www.sr.bham.ac.uk/~ajrs/papers/sanderson06/mean_Tprofile-CC.txt" ,  header=TRUE)
-# t <- read.table("http://www.sr.bham.ac.uk/~ajrs/papers/sanderson06/mean_Tprofile-nCC.txt" , header=TRUE)
-# CC$type <- "Cool core"
-# nCC$type <- "Non-cool core"
-# A <- rbind(CC, nCC)
- 
-# Make the plot
-ggplot(data=ribo, aes(x=named_position, y=`N3-GT2-JFH`, ymin=0, ymax=1.0, fill=`RNA-ref-2`, linetype=`RNA-ref-2`)) + 
- geom_line() + 
- geom_ribbon(alpha=0.5) + 
- scale_x_log10() + 
- scale_y_log10() + 
- xlab("Position") + 
- ylab("c-score")
+library(dplyr)
+
+# Convertir les données en format long
+ribo_long <- ribo_df %>%
+  pivot_longer(cols = -site, names_to = "condition", values_to = "c_score") 
 
 
-stats <- ribo %>%
-  group_by(named_position, condition) %>%
+# Filtrer pour les deux conditions souhaitées
+ribo_filtered <- ribo_long %>%
+  filter(condition %in% c("N3-GT2-JFH", "N1-GT1-TN-Hi"))
+
+# Calculer les statistiques pour les quartiles
+stats <- ribo_long %>%
+  group_by(site, condition) %>%
   summarise(
-    median = median(c_score),
-    q25 = quantile(c_score, 0.25),
-    q75 = quantile(c_score, 0.75)
+    median = median(c_score, na.rm = TRUE),
+    q25 = quantile(c_score, 0.25, na.rm = TRUE),
+    q75 = quantile(c_score, 0.75, na.rm = TRUE),
+    .groups = "drop"
   )
 
-# Tracé
-ggplot(stats, aes(x = named_position, y = median, linetype = condition, fill = condition)) +
+# Tracer le graphique
+ggplot(stats, aes(x = site, y = median, color = condition, fill = condition)) +
+  geom_line(size = 1) +  # Lignes
+  geom_ribbon(aes(ymin = q25, ymax = q75), alpha = 0.3) +  # Ruban pour les quartiles
+  scale_x_discrete(expand = c(0, 0)) +  # Échelle x basée sur les sites (discrets)
+  scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +  # Limites pour y
+  labs(
+    x = "Position (site)",
+    y = "C-score",
+    color = "Condition",
+    fill = "Condition"
+  ) +
+  theme_bw() +
+  theme(
+    legend.position = "top",
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1)  # Rotation des labels des positions
+  )
+
+
+
+
+#test 2 
+
+# 1. Extraction des données de la RiboClass
+ribo_df_test2 <- as.data.frame(ribo_adj_annot[[1]])  # Transforme RiboClass en data frame
+metadata <- ribo_adj_annot[[2]]  
+
+ribo_df_test2 <- extract_data(ribo_adj_annot, "cscore", position_to_rownames = TRUE)
+
+# Ajout des métadonnées aux colonnes du ribo_df_test2
+colnames(ribo_df_test2)[-1] <- metadata$condition # marche pas, il faut trouver une solution pour ressortir les conditions ~ cscores ~ position
+
+# 2. Transformation en long format et agrégation par groupe
+ribo_long_test2 <- ribo_df_test2 %>%
+  pivot_longer(-site, names_to = "condition", values_to = "c_score") %>%
+  left_join(metadata, by = c("condition" = "condition")) %>%
+  group_by(site, Groupe) %>%
+  summarise(
+    median_cscore = median(c_score, na.rm = TRUE),
+    q25 = quantile(c_score, 0.25, na.rm = TRUE),
+    q75 = quantile(c_score, 0.75, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# 3. Tracé du graphique
+ggplot(ribo_long_test2, aes(x = site, y = median_cscore, group = Groupe, color = Groupe, fill = Groupe)) +
   geom_line() +
   geom_ribbon(aes(ymin = q25, ymax = q75), alpha = 0.3) +
-  scale_x_continuous() +
+  scale_x_discrete(guide = guide_axis(angle = 90)) +  # Rotation des étiquettes si besoin
   scale_y_continuous(limits = c(0, 1)) +
   xlab("Position") +
   ylab("C-score") +
-  theme_bw()
+  theme_bw() +
+  ggtitle("C-score par groupe avec quartiles")
 ```
 
 Here is given an histo plot given the mean C-score and the standard deviation in the different biological context for each individual rRNA 2'Ome sites. Color indicates the different biological groups. Plot de Julie Herleinmecker
@@ -217,7 +259,7 @@ First, mean comparison between biological conditions is performed for all the rR
 # prend une riboclass en entrée
 plot_diff_sites(
   ribo_adj_annot,
-  factor_column = "Repeat",
+  factor_column = "condition",
   p_cutoff = 0.09,
   cscore_cutoff = 0.05,
   adjust_pvalues_method = "fdr",
