@@ -49,9 +49,9 @@ Metadata used for ComBat-seq :
 
 </details>
 
-## Site-by-site analysis of rRNA 2'Ome // on garde cette partie comme elle est.
+## Site-by-site analysis of rRNA 2'Ome
 
-The alteration in rRNA 2'Ome is analysed site-by-site individually to identify significant alteration in rRNA 2'Ome level at particular site depending on the biological context. c'est le line plot. 
+The alteration in rRNA 2'Ome is analysed site-by-site individually to identify significant alteration in rRNA 2'Ome level at particular site depending on the biological context.  
 
 ### Site-by-site analysis of all rRNA 2'Ome sites {.tabset}
 
@@ -91,7 +91,7 @@ df_of_Cscores <- df_of_Cscores %>%
 df_of_Cscores <- df_of_Cscores[, -c(4:ncol(df_of_Cscores))]
 
 
-# 2. Transformation en long format et agrégation par groupe
+# Transformation en long format et agrégation par groupe pour faire le ruban
 df_of_Cscores <- df_of_Cscores %>%
   group_by(site, group.id) %>%
   summarise(
@@ -101,34 +101,22 @@ df_of_Cscores <- df_of_Cscores %>%
     .groups = "drop"
   )
 
-# 3. Tracé du graphique
-ggplot(df_of_Cscores, aes(x = site, y = median_cscore, group = group.id, color = group.id, fill = group.id)) +
-  geom_line() +
-  geom_ribbon(aes(ymin = q25, ymax = q75), alpha = 0.1) +
-  scale_x_discrete(guide = guide_axis(angle = 90)) +  # Rotation des étiquettes si besoin
-  scale_y_continuous(limits = c(0, 1)) +
-  xlab("Position") +
-  ylab("C-score") +
-  theme_bw() +
-  ggtitle("C-score par groupe avec quartiles")
-   
-df_filtered <- df_of_Cscores[df_of_Cscores$group.id == "MOCK-DCV", ]
-
+# Tracé du graphique
 
 ggplot(df_of_Cscores, aes(x = site, y = median_cscore, group = group.id, color = group.id, fill = group.id)) + # remplacer df_filtered par df_of_Cscores
   geom_line(aes(color = group.id)) +
   geom_ribbon(aes(ymin = q25, ymax = q75), alpha = 0.5) +
   scale_x_discrete(guide = guide_axis(angle = 90)) +
   scale_y_continuous(limits = c(0, 1)) +
-  xlab("Position") +
+  xlab("Site of interest") +
   ylab("C-score") +
   theme_bw() +
-  ggtitle("C-score par groupe avec quartiles")
-  #facet_wrap(~ group.id, scales = "free_y") # séparer ou non les échantillons
+  ggtitle("methylation global profile")
+  #facet_wrap(~ group.id, scales = "free_y", ncol = 6) # séparer ou non les échantillons
 
 ```
 
-Here is given an histo plot given the mean C-score and the standard deviation in the different biological context for each individual rRNA 2'Ome sites. Color indicates the different biological groups. Plot de Julie Herleinmecker
+Here is given an histo plot given the mean C-score and the standard deviation in the different biological context for each individual rRNA 2'Ome sites. Color indicates the different biological groups.
 ```{r}
 library(knitr)
 library(ggplot2)
