@@ -174,49 +174,49 @@ print(plot_rle)
 The repartition of RNA end read counts is an indicator of the RNA(s) that present a lower or higher coverage compared to the other RNAs within the same sample. A sample that shows an unusual repartition might be considered with caution, as it could impact the C-score robustness. The following image shows a stacked barplots representing end read count fractions of total end read counts for each RNA per sample. In the case of rRNAs, most end read counts are assigned to the longest rRNA, namely the 18S (~ 0.25) and the 28S (~ 0.50).
 
 ```{r, fig.asp = 0.8, fig.width = 10}
-plot_counts_fraction <- rRMSAnalyzer::plot_counts_fraction(ribo_to_check) + ggplot2::ggtitle("RNA fraction per sample")
-
-library(ggplot2)
-library(gridExtra)
-#% de sous ARN théorique calculé à la main : 
-#28S : 70.26053
-#5.8S : 2.161863
-#5S : 1.676829
-#18S : 25.90078
-#Création du data frame avec les noms des arn et leur fractions théoriques. 
-theorical_fraction <- data.frame(
-  sample = "theorical",
-  group = factor(unique(plot_counts_fraction$plot_env$all_data_sums$rna)),
-  value = (c("1.676829","25.90078", "70.26053", "2.161863"))
-)
-#conversion en valeur numérique pour le graphique
-theorical_fraction$value <- as.numeric(theorical_fraction$value)
-#conversion en %
-
-theorical_fraction$value <- (theorical_fraction$value/100)
-
-#création du plot pour la barre théorique
-theorical_counts_plot <- ggplot2::ggplot(theorical_fraction, aes(x = sample, y = value, fill = group))
-theorical_counts_plot <- theorical_counts_plot + 
-  ggplot2::geom_bar(stat = "identity", width = 0.1) + # Ajuster la largeure de la barre 
-  ggplot2::geom_text(aes(label = value), 
-                    position = position_stack(vjust = 0.5), # Centrer le texte dans chaque barre
-                    color = "black", size = 4) +
-  ggplot2::scale_fill_brewer(palette = "Spectral") +
-  ggplot2::theme_bw() +
-  ggplot2::theme(axis.text.x = element_text(angle = 90, size = 10, hjust = 1),
-                 legend.position = "none") +
-  labs(title = "Theorical counts distribution",
-       x = "Theorical bar",
-       y = "Theorical counts fraction (%)") +
-  ggplot2::scale_y_continuous(limits = c(-0.03, 1.01))
-
-theorical_counts_plot + 
-  ggplot2::theme(
-    plot.margin = ggplot2::unit(c(1, 50, 1, 0), "cm") # Ajuste les marges (haut, droite, bas, gauche)
-  )
-# impression des deux graphiques cote à cote
-grid.arrange(plot_counts_fraction, theorical_counts_plot, ncol = 2, widths = c(3, 1))
+#plot_counts_fraction <- rRMSAnalyzer::plot_counts_fraction(ribo_to_check) + ggplot2::ggtitle("RNA fraction per sample")
+rRMSAnalyzer::plot_counts_fraction(ribo_to_check) + ggplot2::ggtitle("RNA fraction per sample")
+# library(ggplot2)
+# library(gridExtra)
+# #% de sous ARN théorique calculé à la main : 
+# #28S : 70.26053
+# #5.8S : 2.161863
+# #5S : 1.676829
+# #18S : 25.90078
+# #Création du data frame avec les noms des arn et leur fractions théoriques. 
+# theorical_fraction <- data.frame(
+#   sample = "theorical",
+#   group = factor(unique(plot_counts_fraction$plot_env$all_data_sums$rna)),
+#   value = (c("1.676829","25.90078", "70.26053", "2.161863"))
+# )
+# #conversion en valeur numérique pour le graphique
+# theorical_fraction$value <- as.numeric(theorical_fraction$value)
+# #conversion en %
+# 
+# theorical_fraction$value <- (theorical_fraction$value/100)
+# 
+# #création du plot pour la barre théorique
+# theorical_counts_plot <- ggplot2::ggplot(theorical_fraction, aes(x = sample, y = value, fill = group))
+# theorical_counts_plot <- theorical_counts_plot + 
+#   ggplot2::geom_bar(stat = "identity", width = 0.1) + # Ajuster la largeure de la barre 
+#   ggplot2::geom_text(aes(label = value), 
+#                     position = position_stack(vjust = 0.5), # Centrer le texte dans chaque barre
+#                     color = "black", size = 4) +
+#   ggplot2::scale_fill_brewer(palette = "Spectral") +
+#   ggplot2::theme_bw() +
+#   ggplot2::theme(axis.text.x = element_text(angle = 90, size = 10, hjust = 1),
+#                  legend.position = "none") +
+#   labs(title = "Theorical counts distribution",
+#        x = "Theorical bar",
+#        y = "Theorical counts fraction (%)") +
+#   ggplot2::scale_y_continuous(limits = c(-0.03, 1.01))
+# 
+# theorical_counts_plot + 
+#   ggplot2::theme(
+#     plot.margin = ggplot2::unit(c(1, 50, 1, 0), "cm") # Ajuste les marges (haut, droite, bas, gauche)
+#   )
+# # impression des deux graphiques cote à cote
+# grid.arrange(plot_counts_fraction, theorical_counts_plot, ncol = 2, widths = c(3, 1))
 ```
 
 # Profiles comparison
@@ -234,7 +234,7 @@ Of note, rRNA sequences are enriched in GC-stretches and in nucleotide repeats w
 In order to identify distinct coverage profiles, coverage profiles are compared with one other within the cohort. Pairwise sample correlations of coverage profile are calculated using a Pearson correlation based distance. A heatmap is then generated that summarizes the correlation values for the entire series. These values goes from 0 (no correlation, indicated in red) to 1 (perfect correlation, indicated in blue). 
 
 ```{r heatmap_corr}
-plot_heatmap_corr <- rRMSAnalyzer::plot_heatmap_corr(ribo_to_check,"Count")
+#plot_heatmap_corr <- rRMSAnalyzer::plot_heatmap_corr(ribo_to_check,"Count")
 ```
 
 
@@ -243,17 +243,29 @@ plot_heatmap_corr <- rRMSAnalyzer::plot_heatmap_corr(ribo_to_check,"Count")
 # TEST New heatmap with outlier_level
 library(ComplexHeatmap)
 library(dplyr)
-corr_matrix <- extract_data(ribo, "Count")
+corr_matrix <- extract_data(ribo, "count")
 corr_matrix <- corr_matrix[, -1]
 corr_matrix <- cor(corr_matrix, use = "complete.obs")
 pearson_color <- colorRamp2::colorRamp2(c(0,0.5,1),c("red","white", "blue"))
 
+#incrementing qcdata
+#calculate the number of fold the sample is an outlier
+qcdata$total_outliers <- rowSums(qcdata[, c("coverage_quality", "rle_median_quality")] == "warning")
+
+#add the column in ribo_to_check
+ribo_to_check$metadata$outlier_level <- qcdata$total_outliers
 qcdata$total_outliers <- as.character(qcdata$total_outliers)
 
 # Préparer les annotations
 row_annotation <- HeatmapAnnotation(
   outlier_level = qcdata$total_outliers,
-  col = list(outlier_level = c("0" = "darkgrey", "1" = "#9FE2BF", "2" = "#40E0D0", "3" = "#6495ED"))
+  col = list(outlier_level = c("0" = "darkgrey", "1" = "lightsalmon", "2" = "orange", "3" = "#A91101")),
+   annotation_legend_param = list(
+    title_gp = gpar(fontsize = 16), # Taille du titre
+    labels_gp = gpar(fontsize = 14),# Taille des étiquettes
+    grid_width = unit(8, "mm"),     # Largeur des carrés
+    grid_height = unit(8, "mm")     # Hauteur des carrés
+  )
 )
 
 #créer un vecteur pour la couleur suivant le niveau d'outlier 
@@ -270,7 +282,12 @@ x <- Heatmap(
   cluster_rows = FALSE, cluster_columns = TRUE,
   clustering_distance_columns = "pearson", 
   heatmap_legend_param = list(
-  legend_direction = "horizontal" ),
+  legend_direction = "horizontal", # Légende horizontale
+    title_gp = gpar(fontsize = 16),  # Taille du titre de la légende
+    labels_gp = gpar(fontsize = 14), # Taille des étiquettes de la légende
+    grid_height = unit(10, "mm"),     # Hauteur des carrés de la légende
+    grid_width = unit(10, "mm")       # Largeur des carrés de la légende 
+  ),
   clustering_method_columns = "ward.D2",
   column_split = 3,
   row_names_gp = grid::gpar(fontsize = 16),
@@ -280,25 +297,22 @@ x <- Heatmap(
   column_dend_gp = gpar(col = "red"),
   column_names_gp = gpar(col = column_colors, fontsize = 16)
 )
-print(x)
+draw(
+  x,
+  heatmap_legend_side = "bottom",  # Position de la légende
+  annotation_legend_side = "bottom" # Pour les légendes des annotations
+)
 ```
 
 ## Correspondance analysis
 
-To identify distinct coverage profile, we compare the coverage profiles of all samples in the series. The Correspondence Analysis (COA) plot shows the distance between each sample based on its coverage profile. Samples that are far appart are considered putative outliers. At this stage, it is possible to visualise the bias linked to the sequencing batch or to evaluate the performance of the ComBat-seq correction algorithm if it has been applied (Zhang et al, 2020; Paraqindes et al, in revision).
+To identify distinct coverage profile, we compare the coverage profiles of all samples in the series. The Correspondence Analysis (COA) plot shows the distance between each sample based on its coverage profile. Samples that are far appart are considered putative outliers. At this stage, it is possible to visualise the bias linked to the sequencing batch or to evaluate the performance of the ComBat-seq correction algorithm if it has been applied (Zhang et al, 2020; Paraqindes et al, in revision). 
 
-```{r, fig.asp = 1, fig.width = 15}
-#incrementing qcdata
-#calculate the number of fold the sample is an outlier
-qcdata$total_outliers <- rowSums(qcdata[, c("coverage_quality", "rle_median_quality")] == "warning")
-
-#add the column in ribo_to_check
-ribo_to_check$metadata$outlier_level <- qcdata$total_outliers
-
+```{r, fig.asp = 1, fig.width = 10}
 #Plot_coa for outliers
 plot_coa_binaire <- rRMSAnalyzer::plot_coa(ribo_to_check, color_col = "outlier_level")
 plot_coa_binaire <- plot_coa_binaire + 
-   ggplot2::scale_color_manual(values = c("0" = "darkgrey", "1" = "#9FE2BF", "2" = "#40E0D0", "3" = "#6495ED"))
+   ggplot2::scale_color_manual(values = c("0" = "darkgrey", "1" = "lightsalmon", "2" = "orange", "3" = "#A91101"))
 
 #print(plot_coa_binaire)
 
@@ -346,7 +360,7 @@ rRMSAnalyzer::plot_pca(ribo_to_check,params$library_col)+
 ```
 
 ```{r write table}
-output_dir <- "/home/bioinfo/Bureau/RMS/RMS_Git_change_plot_with_Emilie/rRMSAnalyzer"
+output_dir <- getwd()
 write.table(qcdata,file.path(output_dir,"quality_control.csv"),sep="\t",row.names=FALSE,quote = FALSE)
 knitr::kable(qcdata)
 ```
