@@ -36,8 +36,6 @@ plot_heatmap_corr <- function(ribo, values_col, color_col=NULL) {
   } else {
     column_ha <- NULL
   }
-  
-
     corr_matrix <- stats::cor(cscore_matrix,use = "complete.obs")
     pearson_color <- colorRamp2::colorRamp2(c(0,0.5,1),c("red","white", "blue"))
    
