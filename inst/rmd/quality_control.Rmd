@@ -258,22 +258,33 @@ qcdata$total_outliers <- as.character(qcdata$total_outliers)
 
 # Préparer les annotations
 row_annotation <- HeatmapAnnotation(
-  outlier_level = qcdata$total_outliers,
-  col = list(outlier_level = c("0" = "darkgrey", "1" = "lightsalmon", "2" = "orange", "3" = "#A91101")),
-   annotation_legend_param = list(
+  coverage_quality = qcdata$coverage_quality,
+  rle_median_quality = qcdata$rle_median_quality,
+  col = list(
+    coverage_quality = c("ok" = "darkgrey", "warning" = "red"),
+    rle_median_quality = c("ok" = "darkgrey", "warning" = "red")
+  ),
+  annotation_legend_param = list(
     title_gp = gpar(fontsize = 16), # Taille du titre
-    labels_gp = gpar(fontsize = 14),# Taille des étiquettes
+    labels_gp = gpar(fontsize = 14), # Taille des étiquettes
     grid_width = unit(8, "mm"),     # Largeur des carrés
     grid_height = unit(8, "mm")     # Hauteur des carrés
   )
 )
 
-#créer un vecteur pour la couleur suivant le niveau d'outlier 
+#créer un vecteur pour la couleur des échantillons suivant le niveau d'outlier 
 column_colors <- ifelse(qcdata$total_outliers > 0, "red", "black")
 
-# Plot de la heatmap avec annotations
+# Identifier les échantillons en "Warning"
+column_colors <- ifelse(
+  qcdata$coverage_quality == "warning" | qcdata$rle_median_quality == "warning",
+  "red",  # Échantillons "Warning" en rouge
+  "black" # Autres échantillons en noir
+)
+
+# Plot de la heatmap avec noms des colonnes colorés
 x <- Heatmap(
-  corr_matrix,col = pearson_color,
+  corr_matrix, col = pearson_color,
   top_annotation = row_annotation,
   name = "Pearson correlation",
   row_title = "Sample",
@@ -282,11 +293,11 @@ x <- Heatmap(
   cluster_rows = FALSE, cluster_columns = TRUE,
   clustering_distance_columns = "pearson", 
   heatmap_legend_param = list(
-  legend_direction = "horizontal", # Légende horizontale
+    legend_direction = "horizontal", # Légende horizontale
     title_gp = gpar(fontsize = 16),  # Taille du titre de la légende
     labels_gp = gpar(fontsize = 14), # Taille des étiquettes de la légende
-    grid_height = unit(10, "mm"),     # Hauteur des carrés de la légende
-    grid_width = unit(10, "mm")       # Largeur des carrés de la légende 
+    grid_height = unit(10, "mm"),    # Hauteur des carrés de la légende
+    grid_width = unit(10, "mm")      # Largeur des carrés de la légende 
   ),
   clustering_method_columns = "ward.D2",
   column_split = 3,
@@ -295,8 +306,9 @@ x <- Heatmap(
   column_dend_side = "bottom",
   column_dend_height = unit(1, "cm"),
   column_dend_gp = gpar(col = "red"),
-  column_names_gp = gpar(col = column_colors, fontsize = 16)
+  column_names_gp = gpar(col = column_colors, fontsize = 16) # Couleur des noms des colonnes
 )
+
 draw(
   x,
   heatmap_legend_side = "bottom",  # Position de la légende
@@ -304,42 +316,40 @@ draw(
 )
 ```
 
-## Correspondance analysis
+## Correspondance analysis {.tabset}
 
 To identify distinct coverage profile, we compare the coverage profiles of all samples in the series. The Correspondence Analysis (COA) plot shows the distance between each sample based on its coverage profile. Samples that are far appart are considered putative outliers. At this stage, it is possible to visualise the bias linked to the sequencing batch or to evaluate the performance of the ComBat-seq correction algorithm if it has been applied (Zhang et al, 2020; Paraqindes et al, in revision). 
 
-```{r, fig.asp = 1, fig.width = 10}
-#Plot_coa for outliers
+### COA 1 for batch effect / ComBat-seq
+
+```{r}
+#{r, fig.asp = 1, fig.width = 10} https://bookdown.org/yihui/rmarkdown-cookbook/html-tabs.html
+plot_coa <- rRMSAnalyzer::plot_coa(ribo_to_check,color_col = params$library_col)+ 
+  scale_color_manual(values = c("L1" = "#00FFFF", "L2" = "orange", "L3" = "purple", "L4" = "#808000", "L5" = "#000080", "L6" = "pink", "L7" = "#FF00FF", "L8" = "#CCCCFF", "L9" = "#9FE2BF", "L10" = "#DFFF00", "L11" = "#DFAF00", "L12" = "#DFDF00"))
+
+print(plot_coa)
+
+#interactive graphs
+# install.packages("gridExtra")
+# library(gridExtra)
+# #install.packages("plotly")
+# library(plotly)
+# plotly(plot_coa)
+#grid.arrange(plot_coa, plot_coa_binaire, ncol = 1)
+```
+
+### COA 2 for outlier samples visualisation
+
+```{r}
 plot_coa_binaire <- rRMSAnalyzer::plot_coa(ribo_to_check, color_col = "outlier_level")
 plot_coa_binaire <- plot_coa_binaire + 
    ggplot2::scale_color_manual(values = c("0" = "darkgrey", "1" = "lightsalmon", "2" = "orange", "3" = "#A91101"))
 
-#print(plot_coa_binaire)
-
-
-
-
-
-#Plot_coa for batch effect
-# Plot_coa by color_col specified in param
-plot_coa <- rRMSAnalyzer::plot_coa(ribo_to_check,color_col = params$library_col)+ 
-  scale_color_manual(values = c("L1" = "#00FFFF", "L2" = "orange", "L3" = "purple", "L4" = "#808000", "L5" = "#000080", "L6" = "pink", "L7" = "#FF00FF", "L8" = "#CCCCFF", "L9" = "#9FE2BF", "L10" = "#DFFF00", "L11" = "#DFAF00", "L12" = "#DFDF00"))
-
-#print(plot_coa)
-
-#interactive graphs
-#install.packages("gridExtra")
-# library(gridExtra)
-# #install.packages("plotly")
-# library(plotly)
-# 
-# plotly(plot_coa)
-
+print(plot_coa_binaire)
 #plot_coa + plot_coa_binaire + plot_layout(widths = c(2,1))
-
-#print both graphs in one
-grid.arrange(plot_coa, plot_coa_binaire, ncol = 1)
 ```
+
+
 
 # C-scores analysis
 
