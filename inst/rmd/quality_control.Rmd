@@ -92,7 +92,7 @@ The following metadata are used in the project **`r params$project_name`** :
 
 ```{r, echo=FALSE}
 qcdata <- ribo_to_check[[2]]
-knitr::kable(qcdata)
+knitr::kable(qcdata)%>% kable_styling("striped") %>% scroll_box(width = "100%", height = "500px")
 ```
  
 
@@ -372,7 +372,7 @@ rRMSAnalyzer::plot_pca(ribo_to_check,params$library_col)+
 ```{r write table}
 output_dir <- getwd()
 write.table(qcdata,file.path(output_dir,"quality_control.csv"),sep="\t",row.names=FALSE,quote = FALSE)
-knitr::kable(qcdata)
+knitr::kable(qcdata, "html") %>% kable_styling("striped") %>% scroll_box(width = "100%", height = "500px")
 ```
 
 # About
