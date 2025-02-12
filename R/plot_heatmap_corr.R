@@ -52,5 +52,6 @@ plot_heatmap_corr <- function(ribo, values_col, color_col=NULL) {
                           row_names_gp = grid::gpar(fontsize = 6))
   
  ComplexHeatmap::draw(ht, heatmap_legend_side = "bottom") # Affiche la légende horizontalement
+ 
   
 }
