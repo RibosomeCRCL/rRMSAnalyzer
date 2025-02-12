@@ -24,22 +24,22 @@
 #' ribo_toy_two <- keep_ribo_samples(ribo_toy,c('S1','RNA1','S7','RNA2'))
 #' ribo_toy_adjusted <- adjust_bias(ribo_toy_two,'run') 
 #' 
-adjust_bias <- function(ribo, batch,ncores = 1, ...) {
-    check_metadata(ribo,batch)
+adjust_bias <- function(ribo, batch,ncores = 1, ...) { # ... permet de passer des arguments supplémentaires à sva::ComBat_seq(), comme :group = Pour indiquer un design expérimental ; full_mod = Pour ajuster un modèle complet ou ref.batch = Si on veut ajuster par rapport à un batch de référence
+    check_metadata(ribo,batch) # Vérifie que la colonne spécifiée par batch existe bien dans les métadonnées de ribo et vérifie la cohérence des échantillons et de leurs annotations
     matrix_ribo <- extract_data(ribo, "count", position_to_rownames = TRUE)
     # reorganize column according to metadata and convert DF to
     # matrix (otherwise, ComBat_seq won't work)
     matrix_ribo <- as.matrix(matrix_ribo[, c(ribo[["metadata"]][["samplename"]])])
-    adjusted_matrix <- sva::ComBat_seq(matrix_ribo, batch = ribo[["metadata"]][[batch]],
+    adjusted_matrix <- sva::ComBat_seq(matrix_ribo, batch = ribo[["metadata"]][[batch]], #applique CombatSeq, Indique la variable de batch depuis les métadonnées
                                        ...)
-    ribo_updated <- .update_ribo_count_with_matrix(ribo, adjusted_matrix)
+    ribo_updated <- .update_ribo_count_with_matrix(ribo, adjusted_matrix) # Remplace les anciennes données de comptage par les données ajustées (adjusted_matrix)
     
-    if (ribo_updated[["has_cscore"]]) {
+    if (ribo_updated[["has_cscore"]]) { # si les données ont déjà un c-score de calculé
       message("Recomputing c-score with the following parameters :",
-              "\n- C-score method : ", ribo_updated[["cscore_method"]],
+              "\n- C-score method : ", ribo_updated[["cscore_method"]], 
               "\n- Flanking window : ", ribo_updated[["cscore_window"]],
               "\n")
-      ribo_updated <- compute_cscore(ribo_updated, ribo_updated[["cscore_window"]],
+      ribo_updated <- compute_cscore(ribo_updated, ribo_updated[["cscore_window"]], # alors il le recalcule avec les données ajustées
                                      ribo_updated[["cscore_method"]], ncores)
 
     }
