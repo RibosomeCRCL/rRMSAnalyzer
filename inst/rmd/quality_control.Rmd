@@ -91,6 +91,7 @@ The following (r)RNA were used by the coverage tool: **`r as.character(ribo_to_c
 The following metadata are used in the project **`r params$project_name`** :
 
 ```{r, echo=FALSE}
+library(kableExtra)
 qcdata <- ribo_to_check[[2]]
 knitr::kable(qcdata)%>% kable_styling("striped") %>% scroll_box(width = "100%", height = "500px")
 ```
@@ -108,20 +109,25 @@ The coverage distribution of absolute end read counts at each genomic positions 
 Samples with a median coverage below 100 (the blue line), are highlighted in red and should be interpreted with caution or excluded from further analysis. This threshold ensures a level of precision within the percentage range for calculating the C-score, which is targeted for good quality analyses.
 
 ```{r boxplot2,warning=FALSE}
-## calc
+## Create a df to save all the data
 ribo_matrix <- extract_data(ribo_to_check, "count", position_to_rownames = TRUE)
 #calculate median for all the column in the ribo_matrix df
 medcov <- apply(ribo_matrix,2,function(x) median(x,na.rm=T)) 
 # create a df like ribo_matrix and add median_coverage column
 qcdata <- cbind(qcdata,median_coverage=medcov[rownames(qcdata)]) 
 # add a quality column initialized at ok
-qcdata$coverage_quality <- "ok" 
+qcdata$coverage_quality <- "pass" 
 # add a threshold for outliers
 qcdata$coverage_quality[qcdata$median_coverage < 100] <- "warning" 
+```
 
+```{r}
 ## plot
 rRMSAnalyzer::boxplot_count(ribo_to_check) + ggplot2::ggtitle("End read counts distribution by sample")
+
 ```
+
+
 
 ## Relative Log Coverage
 
@@ -162,7 +168,7 @@ for (i in 1:nrow(outlier_table)) {
 #incrementing the df qcdata with rle median
 qcdata$rle_median <- outlier_table$rle_median[match(qcdata$samplename, outlier_table$key)]
 # add a rle_median_quality column initialized at ok
-qcdata$rle_median_quality <- "ok" 
+qcdata$rle_median_quality <- "pass" 
 # add a threshold for outliers
 qcdata$rle_median_quality[qcdata$rle_median < mad] <- "warning" 
 
@@ -325,7 +331,7 @@ To identify distinct coverage profile, we compare the coverage profiles of all s
 ```{r}
 #{r, fig.asp = 1, fig.width = 10} https://bookdown.org/yihui/rmarkdown-cookbook/html-tabs.html
 plot_coa <- rRMSAnalyzer::plot_coa(ribo_to_check,color_col = params$library_col)+ 
-  scale_color_manual(values = c("L1" = "#00FFFF", "L2" = "orange", "L3" = "purple", "L4" = "#808000", "L5" = "#000080", "L6" = "pink", "L7" = "#FF00FF", "L8" = "#CCCCFF", "L9" = "#9FE2BF", "L10" = "#DFFF00", "L11" = "#DFAF00", "L12" = "#DFDF00"))
+  scale_color_manual(values = c("L1" = "#00F", "L2" = "orange", "L3" = "purple", "L4" = "#808000", "L5" = "#000080", "L6" = "pink", "L7" = "#FF00FF", "L8" = "#CCCCFF", "L9" = "#9FE2BF", "L10" = "#DFFF00", "L11" = "#DFAF00", "L12" = "#DFDF00"))
 
 print(plot_coa)
 
