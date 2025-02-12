@@ -90,7 +90,8 @@ The C-score corresponding from annotated sites are extracted from all the genomi
 Here is a table, which summarizes the annotated rRNA 2'Ome sites in your RiboClass.
 
 ```{r}
-knitr::kable(df_ribo_annot)
+library(kableExtra)
+knitr::kable(df_ribo_annot)%>% kable_styling("striped") %>% scroll_box(width = "100", height = "500px")
 ```
 
 ## Analysis of rRNA 2'Ome profile
@@ -119,6 +120,7 @@ To identify the most variable rRNA 2’Ome sites, variability of the C-score amo
 
 ```{r,fig.width=13}
 rRMSAnalyzer::boxplot_cscores(ribo_to_check,sort_by = "iqr")
+rRMSAnalyzer::boxplot_cscores(ribo_adj_annot,sort_by = "iqr")
 ```
 
 To determine whether usage of the most variable rRNA 2’Ome sites associate with biological context, previous analyses are performed (cf 3.2) using this minimal set of variable rRNA 2’Ome sites.

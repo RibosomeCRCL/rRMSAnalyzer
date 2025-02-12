@@ -116,7 +116,7 @@ plot_diff_sites <- function(ribo, factor_column,
   
   check_metadata(ribo,factor_column)
   ribo_matrix <- extract_data(ribo, only_annotated = TRUE, position_to_rownames = TRUE)
-  kruskal_df <- wrapper_kruskal_test(ribo, factor_column = factor_column)
+  kruskal_df <- wrapper_kruskal_test(ribo, factor_column = factor_column) #test non paramétrique, Tester avec anova
   
  if(object_only) return(kruskal_df)
   
