@@ -1,198 +1,68 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/404.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/articles/custom_anno.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/articles/custom_ribo.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/articles/rRMSAnalyzer.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/index.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/adjust_bias.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/annotate_site.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/boxplot_count.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/boxplot_cscores.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/check_metadata.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/check_sample.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/compute_cscore.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-calculate_pca.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-compute_RLE.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-compute_coa.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-plot_boxplot_samples.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-plot_boxplot_sites.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-plot_coa.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-plot_heatmap.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-plot_heatmap_corr.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-plot_pca.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-plot_rle.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-read_count_files.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-update_ribo_count_with_matrix.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/extract_data.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/format_to_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/generate_metadata_df.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/get_IQR.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/get_annotation.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/get_range.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/get_variant_sites.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/human_methylated.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/human_suspected.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/keep_ribo_samples.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/keep_selected_annotation.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/kruskal_test_on_cscores.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/load_ribodata.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/mean_samples_by_conditon.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/new_riboclass.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_coa.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_counts_env.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_counts_fraction.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_diff_sites.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_heatmap.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_heatmap_corr.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_most_differential_sites.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_pca.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_rle.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/print.RiboClass.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/rRMSAnalyzer-package.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/remove_annotation.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/remove_ribo_samples.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/remove_rna.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/rename_rna.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/report.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/report_qc.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/ribo_toy.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/select_most_differential_sites.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/show_rna_names.html</loc>
-  </url>
-  <url>
-    <loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/wrapper_kruskal_test.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/404.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/LICENSE.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/articles/custom_anno.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/articles/custom_ribo.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/articles/index.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/articles/rRMSAnalyzer.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/authors.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/index.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/news/index.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/adjust_bias.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/annotate_site.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/boxplot_count.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/boxplot_cscores.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/check_metadata.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/check_sample.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/compute_cscore.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-calculate_pca.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-compute_RLE.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-compute_coa.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-plot_boxplot_samples.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-plot_boxplot_sites.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-plot_coa.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-plot_heatmap.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-plot_heatmap_corr.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-plot_pca.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-plot_rle.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-read_count_files.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-update_ribo_count_with_matrix.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/extract_data.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/format_to_plot.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/generate_metadata_df.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/get_IQR.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/get_annotation.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/get_range.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/get_variant_sites.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/human_methylated.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/human_suspected.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/index.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/keep_ribo_samples.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/keep_selected_annotation.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/kruskal_test_on_cscores.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/load_ribodata.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/mean_samples_by_conditon.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/new_riboclass.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_coa.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_counts_env.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_counts_fraction.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_diff_sites.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_heatmap.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_heatmap_corr.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_most_differential_sites.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_pca.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/plot_rle.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/print.RiboClass.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/rRMSAnalyzer-package.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/remove_annotation.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/remove_ribo_samples.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/remove_rna.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/rename_rna.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/report.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/report_qc.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/ribo_toy.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/select_most_differential_sites.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/show_rna_names.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/wrapper_kruskal_test.html</loc></url>
 </urlset>
+
