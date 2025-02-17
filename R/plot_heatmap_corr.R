@@ -30,28 +30,26 @@ plot_heatmap_corr <- function(ribo, values_col, color_col=NULL) {
 .plot_heatmap_corr <- function(cscore_matrix, metadata,
                                color_col) {
   
-  if(!is.null(color_col)) { # si aucune couleur est donnée
-    col <- generate_palette(metadata,color_col) # génère une palette de couleur pour le heatmap
-    column_ha <- ComplexHeatmap::HeatmapAnnotation(df = metadata[color_col], col = col) #créer les annotations de la heatmap
+  if(!is.null(color_col)) { # if no color is given
+    col <- generate_palette(metadata,color_col) # generate a color palette for the heatmap
+    column_ha <- ComplexHeatmap::HeatmapAnnotation(df = metadata[color_col], col = col) # annotation creation
   } else { # sinon
     column_ha <- NULL
   }
-    corr_matrix <- stats::cor(cscore_matrix,use = "complete.obs") # calcule la corrélation entre les colonnes ou lignes de la matrice, la corrélation est calculée en ignorant les valeurs manquantes (NA)
-    pearson_color <- colorRamp2::colorRamp2(c(0,0.5,1),c("red","white", "blue")) # 0 = rouge, 0.5 = blanc, 1 = bleu
+    corr_matrix <- stats::cor(cscore_matrix,use = "complete.obs") # calculate correlation between lines or columns matrix, correlation is calculated ignoring missing values (NA)
+    pearson_color <- colorRamp2::colorRamp2(c(0,0.5,1),c("red","white", "blue")) # 0 = red, 0.5 = white, 1 = blue
    
  ht <- ComplexHeatmap::Heatmap(corr_matrix,col = pearson_color,name = "Pearson correlation",
                           row_title = "Sample",column_title = "Pearson correlation between samples", 
-                          column_title_side = "top", #Position du titre des colonnes en haut
-                          cluster_rows = FALSE, cluster_columns = TRUE, # Pas de clustering des lignes (les échantillons restent dans l'ordre original), Clustering des colonnes (les échantillons corrélés seront regroupés)
-                          clustering_distance_columns = "pearson", # Utilisation de la distance de Pearson pour mesurer les similarités entre échantillons
+                          column_title_side = "top", # column title position on top
+                          cluster_rows = FALSE, cluster_columns = TRUE, # no clustering of lines (samples stay in original order), column clustering (correlated samples will be grouped
+                          clustering_distance_columns = "pearson", # use of pearson distance to mesure similarity between samples
                           heatmap_legend_param = list(
                             legend_direction = "horizontal" ),
-                          clustering_method_columns = "ward.D2", # Utilisation de la méthode de clustering Ward.D2, qui regroupe les échantillons minimisant la variance intra-groupe
-                          column_split = 3, # Divise les colonnes en 3 groupes distincts après clustering
-                          top_annotation = column_ha, # ajoute les annotations définis dans la boucle if plus haut
+                          clustering_method_columns = "ward.D2", # use of clustering method Ward.D2 which group samples minimizing intra-group variance
+                          column_split = 3, # divide colums in 3 groups after clustering
+                          top_annotation = column_ha, # add annotations defined in the loop on the top
                           row_names_gp = grid::gpar(fontsize = 6))
   
- ComplexHeatmap::draw(ht, heatmap_legend_side = "bottom") # Affiche la légende horizontalement
- 
-  
+ ComplexHeatmap::draw(ht, heatmap_legend_side = "bottom") # display legend in a horizontal manner
 }
