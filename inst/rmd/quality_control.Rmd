@@ -122,9 +122,7 @@ qcdata$coverage_quality[qcdata$median_coverage < 100] <- "warning"
 ```
 
 ```{r}
-## plot
 rRMSAnalyzer::boxplot_count(ribo_to_check) + ggplot2::ggtitle("End read counts distribution by sample")
-
 ```
 
 
@@ -198,7 +196,6 @@ Of note, rRNA sequences are enriched in GC-stretches and in nucleotide repeats w
 In order to identify distinct coverage profiles, coverage profiles are compared with one other within the cohort. Pairwise sample correlations of coverage profile are calculated using a Pearson correlation based distance. A heatmap is then generated that summarizes the correlation values for the entire series. These values goes from 0 (no correlation, indicated in red) to 1 (perfect correlation, indicated in blue). 
 
 ```{r heatmap_corr, fig.asp = 0.9, fig.width = 15}
-# TEST New heatmap with outlier_level
 library(ComplexHeatmap)
 library(dplyr)
 corr_matrix <- extract_data(ribo, "count")
@@ -219,8 +216,8 @@ row_annotation <- HeatmapAnnotation(
   coverage_quality = qcdata$coverage_quality,
   rle_median_quality = qcdata$rle_median_quality,
   col = list(
-    coverage_quality = c("ok" = "darkgrey", "warning" = "red"),
-    rle_median_quality = c("ok" = "darkgrey", "warning" = "red")
+    coverage_quality = c("pass" = "darkgrey", "warning" = "red"),
+    rle_median_quality = c("pass" = "darkgrey", "warning" = "red")
   ),
   annotation_legend_param = list(
     title_gp = gpar(fontsize = 16), # title size
