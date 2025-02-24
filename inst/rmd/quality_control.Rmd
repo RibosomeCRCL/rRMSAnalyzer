@@ -23,7 +23,6 @@ all_sites <- length(ribo_to_check[[1]][[1]][[1]])
 # Get the number of valid sites
 ribom <- extract_data(ribo_to_check)
 valid_sites <- sum(complete.cases(ribom))
-
 ```
 
 ```{=html}
@@ -92,8 +91,12 @@ The following (r)RNA were used by the coverage tool: **`r as.character(ribo_to_c
 The following metadata are used in the project **`r params$project_name`** :
 
 ```{r, echo=FALSE}
-knitr::kable(ribo_to_check[[2]])
+library(kableExtra)
+qcdata <- ribo_to_check[[2]]
+knitr::kable(qcdata)%>% kable_styling("striped") %>% scroll_box(width = "100%", height = "500px")
 ```
+ 
+
  
 # Global coverage
 
@@ -106,8 +109,23 @@ The coverage distribution of absolute end read counts at each genomic positions 
 Samples with a median coverage below 100 (the blue line), are highlighted in red and should be interpreted with caution or excluded from further analysis. This threshold ensures a level of precision within the percentage range for calculating the C-score, which is targeted for good quality analyses.
 
 ```{r boxplot2,warning=FALSE}
+## Create a df to save all the data
+ribo_matrix <- extract_data(ribo_to_check, "count", position_to_rownames = TRUE)
+#calculate median for all the column in the ribo_matrix df
+medcov <- apply(ribo_matrix,2,function(x) median(x,na.rm=T)) 
+# create a df like ribo_matrix and add median_coverage column
+qcdata <- cbind(qcdata,median_coverage=medcov[rownames(qcdata)]) 
+# add a quality column initialized
+qcdata$coverage_quality <- "pass" 
+# add a threshold for outliers
+qcdata$coverage_quality[qcdata$median_coverage < 100] <- "warning" 
+```
+
+```{r,warning=FALSE}
 rRMSAnalyzer::boxplot_count(ribo_to_check) + ggplot2::ggtitle("End read counts distribution by sample")
 ```
+
+
 
 ## Relative Log Coverage
 
@@ -123,15 +141,43 @@ Where :
 
 The following image shows the **Relative Log Coverage boxplot**. The blue lines give the median +/- 2mad variation. Median outside the blue lines identifies putative outlier sample (highlighted in red). Sample that presents a lower or higher coverage compared to other samples might be considered carefully or removed in the following biological analyses as an outlier sample.
 
-```{r}
-rRMSAnalyzer::plot_rle(ribo_to_check,show_outlier = T) + ggplot2::ggtitle("Relative Log Coverage")
+```{r,warning=FALSE}
+#plot object extraction
+plot_rle <- rRMSAnalyzer::plot_rle(ribo_to_check,show_outlier = T) + ggplot2::ggtitle("Relative Log Coverage")
+# extraction of the median absolute deviation
+mad <- plot_rle$plot_env$mad  
+# extraction of the median for all samples
+rle_median <- as.vector(plot_rle$plot_env$rle_grouped$median)
+# extraction of sample names
+keys <- as.vector(plot_rle$plot_env$rle_grouped$key)
+# creation of a data frame containing sample names and medians
+outlier_table <- data.frame(
+  key = keys,
+  rle_median = rle_median)
+# creation of the data frame outlier 
+outlier <- data.frame()
+# calculation of outliers 
+for (i in 1:nrow(outlier_table)) {
+  if(outlier_table$rle_median[i] < mad) {
+  outlier <- rbind(outlier, outlier_table[i,])
+  }
+}
+
+#incrementing the df qcdata with rle median
+qcdata$rle_median <- outlier_table$rle_median[match(qcdata$samplename, outlier_table$key)]
+# add a rle_median_quality column initialized at ok
+qcdata$rle_median_quality <- "pass" 
+# add a threshold for outliers
+qcdata$rle_median_quality[qcdata$rle_median < mad] <- "warning" 
+
+print(plot_rle)
 ```
 
 ## RNA fraction per sample
 
 The repartition of RNA end read counts is an indicator of the RNA(s) that present a lower or higher coverage compared to the other RNAs within the same sample. A sample that shows an unusual repartition might be considered with caution, as it could impact the C-score robustness. The following image shows a stacked barplots representing end read count fractions of total end read counts for each RNA per sample. In the case of rRNAs, most end read counts are assigned to the longest rRNA, namely the 18S (~ 0.25) and the 28S (~ 0.50).
 
-```{r}
+```{r,warning=FALSE, fig.asp = 0.8, fig.width = 10}
 rRMSAnalyzer::plot_counts_fraction(ribo_to_check) + ggplot2::ggtitle("RNA fraction per sample")
 ```
 
@@ -149,16 +195,102 @@ Of note, rRNA sequences are enriched in GC-stretches and in nucleotide repeats w
 
 In order to identify distinct coverage profiles, coverage profiles are compared with one other within the cohort. Pairwise sample correlations of coverage profile are calculated using a Pearson correlation based distance. A heatmap is then generated that summarizes the correlation values for the entire series. These values goes from 0 (no correlation, indicated in red) to 1 (perfect correlation, indicated in blue). 
 
-```{r heatmap_corr}
-rRMSAnalyzer::plot_heatmap_corr(ribo_to_check,"Count")
+```{r heatmap_corr, warning=FALSE, fig.asp = 0.9, fig.width = 15}
+library(ComplexHeatmap)
+library(dplyr)
+corr_matrix <- extract_data(ribo, "count")
+corr_matrix <- corr_matrix[, -1]
+corr_matrix <- cor(corr_matrix, use = "complete.obs")
+pearson_color <- colorRamp2::colorRamp2(c(0,0.5,1),c("red","white", "blue"))
+
+#incrementing qcdata
+#calculate the number of fold the sample is an outlier
+qcdata$total_outliers <- rowSums(qcdata[, c("coverage_quality", "rle_median_quality")] == "warning")
+
+#add the column in ribo_to_check
+ribo_to_check$metadata$outlier_level <- qcdata$total_outliers
+qcdata$total_outliers <- as.character(qcdata$total_outliers)
+
+# Préparer les annotations
+row_annotation <- HeatmapAnnotation(
+  coverage_quality = qcdata$coverage_quality,
+  rle_median_quality = qcdata$rle_median_quality,
+  col = list(
+    coverage_quality = c("pass" = "darkgrey", "warning" = "red"),
+    rle_median_quality = c("pass" = "darkgrey", "warning" = "red")
+  ),
+  annotation_legend_param = list(
+    title_gp = gpar(fontsize = 16), # title size
+    labels_gp = gpar(fontsize = 14), # tag title
+    grid_width = unit(8, "mm"),     # square width
+    grid_height = unit(8, "mm")     # square height
+  )
+)
+
+# create a vector for sample color by level of outlier
+column_colors <- ifelse(qcdata$total_outliers > 0, "red", "black")
+
+# identifying warning sample
+column_colors <- ifelse(
+  qcdata$coverage_quality == "warning" | qcdata$rle_median_quality == "warning",
+  "red",  # "Warning" in red
+  "black" # other in black
+)
+
+# heatmap plot with name of coloured columns
+x <- Heatmap(
+  corr_matrix, col = pearson_color,
+  top_annotation = row_annotation,
+  name = "Pearson correlation",
+  row_title = "Sample",
+  column_title = "Pearson correlation between samples", 
+  column_title_side = "top",
+  cluster_rows = FALSE, cluster_columns = TRUE,
+  clustering_distance_columns = "pearson", 
+  heatmap_legend_param = list(
+    legend_direction = "horizontal", # horizontal legend
+    title_gp = gpar(fontsize = 16),  # legend title size
+    labels_gp = gpar(fontsize = 14), # legend tags title
+    grid_height = unit(10, "mm"),    # legend square height 
+    grid_width = unit(10, "mm")      # legend square width
+  ),
+  clustering_method_columns = "ward.D2",
+  column_split = 3,
+  row_names_gp = grid::gpar(fontsize = 16),
+  rect_gp = gpar(col = "black", lwd = 0.2),
+  column_dend_side = "bottom",
+  column_dend_height = unit(1, "cm"),
+  column_dend_gp = gpar(col = "red"),
+  column_names_gp = gpar(col = column_colors, fontsize = 16) # column name color
+)
+
+draw(
+  x,
+  heatmap_legend_side = "bottom",  # legend position
+  annotation_legend_side = "bottom" # for legend annotation
+)
 ```
 
-## Correspondance analysis
+## Correspondance analysis {.tabset}
 
-To identify distinct coverage profile, we compare the coverage profiles of all samples in the series. The Correspondence Analysis (COA) plot shows the distance between each sample based on its coverage profile. Samples that are far appart are considered putative outliers. At this stage, it is possible to visualise the bias linked to the sequencing batch or to evaluate the performance of the ComBat-seq correction algorithm if it has been applied (Zhang et al, 2020; Paraqindes et al, in revision).
+To identify distinct coverage profile, we compare the coverage profiles of all samples in the series. The Correspondence Analysis (COA) plot shows the distance between each sample based on its coverage profile. Samples that are far appart are considered putative outliers. At this stage, it is possible to visualise the bias linked to the sequencing batch or to evaluate the performance of the ComBat-seq correction algorithm if it has been applied (Zhang et al, 2020; Paraqindes et al, in revision). 
 
-```{r}
-rRMSAnalyzer::plot_coa(ribo_to_check,color_col = params$library_col)
+### COA 1 for batch effect / ComBat-seq
+
+```{r, warning=FALSE}
+#{r, fig.asp = 1, fig.width = 10} https://bookdown.org/yihui/rmarkdown-cookbook/html-tabs.html
+plot_coa <- rRMSAnalyzer::plot_coa(ribo_to_check,color_col = params$library_col)+ 
+  scale_color_manual(values = c("L1" = "#00F", "L2" = "orange", "L3" = "purple", "L4" = "#808000", "L5" = "#000080", "L6" = "pink", "L7" = "#FF00FF", "L8" = "#CCCCFF", "L9" = "#9FE2BF", "L10" = "#DFFF00", "L11" = "#DFAF00", "L12" = "#DFDF00"))
+```
+
+### COA 2 for outlier samples visualisation
+
+```{r, warning=FALSE}
+plot_coa_binaire <- rRMSAnalyzer::plot_coa(ribo_to_check, color_col = "outlier_level")
+plot_coa_binaire <- plot_coa_binaire + 
+   ggplot2::scale_color_manual(values = c("0" = "darkgrey", "1" = "lightsalmon", "2" = "orange", "3" = "#A91101"))
+
+print(plot_coa_binaire)
 ```
 
 # C-scores analysis
@@ -174,8 +306,15 @@ The image shows **a Principal Component Analysis (PCA) plot illustrating the dis
 The PCA cannot use genomic positions with an invalid C-score.
 Thus, it uses **`r as.character(valid_sites)`** genomic positions instead of all **`r as.character(all_sites)`**.
 
-```{r not corrected cscore PCA,echo=FALSE}
-rRMSAnalyzer::plot_pca(ribo_to_check,params$library_col)
+```{r not corrected cscore PCA, ,warning=FALSE, echo=FALSE}
+rRMSAnalyzer::plot_pca(ribo_to_check,params$library_col)+ 
+   ggplot2::scale_color_manual(values = c("L1" = "#00FFFF", "L2" = "orange", "L3" = "purple", "L4" = "#808000", "L5" = "#000080", "L6" = "pink", "L7" = "#FF00FF", "L8" = "#CCCCFF", "L9" = "#9FE2BF", "L10" = "#DFFF00", "L11" = "#DFAF00", "L12" = "#DFDF00"))
+```
+
+```{r write table, warning=FALSE}
+output_dir <- getwd()
+write.table(qcdata,file.path(output_dir,"quality_control.csv"),sep="\t",row.names=FALSE,quote = FALSE)
+knitr::kable(qcdata, "html") %>% kable_styling("striped") %>% scroll_box(width = "100%", height = "500px")
 ```
 
 # About

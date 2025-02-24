@@ -37,16 +37,16 @@ boxplot_count <- function(ribo, color_col = NA,
 #' ribo_toy <- annotate_site(ribo_toy,human_methylated)
 #' boxplot_cscores(ribo_toy)
 #' 
-boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var")[1], horizontal = FALSE) {
-  ribo_m <- extract_data(ribo,only_annotated = TRUE)
+boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var")[1], horizontal = FALSE) { # main function which call inner function .plot_boxplot_sites 
+  ribo_m <- extract_data(ribo,only_annotated = TRUE) # extract annotated data
   
-  if(nrow(ribo_m) == 0) {
+  if(nrow(ribo_m) == 0) { # verification that the riboclass is annotated
     stop("No annotated site found. Please use annotate_site() on your RiboClass before calling this function.")
     }
   
-  return(.plot_boxplot_sites(ribo_m,
+  return(.plot_boxplot_sites(ribo_m, # inner function
                       values_to_plot = "cscore",outlier = TRUE, 
-                      sort_by = sort_by,
+                      sort_by = sort_by, # this variable allows to sort the sites annotated according to the median (default) or the IQR or the var
                       horizontal = horizontal))
 }
 
@@ -59,33 +59,39 @@ boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var
 #'
 #' @return A ggplot object.
 #' @keywords internal
-#'
-.plot_boxplot_sites <- function(matrix, values_to_plot, outlier, sort_by, horizontal) {
-  site <- cscore <- NULL
-  id_vars <- "site"
-  
-    if (tolower(sort_by) == "iqr") {
-      matrix_melted <- get_IQR(matrix)
+#' These two functions above and below allow to plot boxplots to visualize the 
+#' distribution of C-scores associated with sites annotated in a RiboClass object.
+
+
+.plot_boxplot_sites <- function(matrix, values_to_plot, outlier, sort_by, horizontal) { # main function called in the Rmd
+  site <- cscore <- NULL # variable init
+  id_vars <- "site" # usfull for long format transformation
+    
+    # Site sorting according to 3 criteria (iqr, median or var) by default: median
+    if (tolower(sort_by) == "iqr") { # convert the variable sort_by to a minuscule and verifies if sort_by = "iqr"
+      matrix_melted <- get_IQR(matrix) # if TRUE, the get_IQR function is called
       
-    } else if(tolower(sort_by) == "median") {    
-      matrix_melted <- reshape2::melt(matrix, id.vars = id_vars,
-                                      value.name = values_to_plot)
-    } else if (tolower(sort_by) == "var")  {
-      matrix_melted <- get_IQR(matrix, "var")
+    } else if(tolower(sort_by) == "median") { # otherwise converts the variable sort-by to lowercase and checks if sort_by = "median"
+      matrix_melted <- reshape2::melt(matrix, id.vars = id_vars, # Transformation of the table matrix into a long format id.vars = site
+                                      value.name = values_to_plot) # Column that will store the values ("cscore")
+      print(head(matrix_melted))
+      
+    } else if (tolower(sort_by) == "var")  { # otherwise if sort_by = var we sort by var 
+      matrix_melted <- get_IQR(matrix, "var") # function call : get_IQR 
+      
     } else {
-      stop("Choose either \"median\", \"iqr\" or \"var\" for sort_by param.\n  \"",
+      stop("Choose either \"median\", \"iqr\" or \"var\" for sort_by param.\n  \"", # Error message if none of the 3 is recognized 
            sort_by,"\" is not a valid argument.")
     }
   
+  shape_outlier <- NA 
+  if (outlier) # if outlier = TRUE
+    shape_outlier <- 19 # represented by full circle (19)
   
-  shape_outlier <- NA
-  if (outlier)
-    shape_outlier <- 19
-  
-  if ((tolower(sort_by) %in% c("iqr","var"))) {
-  
-    method <- ifelse(tolower(sort_by) =="iqr","IQR","variance")
-  p <- ggplot(matrix_melted, aes(x = site, y = cscore)) +
+  if ((tolower(sort_by) %in% c("iqr","var"))) { # si sort_by = iqr ou var
+    method <- ifelse(tolower(sort_by) =="iqr","IQR","variance") # dynamic title
+   
+  p <- ggplot(matrix_melted, aes(x = site, y = cscore)) + # plot creation
     geom_boxplot() +
     theme_bw() +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5,
@@ -95,13 +101,16 @@ boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var
           axis.text.y = element_text(size=12)) +
     labs(x = paste0("Site (sorted by ",method,")"),
          y = "C-score")
+ 
+  return(p)
   
-  } else {
-    matrix_melted <- reshape2::melt(matrix, id.vars = id_vars,
+  } else { # otherwise (if sort_by = median)
+    matrix_melted <- reshape2::melt(matrix, id.vars = id_vars, # sort site by median with stats::reorder()
                                     value.name = values_to_plot)
+    
   p <- ggplot2::ggplot(matrix_melted,
-                       ggplot2::aes(x = stats::reorder(site, 
-                                                       !!rlang::sym(values_to_plot),
+                       ggplot2::aes(x = stats::reorder(site, # Sorts the site values based on a metric (metric)
+                                                       !!rlang::sym(values_to_plot), # dynamically retrieves the corresponding column to values_to_plot ("cscore", "median", "iqr", etc.)
                                                        na.rm = TRUE),
                                     y = !!rlang::sym(values_to_plot))) +
     ggplot2::geom_boxplot(outlier.shape = shape_outlier) +
@@ -111,8 +120,8 @@ boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var
     ggplot2::ylab("C-score")
   }
   
-  if (horizontal)
-    p <- p + ggplot2::coord_flip()
+  if (horizontal) # if horizontal = TRUE
+    p <- p + ggplot2::coord_flip() # invert axis
   
   return(p)
 }
@@ -129,47 +138,62 @@ boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var
 #'
 #' @return ggplot boxplot
 #' @keywords internal
-#'
+
 .plot_boxplot_samples <- function(matrix, values_col_name, metadata,
-                                  color_col = NA, outlier, horizontal) {
+                                  color_col = NA, outlier= TRUE, horizontal=TRUE) {
   Sample <- NULL
   id_vars <- "Sample"
-  matrix <- log10(matrix)
-  matrix_inv <- as.data.frame(t(matrix))
- # matrix_inv <- tibble::rownames_to_column(matrix_inv, "Sample")
+  matrix <- log10(matrix) # conversion of c-score in log10
+  matrix_inv <- as.data.frame(t(matrix)) # transposition of the matrix
+  # matrix_inv <- tibble::rownames_to_column(matrix_inv, "Sample")
   matrix_inv["Sample"] <- rownames(matrix_inv)
   
+  # verify if color_col is given
   if (!is.na(color_col)) {
     matrix_inv <- cbind(matrix_inv, metadata[color_col])
     id_vars <- c(color_col, "Sample")
+  }else{
+    # If color_col is missing, create a "qc" column to identify the outliers
+    matrix_inv <- cbind(matrix_inv, qc=0)
+    matrix_inv$qc[apply(matrix,2,median,"na.rm"=T)<=2] <- 1 
+    id_vars <- c("qc", "Sample")
+    
   }
-  
-  matrix_melted <- reshape2::melt(matrix_inv, id.vars = id_vars,
+  # Transformation in format "melted" for ggplot
+  matrix_melted <- reshape2::melt(matrix_inv, id.vars = id_vars, #creation of a matrix with "qc" columns (=0 or 1 if outlier) "Sample", "variable" et "count"
                                   value.name = values_col_name)
-  
+  # Transformer "Sample" en facteur pour contrôler l'ordre
   matrix_melted[["Sample"]] <- factor(matrix_melted[["Sample"]],
                                       levels = unique(matrix_melted[["Sample"]]))
   shape_outlier <- NA
-  
+
   if (outlier)
     shape_outlier <- 19
   
-  if (is.na(color_col)) {
+  # Initialize the plot with or without the defined color
+  if (is.na(color_col)) {   # if there is no color_col column in the metadata
+
     p <- ggplot2::ggplot(matrix_melted,
-                         ggplot2::aes(x = Sample, y = !!sym(values_col_name)))
+         ggplot2::aes(x = Sample, y = !!sym(values_col_name), # create the qc column to map colors
+                                      fill = factor(qc))) +
+         ggplot2::theme(legend.position="none",
+         ggplot2::scale_fill_manual(values=c("white", "red")))
   } else {
     p <- ggplot2::ggplot(matrix_melted,
-                         ggplot2::aes(x = Sample, y = !!sym(values_col_name), 
+                         ggplot2::aes(x = Sample , y = !!sym(values_col_name), # the colors are mapped to the corresponding column
                                       fill = !!sym(color_col)))
   }
-  p <- p + ggplot2::geom_boxplot(outlier.shape = shape_outlier) + 
+  #ajout boxplot
+  p <- p + ggplot2::geom_boxplot(outlier.shape = shape_outlier) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5,
-                                                         hjust = 1))
-    
-  
+                                                       hjust = 1))
+
+  #ajout ligne horizontale
   p <- p + ggplot2::geom_hline(yintercept = 2, colour = "blue")
+
+  #orientation horizontale (optionnel)
   if (horizontal)
     p <- p + ggplot2::coord_flip()
-  
+
   return(p)
 }
