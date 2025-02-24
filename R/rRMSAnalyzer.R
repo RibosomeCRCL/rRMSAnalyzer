@@ -28,8 +28,8 @@
 #'
 #' @author Théo COMBE, Hermes PARAQINDES, Janice KIELBASSA
 #' 
-#' @docType package
 #' @name rRMSAnalyzer-package
 #' @aliases rRMSAnalyzer-package
 #' @keywords package
+"_PACKAGE"
 NULL
