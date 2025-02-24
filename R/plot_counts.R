@@ -7,7 +7,7 @@
 #' @param samples Samples to display. "all" will display all samples.
 #' @param flanking Number of sites to display on the left/right of the selected position.
 #'
-#' @return
+#' @return A ggplot object
 #' @export
 #'
 #' @examples
