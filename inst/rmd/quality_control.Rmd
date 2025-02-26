@@ -271,7 +271,7 @@ draw(
 )
 ```
 
-## Correspondance analysis {.tabset}
+## Correspondance analysis {.tabset .tabset-pills}
 
 To identify distinct coverage profile, we compare the coverage profiles of all samples in the series. The Correspondence Analysis (COA) plot shows the distance between each sample based on its coverage profile. Samples that are far appart are considered putative outliers. At this stage, it is possible to visualise the bias linked to the sequencing batch or to evaluate the performance of the ComBat-seq correction algorithm if it has been applied (Zhang et al, 2020; Paraqindes et al, in revision). 
 
@@ -281,6 +281,7 @@ To identify distinct coverage profile, we compare the coverage profiles of all s
 #{r, fig.asp = 1, fig.width = 10} https://bookdown.org/yihui/rmarkdown-cookbook/html-tabs.html
 plot_coa <- rRMSAnalyzer::plot_coa(ribo_to_check,color_col = params$library_col)+ 
   scale_color_manual(values = c("L1" = "#00F", "L2" = "orange", "L3" = "purple", "L4" = "#808000", "L5" = "#000080", "L6" = "pink", "L7" = "#FF00FF", "L8" = "#CCCCFF", "L9" = "#9FE2BF", "L10" = "#DFFF00", "L11" = "#DFAF00", "L12" = "#DFDF00"))
+print(plot_coa)
 ```
 
 ### COA 2 for outlier samples visualisation
@@ -292,6 +293,8 @@ plot_coa_binaire <- plot_coa_binaire +
 
 print(plot_coa_binaire)
 ```
+
+## {-}
 
 # C-scores analysis
 
