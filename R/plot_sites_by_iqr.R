@@ -38,7 +38,8 @@ plot_sites_by_IQR <- function(ribo = NULL, plot = "IQR", variance = "IQR", ...) 
     p1 <- ggplot(IQR_order_df, aes_string(x = "site", y = tolower(variance))) +
       geom_point(aes(colour = ifelse(IQR_order_df[,1:2][,1] > median_2mad, "red", "black"))) +
       theme_bw() + 
-      theme(axis.text.x = element_text(angle = 90, size = 9, hjust = 1), 
+      theme(axis.text.x = element_text(angle = 90, size = 9, vjust = 0.5,
+                                       hjust = 1), 
             legend.position = "top", 
             axis.title = element_text(size = 14), 
             axis.text.y = element_text(size = 12)
@@ -68,7 +69,8 @@ plot_sites_by_IQR <- function(ribo = NULL, plot = "IQR", variance = "IQR", ...) 
     p1 <- ggplot(IQR_order_df, aes(x = sites.id, y = Cscore)) +
       geom_boxplot() +
       theme_bw() + 
-      theme(axis.text.x = element_text(angle = 90, size = 9, hjust = 1), 
+      theme(axis.text.x = element_text(angle = 90, size = 9, vjust = 0.5,
+                                       hjust = 1), 
             legend.position = "top", 
             axis.title = element_text(size = 14), 
             axis.text.y = element_text(size = 12)
