@@ -68,7 +68,7 @@ plot_sites_by_IQR <- function(ribo = NULL, plot = "IQR", variance = "IQR", ...) 
     p1 <- ggplot(IQR_order_df, aes(x = sites.id, y = Cscore)) +
       geom_boxplot() +
       theme_bw() + 
-      theme(axis.text.x = element_text(angle = 45, size = 9, hjust = 1), 
+      theme(axis.text.x = element_text(angle = 90, size = 9, hjust = 1), 
             legend.position = "top", 
             axis.title = element_text(size = 14), 
             axis.text.y = element_text(size = 12)
