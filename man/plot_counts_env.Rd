@@ -23,6 +23,9 @@ plot_counts_env(
 
 \item{flanking}{Number of sites to display on the left/right of the selected position.}
 }
+\value{
+A ggplot object
+}
 \description{
 Plot counts for a given position on a given RNA
 }

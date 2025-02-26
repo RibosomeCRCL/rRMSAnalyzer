@@ -11,6 +11,11 @@
 #' @export
 #'
 #' @examples
+#' data("ribo_toy")
+#' data("human_methylated")
+#' ribo_toy <- rename_rna(ribo_toy)
+#' ribo_toy <- annotate_site(ribo_toy,human_methylated)
+#' get_variant_sites(ribo = ribo_toy)
 get_variant_sites <- function(ribo, n = 20, type_of_variant = "most",
                               only_annotated = TRUE) {
     site <- NULL
