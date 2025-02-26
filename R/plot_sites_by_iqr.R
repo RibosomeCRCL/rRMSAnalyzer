@@ -25,7 +25,7 @@ plot_sites_by_IQR <- function(ribo = NULL, plot = "IQR", variance = "IQR", ...) 
   
   # Compute IQR or variance and order the sites accordingly
   IQR_order_df <- get_IQR(Cscore_matrix, order = variance)
-  IQR_order_df <- IQR_order_df[order(IQR_order_df$iqr, decreasing = FALSE), ]
+  IQR_order_df <- IQR_order_df[order(IQR_order_df[,1], decreasing = FALSE), ]
   IQR_order_df$site <- factor(x = IQR_order_df$site, levels = unique(IQR_order_df$site))
   
   # Compute threshold for highlighting significant points (median + 2 * MAD)
@@ -66,7 +66,7 @@ plot_sites_by_IQR <- function(ribo = NULL, plot = "IQR", variance = "IQR", ...) 
   
   # If "boxplot" is selected, generate a boxplot of C-score per site
   if (tolower(plot) == "boxplot") {
-    p1 <- ggplot(IQR_order_df, aes(x = sites.id, y = Cscore)) +
+    p1 <- ggplot(IQR_order_df, aes(x = site, y = cscore)) +
       geom_boxplot() +
       theme_bw() + 
       theme(axis.text.x = element_text(angle = 90, size = 9, vjust = 0.5,
@@ -77,7 +77,7 @@ plot_sites_by_IQR <- function(ribo = NULL, plot = "IQR", variance = "IQR", ...) 
             ) +
       labs(x = "rRNA 2'Ome sites",
            y = "Cscore", size = 20) +
-      theme()
+      theme(...)
     return(p1)
   }
 }
