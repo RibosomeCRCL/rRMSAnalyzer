@@ -9,6 +9,7 @@ Authors@R: c(
     person("Virginie","Marcel", role="aut"),
     person("Émilie","Thomas", role="aut"),
     person("Anthony","Ferrari", role="aut"),
+    person("Allyson","Moureaux", role="aut"),
     person("Fondation Synergie Lyon Cancer", role="fnd"),
     person("INCA", role="fnd"),
     person("SIRIC program", role="fnd"),
