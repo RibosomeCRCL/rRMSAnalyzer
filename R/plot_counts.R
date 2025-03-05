@@ -159,7 +159,7 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
     
   }
   
-  # -----------------------------------2-------------------------------------------
+  # -----------------------------------3-------------------------------------------
   
   if (samples[1] == "all" & condition != NULL) { # if samples = all and condition specified
     
@@ -308,8 +308,9 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
       annotate("text", label = paste("Counts median", modalities[2]), 
                x = pos - flanking + 1, y = median_mod2 / 0.985, color = "orange") + 
       
-      scale_color_manual(values=c("darkgreen", "orange")) 
+      scale_color_manual(values = c("darkgreen", "orange")) 
     
   }
-  
+
   return(plot_to_return)
+}
