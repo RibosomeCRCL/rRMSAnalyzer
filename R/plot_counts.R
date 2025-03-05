@@ -14,7 +14,8 @@
 #' data("ribo_toy")
 #' ribo_toy <- rename_rna(ribo = ribo_toy)
 #' plot_counts_env(ribo = ribo_toy, rna = "5.8S", pos = 15)
-plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all", flanking = 6) {
+plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all", flanking = 6, condition = NULL) {
+  #in this code condition = column name of the metadata BUT [[condition]] and .data[[condition]] = value taken by the parameter "condition" in the function above
   new_position <- count <- NULL
   
   #Check for ribo
@@ -30,11 +31,10 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
   if (table(ribo$data[[1]]$rna)[rna] < pos) {stop(paste(pos, " is higher than the lenth of", rna))}
   
   # check for sample
-  
   if(samples[1] == "all") {
     ribo <- ribo
   } else if (all(samples %in% names(ribo[["data"]]))) {
-    ribo <- keep_ribo_samples(ribo = ribo, samples_to_keep = samples)
+    ribo <- keep_ribo_samples(ribo = ribo, samples_to_keep = samples) #modif ribo = ribo
   } else {
     stop("Samples name should be from ", toString(names(ribo[["data"]])))
   }
@@ -47,30 +47,38 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
   pos_of_interest <- paste(rna, formatC(pos,width = 4,flag = "0"), sep = "_")
   
   # Extract count data from RiboClass
-  count_data <- extract_data(ribo = ribo, col = "count")
+  count_data <- extract_data(ribo = ribo, col = "count") # to format the data
   
-  # extract the information
+  # extract metadata to merge it with count_data
+  metadata <- ribo$metadata[, c("samplename", "condition", condition ) ] 
+  
+  # extract the information of position
   which_pos <- which(count_data$named_position == pos_of_interest)
+  
   # positions around the position of interest
   which_positions <- c((which_pos - flanking):which_pos, (which_pos + 1):(which_pos + flanking))
   
-  count_data <- count_data[which_positions,]
+  #filter to have just the count for the flanking region
+  count_data <- count_data[which_positions,] 
   
-  count_data$new_position <- c((pos - flanking):pos, (pos + 1):(pos + flanking))
+  # add column for position without RNA before
+  count_data$new_position <- c((pos - flanking):pos, (pos + 1):(pos + flanking)) 
   
-  count_transform <- tidyr::gather(count_data[,-1], "samples", "count", -new_position)
+  # Fusion with metadata to have condition information
+  count_transform <- tidyr::gather(count_data[,-1], "samplename", "count", -new_position) 
   
+  # Add of new_position and condition column specified
+  count_transform <- merge(count_transform, metadata, by = "samplename", all.y = FALSE)  
   
   # check if there are other modifications in the window
-  
   other_mod <- which(!is.na(ribo$data[[1]][which_positions[-ceiling(length(which_positions) / 2)],"site"]))
   
   other_mod_pos <- count_data$new_position[other_mod]
   
   
-  # ggplot 
-  
-  if (samples[1] == "all") {
+  # 4 ggplots  
+  # -----------------------------------1-------------------------------------------
+  if (samples[1] == "all" & condition == NULL) { #if sample = all and no condition specified  
     
     plot_to_return <- ggplot(data = count_transform) +
       geom_boxplot(aes(x = new_position, y = log10(count), group = new_position)) +
@@ -107,14 +115,14 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
                x = pos - flanking,
                y = stats::median(log10(count_transform$count) / 0.985, na.rm = TRUE),
                color = "darkred")
-      
-
   } 
-  if ((all(samples %in% names(ribo[["data"]])))) {
+  
+  # -----------------------------------2-------------------------------------------  
+  if ((all(samples %in% names(ribo[["data"]]))) & condition == NULL) { 
     
-    plot_to_return <- ggplot(data = count_transform, aes(x = new_position, y = log10(count), group = samples)) +
+    plot_to_return <- ggplot(data = count_transform, aes(x = new_position, y = log10(count), group = samplename)) + 
       geom_point(size = 3) +
-      geom_line(aes(col = samples), linewidth = 2) +
+      geom_line(aes(col = samplename), linewidth = 2) + 
       theme_bw() + 
       labs(title = paste("Count profile for",length(samples),"samples"),
            subtitle = paste("RNA:",rna),
@@ -148,12 +156,160 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
                  linewidth = 1,
                  linetype = "11",
                  color = "lightgreen")
+    
+  }
+  
+  # -----------------------------------2-------------------------------------------
+  
+  if (samples[1] == "all" & condition != NULL) { # if samples = all and condition specified
+    
+    # Extract uniques modalities of condition variable
+    modalities <- unique(count_transform$condition)
+    
+    # Verifying that there is just two modality
+    if (length(modalities) != 2) { #to comment if modality > 2
+      stop("La variable condition doit avoir exactement deux modalités pour que le code fonctionne. Si > 3 veuillez modifier plot_count.R.")
+    }
+    
+    # Compute madians per modalities
+    median_mod1 <- median(log10(count_transform$count[count_transform[[condition]] == modalities[1]]), na.rm = TRUE)
+    median_mod2 <- median(log10(count_transform$count[count_transform[[condition]] == modalities[2]]), na.rm = TRUE)
+    #median_mod3 <- median(log10(count_transform$count[count_transform[[condition]] == modalities[3]]), na.rm = TRUE)
+    #median_mod4 <- median(log10(count_transform$count[count_transform[[condition]] == modalities[4]]), na.rm = TRUE)
+    
+    plot_to_return <- ggplot(data = count_transform) + 
+      aes(x = new_position,  
+          y = log10(count), 
+          color = .data[[condition]], #for shape color
+          fill = NA, #no fill color
+          group = interaction(new_position, .data[[condition]])) + #to group by position and specified condition
       
+      geom_boxplot(position = position_dodge(width = 0.7),  #to avoid overlap 
+                   width = 0.6,
+                   fill = NA) +  
+      
+      # do boxplot filled for specified position and other modifications in the window
+      geom_boxplot(data = count_transform[which(count_transform$new_position %in% other_mod_pos),], #specified position
+                   aes(x = new_position, y = log10(count), group = interaction(new_position, .data[[condition]])), 
+                   position = position_dodge(width = 0.7),
+                   fill = "khaki2",
+                   alpha = 0.5,
+                   width = 0.6) +
+      
+      geom_boxplot(data = count_transform[which(count_transform$new_position == pos),], # other modification
+                   aes(x = new_position, y = log10(count), group = interaction(new_position, .data[[condition]])), 
+                   position = position_dodge(width = 0.7),
+                   fill = "aquamarine2",
+                   alpha = 0.5,
+                   width = 0.6) +
+      
+      theme_bw() +
+      
+      labs(title = paste("Count profile for", length(ribo[["data"]]), "samples"),
+           subtitle = paste("RNA:", rna),
+           y = "log10(count)",
+           x = "Position") +
+      
+      scale_x_continuous(labels = min(count_transform$new_position):max(count_transform$new_position), # to have all the position in x axis
+                         breaks = min(count_transform$new_position):max(count_transform$new_position)) +  
+      #highligth the minimum coverage
+      {if (min(count_transform$count) < 100) geom_hline(yintercept = 2 ,
+                                                        linewidth = 1,
+                                                        linetype = "11",
+                                                        color = "red")} +
+      {if (min(count_transform$count) < 100) annotate("text", 
+                                                      label = "Coverage limit",
+                                                      x = pos - flanking,
+                                                      y = 2 / 1.02,
+                                                      color = "red")} +
+      
+      # Add madians for each modality of condition
+      geom_hline(yintercept = median_mod1, linewidth = 1, linetype = "11", color = "darkgreen") +  
+      annotate("text", label = paste("Counts median", modalities[1]), 
+               x = pos - flanking + 1, y = median_mod1 / 0.985, color = "darkgreen") + 
+      
+      geom_hline(yintercept = median_mod2, linewidth = 1, linetype = "11", color = "orange") +  
+      annotate("text", label = paste("Counts median", modalities[2]), 
+               x = pos - flanking + 1, y = median_mod2 / 0.985, color = "orange") + 
+      
+      scale_color_manual(values=c("darkgreen", "orange")) 
+    
+  }
+  
+  # -----------------------------------4-------------------------------------------
+  
+  if ((all(samples %in% names(ribo[["data"]]))) & condition != NULL) { # changer le plot rajouter le hline pour les médianes
+    # Extract uniques modalities of condition variable
+    modalities <- unique(count_transform$condition)
+    
+    # Verifying that there is just two modality
+    if (length(modalities) != 2) { #to comment if modality > 2
+      stop("La variable condition doit avoir exactement deux modalités pour que le code fonctionne. Si > 3 veuillez modifier plot_count.R.")
+    }
+    
+    # Compute madians per modalities
+    median_mod1 <- median(log10(count_transform$count[count_transform[[condition]] == modalities[1]]), na.rm = TRUE)
+    median_mod2 <- median(log10(count_transform$count[count_transform[[condition]] == modalities[2]]), na.rm = TRUE)
+    #median_mod3 <- median(log10(count_transform$count[count_transform[[condition]] == modalities[3]]), na.rm = TRUE)
+    #median_mod4 <- median(log10(count_transform$count[count_transform[[condition]] == modalities[4]]), na.rm = TRUE)
+    
+    plot_to_return <- ggplot(data = count_transform) + 
+      aes(x = new_position,  
+          y = log10(count), 
+          color = .data[[condition]], #for shape color
+          fill = NA, #no fill color
+          group = interaction(new_position, .data[[condition]])) + #to group by position and specified condition
+      
+      geom_boxplot(position = position_dodge(width = 0.7),  #to avoid overlap 
+                   width = 0.6,
+                   fill = NA) +  
+      
+      # do boxplot filled for specified position and other modifications in the window
+      geom_boxplot(data = count_transform[which(count_transform$new_position %in% other_mod_pos),], #specified position
+                   aes(x = new_position, y = log10(count), group = interaction(new_position, .data[[condition]])), 
+                   position = position_dodge(width = 0.7),
+                   fill = "khaki2",
+                   alpha = 0.5,
+                   width = 0.6) +
+      
+      geom_boxplot(data = count_transform[which(count_transform$new_position == pos),], # other modification
+                   aes(x = new_position, y = log10(count), group = interaction(new_position, .data[[condition]])), 
+                   position = position_dodge(width = 0.7),
+                   fill = "aquamarine2",
+                   alpha = 0.5,
+                   width = 0.6) +
+      
+      theme_bw() +
+      
+      labs(title = paste("Count profile for", length(ribo[["data"]]), "samples"),
+           subtitle = paste("RNA:", rna),
+           y = "log10(count)",
+           x = "Position") +
+      
+      scale_x_continuous(labels = min(count_transform$new_position):max(count_transform$new_position), # to have all the position in x axis
+                         breaks = min(count_transform$new_position):max(count_transform$new_position)) +  
+      #highligth the minimum coverage
+      {if (min(count_transform$count) < 100) geom_hline(yintercept = 2 ,
+                                                        linewidth = 1,
+                                                        linetype = "11",
+                                                        color = "red")} +
+      {if (min(count_transform$count) < 100) annotate("text", 
+                                                      label = "Coverage limit",
+                                                      x = pos - flanking,
+                                                      y = 2 / 1.02,
+                                                      color = "red")} +
+      
+      # Add madians for each modality of condition
+      geom_hline(yintercept = median_mod1, linewidth = 1, linetype = "11", color = "darkgreen") +  
+      annotate("text", label = paste("Counts median", modalities[1]), 
+               x = pos - flanking + 1, y = median_mod1 / 0.985, color = "darkgreen") + 
+      
+      geom_hline(yintercept = median_mod2, linewidth = 1, linetype = "11", color = "orange") +  
+      annotate("text", label = paste("Counts median", modalities[2]), 
+               x = pos - flanking + 1, y = median_mod2 / 0.985, color = "orange") + 
+      
+      scale_color_manual(values=c("darkgreen", "orange")) 
+    
   }
   
   return(plot_to_return)
-
-}
-
-
-# rajoute une ligne à 100
