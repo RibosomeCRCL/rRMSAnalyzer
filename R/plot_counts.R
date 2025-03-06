@@ -34,7 +34,7 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
   if(samples[1] == "all") {
     ribo <- ribo
   } else if (all(samples %in% names(ribo[["data"]]))) {
-    ribo <- keep_ribo_samples(ribo = ribo, samples_to_keep = samples) #modif ribo = ribo
+    ribo <- keep_ribo_samples(ribo = ribo, samples_to_keep = samples) 
   } else {
     stop("Samples name should be from ", toString(names(ribo[["data"]])))
   }
@@ -78,17 +78,17 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
   
   # 4 ggplots  
   # -----------------------------------1-------------------------------------------
-  if (samples[1] == "all" & condition == NULL) { #if sample = all and no condition specified  
+  if (samples[1] == "all" && is.null(condition)) { #if sample = all and no condition specified  
     
     plot_to_return <- ggplot(data = count_transform) +
       geom_boxplot(aes(x = new_position, y = log10(count), group = new_position)) +
       geom_boxplot(data = count_transform[which(count_transform$new_position %in% other_mod_pos),], 
                    aes(x = new_position, y = log10(count), group = new_position), 
-                   fill = "lightblue",
+                   fill = "pink",
                    width = 0.8) +
       geom_boxplot(data = count_transform[which(count_transform$new_position == pos),], 
                    aes(x = new_position, y = log10(count), group = new_position), 
-                   fill = "lightgreen",
+                   fill = "green",
                    width = 0.8) +
       theme_bw() +
       labs(title = paste("Count profile for",length(ribo[["data"]]),"samples"),
@@ -97,15 +97,17 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
            x = "Position") +
       scale_x_continuous(labels = min(count_transform$new_position):max(count_transform$new_position), 
                          breaks = min(count_transform$new_position):max(count_transform$new_position)) +
-      {if (min(count_transform$count) < 100) geom_hline(yintercept = 2 ,
-                                                        linewidth = 1,
-                                                        linetype = "11",
-                                                        color = "red")} +
-      {if (min(count_transform$count) < 100) annotate("text", 
-                                                      label = "Coverage limit",
-                                                      x = pos - flanking,
-                                                      y = 2 / 1.02,
-                                                      color = "red")} +
+      scale_y_continuous(limits = c(0, NA)) +
+      #highligth the minimum coverage
+      geom_hline(yintercept = 2 , 
+                 linewidth = 1,
+                 linetype = "11",
+                 color = "red") +
+      annotate("text",
+               label = "Coverage limit",
+               x = pos - flanking,
+               y = 2 / 1.02,
+               color = "red") +
       geom_hline(yintercept = stats::median(log10(count_transform$count) , na.rm = TRUE),
                  linewidth = 1,
                  linetype = "11",
@@ -118,7 +120,7 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
   } 
   
   # -----------------------------------2-------------------------------------------  
-  if ((all(samples %in% names(ribo[["data"]]))) & condition == NULL) { 
+  if ((all(samples %in% names(ribo[["data"]]))) && is.null(condition)) { 
     
     plot_to_return <- ggplot(data = count_transform, aes(x = new_position, y = log10(count), group = samplename)) + 
       geom_point(size = 3) +
@@ -130,15 +132,17 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
            x = "position") +
       scale_x_continuous(labels = min(count_transform$new_position):max(count_transform$new_position), 
                          breaks = min(count_transform$new_position):max(count_transform$new_position)) +
-      {if (min(count_transform$count) < 100) geom_hline(yintercept = 2 ,
-                                                        linewidth = 1,
-                                                        linetype = "11",
-                                                        color = "red")} +
-      {if (min(count_transform$count) < 100) annotate("text", 
-                                                      label = "Coverage limit",
-                                                      x = pos - flanking + 1,
-                                                      y = 2 / 1.02,
-                                                      color = "red")} +
+      scale_y_continuous(limits = c(0, NA)) +
+      #highligth the minimum coverage
+      geom_hline(yintercept = 2 , 
+                 linewidth = 1,
+                 linetype = "11",
+                 color = "red") +
+      annotate("text",
+               label = "Coverage limit",
+               x = pos - flanking,
+               y = 2 / 1.02,
+               color = "red") +
       geom_hline(yintercept = stats::median(log10(count_transform$count) , na.rm = TRUE),
                  linewidth = 1,
                  linetype = "11",
@@ -151,17 +155,17 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
       geom_vline(xintercept = other_mod_pos,
                  linewidth = 1,
                  linetype = "11",
-                 color = "lightblue") + 
+                 color = "pink") + 
       geom_vline(xintercept = pos,
                  linewidth = 1,
                  linetype = "11",
-                 color = "lightgreen")
+                 color = "green")
     
   }
   
   # -----------------------------------3-------------------------------------------
   
-  if (samples[1] == "all" & condition != NULL) { # if samples = all and condition specified
+  if (samples[1] == "all" && !is.null(condition)) { # if samples = all and condition specified
     
     # Extract uniques modalities of condition variable
     modalities <- unique(count_transform$condition)
@@ -192,14 +196,14 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
       geom_boxplot(data = count_transform[which(count_transform$new_position %in% other_mod_pos),], #specified position
                    aes(x = new_position, y = log10(count), group = interaction(new_position, .data[[condition]])), 
                    position = position_dodge(width = 0.7),
-                   fill = "khaki2",
+                   fill = "pink",
                    alpha = 0.5,
                    width = 0.6) +
       
       geom_boxplot(data = count_transform[which(count_transform$new_position == pos),], # other modification
                    aes(x = new_position, y = log10(count), group = interaction(new_position, .data[[condition]])), 
                    position = position_dodge(width = 0.7),
-                   fill = "aquamarine2",
+                   fill = "green",
                    alpha = 0.5,
                    width = 0.6) +
       
@@ -212,39 +216,39 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
       
       scale_x_continuous(labels = min(count_transform$new_position):max(count_transform$new_position), # to have all the position in x axis
                          breaks = min(count_transform$new_position):max(count_transform$new_position)) +  
+      scale_y_continuous(limits = c(0, NA)) +
       #highligth the minimum coverage
-      {if (min(count_transform$count) < 100) geom_hline(yintercept = 2 ,
-                                                        linewidth = 1,
-                                                        linetype = "11",
-                                                        color = "red")} +
-      {if (min(count_transform$count) < 100) annotate("text", 
-                                                      label = "Coverage limit",
-                                                      x = pos - flanking,
-                                                      y = 2 / 1.02,
-                                                      color = "red")} +
+      geom_hline(yintercept = 2 , 
+                 linewidth = 1,
+                 linetype = "11",
+                 color = "#fc9272") +
+      annotate("text",
+               label = "Coverage limit",
+               x = pos - flanking,
+               y = 2 / 1.02,
+               color = "#fc9272") +
       
       # Add madians for each modality of condition
-      geom_hline(yintercept = median_mod1, linewidth = 1, linetype = "11", color = "darkgreen") +  
+      geom_hline(yintercept = median_mod1, linewidth = 1, linetype = "11", color = "red") +  
       annotate("text", label = paste("Counts median", modalities[1]), 
-               x = pos - flanking + 1, y = median_mod1 / 0.985, color = "darkgreen") + 
+               x = pos - flanking + 1, y = median_mod1 / 0.985, color = "red") + 
       
-      geom_hline(yintercept = median_mod2, linewidth = 1, linetype = "11", color = "orange") +  
+      geom_hline(yintercept = median_mod2, linewidth = 1, linetype = "11", color = "#3182bd") +  
       annotate("text", label = paste("Counts median", modalities[2]), 
-               x = pos - flanking + 1, y = median_mod2 / 0.985, color = "orange") + 
+               x = pos - flanking + 1, y = median_mod2 / 0.985, color = "#3182bd") + 
       
-      scale_color_manual(values=c("darkgreen", "orange")) 
-    
+      scale_color_manual(values=c("red", "#3182bd")) 
   }
   
   # -----------------------------------4-------------------------------------------
   
-  if ((all(samples %in% names(ribo[["data"]]))) & condition != NULL) { # changer le plot rajouter le hline pour les médianes
+  if ((all(samples %in% names(ribo[["data"]]))) && !is.null(condition)) { # changer le plot rajouter le hline pour les médianes
     # Extract uniques modalities of condition variable
     modalities <- unique(count_transform$condition)
     
     # Verifying that there is just two modality
     if (length(modalities) != 2) { #to comment if modality > 2
-      stop("La variable condition doit avoir exactement deux modalités pour que le code fonctionne. Si > 3 veuillez modifier plot_count.R.")
+      stop("La variable condition doit avoir exactement deux modalités pour que le code fonctionne. Si > 3 veuillez modifier plot_count.R. Si < 2 veuillez ne pas spécifier la condition")
     }
     
     # Compute madians per modalities
@@ -268,14 +272,14 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
       geom_boxplot(data = count_transform[which(count_transform$new_position %in% other_mod_pos),], #specified position
                    aes(x = new_position, y = log10(count), group = interaction(new_position, .data[[condition]])), 
                    position = position_dodge(width = 0.7),
-                   fill = "khaki2",
+                   fill = "pink",
                    alpha = 0.5,
                    width = 0.6) +
       
       geom_boxplot(data = count_transform[which(count_transform$new_position == pos),], # other modification
                    aes(x = new_position, y = log10(count), group = interaction(new_position, .data[[condition]])), 
                    position = position_dodge(width = 0.7),
-                   fill = "aquamarine2",
+                   fill = "green",
                    alpha = 0.5,
                    width = 0.6) +
       
@@ -287,28 +291,30 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
            x = "Position") +
       
       scale_x_continuous(labels = min(count_transform$new_position):max(count_transform$new_position), # to have all the position in x axis
-                         breaks = min(count_transform$new_position):max(count_transform$new_position)) +  
+                         breaks = min(count_transform$new_position):max(count_transform$new_position)) + 
+      scale_y_continuous(limits = c(0, NA)) +
       #highligth the minimum coverage
-      {if (min(count_transform$count) < 100) geom_hline(yintercept = 2 ,
-                                                        linewidth = 1,
-                                                        linetype = "11",
-                                                        color = "red")} +
-      {if (min(count_transform$count) < 100) annotate("text", 
-                                                      label = "Coverage limit",
-                                                      x = pos - flanking,
-                                                      y = 2 / 1.02,
-                                                      color = "red")} +
+      #highligth the minimum coverage
+      geom_hline(yintercept = 2 , 
+                 linewidth = 1,
+                 linetype = "11",
+                 color = "#fc9272") +
+      annotate("text",
+               label = "Coverage limit",
+               x = pos - flanking,
+               y = 2 / 1.02,
+               color = "#fc9272") +
       
       # Add madians for each modality of condition
-      geom_hline(yintercept = median_mod1, linewidth = 1, linetype = "11", color = "darkgreen") +  
+      geom_hline(yintercept = median_mod1, linewidth = 1, linetype = "11", color = "red") +  
       annotate("text", label = paste("Counts median", modalities[1]), 
-               x = pos - flanking + 1, y = median_mod1 / 0.985, color = "darkgreen") + 
+               x = pos - flanking + 1, y = median_mod1 / 0.985, color = "red") + 
       
-      geom_hline(yintercept = median_mod2, linewidth = 1, linetype = "11", color = "orange") +  
+      geom_hline(yintercept = median_mod2, linewidth = 1, linetype = "11", color = "#3182bd") +  
       annotate("text", label = paste("Counts median", modalities[2]), 
-               x = pos - flanking + 1, y = median_mod2 / 0.985, color = "orange") + 
+               x = pos - flanking + 1, y = median_mod2 / 0.985, color = "#3182bd") + 
       
-      scale_color_manual(values = c("darkgreen", "orange")) 
+      scale_color_manual(values = c("red", "#3182bd")) 
     
   }
 
