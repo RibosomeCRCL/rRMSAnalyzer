@@ -4,12 +4,14 @@ Title: Package to Analyze RiboMethSeq Data
 Version: 2.0.1
 Authors@R: c(
     person("Théo","Combe", email="epirnatools@lyon.unicancer.fr", role=c("aut","cre")),
+        person("Allyson","Moureaux", role=c("aut","cre")),
     person("Hermes","Paraqindes", role="aut"),
     person("Janice","Kielbassa", role="aut"),
+    person("Fleur","Bourdelais", role="aut"),
+    person("Sebastien","Durand", role="aut"),
     person("Virginie","Marcel", role="aut"),
     person("Émilie","Thomas", role="aut"),
     person("Anthony","Ferrari", role="aut"),
-    person("Allyson","Moureaux", role="aut"),
     person("Fondation Synergie Lyon Cancer", role="fnd"),
     person("INCA", role="fnd"),
     person("SIRIC program", role="fnd"),
