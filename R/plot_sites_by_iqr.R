@@ -31,6 +31,15 @@ plot_sites_by_IQR <- function(ribo = NULL, plot = "IQR", variance = "IQR", ...) 
   # Compute threshold for highlighting significant points (median + 2 * MAD)
   median_2mad <- median(unique(IQR_order_df[,1:2])[,1]) + 2 * mad(unique(IQR_order_df[,1:2])[,1])
   
+  #Create a table with the most variant sites if needed
+  most_variants_sites <- unique(IQR_order_df[IQR_order_df[,1] > median_2mad, "site"])
+  
+  #get the length for another plot (PCA) 
+  n <- length(most_variants_sites)
+  
+  # Save it in the global environnement 
+  assign("n_sites_variant", n, envir = .GlobalEnv)
+  
   # Check if the requested plot type is "IQR" or "var"
   if (tolower(plot) %in% c("iqr", "var")) {
     
