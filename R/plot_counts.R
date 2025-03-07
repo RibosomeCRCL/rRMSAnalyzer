@@ -75,6 +75,16 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
   
   other_mod_pos <- count_data$new_position[other_mod]
   
+  # Count sample number by condition
+  sample_counts <- count_transform %>%
+    group_by(.data[[condition]]) %>%
+    summarise(n = n())
+  
+  # Create name condition
+  labels_with_counts <- setNames(
+    paste0(sample_counts[[condition]], " (n=", sample_counts$n, ")"), 
+    sample_counts[[condition]]
+  )
   
   # 4 ggplots  
   # -----------------------------------1-------------------------------------------
@@ -198,14 +208,18 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
                    position = position_dodge(width = 0.7),
                    fill = "pink",
                    alpha = 0.5,
-                   width = 0.6) +
+                   width = 0.6,
+                   show.legend = FALSE) +
       
       geom_boxplot(data = count_transform[which(count_transform$new_position == pos),], # other modification
                    aes(x = new_position, y = log10(count), group = interaction(new_position, .data[[condition]])), 
                    position = position_dodge(width = 0.7),
                    fill = "green",
                    alpha = 0.5,
-                   width = 0.6) +
+                   width = 0.6,
+                   show.legend = FALSE) +
+      scale_color_manual(values=c("red", "#3182bd"),,
+                         labels = labels_with_counts) +
       
       theme_bw() +
       
@@ -235,9 +249,7 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
       
       geom_hline(yintercept = median_mod2, linewidth = 1, linetype = "11", color = "#3182bd") +  
       annotate("text", label = paste("Counts median", modalities[2]), 
-               x = pos - flanking + 1, y = median_mod2 / 0.985, color = "#3182bd") + 
-      
-      scale_color_manual(values=c("red", "#3182bd")) 
+               x = pos - flanking + 1, y = median_mod2 / 0.985, color = "#3182bd") 
   }
   
   # -----------------------------------4-------------------------------------------
@@ -274,14 +286,16 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
                    position = position_dodge(width = 0.7),
                    fill = "pink",
                    alpha = 0.5,
-                   width = 0.6) +
+                   width = 0.6,
+                   show.legend = FALSE) +
       
       geom_boxplot(data = count_transform[which(count_transform$new_position == pos),], # other modification
                    aes(x = new_position, y = log10(count), group = interaction(new_position, .data[[condition]])), 
                    position = position_dodge(width = 0.7),
                    fill = "green",
                    alpha = 0.5,
-                   width = 0.6) +
+                   width = 0.6,
+                   show.legend = FALSE) +
       
       theme_bw() +
       
@@ -314,8 +328,9 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
       annotate("text", label = paste("Counts median", modalities[2]), 
                x = pos - flanking + 1, y = median_mod2 / 0.985, color = "#3182bd") + 
       
-      scale_color_manual(values = c("red", "#3182bd")) 
-    
+      scale_color_manual(values = c("red", "#3182bd"),
+                         ,
+                         labels = labels_with_counts)
   }
 
   return(plot_to_return)
