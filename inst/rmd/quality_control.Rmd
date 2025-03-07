@@ -326,6 +326,8 @@ knitr::kable(qcdata, "html") %>% kable_styling("striped") %>% scroll_box(width =
 
 -   Yuqing Zhang, Giovanni Parmigiani, W Evan Johnson, ComBat-seq: batch effect adjustment for RNA-seq count data, NAR Genomics and Bioinformatics, Volume 2, Issue 3, 1 September 2020, lqaa078, [https://doi.org/10.1093/nargab/lqaa078](https://doi.org/10.1093/nargab/lqaa078)
 
+- Marcel, V., Kielbassa, J., Marchand, V., Natchiar, K. S., Paraqindes, H., van Long, F. N., Ayadi, L., Bourguignon-Igel, V., Monaco, P. lo, Monchiet, D., Scott, V., Tonon, L., Bray, S. E., Diot, A., Jordan, L. B., Thompson, A. M., Bourdon, J. C., Dubois, T., Andre, F., … Diaz, J. J. (2021). Ribosomal RNA 2′ O-methylation as a novel layer of inter-tumour heterogeneity in breast cancer. In NAR Cancer (Vol. 3, Issue 1). Oxford University Press. https://doi.org/10.1093/narcan/zcab006 
+
 -   <mark> Marcel et al 2020, </mark>
 
 -   Birkedal, U., Christensen-Dalsgaard, M., Krogh, N., Sabarinathan, R., Gorodkin, J. and Nielsen, H. (2015), Profiling of Ribose Methylations in RNA by High-Throughput Sequencing. Angew. Chem. Int. Ed., 54: 451-455. https://doi.org/10.1002/anie.201408362
