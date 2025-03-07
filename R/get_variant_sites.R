@@ -20,7 +20,7 @@ get_variant_sites <- function(ribo, n = NULL, type_of_variant = "most",
                               only_annotated = TRUE) {
     site <- NULL
     
-    # Use n define in plot_site_by_iqr.R
+    # Use n defined in plot_site_by_iqr.R
     if (exists("n_sites_variant", envir = .GlobalEnv)) {
       n <- get("n_sites_variant", envir = .GlobalEnv)
     } else {
