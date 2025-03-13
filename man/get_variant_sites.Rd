@@ -6,7 +6,7 @@
 \usage{
 get_variant_sites(
   ribo,
-  n = 20,
+  n = NULL,
   type_of_variant = "most",
   only_annotated = TRUE
 )

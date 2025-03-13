@@ -9,8 +9,8 @@
   values_col_name,
   metadata,
   color_col = NA,
-  outlier,
-  horizontal
+  outlier = TRUE,
+  horizontal = TRUE
 )
 }
 \arguments{
