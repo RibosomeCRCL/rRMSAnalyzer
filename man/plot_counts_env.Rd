@@ -9,7 +9,8 @@ plot_counts_env(
   rna = NULL,
   pos = NULL,
   samples = "all",
-  flanking = 6
+  flanking = 6,
+  condition = NULL
 )
 }
 \arguments{
