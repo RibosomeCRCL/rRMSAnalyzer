@@ -26,7 +26,7 @@
 #' 
 #'
 #'
-#' @author Théo COMBE, Hermes PARAQINDES, Janice KIELBASSA
+#' @author Théo COMBE, Hermes PARAQINDES, Allyson MOUREAUX, Janice KIELBASSA
 #' 
 #' @name rRMSAnalyzer-package
 #' @aliases rRMSAnalyzer-package
