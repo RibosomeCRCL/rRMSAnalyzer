@@ -56,7 +56,7 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
   cscore_matrix <- stats::na.omit(cscore_matrix)
   cscore_matrix <- as.matrix(cscore_matrix)
   ComplexHeatmap::Heatmap(cscore_matrix,col = heat_colors,name = "C-score",
-                          row_title = "Position",column_title = "Sample", 
+                          row_title = "rRNA 2’Ome sites",column_title = "Sample", 
                           column_title_side = "bottom",
                           cluster_rows = TRUE, cluster_columns = TRUE,
                           clustering_distance_columns = "manhattan", 

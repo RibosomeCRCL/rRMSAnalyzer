@@ -53,6 +53,6 @@ plot_counts_fraction <- function(ribo) {
     ggplot2::theme(axis.text.x = element_text(angle = 90, size = 7, hjust = 1)) +
     labs(title = "Counts distribution per sample",
          x = "Sample",
-         y = "Counts fraction")
+         y = "End read count fraction")
   return(counts_plot)
 }

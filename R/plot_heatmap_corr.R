@@ -30,10 +30,10 @@ plot_heatmap_corr <- function(ribo, values_col, color_col=NULL) {
 .plot_heatmap_corr <- function(cscore_matrix, metadata,
                                color_col) {
   
-  if(!is.null(color_col)) { # if no color is given
+  if(!is.null(color_col)) { # if color is given
     col <- generate_palette(metadata,color_col) # generate a color palette for the heatmap
     column_ha <- ComplexHeatmap::HeatmapAnnotation(df = metadata[color_col], col = col) # annotation creation
-  } else { # sinon
+  } else {
     column_ha <- NULL
   }
     corr_matrix <- stats::cor(cscore_matrix,use = "complete.obs") # calculate correlation between lines or columns matrix, correlation is calculated ignoring missing values (NA)
