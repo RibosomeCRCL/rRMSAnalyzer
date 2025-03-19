@@ -10,7 +10,7 @@ output:
 toc-title: "rRMSAnalyzer"
     
 params:
-    library_col: "library"
+    library_col: "lib"
     condition_col: "condition"
     ribo_name: "ribo"
     project_name: "Unnamed project"
@@ -19,7 +19,6 @@ params:
 knitr::opts_chunk$set(echo=FALSE)
 
 all_sites <- length(ribo_to_check[[1]][[1]][[1]])
-
 # Get the number of valid sites
 ribom <- extract_data(ribo_to_check)
 valid_sites <- sum(complete.cases(ribom))
@@ -33,6 +32,10 @@ valid_sites <- sum(complete.cases(ribom))
 
 details{
 background-color: #E4F3F3;
+}
+
+details2{
+background-color: #9ecae1;
 }
 
 </style>
@@ -70,7 +73,7 @@ Name of column in metadata used for ComBat-seq adjustment:
 
 ## Content
 
-This quality control (QC) reports different metrics to ensure that subsequent analyses are free from bias related to the riboMethSeq technology. 
+This quality control (QC) reports different metrics to ensure that subsequent analyses are free from bias related to the RiboMethSeq technology. 
 
 In this report, the end read count data is used to ensure the quality of the sequencing coverage on the samples. Then, this measure is used to ensure the technical homogeneity of the cohort by comparing samples with each other. QC verifies that the coverage is uniform and reproducible between samples, eliminating the possibility of biases due to sequencing and outlier samples. Finally, a cohort check using the C-score values is performed to verify that subsequent analyses will be free of biases that may affect biological conclusions.
 
@@ -82,17 +85,19 @@ The following (r)RNA were used by the coverage tool: **`r as.character(ribo_to_c
 
 ## Method
 
-**C-score computation** : In the following analyses, the C-Score was computed using the **`r as.character(ribo_to_check["cscore_method"])`** of the **`r as.character(ribo_to_check["cscore_window"])`** neighboring positions (Birkedal et al, 2015; Marcel et al, 2020). In the end, there are **`r as.character(valid_sites)`** genomic positions with a valid C-score in all samples. Of note, C-score for genomic positions on RNA’s extremities cannot be computed because of the lack of neighbors in the local window.
+**C-score computation** : In the following analyses, the C-Score was computed using the **`r as.character(ribo_to_check["cscore_method"])`** of the **`r as.character(ribo_to_check["cscore_window"])`** neighboring positions (Birkedal et al, 2015; Marcel et al, 2021). In the end, there are **`r as.character(valid_sites)`** genomic positions with a valid C-score in all samples. Of note, C-score for genomic positions on RNA’s extremities cannot be computed because of the lack of neighbors in the local window.
 
 **Sequencing biases correction** : The possible technical biases induced by the sequencing step are corrected using the **ComBat-seq** method (Zhang et al, 2020; Paraqindes et al, 2023). In this analysis, the correction is **`r ifelse(is.null(ribo_to_check[["combatSeq_count"]]),"unused","used")`**. Here we used the variable "**`r ifelse(is.null(ribo_to_check[["col_used_combatSeq"]]),"None",as.character(ribo_to_check["col_used_combatSeq"]))`**" to perform this correction.
 
 ## Metadata
 
 The following metadata are used in the project **`r params$project_name`** :
-
-```{r, echo=FALSE}
-library(kableExtra)
+```{r, echo=FALSE, warning=FALSE}
+if (!require("kableExtra")) install.packages("kableExtra")
 qcdata <- ribo_to_check[[2]]
+```
+
+```{r, echo=FALSE, warning=FALSE}
 knitr::kable(qcdata)%>% kable_styling("striped") %>% scroll_box(width = "100%", height = "500px")
 ```
  
@@ -104,7 +109,7 @@ In this section, we present QC measures that are derived from the end read count
 
 ##  Coverage distribution
 
-The coverage distribution of absolute end read counts at each genomic positions is visuallized here using a boxplot for each individual samples, controlling for coverage variation. 
+The coverage distribution of absolute end read counts at each genomic position is visuallized here using a boxplot for each individual samples, controlling for coverage variation. 
 
 Samples with a median coverage below 100 (the blue line), are highlighted in red and should be interpreted with caution or excluded from further analysis. This threshold ensures a level of precision within the percentage range for calculating the C-score, which is targeted for good quality analyses.
 
@@ -175,10 +180,12 @@ print(plot_rle)
 
 ## RNA fraction per sample
 
-The repartition of RNA end read counts is an indicator of the RNA(s) that present a lower or higher coverage compared to the other RNAs within the same sample. A sample that shows an unusual repartition might be considered with caution, as it could impact the C-score robustness. The following image shows a stacked barplots representing end read count fractions of total end read counts for each RNA per sample. In the case of rRNAs, most end read counts are assigned to the longest rRNA, namely the 18S (~ 0.25) and the 28S (~ 0.50).
+The repartition of RNA end read counts is an indicator of the RNA(s) that present a lower or higher coverage compared to the other RNAs within the same sample. A sample that shows an unusual repartition might be considered with caution, as it could impact the C-score robustness. 
+
+The following image shows a stacked barplots representing end read count fractions of total end read counts for each RNA per sample. Theoretical mean fractions have been computed using 38 samples issued from 6 different human cell lines and the commercial Human XpressRef Universal Total RNA (Qiagen). Theoretical mean fractions are given as dotted lines. In the case of rRNAs, most end read counts are assigned to the longest rRNA, namely the 18S (~ 0.30) and the 28S (~ 0.60).
 
 ```{r,warning=FALSE, fig.asp = 0.8, fig.width = 10}
-rRMSAnalyzer::plot_counts_fraction(ribo_to_check) + ggplot2::ggtitle("RNA fraction per sample")
+rRMSAnalyzer::plot_counts_fraction(ribo) + ggplot2::ggtitle("RNA fraction per sample")
 ```
 
 # Profiles comparison
@@ -187,104 +194,44 @@ In this section, we explore the difference between the samples using global cove
 
 A sample with an atypical coverage pattern should be treated with caution or excluded from further analysis.
 
-It is possible for samples to cluster in sequencing batches. In this case, ComBat-seq correcting algorithm should be used to avoid biaise in subsequent analyses. 
+It is possible for samples to cluster in sequencing batches. In this case, ComBat-seq correcting algorithm should be used to avoid biases in subsequent analyses. 
 
 Of note, rRNA sequences are enriched in GC-stretches and in nucleotide repeats which introduces a bias during read alignment. The coverage profile is therefore not uniform, however, it will be typical of the rRNA sequence and reproducible across samples.
 
 ## Correlation matrix
 
-In order to identify distinct coverage profiles, coverage profiles are compared with one other within the cohort. Pairwise sample correlations of coverage profile are calculated using a Pearson correlation based distance. A heatmap is then generated that summarizes the correlation values for the entire series. These values goes from 0 (no correlation, indicated in red) to 1 (perfect correlation, indicated in blue). 
+In order to identify distinct coverage profiles, coverage profiles are compared with one other within the cohort. Pairwise sample correlations of coverage profile are calculated using a Pearson correlation based distance. A heatmap is then generated that summarizes the correlation values for the entire series. These values go from 0 (no correlation, indicated in red) to 1 (perfect correlation, indicated in blue). 
 
-```{r heatmap_corr, warning=FALSE, fig.asp = 0.9, fig.width = 15}
-library(ComplexHeatmap)
-library(dplyr)
-corr_matrix <- extract_data(ribo, "count")
-corr_matrix <- corr_matrix[, -1]
-corr_matrix <- cor(corr_matrix, use = "complete.obs")
-pearson_color <- colorRamp2::colorRamp2(c(0,0.5,1),c("red","white", "blue"))
-
-#incrementing qcdata
-#calculate the number of fold the sample is an outlier
-qcdata$total_outliers <- rowSums(qcdata[, c("coverage_quality", "rle_median_quality")] == "warning")
-
-#add the column in ribo_to_check
-ribo_to_check$metadata$outlier_level <- qcdata$total_outliers
-qcdata$total_outliers <- as.character(qcdata$total_outliers)
-
-# Préparer les annotations
-row_annotation <- HeatmapAnnotation(
-  coverage_quality = qcdata$coverage_quality,
-  rle_median_quality = qcdata$rle_median_quality,
-  col = list(
-    coverage_quality = c("pass" = "darkgrey", "warning" = "red"),
-    rle_median_quality = c("pass" = "darkgrey", "warning" = "red")
-  ),
-  annotation_legend_param = list(
-    title_gp = gpar(fontsize = 16), # title size
-    labels_gp = gpar(fontsize = 14), # tag title
-    grid_width = unit(8, "mm"),     # square width
-    grid_height = unit(8, "mm")     # square height
-  )
-)
-
-# create a vector for sample color by level of outlier
-column_colors <- ifelse(qcdata$total_outliers > 0, "red", "black")
-
-# identifying warning sample
-column_colors <- ifelse(
-  qcdata$coverage_quality == "warning" | qcdata$rle_median_quality == "warning",
-  "red",  # "Warning" in red
-  "black" # other in black
-)
-
-# heatmap plot with name of coloured columns
-x <- Heatmap(
-  corr_matrix, col = pearson_color,
-  top_annotation = row_annotation,
-  name = "Pearson correlation",
-  row_title = "Sample",
-  column_title = "Pearson correlation between samples", 
-  column_title_side = "top",
-  cluster_rows = FALSE, cluster_columns = TRUE,
-  clustering_distance_columns = "pearson", 
-  heatmap_legend_param = list(
-    legend_direction = "horizontal", # horizontal legend
-    title_gp = gpar(fontsize = 16),  # legend title size
-    labels_gp = gpar(fontsize = 14), # legend tags title
-    grid_height = unit(10, "mm"),    # legend square height 
-    grid_width = unit(10, "mm")      # legend square width
-  ),
-  clustering_method_columns = "ward.D2",
-  column_split = 3,
-  row_names_gp = grid::gpar(fontsize = 16),
-  rect_gp = gpar(col = "black", lwd = 0.2),
-  column_dend_side = "bottom",
-  column_dend_height = unit(1, "cm"),
-  column_dend_gp = gpar(col = "red"),
-  column_names_gp = gpar(col = column_colors, fontsize = 16) # column name color
-)
-
-draw(
-  x,
-  heatmap_legend_side = "bottom",  # legend position
-  annotation_legend_side = "bottom" # for legend annotation
-)
+```{r heatmap_corr, warning=FALSE, echo=FALSE, fig.asp = 0.9, fig.width = 15}
+  #incrementing qcdata
+  #calculate the number of fold the sample is an outlier
+  qcdata$total_outliers <- rowSums(qcdata[, c("coverage_quality", "rle_median_quality")] == "warning")
+  
+  #add the column in ribo_to_check
+  ribo_to_check$metadata$outlier_level <- qcdata$total_outliers
+  qcdata$total_outliers <- as.character(qcdata$total_outliers)
+  
+rRMSAnalyzer::heatmap_annotated(ribo, qcdata)
 ```
 
 ## Correspondance analysis {.tabset .tabset-pills}
 
-To identify distinct coverage profile, we compare the coverage profiles of all samples in the series. The Correspondence Analysis (COA) plot shows the distance between each sample based on its coverage profile. Samples that are far appart are considered putative outliers. At this stage, it is possible to visualise the bias linked to the sequencing batch or to evaluate the performance of the ComBat-seq correction algorithm if it has been applied (Zhang et al, 2020; Paraqindes et al, in revision). 
+To identify distinct coverage profile, we compare the coverage profiles of all samples in the series. The Correspondence Analysis (COA) plot shows the distance between each sample based on its coverage profile. Samples that are far appart are considered putative outliers. At this stage, it is possible to visualise the bias linked to the sequencing batch or to evaluate the performance of the ComBat-seq correction algorithm if it has been applied (Zhang et al, 2020; Paraqindes et al, 2023). 
 
-### COA 1 for batch effect / ComBat-seq
+### COA-1: by library (batch effect ?)
+
+COA-1 allows to visualize the different libraries and thus putative batch effect that can be resolved using ComBat-seq. 
 
 ```{r, warning=FALSE}
 #{r, fig.asp = 1, fig.width = 10} https://bookdown.org/yihui/rmarkdown-cookbook/html-tabs.html
 plot_coa <- rRMSAnalyzer::plot_coa(ribo_to_check,color_col = params$library_col)+ 
-  scale_color_manual(values = c("L1" = "#00F", "L2" = "orange", "L3" = "purple", "L4" = "#808000", "L5" = "#000080", "L6" = "pink", "L7" = "#FF00FF", "L8" = "#CCCCFF", "L9" = "#9FE2BF", "L10" = "#DFFF00", "L11" = "#DFAF00", "L12" = "#DFDF00"))
+  ggplot2::scale_color_manual(values = c("L1" = "#00F", "L2" = "orange", "L3" = "purple", "L4" = "#808000", "L5" = "#000080", "L6" = "pink", "L7" = "#FF00FF", "L8" = "#CCCCFF", "L9" = "#9FE2BF", "L10" = "#DFFF00", "L11" = "#DFAF00", "L12" = "#DFDF00"))
 print(plot_coa)
 ```
 
-### COA 2 for outlier samples visualisation
+### COA-2: by outlier samples
+
+COA-2 allows to visualize the sample depending whether they have been considered as outliers based on 1 or 2 previous graphs (see section 2.1 and 2.2). The outlier level of “0” means that no warning has been raised for this sample.
 
 ```{r, warning=FALSE}
 plot_coa_binaire <- rRMSAnalyzer::plot_coa(ribo_to_check, color_col = "outlier_level")
@@ -300,25 +247,34 @@ print(plot_coa_binaire)
 
 ## Principal component analysis of C-scores
 
-In this section, Qcs are made from C-score measurements, which will be used in the subsequent analysis. This final QC will therefore check that the dataset is free of biases that could affect the biological conclusions.
+In this section, QCs are based on C-scores, which will be used in the subsequent analysis. This final QC will therefore check that the dataset is free of biases that could affect the biological conclusions.
 
 Since more than 1.5% of the C-score corresponds to non-biological noise, normalization during C-score calculation should limit the dispersion of the samples based on their C-score at all genomic positions in the whole serie. Thus, Principal Component Analysis (PCA) on C-scores helps to identify putative batch effect that can be corrected using the inter-normalization option (ComBat-seq tool) (Zhang et al, 2020; Paraqindes et al, 2023). 
 
-The image shows **a Principal Component Analysis (PCA) plot illustrating the distance between each sample based on its C-score at all genomic positions**. The samples are colored by library. 
+The image shows a Principal Component Analysis (PCA) plot illustrating the distance between each sample based on its C-score at all genomic positions. The samples are colored by library. 
 
 The PCA cannot use genomic positions with an invalid C-score.
 Thus, it uses **`r as.character(valid_sites)`** genomic positions instead of all **`r as.character(all_sites)`**.
 
 ```{r not corrected cscore PCA, ,warning=FALSE, echo=FALSE}
 rRMSAnalyzer::plot_pca(ribo_to_check,params$library_col)+ 
-   ggplot2::scale_color_manual(values = c("L1" = "#00FFFF", "L2" = "orange", "L3" = "purple", "L4" = "#808000", "L5" = "#000080", "L6" = "pink", "L7" = "#FF00FF", "L8" = "#CCCCFF", "L9" = "#9FE2BF", "L10" = "#DFFF00", "L11" = "#DFAF00", "L12" = "#DFDF00"))
+   ggplot2::scale_color_manual(values = c("L1" = "#00FFFF", "L2" = "orange", "L3" = "purple", "L4" = "#808000", "L5" = "#000080", "L6" = "pink", "L7" = "#FF00FF", "L8" = "#CCCCFF", "L9" = "#9FE2BF", "L10" = "#DFFF00", "L11" = "#DFAF00", "L12" = "#DFDF00")) +
+    ggplot2::labs(color = "library") + # change legend title
+    ggplot2::guides(color = ggplot2::guide_legend(title = "library"), fill = "none", shape = "none") #delete all legend not used
 ```
+
+# Outlier summary
+
+This table recapitulates the different QC parameters used to identify putative outliers as shown in the graph 3.2.2 COA-2.
 
 ```{r write table, warning=FALSE}
 output_dir <- getwd()
 write.table(qcdata,file.path(output_dir,"quality_control.csv"),sep="\t",row.names=FALSE,quote = FALSE)
 knitr::kable(qcdata, "html") %>% kable_styling("striped") %>% scroll_box(width = "100%", height = "500px")
 ```
+# Comments
+
+*Comments can be written her to appear on the html document*
 
 # About
 
@@ -328,12 +284,14 @@ knitr::kable(qcdata, "html") %>% kable_styling("striped") %>% scroll_box(width =
 
 - Marcel, V., Kielbassa, J., Marchand, V., Natchiar, K. S., Paraqindes, H., van Long, F. N., Ayadi, L., Bourguignon-Igel, V., Monaco, P. lo, Monchiet, D., Scott, V., Tonon, L., Bray, S. E., Diot, A., Jordan, L. B., Thompson, A. M., Bourdon, J. C., Dubois, T., Andre, F., … Diaz, J. J. (2021). Ribosomal RNA 2′ O-methylation as a novel layer of inter-tumour heterogeneity in breast cancer. In NAR Cancer (Vol. 3, Issue 1). Oxford University Press. https://doi.org/10.1093/narcan/zcab006 
 
--   <mark> Marcel et al 2020, </mark>
 
--   Birkedal, U., Christensen-Dalsgaard, M., Krogh, N., Sabarinathan, R., Gorodkin, J. and Nielsen, H. (2015), Profiling of Ribose Methylations in RNA by High-Throughput Sequencing. Angew. Chem. Int. Ed., 54: 451-455. https://doi.org/10.1002/anie.201408362
+- Birkedal, U., Christensen-Dalsgaard, M., Krogh, N., Sabarinathan, R., Gorodkin, J. and Nielsen, H. (2015), Profiling of Ribose Methylations in RNA by High-Throughput Sequencing. Angew. Chem. Int. Ed., 54: 451-455. https://doi.org/10.1002/anie.201408362
+
+- Paraqindes H\*, Mourksi NEH\*, Bellesta S\*, Hedjam J, Bourdelais F, Fenouil T, Picart T, Catez F, Combe T, Ferrari A, Kielbassa J, Thomas E, Tonon L, Viari A, Attignon V, Carrere M, Perrossier J, Giraud S, Vanbelle C, Gabut M, Bergeron D, Scott MS, Castro Vega L, Magne N, Huillard E, Sanson M, Meyronet D, Diaz JJ, Ducray F#, Marcel V\*#, Durand S\*#. IDHwt and IDHmut adult-type diffuse gliomas display distinct alterations in ribosome biogenesis and 2’O-methylation of ribosomal RNA. Neuro Oncol 2023, 25(12) :2191-2206.  
+https://doi.org/10.1093/neuonc/noad192
 
 ## Citation
-**When using this report, please cite :**
+**When using this report, please cite : Paraqindes et al, Neuro Oncol 2023**
 
 
 ## License
@@ -362,4 +320,4 @@ sessionInfo()
 
 
 -----------------------
-This report has been automatically generated with [rRMSAnalyzer](https://github.com/RibosomeCRCL/rRMSAnalyzer) 2.0.0 (April 2023)
+This report has been automatically generated with [rRMSAnalyzer](https://github.com/RibosomeCRCL/rRMSAnalyzer) 2.0.1 (March 2025)
