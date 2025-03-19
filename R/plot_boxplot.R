@@ -99,7 +99,7 @@ boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var
           legend.position = "top",
           axis.title=element_text(size=14),
           axis.text.y = element_text(size=12)) +
-    labs(x = paste0("Site (sorted by ",method,")"),
+    labs(x = paste0("rRNA 2’Ome sites (sorted by ",method,")"),
          y = "C-score")
  
   return(p)
@@ -116,7 +116,7 @@ boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var
     ggplot2::geom_boxplot(outlier.shape = shape_outlier) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5,
                                                        hjust = 1)) +
-    ggplot2::xlab("Site (sorted by median)") +
+    ggplot2::xlab("rRNA 2’Ome sites (sorted by median)") +
     ggplot2::ylab("C-score")
   }
   
@@ -171,27 +171,28 @@ boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var
     shape_outlier <- 19
   
   # Initialize the plot with or without the defined color
-  if (is.na(color_col)) {   # if there is no color_col column in the metadata
-
+  if (is.na(color_col)) {   # if no color specified
     p <- ggplot2::ggplot(matrix_melted,
-         ggplot2::aes(x = Sample, y = !!sym(values_col_name), # create the qc column to map colors
+                         ggplot2::aes(x = Sample, y = !!sym(values_col_name), # create the qc column to map colors
                                       fill = factor(qc))) +
-         ggplot2::theme(legend.position="none",
-         ggplot2::scale_fill_manual(values=c("white", "red")))
+      ggplot2::geom_boxplot(outlier.shape = shape_outlier) +
+      ggplot2::scale_fill_manual(values = c("0" = "white", "1" = "red")) +
+      ggplot2::theme(legend.position = "none")
   } else {
     p <- ggplot2::ggplot(matrix_melted,
-                         ggplot2::aes(x = Sample , y = !!sym(values_col_name), # the colors are mapped to the corresponding column
-                                      fill = !!sym(color_col)))
+                         ggplot2::aes(x = Sample, y = !!sym(values_col_name), fill = !!sym(color_col))) +
+      ggplot2::geom_boxplot(outlier.shape = shape_outlier)
   }
-  #ajout boxplot
+  #add boxplot
   p <- p + ggplot2::geom_boxplot(outlier.shape = shape_outlier) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5,
-                                                       hjust = 1))
+                                                       hjust = 1)) +
+    ylab("log10(total end read count)")
 
-  #ajout ligne horizontale
+  # add horizontal line
   p <- p + ggplot2::geom_hline(yintercept = 2, colour = "blue")
 
-  #orientation horizontale (optionnel)
+  # horizontal orientation (optional)
   if (horizontal)
     p <- p + ggplot2::coord_flip()
 
