@@ -8,7 +8,8 @@ report_qc(
   ribo,
   library_col,
   project_name = "Unnamed project",
-  output_dir = getwd()
+  output_dir = getwd(),
+  comments = NULL
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ report_qc(
 \item{project_name}{Name of the project.}
 
 \item{output_dir}{Path to output dir. Working directory is selected by default.}
+
+\item{comments}{Path to a text file containing comments}
 }
 \description{
 Generate html report about possible batch effect for a given RiboClass.

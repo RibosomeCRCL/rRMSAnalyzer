@@ -6,7 +6,7 @@ output:
         number_sections: true
         toc: true
         toc_float:
-            collapsed: true
+            collapsed: false
 toc-title: "rRMSAnalyzer"
     
 params:
@@ -14,6 +14,7 @@ params:
     condition_col: "condition"
     ribo_name: "ribo"
     project_name: "Unnamed project"
+    comments: "No comment"
 ---
 ```{r include = FALSE}
 knitr::opts_chunk$set(echo=FALSE)
@@ -109,7 +110,7 @@ In this section, we present QC measures that are derived from the end read count
 
 ##  Coverage distribution
 
-The coverage distribution of absolute end read counts at each genomic position is visuallized here using a boxplot for each individual samples, controlling for coverage variation. 
+The coverage distribution of absolute end read counts at each genomic position is visualized here using a boxplot for each individual samples, controlling for coverage variation. 
 
 Samples with a median coverage below 100 (the blue line), are highlighted in red and should be interpreted with caution or excluded from further analysis. This threshold ensures a level of precision within the percentage range for calculating the C-score, which is targeted for good quality analyses.
 
@@ -134,7 +135,7 @@ rRMSAnalyzer::boxplot_count(ribo_to_check) + ggplot2::ggtitle("End read counts d
 
 ## Relative Log Coverage
 
-The **Relative Log Coverage** (RLC)  is a measure to ensure  the reproducibility of the coverage across all samples.
+The Relative Log Coverage (RLC)  is a measure to ensure  the reproducibility of the coverage across all samples.
 
 $$\log_2(\frac{pos_{sample} + 1}{pos_{all}})$$
 
@@ -142,9 +143,9 @@ $$\log_2(\frac{pos_{sample} + 1}{pos_{all}})$$
 Where :
 
 -   pos~sample~ : the end read count at a specific position for a specific sample.
--   pos~all~ : the end read count **median of all samples** for the same specific position.
+-   pos~all~ : the end read count median of all samples for the same specific position.
 
-The following image shows the **Relative Log Coverage boxplot**. The blue lines give the median +/- 2mad variation. Median outside the blue lines identifies putative outlier sample (highlighted in red). Sample that presents a lower or higher coverage compared to other samples might be considered carefully or removed in the following biological analyses as an outlier sample.
+The following image shows the Relative Log Coverage boxplot. The blue lines give the median +/- 2mad variation. Median outside the blue lines identifies putative outlier sample (highlighted in red). Sample that presents a lower or higher coverage compared to other samples might be considered carefully or removed in the following biological analyses as an outlier sample.
 
 ```{r,warning=FALSE}
 #plot object extraction
@@ -182,7 +183,7 @@ print(plot_rle)
 
 The repartition of RNA end read counts is an indicator of the RNA(s) that present a lower or higher coverage compared to the other RNAs within the same sample. A sample that shows an unusual repartition might be considered with caution, as it could impact the C-score robustness. 
 
-The following image shows a stacked barplots representing end read count fractions of total end read counts for each RNA per sample. Theoretical mean fractions have been computed using 38 samples issued from 6 different human cell lines and the commercial Human XpressRef Universal Total RNA (Qiagen). Theoretical mean fractions are given as dotted lines. In the case of rRNAs, most end read counts are assigned to the longest rRNA, namely the 18S (~ 0.30) and the 28S (~ 0.60).
+The following image shows a stacked barplots representing end read count fractions of total end read counts for each RNA per sample. Theoretical mean fractions have been computed using 38 samples issued from 6 different human cell lines and the commercial Human XpressRef Universal Total RNA (Qiagen). Theoretical mean fractions are given as dotted lines. In the case of rRNAs, most end read counts are assigned to the longest rRNAs, namely the 18S (~ 0.30) and the 28S (~ 0.60).
 
 ```{r,warning=FALSE, fig.asp = 0.8, fig.width = 10}
 rRMSAnalyzer::plot_counts_fraction(ribo) + ggplot2::ggtitle("RNA fraction per sample")
@@ -274,9 +275,11 @@ knitr::kable(qcdata, "html") %>% kable_styling("striped") %>% scroll_box(width =
 ```
 # Comments
 
-*Comments can be written her to appear on the html document*
+```{r, echo=FALSE}
+cat(params$comments)
+```
 
-# About
+# Aditiontional Information
 
 ## Bibliography
 
@@ -287,7 +290,7 @@ knitr::kable(qcdata, "html") %>% kable_styling("striped") %>% scroll_box(width =
 
 - Birkedal, U., Christensen-Dalsgaard, M., Krogh, N., Sabarinathan, R., Gorodkin, J. and Nielsen, H. (2015), Profiling of Ribose Methylations in RNA by High-Throughput Sequencing. Angew. Chem. Int. Ed., 54: 451-455. https://doi.org/10.1002/anie.201408362
 
-- Paraqindes H\*, Mourksi NEH\*, Bellesta S\*, Hedjam J, Bourdelais F, Fenouil T, Picart T, Catez F, Combe T, Ferrari A, Kielbassa J, Thomas E, Tonon L, Viari A, Attignon V, Carrere M, Perrossier J, Giraud S, Vanbelle C, Gabut M, Bergeron D, Scott MS, Castro Vega L, Magne N, Huillard E, Sanson M, Meyronet D, Diaz JJ, Ducray F#, Marcel V\*#, Durand S\*#. IDHwt and IDHmut adult-type diffuse gliomas display distinct alterations in ribosome biogenesis and 2’O-methylation of ribosomal RNA. Neuro Oncol 2023, 25(12) :2191-2206.  
+- Paraqindes H\*, Mourksi NEH\*, Ballesta S\*, Hedjam J, Bourdelais F, Fenouil T, Picart T, Catez F, Combe T, Ferrari A, Kielbassa J, Thomas E, Tonon L, Viari A, Attignon V, Carrere M, Perrossier J, Giraud S, Vanbelle C, Gabut M, Bergeron D, Scott MS, Castro Vega L, Magne N, Huillard E, Sanson M, Meyronet D, Diaz JJ, Ducray F#, Marcel V\*#, Durand S\*#. IDHwt and IDHmut adult-type diffuse gliomas display distinct alterations in ribosome biogenesis and 2’O-methylation of ribosomal RNA. Neuro Oncol 2023, 25(12) :2191-2206.  
 https://doi.org/10.1093/neuonc/noad192
 
 ## Citation
