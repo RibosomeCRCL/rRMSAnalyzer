@@ -50,7 +50,8 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
   count_data <- extract_data(ribo = ribo, col = "count") # to format the data
   
   # extract metadata to merge it with count_data
-  metadata <- ribo$metadata[, c("samplename", "condition", condition ) ] 
+  metadata <- ribo$metadata[, c("samplename", condition), drop = FALSE]
+  #metadata <- ribo$metadata[, c("samplename", "condition", .data[[condition]] ) ] 
   
   # extract the information of position
   which_pos <- which(count_data$named_position == pos_of_interest)
@@ -76,16 +77,20 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
   other_mod_pos <- count_data$new_position[other_mod]
   
   # Count sample number by condition
+  count_transform <- count_transform %>%
+    group_by(if (!is.null(condition)) .data[[condition]] else new_position)
+  
+  # Count samples number per condition or new_position if there is no condition
   sample_counts <- count_transform %>%
-    group_by(.data[[condition]]) %>%
-    summarise(n = n())
+    summarise(n = n(), .groups = "drop")
   
   # Create name condition
-  labels_with_counts <- setNames(
+  if (!is.null(condition)) {
+    labels_with_counts <- setNames(
     paste0(sample_counts[[condition]], " (n=", sample_counts$n, ")"), 
     sample_counts[[condition]]
   )
-  
+  }
   # 4 ggplots  
   # -----------------------------------1-------------------------------------------
   if (samples[1] == "all" && is.null(condition)) { #if sample = all and no condition specified  
@@ -178,7 +183,7 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
   if (samples[1] == "all" && !is.null(condition)) { # if samples = all and condition specified
     
     # Extract uniques modalities of condition variable
-    modalities <- unique(count_transform$condition)
+    modalities <- unique(count_transform[[condition]])
     
     # Verifying that there is just two modality
     if (length(modalities) != 2) { #to comment if modality > 2
