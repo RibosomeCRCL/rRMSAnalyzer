@@ -94,14 +94,19 @@ boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var
   p <- ggplot(matrix_melted, aes(x = site, y = cscore)) + # plot creation
     geom_boxplot() +
     theme_bw() +
+    ggtitle("Boxplot of c-score values across the samples") +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5,
                                      hjust = 1),
           legend.position = "top",
           axis.title=element_text(size=14),
           axis.text.y = element_text(size=12)) +
     labs(x = paste0("rRNA 2’Ome sites (sorted by ",method,")"),
-         y = "C-score")
- 
+         y = "C-score",
+         subtitle = paste0(
+           length(unique(matrix_melted$sample)), " samples and ", 
+           length(unique(matrix_melted$site)), " positions"
+         )
+    )
   return(p)
   
   } else { # otherwise (if sort_by = median)

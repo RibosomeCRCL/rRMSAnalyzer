@@ -1,17 +1,17 @@
 #' Compute statistics for c-score based on condition column
 #'
+#' @param test statistic test wanted student, anova or kruskal
+#' @param condition_col column condition in metadata
 #' @param ribo a RiboClass object
-#' @param test_name name of the test to perform
-#' @param col_condition condition column on which perform the tests
 #'
 #' @returns a dataframe
 #' @export
 #'
 #' @examples res_pv(ribo = ribo_adj_annot, test_name = t.test, condition_col = col)
-res_pv <- function(ribo = ribo_adj_annot, test = "student", condition_col = PR3) {
+res_pv <- function(ribo = ribo, test = "student", condition_col = NULL) {
   # Test arg verification
   if(!test %in% c("student", "anova", "kruskal")) {
-    stop("Le test doit être 't.test', 'anova' ou 'kruskal.test'")
+    stop("Test has to be 'student', 'anova' ou 'kruskal'")
   }
   
   # Extract data
@@ -30,7 +30,7 @@ res_pv <- function(ribo = ribo_adj_annot, test = "student", condition_col = PR3)
   res_pv <- data %>%
     dplyr::group_by(annotated_sites) %>%
     dplyr::summarise(
-      p_value = ifelse(test == "student", t.test(c_score ~ get(condition_col))$p.value,
+      p_value = ifelse(test == "student", t.test(c_score ~ get(condition_col))$p.value, # Welch test because var.equal is false (default)
                        ifelse(test == "anova", anova(lm(c_score ~ get(condition_col)))$"Pr(>F)"[1],
                               kruskal.test(c_score ~ get(condition_col))$p.value)),
       fold_change = mean(c_score[get(condition_col) == unique(get(condition_col))[1]]) /

@@ -43,6 +43,19 @@ metadata_data_total <- new_metadata_sites%>%
   dplyr::summarize(median_Cscore_metadata_ech_ctrl = median(cscore[samplename %in% cond1$samplename]), # take samplename into cond1
             median_Cscore_metadata_ech = median(cscore[samplename %in% cond2$samplename]), # take samplename into cond2
             difference = median_Cscore_metadata_ech - median_Cscore_metadata_ech_ctrl) # compute the difference between both
+
+
+metadata_data_total <- metadata_data_total %>%
+  dplyr::mutate(site = as.character(site))
+
+human_methylated <- human_methylated %>%
+  dplyr::mutate(Nomenclature = as.character(Nomenclature))
+
+
+# keep site order (to debug)
+# metadata_data_total <- metadata_data_total %>%
+#   dplyr::mutate(site = factor(site, levels = rev(unique(human_methylated$Nomenclature))))
+
 # create difference_cat column
 metadata_data_total$difference_cat <- ifelse(abs(metadata_data_total$difference) < 0.05, "No difference", 
                                              ifelse(metadata_data_total$difference > 0.05, "Increase",
@@ -68,7 +81,7 @@ part1 <- ggplot(metadata_data_total, aes(x=site, y=difference, label=site)) +
         plot.subtitle = element_text(hjust = 0.5),
         panel.grid.minor = element_blank()) +
   annotate("rect", ymin = -0.05, ymax = 0.05,
-           xmin = 0, xmax = 113, fill = "darkgrey", alpha = .2) +
+           xmin = 0, xmax = 113, fill = "darkgrey", alpha = 0.2) +
   xlab("2'Ome sites") +
   ylab(bquote("\u0394"~ "median C-score" ~ "(" * .(ech) ~ "-" ~ .(ctrl) * ")")) +
   coord_flip() +
@@ -77,10 +90,10 @@ part1 <- ggplot(metadata_data_total, aes(x=site, y=difference, label=site)) +
 #7.4. Graphique n°2: difference of cscore vizualisation 
 part2 <- ggplot(metadata_data_total) +
   geom_point(data = metadata_data_total[,c(1,3)],
-             aes(x = site, y = median_Cscore_metadata_ech, color = paste0(ech)), #"PR3+"
+             aes(x = site, y = median_Cscore_metadata_ech, color = paste0(ech)), 
              size = 2) +
   geom_point(data = metadata_data_total[,c(1,2)],
-             aes(x = site, y = median_Cscore_metadata_ech_ctrl, color = paste0(ctrl)), #"PR3-"
+             aes(x = site, y = median_Cscore_metadata_ech_ctrl, color = paste0(ctrl)),
              size = 2) +
   theme_bw() +
   theme(axis.title.y = element_blank(),
@@ -88,23 +101,20 @@ part2 <- ggplot(metadata_data_total) +
         axis.ticks.y = element_blank(),
         plot.subtitle = element_text(hjust = 0.5),
         panel.grid.minor = element_blank()) +
-  geom_segment(data = metadata_data_total[which(metadata_data_total$difference_cat %in% c("Decrease", "Increase")), ],
-               #changer les noms des sites d'intérêt
-               #si 1 site: [which(metada_data_total$site %in% "28S_Cm1327"), ]
-               #si >1 site: [which(metada_data_total$site %in% c("28S_Cm1327", "18S_Gm1447")),]
+  geom_segment(data = metadata_data_total[which(metadata_data_total$difference_cat %in% c("Increase", "Decrease")), ],
                aes(x = site, y = median_Cscore_metadata_ech, xend = site, yend = median_Cscore_metadata_ech_ctrl, color = difference_cat),
                alpha = 1,
                linewidth = 1) +
   coord_flip() +
   scale_y_continuous(name = "Median c-score",sec.axis = sec_axis(trans = ~ ., name = NULL, breaks = NULL)) +
   scale_color_manual(
-    values = setNames(c("orchid", "seagreen", "grey", "red", "blue"), # , "grey", "red", "blue"
+    values = setNames(c("orchid", "seagreen", "grey", "blue", "red"), # , "grey", "red", "blue"
                       c(ctrl, ech, "No difference", "Decrease", "Increase")), # , "No difference", "Increase", "Decrease" # format dynamically colours
     name = "Condition",) +
   theme(legend.position = "bottom")
   
   # 7.5. combine graphs
-  plot_comparison_mediane <- part1 + part2 + patchwork::plot_layout(widths = c(2,1)) 
+  plot_comparison_mediane <- patchwork::wrap_plots(part1, part2, widths = c(2,1))
 
   return(plot_comparison_mediane)
 }

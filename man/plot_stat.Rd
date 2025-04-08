@@ -2,24 +2,41 @@
 % Please edit documentation in R/plot_stat.R
 \name{plot_stat}
 \alias{plot_stat}
-\title{Plot statitic}
+\title{Plot statistic}
 \usage{
-plot_stat(ribo = ribo_adj_annot, site = NULL, res_pv = NULL, pthr = NULL)
+plot_stat(
+  ribo = ribo_adj_annot,
+  p_cutoff = 0.01,
+  cscore_cutoff = 0.5,
+  adjust_pvalues_method = "fdr",
+  site = NULL,
+  res_pv = res_pv,
+  pthr = NULL,
+  condition_col = NULL
+)
 }
 \arguments{
 \item{ribo}{a RiboClass}
+
+\item{p_cutoff}{cutoff of c-score under which sites are not taken in account}
+
+\item{cscore_cutoff}{}
+
+\item{adjust_pvalues_method}{}
 
 \item{site}{sites to plot}
 
 \item{res_pv}{df of p values extracted from res_pv.R}
 
 \item{pthr}{p value threshold}
+
+\item{condition_col}{the condition column passed in params of the Rmd}
 }
 \value{
 a boxplot
 }
 \description{
-Plot statitic
+Plot statistic
 }
 \examples{
 plot_stat(data = ribo, site = NULL, res_pv = res_pv, pthr = 0.05)

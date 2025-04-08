@@ -35,10 +35,6 @@ details{
 background-color: #E4F3F3;
 }
 
-details2{
-background-color: #9ecae1;
-}
-
 </style>
 ```
 <details>
@@ -183,7 +179,7 @@ print(plot_rle)
 
 The repartition of RNA end read counts is an indicator of the RNA(s) that present a lower or higher coverage compared to the other RNAs within the same sample. A sample that shows an unusual repartition might be considered with caution, as it could impact the C-score robustness. 
 
-The following image shows a stacked barplots representing end read count fractions of total end read counts for each RNA per sample. Theoretical mean fractions have been computed using 38 samples issued from 6 different human cell lines and the commercial Human XpressRef Universal Total RNA (Qiagen). Theoretical mean fractions are given as dotted lines. In the case of rRNAs, most end read counts are assigned to the longest rRNAs, namely the 18S (~ 0.30) and the 28S (~ 0.60).
+The following image shows a stacked barplots representing end read count fractions of total end read counts for each RNA per sample. Theoretical mean fractions have been computed using 38 samples issued from 6 different tumorals human cell lines and the commercial Human XpressRef Universal Total RNA (Qiagen). Theoretical mean fractions are given as dotted lines. In the case of rRNAs, most end read counts are assigned to the longest rRNAs, namely the 18S (~ 0.30) and the 28S (~ 0.60).
 
 ```{r,warning=FALSE, fig.asp = 0.8, fig.width = 10}
 rRMSAnalyzer::plot_counts_fraction(ribo) + ggplot2::ggtitle("RNA fraction per sample")
@@ -275,8 +271,8 @@ knitr::kable(qcdata, "html") %>% kable_styling("striped") %>% scroll_box(width =
 ```
 # Comments
 
-```{r, echo=FALSE}
-cat(params$comments)
+```{r, echo=FALSE, results='asis'}
+cat((params$comments), sep = "\n")
 ```
 
 # Aditiontional Information

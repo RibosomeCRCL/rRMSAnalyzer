@@ -18,7 +18,7 @@ heatmap_annotated <- function(ribo = ribo, qcdata = qcdata) {
   pearson_color <- colorRamp2::colorRamp2(c(0,0.5,1),c("red","white", "blue"))
   
   # Préparer les annotations
-  row_annotation <- HeatmapAnnotation(
+  row_annotation <- ComplexHeatmap::HeatmapAnnotation(
     outlier_coverage_distribution = qcdata$coverage_quality,
     outlier_relative_log_coverage = qcdata$rle_median_quality,
     col = list(
@@ -26,8 +26,8 @@ heatmap_annotated <- function(ribo = ribo, qcdata = qcdata) {
       outlier_relative_log_coverage = c("pass" = "darkgrey", "warning" = "red")
     ),
     annotation_legend_param = list(
-      title_gp = gpar(fontsize = 16), # title size
-      labels_gp = gpar(fontsize = 14), # tag title
+      title_gp = grid::gpar(fontsize = 16), # title size
+      labels_gp = grid::gpar(fontsize = 14), # tag title
       grid_width = unit(8, "mm"),     # square width
       grid_height = unit(8, "mm")     # square height
     )
@@ -44,7 +44,7 @@ heatmap_annotated <- function(ribo = ribo, qcdata = qcdata) {
   )
   
   # heatmap plot with name of coloured columns
-  x <- Heatmap(
+  x <- ComplexHeatmap::Heatmap(
     corr_matrix, col = pearson_color,
     top_annotation = row_annotation,
     name = "Pearson correlation",
@@ -54,22 +54,22 @@ heatmap_annotated <- function(ribo = ribo, qcdata = qcdata) {
     clustering_distance_columns = "pearson", 
     heatmap_legend_param = list(
       legend_direction = "horizontal", # horizontal legend
-      title_gp = gpar(fontsize = 16),  # legend title size
-      labels_gp = gpar(fontsize = 14), # legend tags title
+      title_gp = grid::gpar(fontsize = 16),  # legend title size
+      labels_gp = grid::gpar(fontsize = 14), # legend tags title
       grid_height = unit(10, "mm"),    # legend square height 
       grid_width = unit(10, "mm")      # legend square width
     ),
     clustering_method_columns = "ward.D2",
     column_split = 3,
     row_names_gp = grid::gpar(fontsize = 16),
-    rect_gp = gpar(col = "black", lwd = 0.2),
+    rect_gp = grid::gpar(col = "black", lwd = 0.2),
     column_dend_side = "bottom",
     column_dend_height = unit(1, "cm"),
-    column_dend_gp = gpar(col = "red"),
-    column_names_gp = gpar(col = column_colors, fontsize = 16) # column name color
+    column_dend_gp = grid::gpar(col = "red"),
+    column_names_gp = grid::gpar(col = column_colors, fontsize = 16) # column name color
   )
   
-  draw(x,
+  ComplexHeatmap::draw(x,
        heatmap_legend_side = "bottom",  # legend position
        annotation_legend_side = "bottom" # for legend annotation
   ) 

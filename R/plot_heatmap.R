@@ -14,7 +14,6 @@
 #' data("ribo_toy")
 #' data("human_methylated")#' 
 #' ribo_toy <- rename_rna(ribo_toy)
-#' ribo_toy <- annotate_site(ribo_toy,human_methylated)
 #' plot_heatmap(ribo_toy,  color_col = c("run","condition"), only_annotated=TRUE)
 plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
                          cutree_rows=4, cutree_cols=2, ...) {
@@ -55,8 +54,8 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
   
   cscore_matrix <- stats::na.omit(cscore_matrix)
   cscore_matrix <- as.matrix(cscore_matrix)
-  ComplexHeatmap::Heatmap(cscore_matrix,col = heat_colors,name = "C-score",
-                          row_title = "rRNA 2’Ome sites",column_title = "Sample", 
+ComplexHeatmap::Heatmap(cscore_matrix,col = heat_colors,name = "C-score",
+                          row_title = "rRNA 2'Ome sites",column_title = "Sample", 
                           column_title_side = "bottom",
                           cluster_rows = TRUE, cluster_columns = TRUE,
                           clustering_distance_columns = "manhattan", 
@@ -65,7 +64,6 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
                           clustering_method_rows = "ward.D2",
                           row_split = cutree_rows, column_split = cutree_cols,
                           top_annotation = column_ha,
-                          row_names_gp = grid::gpar(fontsize = 6))
-  
-  
+                          row_names_gp = grid::gpar(fontsize = 6) 
+                          )
 }

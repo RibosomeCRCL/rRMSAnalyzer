@@ -1,28 +1,50 @@
-#' Plot statitic
+#' Plot statistic
 #'
 #' @param ribo a RiboClass
 #' @param site sites to plot
 #' @param res_pv df of p values extracted from res_pv.R
 #' @param pthr p value threshold
+#' @param condition_col the condition column passed in params of the Rmd
+#' @param p_cutoff cutoff of c-score under which sites are not taken in account
+#' @param cscore_cutoff 
+#' @param adjust_pvalues_method 
 #'
 #' @returns a boxplot
 #' @export
 #'
 #' @examples plot_stat(data = ribo, site = NULL, res_pv = res_pv, pthr = 0.05)
-plot_stat <- function(ribo = ribo_adj_annot, site = NULL, res_pv = res_pv, pthr = NULL) {
+plot_stat <- function(ribo = ribo_adj_annot,
+                      p_cutoff = 1e-02,
+                      cscore_cutoff = 0.5,
+                      adjust_pvalues_method = "fdr",
+                      site = NULL, 
+                      res_pv = res_pv, 
+                      pthr = NULL, 
+                      condition_col = NULL) {
   library(ggplot2)
   
-    # Cas où on ne peut pas afficher de plot
+  # Try to get params$condition_col if condition_col is NULL
+  if (is.null(condition_col)) {
+    if (exists("params") && !is.null(params$condition_col)) {
+      condition_col <- params$condition_col
+    } else {
+      stop("Erreur : condition_col is not defined in parameters of the function or in the Rmd")
+    }
+  }
+  
+    # Case where plot can't be draw
   if (is.null(site) && (is.null(res_pv) || is.null(pthr))) {
-    stop("Erreur : Vous devez spécifier au moins un site")
+    stop("Error : You need to specify at least one site")
   }
   if (!is.null(site) && is.null(res_pv) && !is.null(pthr)) {
-    stop("Erreur : res_pv est requis si pthr est fourni")
+    stop("Error : res_pv is required if pthr is given")
   }
 
   # filter sites
   if (!is.null(res_pv) && !is.null(pthr)) {
-    significant_sites <- res_pv %>% dplyr::filter(p_adj < pthr) %>% dplyr::pull(annotated_sites)
+    significant_sites <- res_pv %>% 
+      dplyr::filter(p_adj < pthr, abs(fold_change - 1) >= cscore_cutoff) %>% 
+      dplyr::pull(annotated_sites)
     if (length(significant_sites) == 0) {
       return(ggplot() + 
                annotate("text", x = 4, y = 25, size=8,
@@ -54,7 +76,7 @@ plot_stat <- function(ribo = ribo_adj_annot, site = NULL, res_pv = res_pv, pthr 
   }
   
   # Generate plot
-  stat <- ggplot(data, aes(x = .data[[condition_col]], y = c_score, fill = .data[[condition_col]])) +
+  stat <- ggplot(data, aes(x = !!sym(condition_col), y = c_score, fill = !!sym(condition_col))) +
     geom_boxplot() +
     facet_wrap(~ annotated_sites) +
         theme_bw() +

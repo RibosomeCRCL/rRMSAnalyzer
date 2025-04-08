@@ -4,14 +4,14 @@
 \alias{res_pv}
 \title{Compute statistics for c-score based on condition column}
 \usage{
-res_pv(ribo = ribo_adj_annot, test = "student", condition_col = PR3)
+res_pv(ribo = ribo, test = "student", condition_col = NULL)
 }
 \arguments{
 \item{ribo}{a RiboClass object}
 
-\item{test_name}{name of the test to perform}
+\item{test}{statistic test wanted student, anova or kruskal}
 
-\item{col_condition}{condition column on which perform the tests}
+\item{condition_col}{column condition in metadata}
 }
 \value{
 a dataframe
