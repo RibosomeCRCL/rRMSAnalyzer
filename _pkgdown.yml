@@ -42,11 +42,13 @@ reference:
 - contents:
   - get_IQR
   - get_variant_sites
+  - res_pv
 - title: Plots
   desc: Different plots to show either samples and sites.
 - contents:
   - starts_with("plot_")
   - starts_with("boxplot_")
+  - heatmap_annotated
 - title: Export data
   desc: Export data
 - contents:
