@@ -82,7 +82,7 @@ plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all"
   
   # Count samples number per condition or new_position if there is no condition
   sample_counts <- count_transform %>%
-    dplyr::summarise(n = n(), .groups = "drop")
+    dplyr::summarise(n = dplyr::n(), .groups = "drop")
   
   # Create name condition
   if (!is.null(condition)) {
