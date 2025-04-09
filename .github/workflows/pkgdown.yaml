@@ -23,6 +23,12 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v3
+      
+      - name: Install Bioconductor base
+        run: |
+          install.packages("BiocManager")
+          BiocManager::install(c("BiocParallel"), ask = FALSE)
+        shell: Rscript {0}
 
       - uses: r-lib/actions/setup-pandoc@v2
 
