@@ -121,5 +121,6 @@ plot_pca <- function(ribo, color_col = NULL, axes = c(1, 2),
     ggplot2::xlab(paste("PC", axes[1], ":",
                         round(dudi.pca$eig[axes[1]]/sum(dudi.pca$eig) * 100, 1),
                         "%"))
+
   return(plot.pca)
 }

@@ -29,9 +29,30 @@ plot_counts_fraction <- function(ribo) {
                                                  position = "fill") +
     ggplot2::scale_fill_brewer(palette = "Spectral") +
     ggplot2::theme_bw() +
+    #add théorical mean fraction 
+    ggplot2::geom_hline(yintercept = 0.60381342, linewidth = 1, linetype = "11", color = "blue") +  
+    ggplot2::annotate("text", label = "28S",
+                      levels(factor(all_data_sums$samplesid))[length(levels(factor(all_data_sums$samplesid)))],
+                      y = 0.604 + 0.02, color = "blue") + 
+    
+    ggplot2::geom_hline(yintercept = 0.9250826, linewidth = 1, linetype = "11", color = "darkgreen") +  #0.604+0.32126916
+    ggplot2::annotate("text", label = "18S",
+                      levels(factor(all_data_sums$samplesid))[length(levels(factor(all_data_sums$samplesid)))],
+                      y = 0.925 + 0.02, color = "darkgreen") + 
+    
+    ggplot2::geom_hline(yintercept = 0.9711803, linewidth = 1, linetype = "11", color = "orange2") +  #0.9250826+0.04609767
+    ggplot2::annotate("text", label = "5.8S",
+                      x = levels(factor(all_data_sums$samplesid))[length(levels(factor(all_data_sums$samplesid)))], 
+                      y = 0.9711 + 0.02, color = "black") + 
+    
+    ggplot2::geom_hline(yintercept = 1, linewidth = 1, linetype = "11", color = "red") +  #0.9711803+ 0.02881975
+    ggplot2::annotate("text", label = "5S",
+                      x = levels(factor(all_data_sums$samplesid))[1], 
+                      y = 0.9995 , color = "black") + 
+    
     ggplot2::theme(axis.text.x = element_text(angle = 90, size = 7, hjust = 1)) +
     labs(title = "Counts distribution per sample",
          x = "Sample",
-         y = "Counts fraction")
+         y = "End read count fraction")
   return(counts_plot)
 }

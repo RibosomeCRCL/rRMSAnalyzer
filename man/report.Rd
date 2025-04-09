@@ -11,11 +11,14 @@ report(
   condition_col,
   library_col,
   project_name,
-  output_dir
+  output_dir,
+  comments = NULL
 )
 }
 \arguments{
 \item{ribo}{a RiboClass object.}
+
+\item{ribo_name}{}
 
 \item{rmdfile}{filename of the Rmarkdown template to use.}
 
@@ -23,9 +26,11 @@ report(
 
 \item{library_col}{name or index of the column __in metadata__ containing the library}
 
-\item{project_name}{Name of the project to display on the report.}
+\item{project_name}{Name of the project to display on the report}
 
 \item{output_dir}{Path of output directory}
+
+\item{comments}{Path to a text file containing comments}
 }
 \description{
 Note : if you want to create your own report template,

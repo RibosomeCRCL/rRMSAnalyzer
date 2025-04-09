@@ -11,9 +11,21 @@
 #' @export
 #'
 #' @examples
-get_variant_sites <- function(ribo, n = 20, type_of_variant = "most",
+#' data("ribo_toy")
+#' data("human_methylated")
+#' ribo_toy <- rename_rna(ribo_toy)
+#' ribo_toy <- annotate_site(ribo_toy,human_methylated)
+#' get_variant_sites(ribo = ribo_toy)
+get_variant_sites <- function(ribo, n = NULL, type_of_variant = "most",
                               only_annotated = TRUE) {
     site <- NULL
+    
+    # Use n defined in plot_site_by_iqr.R
+    if (exists("n_sites_variant", envir = .GlobalEnv)) {
+      n <- get("n_sites_variant", envir = .GlobalEnv)
+    } else {
+      n <- 20  #Default values
+    }
     
     df <- extract_data(ribo,only_annotated = only_annotated,
                        position_to_rownames = TRUE)

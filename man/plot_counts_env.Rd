@@ -9,7 +9,8 @@ plot_counts_env(
   rna = NULL,
   pos = NULL,
   samples = "all",
-  flanking = 6
+  flanking = 6,
+  condition = NULL
 )
 }
 \arguments{
@@ -22,6 +23,9 @@ plot_counts_env(
 \item{samples}{Samples to display. "all" will display all samples.}
 
 \item{flanking}{Number of sites to display on the left/right of the selected position.}
+}
+\value{
+A ggplot object
 }
 \description{
 Plot counts for a given position on a given RNA

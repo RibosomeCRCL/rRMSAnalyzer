@@ -6,7 +6,7 @@
 \usage{
 get_variant_sites(
   ribo,
-  n = 20,
+  n = NULL,
   type_of_variant = "most",
   only_annotated = TRUE
 )
@@ -27,4 +27,11 @@ A dataframe with the n most/less variant sites
 }
 \description{
 Return the most/less variant sites of a dataframe or a RiboClass
+}
+\examples{
+data("ribo_toy")
+data("human_methylated")
+ribo_toy <- rename_rna(ribo_toy)
+ribo_toy <- annotate_site(ribo_toy,human_methylated)
+get_variant_sites(ribo = ribo_toy)
 }

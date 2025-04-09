@@ -63,15 +63,27 @@ plot_most_differential_sites <- function(df_of_Cscores = NULL,
           text = element_text(size = 14)) +
     ylim(0,1) +
     facet_wrap(~site, nrow = 2) +
-    geom_text(data = df_of_kruskal[which(df_of_kruskal$site %in% most_differential_sites),],
-              aes(x = -Inf, y = -Inf, label = paste("p = ", scales::scientific(p.adj, digits = 3), sep = "")),
-              hjust = -0.1,
-              vjust = -1,
-              inherit.aes = FALSE,
-              size = 4) +
-    labs(x = "",
-         y = "C-score",
-         fill = "")
+       geom_text(
+         data = df_of_kruskal[which(df_of_kruskal$site %in% most_differential_sites), ],
+         aes(
+           x = -Inf,
+           y = -Inf,
+           label = paste(
+             "p = ",
+             scales::scientific(p.val, digits = 3) ,
+             " \np.adj = ",
+             scales::scientific(p.adj, digits = 3),
+             sep = ""
+           )
+         ),
+         hjust = -0.1,
+         vjust = -1,
+         inherit.aes = FALSE,
+         size = 4
+       ) +
+       labs(x = "",
+            y = "C-score",
+            fill = "")
 
   return(p1)
 }

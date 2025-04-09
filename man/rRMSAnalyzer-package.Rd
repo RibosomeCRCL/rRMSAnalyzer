@@ -41,6 +41,6 @@ Useful links:
 
 }
 \author{
-Théo COMBE, Hermes PARAQINDES, Janice KIELBASSA
+Théo COMBE, Hermes PARAQINDES, Allyson MOUREAUX, Janice KIELBASSA
 }
 \keyword{package}

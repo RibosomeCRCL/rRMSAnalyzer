@@ -21,4 +21,27 @@ A ggplot object.
 \description{
 Internal function for boxplot_cscore
 }
+\keyword{C-scores}
+\keyword{RiboClass}
+\keyword{These}
+\keyword{a}
+\keyword{above}
+\keyword{allow}
+\keyword{and}
+\keyword{annotated}
+\keyword{associated}
+\keyword{below}
+\keyword{boxplots}
+\keyword{distribution}
+\keyword{functions}
+\keyword{in}
 \keyword{internal}
+\keyword{object.}
+\keyword{of}
+\keyword{plot}
+\keyword{sites}
+\keyword{the}
+\keyword{to}
+\keyword{two}
+\keyword{visualize}
+\keyword{with}
