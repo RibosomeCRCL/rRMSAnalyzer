@@ -4,7 +4,7 @@
 #' @param color_col The name of the column to generate colors for
 #'
 #' @return A named vector of colors
-#' @export
+#' @keywords internal
 
 generate_palette <- function(metadata,cols_to_use) {
   annot_list <- list()
