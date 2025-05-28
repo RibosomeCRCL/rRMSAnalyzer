@@ -47,7 +47,7 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_variant_sites</span><span class="op">(</span></span>
 <span>  <span class="va">ribo</span>,</span>
-<span>  n <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  n <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  type_of_variant <span class="op">=</span> <span class="st">"most"</span>,</span>
 <span>  only_annotated <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -80,16 +80,88 @@ annotated sites. Ignored when df is a dataframe.</p></dd>
     <p>A dataframe with the n most/less variant sites</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"ribo_toy"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"human_methylated"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ribo_toy</span> <span class="op">&lt;-</span> <span class="fu"><a href="rename_rna.html">rename_rna</a></span><span class="op">(</span><span class="va">ribo_toy</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ribo_toy</span> <span class="op">&lt;-</span> <span class="fu"><a href="annotate_site.html">annotate_site</a></span><span class="op">(</span><span class="va">ribo_toy</span>,<span class="va">human_methylated</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">get_variant_sites</span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_toy</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  site        S1        S2         S3        S4        S5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Am1310 28S_Am1310 0.0000000 0.0000000 0.01134216 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm4607 28S_Gm4607 0.9146472 0.7968187 0.77452668 0.8580486 0.5416635</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm4593 28S_Gm4593 0.6548805 0.8185865 0.61141927 0.8210696 0.8796136</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Um4590 28S_Um4590 0.6743740 0.6292835 0.37707688 0.5174814 0.7131602</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Am2774 28S_Am2774 0.9321135 0.8001096 0.76273528 0.6723747 0.6951323</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm4588 28S_Gm4588 0.9584463 0.8464707 0.94746670 0.8780584 0.6547637</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18S_Gm1447 18S_Gm1447 0.9137180 0.8577625 0.90624695 0.7951952 0.6319754</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Cm1868 28S_Cm1868 0.9433886 0.8860289 0.70755897 0.8578247 0.7515334</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18S_Am576   18S_Am576 0.7737609 0.9224953 0.96262458 0.9224806 0.9093625</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18S_Cm1272 18S_Cm1272 0.8648843 0.7675112 0.80444568 0.7947909 0.7094644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm4020 28S_Gm4020 0.9498330 0.9408368 0.90054153 0.8882309 0.7126154</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm2863 28S_Gm2863 0.8946672 0.8861210 0.88665694 0.8644288 0.8365101</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm3606 28S_Gm3606 0.9403992 0.9051641 0.95128737 0.8803363 0.8757366</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Cm2848 28S_Cm2848 0.8663283 0.9312575 0.90639002 0.9236443 0.8930689</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Cm4426 28S_Cm4426 0.9880276 0.9624858 0.96296296 0.9447273 0.8032184</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm1303 28S_Gm1303 0.9125155 0.8199730 0.91398866 0.7808545 0.8208420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18S_Cm174   18S_Cm174 0.9119119 0.8668456 0.88068864 0.8173501 0.7939012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Cm1327 28S_Cm1327 0.9195186 0.8758403 0.87758887 0.8650970 0.8075314</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm3723 28S_Gm3723 0.8962343 0.8658188 0.91254094 0.8659218 0.7694043</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Am3764 28S_Am3764 0.9160839 0.8651212 0.93360046 0.8461538 0.9065975</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   S6        S7        S8        S9       S10       S11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Am1310 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm4607 0.6809293 0.6793199 0.8965853 0.8678437 0.9128514 0.8701392</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm4593 0.7533128 0.8320666 0.6718004 0.6039262 0.6580059 0.6447665</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Um4590 0.6357630 0.5902990 0.6466699 0.5832570 0.7077240 0.6050354</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Am2774 0.8063538 0.8026389 0.9070491 0.9263572 0.9365647 0.9252246</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm4588 0.8986765 0.9059829 0.9442231 0.9256655 0.9406554 0.9387978</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18S_Gm1447 0.8687242 0.8356861 0.9016198 0.8993957 0.9136080 0.9076239</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Cm1868 0.8945420 0.8468489 0.9304794 0.9084319 0.9291232 0.9224108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18S_Am576  0.9448698 0.9155496 0.8330813 0.8865031 0.7987087 0.8150155</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18S_Cm1272 0.7804954 0.6661321 0.8571706 0.8362194 0.8190469 0.8250377</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm4020 0.8726274 0.8813773 0.9417737 0.9205847 0.9149801 0.9307817</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm2863 0.8950860 0.7250750 0.9047229 0.8664554 0.8373984 0.8151388</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm3606 0.8962940 0.7536932 0.9263119 0.9295050 0.9229625 0.9187079</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Cm2848 0.9378386 0.8911175 0.8985404 0.8799747 0.8089185 0.8133739</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Cm4426 0.9783984 0.9636864 0.9792910 0.9791462 0.9726243 0.9742669</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm1303 0.8642304 0.8528610 0.9178763 0.8780410 0.9125189 0.9046797</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18S_Cm174  0.8582238 0.8807750 0.9008655 0.9169832 0.8635969 0.7859844</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Cm1327 0.8637317 0.8551941 0.9169329 0.8849945 0.9004181 0.9073924</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm3723 0.8886241 0.8857796 0.8931605 0.8733850 0.8842931 0.8869016</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Am3764 0.9352569 0.8618421 0.8786280 0.9228442 0.9228792 0.8747554</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   S12      RNA1      RNA2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Am1310 0.01266131 0.2480990 0.4021636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm4607 0.86288210 0.8526672 0.8606764</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm4593 0.55256116 0.7531421 0.7238179</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Um4590 0.56590427 0.7209640 0.7123554</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Am2774 0.92049175 0.8051618 0.8255214</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm4588 0.93250878 0.9207541 0.9284497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18S_Gm1447 0.90245294 0.8688009 0.8825684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Cm1868 0.94075414 0.9253045 0.9175618</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18S_Am576  0.81790406 0.9658725 0.9621335</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18S_Cm1272 0.83827006 0.8754211 0.8865737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm4020 0.92504651 0.9520969 0.9472799</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm2863 0.86351991 0.9130369 0.9263136</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm3606 0.91856444 0.9332658 0.9493889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Cm2848 0.82692308 0.9520841 0.9538337</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Cm4426 0.96825397 0.9759433 0.9803154</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm1303 0.90504018 0.9133510 0.9086230</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18S_Cm174  0.90818966 0.9104088 0.9045945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Cm1327 0.90408922 0.9453061 0.9222474</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Gm3723 0.86924090 0.8868730 0.8806376</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28S_Am3764 0.94806694 0.8914334 0.9392550</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Théo Combe, Hermes Paraqindes, Janice Kielbassa, Virginie Marcel, Émilie Thomas, Anthony Ferrari, Fondation Synergie Lyon Cancer, INCA, SIRIC program, LabEX program, Ligue Nationale Contre le Cancer.</p>
+  <p>Developed by Théo Combe, Allyson Moureaux, Hermes Paraqindes, Janice Kielbassa, Fleur Bourdelais, Sebastien Durand, Virginie Marcel, Émilie Thomas, Anthony Ferrari, Fondation Synergie Lyon Cancer, INCA, SIRIC program, LabEX program, Ligue Nationale Contre le Cancer.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>
