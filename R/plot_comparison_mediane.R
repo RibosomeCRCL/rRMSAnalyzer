@@ -24,10 +24,10 @@ plot_comparison_medianes <- function(ribo = NULL, condition_col = NULL,  ech = N
 library(dplyr)
 
 cond1 <- ribo$metadata %>% #filter sample of your 1st condition 
-  dplyr::filter(!!sym(condition_col) == paste0(ech)) # change PR3+ with your condition
+  dplyr::filter(!!sym(condition_col) == paste0(ech)) 
 
 cond2 <- ribo$metadata %>% #filter sample of your 2nd condition 
-  dplyr::filter(!!sym(condition_col) == paste0(ctrl)) # change PR3- with your condition
+  dplyr::filter(!!sym(condition_col) == paste0(ctrl)) 
 
 cond1_2 <- unique(c(cond1$samplename, cond2$samplename)) # merge both of your condition into a variable 
 
@@ -48,13 +48,9 @@ metadata_data_total <- new_metadata_sites%>%
 metadata_data_total <- metadata_data_total %>%
   dplyr::mutate(site = as.character(site))
 
-human_methylated <- human_methylated %>%
-  dplyr::mutate(Nomenclature = as.character(Nomenclature))
-
-
 # keep site order (to debug)
-# metadata_data_total <- metadata_data_total %>%
-#   dplyr::mutate(site = factor(site, levels = rev(unique(human_methylated$Nomenclature))))
+metadata_data_total <- metadata_data_total %>%
+  dplyr::mutate(site = factor(site, levels = rev(unique(human_methylated$Nomenclature))))
 
 # create difference_cat column
 metadata_data_total$difference_cat <- ifelse(abs(metadata_data_total$difference) < 0.05, "No difference", 
@@ -64,13 +60,14 @@ metadata_data_total$difference_cat <- ifelse(abs(metadata_data_total$difference)
 # create a color vector for tags according to difference_cat
 site_colors <- ifelse(metadata_data_total$difference_cat == "Increase", "red", 
                       ifelse(metadata_data_total$difference_cat == "Decrease", "blue", "black"))
-# define color tag for y axis
+# /!\ Vectorized input to `element_text()` is not officially supported.
+# ℹ Results may be unexpected or may change in future versions of ggplot2. 
 
 #7.3. Graphique n°1: vizualisation of absolute cscore value
 part1 <- ggplot(metadata_data_total, aes(x=site, y=difference, label=site)) +
   geom_bar(stat='identity', aes(fill=difference_cat), width = .9) +
   scale_fill_manual(name="Trend of 2'Ome variation",
-                    labels = c("Increase", "Decrease", "No difference"),
+                    labels = c("Decrease", "Increase", "No difference"),
                     values = c("Increase"="red", "Decrease"="blue", "No difference" = "grey"))  +
   labs(title= "Representation of differential median C-score") +
   geom_hline(yintercept = 0.05, linetype = "11") +
@@ -101,15 +98,15 @@ part2 <- ggplot(metadata_data_total) +
         axis.ticks.y = element_blank(),
         plot.subtitle = element_text(hjust = 0.5),
         panel.grid.minor = element_blank()) +
-  geom_segment(data = metadata_data_total[which(metadata_data_total$difference_cat %in% c("Increase", "Decrease")), ],
+  geom_segment(data = metadata_data_total[which(metadata_data_total$difference_cat %in% c("Decrease", "Increase")), ],
                aes(x = site, y = median_Cscore_metadata_ech, xend = site, yend = median_Cscore_metadata_ech_ctrl, color = difference_cat),
                alpha = 1,
                linewidth = 1) +
   coord_flip() +
   scale_y_continuous(name = "Median c-score",sec.axis = sec_axis(trans = ~ ., name = NULL, breaks = NULL)) +
   scale_color_manual(
-    values = setNames(c("orchid", "seagreen", "grey", "blue", "red"), # , "grey", "red", "blue"
-                      c(ctrl, ech, "No difference", "Decrease", "Increase")), # , "No difference", "Increase", "Decrease" # format dynamically colours
+    values = setNames(c("orchid", "seagreen", "grey", "blue", "red"),
+                      c(ctrl, ech, "No difference", "Decrease", "Increase")), # format colours dynamically 
     name = "Condition",) +
   theme(legend.position = "bottom")
   
