@@ -4,7 +4,7 @@
 \alias{res_pv}
 \title{Compute statistics for c-score based on condition column}
 \usage{
-res_pv(ribo = ribo, test = "student", condition_col = NULL)
+res_pv(ribo = ribo, test = NULL, condition_col = NULL)
 }
 \arguments{
 \item{ribo}{a RiboClass object}

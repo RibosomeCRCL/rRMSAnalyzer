@@ -4,21 +4,12 @@
 \alias{plot_global_profile}
 \title{Plot global profile for a given condition on a given metadata}
 \usage{
-plot_global_profile(
-  ribo = ribo_adj_annot,
-  condition_col = condition_col,
-  ech = ech,
-  ctrl = ctrl
-)
+plot_global_profile(ribo = ribo_adj_annot, condition_col = NULL)
 }
 \arguments{
 \item{ribo}{A RiboClass object.}
 
 \item{condition_col}{condition column for the plot}
-
-\item{ech}{modality 1 of condition_col}
-
-\item{ctrl}{modality 2 of condition_col}
 }
 \value{
 a ggplot object
