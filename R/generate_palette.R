@@ -1,4 +1,11 @@
-# Generate the col argument for ComplexHeatmap::HeatmapAnnotation
+#' Generate the col argument for ComplexHeatmap::HeatmapAnnotation
+#'
+#' @param metadata A data.frame containing sample metadata
+#' @param color_col The name of the column to generate colors for
+#'
+#' @return A named vector of colors
+#' @export
+
 generate_palette <- function(metadata,cols_to_use) {
   annot_list <- list()
   palettes_template <- list(
@@ -14,7 +21,14 @@ generate_palette <- function(metadata,cols_to_use) {
     annot <- c()
     
     if(any(col_is_numeric,length(cond_names) > 9)) {
-      palette <- grDevices::hcl.colors(length(cond_names),"Light Grays")
+      #palette <- grDevices::hcl.colors(length(cond_names),"Light Grays")
+      if (requireNamespace("RColorBrewer", quietly = TRUE) && length(cond_names) <= 12) {
+        palette <- RColorBrewer::brewer.pal(length(cond_names), "Set3")
+      } else if (requireNamespace("scales", quietly = TRUE)) {
+        palette <- scales::hue_pal()(length(cond_names))
+      } else {
+        palette <- grDevices::rainbow(length(cond_names))
+      }
 
     } else {
       palette <- palettes[[1]]
