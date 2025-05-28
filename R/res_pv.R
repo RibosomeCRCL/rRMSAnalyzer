@@ -8,11 +8,8 @@
 #' @export
 #'
 #' @examples res_pv(ribo = ribo_adj_annot, test_name = t.test, condition_col = col)
-res_pv <- function(ribo = ribo, test = "student", condition_col = NULL) {
-  # Test arg verification
-  if(!test %in% c("student", "anova", "kruskal")) {
-    stop("Test has to be 'student', 'anova' ou 'kruskal'")
-  }
+res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
+
   
   # Extract data
   data <- extract_data(ribo, only_annotated = TRUE, position_to_rownames = TRUE)
@@ -25,6 +22,17 @@ res_pv <- function(ribo = ribo, test = "student", condition_col = NULL) {
   # fusion with metadata
   data <- data %>%
     dplyr::left_join(ribo$metadata, by = "samplename") # left join between metadata and ribom_long
+  
+  # Determine test if not provided
+  if (is.null(test)) {
+    n_conditions <- length(unique(data[[condition_col]]))
+    test <- if (n_conditions == 2) "student" else "anova"
+  }
+  
+  # Test argument verification
+  if (!test %in% c("student", "anova", "kruskal")) {
+    stop("Test must be one of: 'student', 'anova', or 'kruskal'")
+  }
   
   # Stats
   res_pv <- data %>%
