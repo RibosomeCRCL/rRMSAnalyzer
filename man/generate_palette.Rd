@@ -17,3 +17,4 @@ A named vector of colors
 \description{
 Generate the col argument for ComplexHeatmap::HeatmapAnnotation
 }
+\keyword{internal}
