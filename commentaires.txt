@@ -1,0 +1,3 @@
+Here appear your **comments** on the report_qc file. In a html format.
+- Some bullet point
+- SOME COMMENT
