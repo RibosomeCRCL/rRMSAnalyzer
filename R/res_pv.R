@@ -9,7 +9,6 @@
 #'
 #' @examples res_pv(ribo = ribo_adj_annot, test_name = t.test, condition_col = col)
 res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
-
   
   # Extract data
   data <- extract_data(ribo, only_annotated = TRUE, position_to_rownames = TRUE)
@@ -23,6 +22,9 @@ res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
   data <- data %>%
     dplyr::left_join(ribo$metadata, by = "samplename") # left join between metadata and ribom_long
   
+  #supprime les lignes avec au moins 1 NA
+  datatest <- data %>% tidyr::drop_na({{condition_col}})
+  
   # Determine test if not provided
   if (is.null(test)) {
     n_conditions <- length(unique(data[[condition_col]]))
@@ -34,16 +36,34 @@ res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
     stop("Test must be one of: 'student', 'anova', or 'kruskal'")
   }
   
+  #----------------------------------------------------------------------------
+  #             Verify white space
+  #----------------------------------------------------------------------------             
+  if (any(grepl("\\s", ribo$metadata$samplename))) {
+    stop(" Error samplename has whitespaces. Please rename your samplename.")
+  }
+  #----------------------------------------------------------------------------
+  
   # Stats
+  
+  if (test == "anova") {
   res_pv <- data %>%
     dplyr::group_by(annotated_sites) %>%
     dplyr::summarise(
-      p_value = ifelse(test == "student", t.test(c_score ~ get(condition_col))$p.value, # Welch test because var.equal is false (default)
-                       ifelse(test == "anova", anova(lm(c_score ~ get(condition_col)))$"Pr(>F)"[1],
-                              kruskal.test(c_score ~ get(condition_col))$p.value)),
-      fold_change = mean(c_score[get(condition_col) == unique(get(condition_col))[1]]) /
-        mean(c_score[get(condition_col) == unique(get(condition_col))[2]])
-    )
+      p_value = anova(lm(c_score ~ get(condition_col)))$"Pr(>F)"[1])
+  } else {
+    res_pv <- data %>%
+      dplyr::group_by(annotated_sites) %>%
+      dplyr::summarise(
+        p_value = if (test == "student") {
+          t.test(c_score ~ get(condition_col))$p.value
+        } else {
+          kruskal.test(c_score ~ get(condition_col))$p.value
+        },
+        delta_c_score = abs(mean(c_score[get(condition_col) == unique(get(condition_col))[1]]) -
+    mean(c_score[get(condition_col) == unique(get(condition_col))[2]]))
+  )
+  }
   
   # pval_adj
   res_pv$p_adj <- p.adjust(res_pv$p_value, method = "fdr")
