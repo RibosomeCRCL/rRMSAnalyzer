@@ -11,7 +11,7 @@
 #' plot_global_profile(ribo, condition_col, ech, ctrl)
 
 plot_global_profile <- function(ribo = ribo_adj_annot, condition_col = NULL) { #, ech = NULL, ctrl = NULL) {
-  library(rlang)
+
   #Check for ribo
   if (is.null(ribo)) {stop("MISSING parameter: please provide a RiboClass!")}
   if (!inherits(ribo, "RiboClass")) {stop("ribo argument is not a RiboClass!")}
@@ -79,14 +79,14 @@ plot_global_profile <- function(ribo = ribo_adj_annot, condition_col = NULL) { #
     
   if (length(unique(condition_col)) > 4) stop("Too many conditions to draw a clear plot.")
     
-    global_profile <- ggplot(result, aes(x = annotated_sites, y = mean_c_score , group = condition , color = condition, fill = condition)) +
+    global_profile <- ggplot(result, aes(x = annotated_sites, y = mean_c_score , group = !!sym(condition_col) , color = !!sym(condition_col), fill = !!sym(condition_col))) +
       geom_line(linewidth = 1) +
       geom_ribbon(aes(ymin = mean_c_score - sd_c_score, ymax = mean_c_score + sd_c_score), alpha = 0.3) +
       scale_x_discrete(guide = guide_axis(angle = 90)) +
       scale_y_continuous(limits = c(0, 1)) +
       labs(
         x = "RNA 2'Ome Methylation sites", y = "C-score",
-        color = "Condition", fill = "Condition",
+        color = condition_col, fill = condition_col,
         title = "2'Ome Global Profile"
       ) +
       theme_bw() +
