@@ -32,9 +32,6 @@ plot_stat(
 
 \item{condition_col}{the condition column passed in params of the Rmd}
 }
-\value{
-a boxplot
-}
 \description{
 Plot statistic
 }
