@@ -9,19 +9,17 @@
 #' @param cscore_cutoff 
 #' @param adjust_pvalues_method 
 #'
-#' @returns a boxplot
 #' @export
 #'
 #' @examples plot_stat(data = ribo, site = NULL, res_pv = res_pv, pthr = 0.05)
-plot_stat <- function(ribo = ribo_adj_annot,
-                      p_cutoff = 1e-02,
+plot_stat <- function(ribo = ribo,
+                      p_cutoff = 0.01,
                       cscore_cutoff = 0.5,
                       adjust_pvalues_method = "fdr",
                       site = NULL, 
                       res_pv = res_pv, 
                       pthr = NULL, 
                       condition_col = NULL) {
-  library(ggplot2)
   
   # Try to get params$condition_col if condition_col is NULL
   if (is.null(condition_col)) {
@@ -41,19 +39,39 @@ plot_stat <- function(ribo = ribo_adj_annot,
   }
 
   # filter sites
-  if (!is.null(res_pv) && !is.null(pthr)) {
+  if ("delta_c_score" %in% colnames(res_pv)) {
     significant_sites <- res_pv %>% 
-      dplyr::filter(p_adj < pthr, abs(fold_change - 1) >= cscore_cutoff) %>% 
+      dplyr::filter(p_adj < pthr, abs(delta_c_score - 1) >= cscore_cutoff) %>% 
       dplyr::pull(annotated_sites)
-    if (length(significant_sites) == 0) {
-      return(ggplot() + 
-               annotate("text", x = 4, y = 25, size=8,
-                        label = "No differential site found !") + 
-               theme_void())
-      }
   } else {
-    significant_sites <- site
+    warning("ANOVA test : filter on p_adj")
+    significant_sites <- res_pv %>% 
+      dplyr::filter(p_adj < pthr) %>% 
+      dplyr::pull(annotated_sites)
   }
+  
+  if (length(significant_sites) == 0) {
+    return(ggplot() + 
+             annotate("text", x = 4, y = 25, size = 8,
+                      label = "No differential site found !") + 
+             theme_void())
+  } else {
+  significant_sites <- site
+ }
+
+  # if (!is.null(res_pv) && !is.null(pthr)) {
+  #   significant_sites <- res_pv %>% 
+  #     dplyr::filter(p_adj < pthr, abs(delta_c_score - 1) >= cscore_cutoff) %>% 
+  #     dplyr::pull(annotated_sites)
+  #   if (length(significant_sites) == 0) {
+  #     return(ggplot() + 
+  #              annotate("text", x = 4, y = 25, size=8,
+  #                       label = "No differential site found !") + 
+  #              theme_void())
+  #     }
+  # } else {
+  #   significant_sites <- site
+  # }
 
   # Extract data
   data <- extract_data(ribo, only_annotated = TRUE, position_to_rownames = TRUE)
