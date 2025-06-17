@@ -47,7 +47,7 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
   
   if(!is.null(color_col)) {
     col <- generate_palette(metadata,color_col)
-    column_ha <- ComplexHeatmap::HeatmapAnnotation(df = metadata[color_col], col = col,na_col = "red")
+    column_ha <- ComplexHeatmap::HeatmapAnnotation(df = metadata[color_col], col = col, na_col = "red")
   } else {
     column_ha <- NULL
   }
