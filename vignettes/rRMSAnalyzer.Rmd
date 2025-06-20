@@ -450,7 +450,7 @@ Here is a list of the implemented plots with the function name:
 - boxplot using the C-scores of the annotated RNA 2’Ome sites in descending order of variability (boxplot_cscores)
 - scatterplot using the Interquartile Range (IQR) of the annotated RNA 2’Ome sites in descending order of variability. A Gauss curve is added on the right side using the IQR distribution allowing to identify the most variable sites in red (plot_sites_by_IQR)  
   
-As an example, the  plot_pca function  is presented below.  
+As an example, the plot_pca function is presented below.  
 
 Here is an example comparing samples reflecting different biological conditions based on the rRNA 2’Ome profile of the provided human_methylated list:
 
@@ -480,12 +480,19 @@ pca <- plot_pca(ribo_adjusted,
 
 # Analytic functions for site-by-site comparison of 2'Ome levels
 
-Two cut-offs are currently used to identify RNA sites with  significantly different 2’Ome levelsè between biological conditions (Marcel et al , NAR Cancer 2021):
+To determine whether sites are differentially methylated between condition, several functions have been implemented to obtain ggplots.
 
--   statistical significance: a p-value < 0.01 using Kruskal-Wallis test. 
--   biological significance: a ΔC-score (i.e., Mean C-score~max~ – Mean C-score~min~) > 0.05, indicating a variation of 5% of the RNA 2’Ome level between the conditions.
+The *plot_global_profile* function display a line plot where the line use the mean of c-score and the ribbon use the standard deviation for each rRNA 2’Ome sites for all sample of each biological condition. 
 
-The *plot_diff_sites* function displays only the RNA sites that meet these two cut-off criteria. It produces a boxplot visualizing the median C-scores per biological condition and the p-value.
+The *plot_comparison_medianes* function display two plots using the mean comparison of C-scores between biological conditions for all rRNA 2'O-methylation sites. On the left, an histogram plot shows the ΔC-score for each site (ΔC-score = Median C-score_condition1 – Median C-score_condition2). On the right, a scatter plot displays the raw median C-scores for each site and condition.
+
+
+Two cut-offs are currently used to identify RNA sites with significantly different 2’Ome levels between biological conditions (Marcel et al, NAR Cancer 2021):
+
+- statistical significance: a p-value < 0.05 using ANOVA, WELCH and Kruskal-Wallis tests. 
+- biological significance: a ΔC-score (i.e., Mean C-score~max~ – Mean C-score~min~) > 0.05, indicating a variation of 5% of the RNA 2’Ome level between the conditions.
+
+The *plot_diff_sites* function displays only the RNA sites that meet these two cut-off criteria. It produces a boxplot visualizing the median C-scores per biological condition and the p-value for a Kruskal-Wallis test.
 
 Here is an example:
 ```{r}
@@ -495,6 +502,8 @@ plot_diff_sites(ribo_adjusted,factor_column = "condition")
 #Because no RNA site was found to fulfill the default cut-offs, the p-value cut-off is changed for the following example
 plot_diff_sites(ribo_adjusted,factor_column = "condition",p_cutoff = 0.1)
 ```
+
+The *plot_stat* function display displays only the RNA sites that meet these two cut-off criteria. It produces a boxplot visualizing the median C-scores per biological condition and the p-value. But it use a res_pv table that can be generated from ANOVA, Welch or Kruskal test thanks to the *res_pv* function. 
 
 # Exporting data
 
