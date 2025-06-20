@@ -33,7 +33,7 @@ Raw data processing to obtain read-end counts from sequencing data can be perfor
 
 # Help, bug reports and suggestions
 
-To report a bug or any suggestion to improve the package, please let us known by opening a new issue on: *github issue link coming soon!*
+To report a bug or any suggestion to improve the package, please let us known by opening a new issue on: https://github.com/RibosomeCRCL/rRMSAnalyzer/issues
 
 # Acknowledgements
 
@@ -272,7 +272,7 @@ The QC report includes the following visualizations:
 - End read counts distribution by sample (boxplot_count)
 - Relative log coverage (i.e., end read count) by sample (plot_rle)
 - RNA fraction of end read counts per sample (plot_count_fraction)
-- Heatmap summarizing the correlation matrix of the end read counts (plot_heatmap_corr)
+- Heatmap summarizing the correlation matrix of the end read counts (heatmap_annotated)
 - Correspondence analysis of the end read counts (plot_coa)
 - Principal component analysis (plot_pca)
 
@@ -310,7 +310,7 @@ After batch effect adjustment using ComBat-seq method, the two technical replica
 The C-score depends on the local coverage around the site. For a simple visualization of the read end count coverage of the flanking region of a given genomic position of interest, use the plot_counts_env function. 
 Two plotting methods are available:
 
-1. **display all samples** (default parameters): by displaying the end read count coverage of all samples using a boxplot at the +6/-6 genomic position relative to the genomic position of interest (green box). Such a plot is automatically used when number of samples in up to  x. The median of the read end count is shown as a dashed red line.
+1. **display all samples** (default parameters): by displaying the end read count coverage of all samples using a boxplot at the +6/-6 genomic position relative to the genomic position of interest (green box). A pink box is displayed if there is other modification in the window. Such a plot is automatically used when samples = "all". The median of the read end count and coverage limit are shown as two dashed red lines.
 
 Here is an example:
 
@@ -344,7 +344,7 @@ print(ribo_2samples)
 Here is an example to generate a new RiboClass by removing two samples ("S1" and "S2"):
 
 ```{r}
-ribo_removed_samples <- remove_ribo_samples(ribo,c("S1","S1"))
+ribo_removed_samples <- remove_ribo_samples(ribo,c("S1","S2"))
 print(ribo_removed_samples)
 ```
 
@@ -400,6 +400,8 @@ By default, rRMSAnalyzer package includes two dataframes containing the position
 
 -   human_suspected: a dataframe, containing the 17 sites that are putative 2'Ome sites for the human rRNAs, as described in the litterature.
 
+Equivalent will come soon for the mouse.
+
 ### Customize 2'Ome sites annotations {#customize-2ome-sites-annotations}
 
 Instead of using the list of human rRNA 2’Ome sites provided by the rRMSAnalyzer package, the user can provide their own list of annotated sites which will be attached to the RiboClass object using the annotate_site function (see 10.3 section : annotation of RNA sites).
@@ -445,7 +447,8 @@ Here is a list of the implemented plots with the function name:
 
 - principal component analysis using the C-scores of the annotated RNA 2’Ome sites (plot_pca)
 - heatmap using the C-scores of the annotated RNA 2’Ome sites (plot_heatmap)
-- boxplot using the C-scores of the annotated RNA 2’Ome sites in ascending order of variability (boxplot_count)
+- boxplot using the C-scores of the annotated RNA 2’Ome sites in descending order of variability (boxplot_cscores)
+- scatterplot using the Interquartile Range (IQR) of the annotated RNA 2’Ome sites in descending order of variability. A Gauss curve is added on the right side using the IQR distribution allowing to identify the most variable sites in red (plot_sites_by_IQR)  
   
 As an example, the  plot_pca function  is presented below.  
 
