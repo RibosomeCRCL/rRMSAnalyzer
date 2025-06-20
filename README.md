@@ -10,7 +10,7 @@ rRMSAnalyzer is an R package that provides a set of easy-to-use
 functions to evaluate 2’Ome levels by computing C-scores from
 RiboMethSeq read end counts as input.
 
-Available features (version 2):
+Available features (version 3):
 
 - C-score computation (using either mean or median for the window of
   neighboring positions)
@@ -18,7 +18,9 @@ Available features (version 2):
 - Different visualizations to compare samples or sites
 - Include a table of annotated human rRNA sites
 - Export computed C-scores into a dataframe
-- Semi-automated quality control report
+- Automated quality control report
+- Automated analysis of 2'ome global methylation profile 
+- Automated differential analysis of 2'ome methylation site
 
 > **Note** We have also developed a [dedicated Nextflow
 > pipeline](https://github.com/RibosomeCRCL/ribomethseq-nf) to process
