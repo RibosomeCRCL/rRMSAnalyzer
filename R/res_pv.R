@@ -22,7 +22,7 @@ res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
   data <- data %>%
     dplyr::left_join(ribo$metadata, by = "samplename") # left join between metadata and ribom_long
   
-  #supprime les lignes avec au moins 1 NA
+  #Erase lines with at least one NA
   datatest <- data %>% tidyr::drop_na({{condition_col}})
   
   # Determine test if not provided
@@ -56,7 +56,7 @@ res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
       dplyr::group_by(annotated_sites) %>%
       dplyr::summarise(
         p_value = if (test == "student") {
-          t.test(c_score ~ get(condition_col))$p.value
+          t.test(c_score ~ get(condition_col), var.equal = FALSE)$p.value #, var.equal = FALSE for Welch test, otherwise its student test
         } else {
           kruskal.test(c_score ~ get(condition_col))$p.value
         },
