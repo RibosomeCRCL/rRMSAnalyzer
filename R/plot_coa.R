@@ -16,6 +16,7 @@
 #' @examples 
 #' data('ribo_toy')
 #' plot_coa(ribo = ribo_toy, color_col = 'condition')
+
 plot_coa <- function(ribo, color_col = NULL, axes = c(1, 2),
                      only_annotated = FALSE, title = "default",
                      subtitle = "default", object_only = FALSE) {

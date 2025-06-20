@@ -25,5 +25,4 @@ raw counts.
 \examples{
 data("ribo_toy")
 boxplot_count(ribo_toy,"run")
-
 }

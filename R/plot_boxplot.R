@@ -11,7 +11,7 @@
 #' @examples 
 #' data("ribo_toy")
 #' boxplot_count(ribo_toy,"run")
-#' 
+ 
 boxplot_count <- function(ribo, color_col = NA,
                           outlier = TRUE, horizontal = FALSE) {
   ribo_matrix <- extract_data(ribo, "count", position_to_rownames = TRUE)
