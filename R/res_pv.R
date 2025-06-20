@@ -45,7 +45,7 @@ res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
   #----------------------------------------------------------------------------
   
   # Stats
-  
+  #create the table res_pv
   if (test == "anova") {
   res_pv <- data %>%
     dplyr::group_by(annotated_sites) %>%
