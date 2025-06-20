@@ -5,7 +5,7 @@
 \title{Plot statistic}
 \usage{
 plot_stat(
-  ribo = ribo_adj_annot,
+  ribo = ribo,
   p_cutoff = 0.01,
   cscore_cutoff = 0.5,
   adjust_pvalues_method = "fdr",
