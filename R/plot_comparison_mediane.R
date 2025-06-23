@@ -44,9 +44,19 @@ metadata_data_total <- new_metadata_sites %>%
 metadata_data_total <- metadata_data_total %>%
   dplyr::mutate(site = as.character(site))
 
-# keep site order (doesn't work yet)
-# metadata_data_total <- metadata_data_total %>%
-#   dplyr::mutate(site = factor(site, levels = rev(unique(human_methylated$Nomenclature))))
+# keep site order 
+#first order
+fst_order <- rev(unique(human_methylated$Nomenclature))
+
+# second order
+other_sites <- setdiff(unique(metadata_data_total$site), fst_order)
+
+#concatenation of both order
+final_order <- c(fst_order, other_sites)
+
+#use final_order
+metadata_data_total <- metadata_data_total %>%
+  dplyr::mutate(site = factor(site, levels = final_order)) #rev(unique(human_methylated$Nomenclature))))
 
 #create difference_cat column
 metadata_data_total$difference_cat <- ifelse(abs(metadata_data_total$difference) < 0.05, "No difference",
@@ -61,8 +71,6 @@ metadata_data_total$difference_cat <- factor(metadata_data_total$difference_cat,
 # create a color vector for tags according to difference_cat
 site_colors <- ifelse(metadata_data_total$difference_cat == "Increase", "red",
                       ifelse(metadata_data_total$difference_cat == "Decrease", "blue", "black"))
-
-#site_colors <- c("Increase" = "red", "No difference" = "black", "Decrease" = "blue")
 
 # add column for colouring x axis 
 metadata_data_total$site_color <- site_colors  
