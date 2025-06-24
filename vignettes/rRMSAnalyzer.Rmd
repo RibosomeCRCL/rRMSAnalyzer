@@ -484,7 +484,7 @@ To determine whether sites are differentially methylated between condition, seve
 
 The *plot_global_profile* function display a line plot where the line use the mean of c-score and the ribbon use the standard deviation for each rRNA 2’Ome sites for all sample of each biological condition. 
 
-The *plot_comparison_medianes* function display two plots using the mean comparison of C-scores between biological conditions for all rRNA 2'O-methylation sites. On the left, an histogram plot shows the ΔC-score for each site (ΔC-score = Median C-score_condition1 – Median C-score_condition2). On the right, a scatter plot displays the raw median C-scores for each site and condition.
+The *plot_comparison_median* function display two plots using the mean comparison of C-scores between biological conditions for all rRNA 2'O-methylation sites. On the left, an histogram plot shows the ΔC-score for each site (ΔC-score = Median C-score_condition1 – Median C-score_condition2). On the right, a scatter plot displays the raw median C-scores for each site and condition.
 
 
 Two cut-offs are currently used to identify RNA sites with significantly different 2’Ome levels between biological conditions (Marcel et al, NAR Cancer 2021):
