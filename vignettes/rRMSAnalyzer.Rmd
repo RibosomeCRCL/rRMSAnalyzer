@@ -3,7 +3,7 @@ title: "rRMSAnalyzer: package to analyze RiboMethSeq data"
 author: "Théo COMBE, Hermes PARAQINDES, Janisse KIELBASSA, Emilie THOMAS, Anthony FERRARI and Virginie MARCEL"
 date: "`r format(Sys.Date(), '%m/%d/%Y')`"
 abstract: > 
-  RiboMethSeq is an innovative RNAseq-based approach, which was developed in 2015 to analyze 2’O-ribose methylation (2’Ome) at all sites of ribosomal RNAs (rRNA) at once, in yeast [@birkedal2014]. This approach was then transferred to human using the Illumina technology [@Marchand2016; @Erales2017; @Marcel2021]. Briefly, the presence of 2'Ome protects the phosphodiester bond located at the 3' of the 2'Ome nucleotide from alkaline hydrolysis. Thus, the presence of 2'Ome at the given nucleotide n induces under-representation of RNA fragments starting at the nucleotide n+1  and an over-representation of RNA fragments ending at the nucleotide n-1, allowing the extrapolation of 2'Ome levels at the corresponding nucleotide position n (or C-score) varying from 0 to 1 [@birkedal2014]. <br><br> The rRMSAnalyzer package can be used for any kind of RNA and with all organisms. This package provides a set of user-friendly functions to compute C-scores from RiboMethSeq read end counts as input, adjust batch effect with ComBat-Seq, visualize the data and provide a table with the annotated human rRNA sites and their C-scores. Processing of the raw data to obtain read end counts from sequencing data was previously described [@Marchand2016]. 
+  RiboMethSeq is an innovative RNAseq-based approach, which was developed in 2015 to analyze 2’O-ribose methylation (2’Ome) at all sites of ribosomal RNAs (rRNA) at once, in yeast [@birkedal2014]. This approach was then transferred to human using the Illumina technology [@Marchand2016; @Erales2017; @Marcel2021]. Briefly, the presence of 2'Ome protects the phosphodiester bond located at the 3' of the 2'Ome nucleotide from alkaline hydrolysis. Thus, the presence of 2'Ome at the given nucleotide n induces under-representation of RNA fragments starting at the nucleotide n+1  and an over-representation of RNA fragments ending at the nucleotide n-1, allowing the extrapolation of 2'Ome levels at the corresponding nucleotide position n (or C-score) varying from 0 to 1 [@birkedal2014]. <br><br> The rRMSAnalyzer package can be used for any kind of RNA and with all organisms. This package provides a set of user-friendly functions to compute C-scores from RiboMethSeq read end counts as input, perform quality control of the dataset, adjust batch effect with ComBat-Seq, and provide tools to visualize, analyze the data and provide a table with the annotated human rRNA sites and their C-scores. Raw data processing to obtain read-end counts from sequencing data can be performed using our Nextflow pipeline [ribomethseq-nf](https://github.com/RibosomeCRCL/ribomethseq-nf), as already described [@Marchand2016].
 output:
    rmarkdown::html_vignette:
       toc: true
@@ -27,9 +27,7 @@ knitr::opts_chunk$set(
 library(rRMSAnalyzer)
 ```
 
-The rRMSAnalyzer package can be used for any type of RNA and on all organism. This package provides a set of user-friendly functions to calculate C-scores from RiboMethSeq read end counts as input, perform quality control of the dataset, adjust for potential batch effects, and provide tools to visualize and analyze the data. In addition, a list of potentially methylated human rRNA sites is provided for analyses. 
 
-Raw data processing to obtain read-end counts from sequencing data can be performed using our Nextflow pipeline [ribomethseq-nf](https://github.com/RibosomeCRCL/ribomethseq-nf), as already described [@Marchand2016].
 
 # Help, bug reports and suggestions
 
