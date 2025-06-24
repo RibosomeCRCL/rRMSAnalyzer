@@ -45,7 +45,7 @@ background-color: #E4F3F3;
 
 </summary>
 Project name : **`r params$project_name`**<br><br>
-User name : **`r Sys.getenv("USERNAME")`** <br>
+Analysed by: Allyson Moureaux <br>
 Date : **`r Sys.time()`**
 
 RiboClass Name : **`r params$ribo_name`**. <br> Number of uploaded samples: **`r length(ribo_to_check[[1]])`** samples. <br> RNA(s) used by the coverage tool: **`r as.character(ribo_to_check[["rna_names"]][["original_name"]])`** <br> There are **`r as.character(all_sites)`** genomic positions.
