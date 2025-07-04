@@ -32,8 +32,8 @@ res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
   }
   
   # Test argument verification
-  if (!test %in% c("student", "anova", "kruskal")) {
-    stop("Test must be one of: 'student', 'anova', or 'kruskal'")
+  if (!test %in% c("student", "anova", "kruskal", "wilcoxon")) {
+    stop("Test must be one of: 'student', 'anova', 'kruskal' or 'wilcoxon'")
   }
   
   #----------------------------------------------------------------------------
@@ -57,15 +57,17 @@ res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
       dplyr::summarise(
         p_value = if (test == "student") {
           t.test(c_score ~ get(condition_col), var.equal = FALSE)$p.value #, var.equal = FALSE for Welch test, otherwise its student test
-        } else {
-          kruskal.test(c_score ~ get(condition_col))$p.value
+        } else if (test == "wilcoxon") {
+          wilcox.test(c_score ~ get(condition_col))$p.value # Mann–Whitney U test because paired = FALSE (default)
+          } else {
+          kruskal.test(c_score ~ get(condition_col))$p.value #no need to specify var.equal = FALSE because this test is by definition done for that
         },
         delta_c_score = abs(mean(c_score[get(condition_col) == unique(get(condition_col))[1]]) -
-    mean(c_score[get(condition_col) == unique(get(condition_col))[2]]))
+    mean(c_score[get(condition_col) == unique(get(condition_col))[2]])) # delta C-score for student, wilcoxon and kruskal only
   )
   }
   
-  # pval_adj
+  # pval_adj for all tests
   res_pv$p_adj <- p.adjust(res_pv$p_value, method = "fdr")
   
   return(res_pv)
