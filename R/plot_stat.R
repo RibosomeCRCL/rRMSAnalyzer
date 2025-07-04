@@ -13,7 +13,7 @@
 #'
 #' @examples plot_stat(data = ribo, site = NULL, res_pv = res_pv, pthr = 0.05)
 plot_stat <- function(ribo = ribo,
-                      p_cutoff = 0.01,
+                      p_cutoff = 0.05,
                       cscore_cutoff = 0.5,
                       adjust_pvalues_method = "fdr",
                       site = NULL, 
@@ -56,7 +56,7 @@ plot_stat <- function(ribo = ribo,
                       label = "No differential site found !") + 
              theme_void())
   } else {
-  significant_sites <- site
+  site <- significant_sites
  }
 
   # if (!is.null(res_pv) && !is.null(pthr)) {
