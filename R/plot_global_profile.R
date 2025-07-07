@@ -39,10 +39,12 @@ plot_global_profile <- function(ribo = ribo_adj_annot, condition_col = NULL) {
   fst_order <- (unique(human_methylated$Nomenclature))
   
   # second order
-  other_sites <- setdiff(unique(result$annotated_sites), fst_order) # sites only present in result 
+  manual <- c("5.8S_Um14","5.8S_Gm75")
+  manual <- manual[manual %in% unique(result$annotated_sites)]
+  #other_sites <- setdiff(unique(result$annotated_sites), fst_order) # sites only present in result 
   
   #concatenation of both order
-  final_order <- c(other_sites, fst_order) #order 5.8S before 18 and 28-S
+  final_order <- c(manual, fst_order) #order 5.8S before 18 and 28-S
   
   #use final_order
   result <- result %>%
