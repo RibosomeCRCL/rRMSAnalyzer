@@ -6,7 +6,7 @@
 \usage{
 plot_stat(
   ribo = ribo,
-  p_cutoff = 0.01,
+  p_cutoff = 0.05,
   cscore_cutoff = 0.5,
   adjust_pvalues_method = "fdr",
   site = NULL,
