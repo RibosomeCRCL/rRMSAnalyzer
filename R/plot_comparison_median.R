@@ -1,4 +1,4 @@
-#' Plot comparison of median of c-score between two conditions
+#' Plot comparison of median of C-score between two conditions
 #'
 #' @param ribo A RiboClass object.
 #' @param condition_col condition column for the plot
@@ -103,7 +103,7 @@ part1 <- ggplot(metadata_data_total, aes(x = site, y = difference, label = site)
   ) +
   geom_text(aes(x = site, y = -1.01, label = site, color = site_color), hjust = 1, size = 4) +  # add label manually
   scale_color_identity() +  
-  xlab("2'Ome sites") +
+  xlab("RNA 2'Ome sites") +
   ylab(bquote("\u0394"~ "median C-score" ~ "(" * .(ech) ~ "-" ~ .(ctrl) * ")")) +
   coord_flip() +
   scale_y_continuous(
@@ -129,7 +129,7 @@ part2 <- ggplot(metadata_data_total) +
                alpha = 1,
                linewidth = 1) +
   coord_flip() +
-  scale_y_continuous(name = "Median c-score",sec.axis = sec_axis(transform = ~ ., name = NULL, breaks = NULL)) +
+  scale_y_continuous(name = "Median C-score",sec.axis = sec_axis(transform = ~ ., name = NULL, breaks = NULL)) +
   scale_color_manual(
     values = setNames(c("black", "orange", "grey", "blue", "red"),
                       c(ctrl, ech, "No difference", "Decrease", "Increase")), # format colours dynamically
