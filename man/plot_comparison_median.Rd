@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_comparison_median.R
 \name{plot_comparison_median}
 \alias{plot_comparison_median}
-\title{Plot comparison of median of c-score between two conditions}
+\title{Plot comparison of median of C-score between two conditions}
 \usage{
 plot_comparison_median(
   ribo = NULL,
@@ -24,7 +24,7 @@ plot_comparison_median(
 two ggplot objects
 }
 \description{
-Plot comparison of median of c-score between two conditions
+Plot comparison of median of C-score between two conditions
 }
 \examples{
 plot_comparison_median(ribo_adj_annot, params$condition_col, params$ech, params$ctrl)
