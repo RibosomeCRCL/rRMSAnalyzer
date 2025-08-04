@@ -9,7 +9,10 @@
 #' @export
 #'
 #' @examples
-#' plot_comparison_median(ribo_adj_annot, params$condition_col, params$ech, params$ctrl)
+#' data("ribo_toy")
+#' ech <- "cond1"
+#' ctrl <- "cond2"
+#' plot_comparison_median(ribo_toy, "condition", ech, ctrl)
 
 plot_comparison_median <- function(ribo = NULL, condition_col = NULL,  ech = NULL, ctrl = NULL) {
   
@@ -104,7 +107,7 @@ part1 <- ggplot(metadata_data_total, aes(x = site, y = difference, label = site)
   geom_text(aes(x = site, y = -1.01, label = site, color = site_color), hjust = 1, size = 4) +  # add label manually
   scale_color_identity() +  
   xlab("RNA 2'Ome sites") +
-  ylab(bquote("\u0394"~ "median C-score" ~ "(" * .(ech) ~ "-" ~ .(ctrl) * ")")) +
+  ylab(bquote("Delta"~ "median C-score" ~ "(" * .(ech) ~ "-" ~ .(ctrl) * ")")) +
   coord_flip() +
   scale_y_continuous(
     sec.axis = sec_axis(transform = ~ ., name = NULL, breaks = NULL), limits = c(-1.2, 1))
