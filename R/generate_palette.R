@@ -1,7 +1,7 @@
 #' Generate the col argument for ComplexHeatmap::HeatmapAnnotation
 #'
 #' @param metadata A data.frame containing sample metadata
-#' @param color_col The name of the column to generate colors for
+#' @param cols_to_use The name of the column to generate colors for
 #'
 #' @return A named vector of colors
 #' @keywords internal
