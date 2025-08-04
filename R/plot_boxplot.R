@@ -1,4 +1,4 @@
-#' Plot a boxplot of a RiboClass object’s counts. 
+#' Plot a boxplot of a RiboClass object counts. 
 #' @description This plot is useful to check if the samples are alike in their
 #' raw counts.
 #' @param ribo A RiboClass object.
@@ -100,7 +100,7 @@ boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var
           legend.position = "top",
           axis.title=element_text(size=14),
           axis.text.y = element_text(size=12)) +
-    labs(x = paste0("rRNA 2’Ome sites (sorted by decreasing ",method,")"),
+    labs(x = paste0("rRNA 2'Ome sites (sorted by decreasing ",method,")"),
          y = "C-score",
          subtitle = paste0(
            length(unique(matrix_melted$sample)), " samples and ", 
@@ -121,7 +121,7 @@ boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var
     ggplot2::geom_boxplot(outlier.shape = shape_outlier) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5,
                                                        hjust = 1)) +
-    ggplot2::xlab("rRNA 2’Ome sites (sorted by median)") +
+    ggplot2::xlab("rRNA 2'Ome sites (sorted by median)") +
     ggplot2::ylab("C-score")
   }
   
@@ -167,7 +167,7 @@ boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var
   # Transformation in format "melted" for ggplot
   matrix_melted <- reshape2::melt(matrix_inv, id.vars = id_vars, #creation of a matrix with "qc" columns (=0 or 1 if outlier) "Sample", "variable" et "count"
                                   value.name = values_col_name)
-  # Transformer "Sample" en facteur pour contrôler l'ordre
+  # Transform "Sample" in factor to control order
   matrix_melted[["Sample"]] <- factor(matrix_melted[["Sample"]],
                                       levels = unique(matrix_melted[["Sample"]]))
   shape_outlier <- NA
