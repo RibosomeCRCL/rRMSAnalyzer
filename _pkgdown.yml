@@ -58,4 +58,36 @@ reference:
 - title: Reports
   desc: Generate automated reports from a RiboClass
 - contents: starts_with("report_")
-
+navbar:
+  structure:
+    left:
+      - Get_started    # tab for the guide
+      - reference      # tab for index
+      - articles       # tab Articles (vignettes)
+      - news           # tab Change log
+      - Model_murine   # tab murin model
+      - Model_human    # tab human model
+  components:
+    Get_started:
+      text: "get started" #text on the tab
+      href: articles/rRMSAnalyzer.html # relative adress
+    Model_murine:
+      text: "Murine model" #text on the tab
+      href: articles/Model_murine.html # relative adress
+    Model_human:
+      text: "Human_model"
+      href: articles/Model_human.html
+articles:
+      - title: Murine model
+        contents:
+          - Model_murine
+      - title: Human model
+        contents:
+          - Model_human
+      - title: Custom Annotation
+        contents:
+          - custom_anno
+      - title: Custom Ribo
+        contents:
+          - custom_ribo
+# to test it run : pkgdown::build_site() 
