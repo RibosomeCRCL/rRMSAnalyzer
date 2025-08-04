@@ -4,7 +4,7 @@ Title: Package to Analyze RiboMethSeq Data
 Version: 2.0.1
 Authors@R: c(
     person("Théo","Combe", email="ribosome.crcl@lyon.unicancer.fr", role=c("aut","cre")),
-        person("Allyson","Moureaux", role="aut"),
+    person("Allyson","Moureaux", role="aut"),
     person("Hermes","Paraqindes", role="aut"),
     person("Janice","Kielbassa", role="aut"),
     person("Fleur","Bourdelais", role="aut"),
@@ -23,8 +23,8 @@ License: GPL (>= 3)
 URL: https://github.com/RibosomeCRCL/rRMSAnalyzer,
     https://ribosomecrcl.github.io/rRMSAnalyzer/
 BugReports: https://github.com/RibosomeCRCL/rRMSAnalyzer/issues
-Depends: R (>= 3.5.0)
-Imports: dplyr, tidyr, rlang, cli, sva, factoextra, ade4, ggplot2, ComplexHeatmap, colorRamp2, reshape2, scales, cowplot, grid, kableExtra, DT
+Depends: R (>= 4.1.0)
+Imports: RColorBrewer, dplyr, tibble, tidyr, rlang, cli, sva, factoextra, ade4, ggplot2, ComplexHeatmap, colorRamp2, reshape2, scales, cowplot, grid, patchwork
 LazyData: FALSE
 biocViews:
 RoxygenNote: 7.3.2
@@ -32,7 +32,9 @@ NeedsCompilation: no
 Encoding: UTF-8
 Suggests: 
     knitr,
+    kableExtra,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0), 
+    DT
 VignetteBuilder: knitr
 Config/testthat/edition: 3
