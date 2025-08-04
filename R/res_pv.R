@@ -1,4 +1,4 @@
-#' Compute statistics for c-score based on condition column
+#' Compute statistics for C-score based on condition column
 #'
 #' @param test statistic test wanted student, anova or kruskal
 #' @param condition_col column condition in metadata
@@ -7,7 +7,9 @@
 #' @returns a dataframe
 #' @export
 #'
-#' @examples res_pv(ribo = ribo_adj_annot, test_name = t.test, condition_col = col)
+#' @examples 
+#' data("ribo_toy")
+#' res_pv(ribo = ribo_toy, test = "student", condition_col = "condition")
 res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
   
   # Extract data
@@ -28,7 +30,9 @@ res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
   # Determine test if not provided
   if (is.null(test)) {
     n_conditions <- length(unique(data[[condition_col]]))
-    test <- if (n_conditions == 2) "student" else "anova"
+    test <- if (n_conditions == 2) "student" 
+    else if (n_conditions > 2) "anova"
+    else message("Test can't be done with one group only")
   }
   
   # Test argument verification
@@ -46,26 +50,69 @@ res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
   
   # Stats
   #create the table res_pv
-  if (test == "anova") {
+  if (test %in% c("anova", "kruskal")) {
   res_pv <- data %>%
     dplyr::group_by(annotated_sites) %>%
     dplyr::summarise(
-      p_value = anova(lm(c_score ~ get(condition_col)))$"Pr(>F)"[1])
-  } else {
+      p_value = {
+        rep_table <- dplyr::cur_data()
+        groups_table <- table(rep_table[[condition_col]])
+        if (length(groups_table) >= 2 && all(groups_table >= 2)) {
+          if (test == "anova") { # test == "anova"
+            anova(lm(c_score ~ get(condition_col), data = rep_table))$"Pr(>F)"[1]
+          } else { # test == "kruskal"
+            kruskal.test(c_score ~ get(condition_col), data = rep_table)$p.value
+          }
+        } else {
+          message(" Site ", unique(rep_table$annotated_sites),
+                  " ignored : doesn't have at least 2 replicats.")
+          NA_real_
+        }
+      }
+    )
+  #     p_value = anova(lm(c_score ~ get(condition_col)))$"Pr(>F)"[1])
+  # } else {
+  } else { #if not anova, nor kruskal  
     res_pv <- data %>%
       dplyr::group_by(annotated_sites) %>%
+      #-------------------------------------------------------------------------
       dplyr::summarise(
-        p_value = if (test == "student") {
-          t.test(c_score ~ get(condition_col), var.equal = FALSE)$p.value #, var.equal = FALSE for Welch test, otherwise its student test
-        } else if (test == "wilcoxon") {
-          wilcox.test(c_score ~ get(condition_col))$p.value # Mann–Whitney U test because paired = FALSE (default)
-          } else {
-          kruskal.test(c_score ~ get(condition_col))$p.value #no need to specify var.equal = FALSE because this test is by definition done for that
+        p_value = {
+          # Check replicats
+          rep_table <- dplyr::cur_data() # extract sub data
+          groups_table <- table(rep_table[[condition_col]])
+          # Verify number of group = 2 replicats number >= 2
+          if (length (groups_table) == 2 && all(groups_table >= 2)) {
+            if (test == "student") { # Welch here
+              t.test(c_score ~ get(condition_col), var.equal = FALSE)$p.value #, var.equal = FALSE for Welch test, otherwise its student test
+            } else if (test == "wilcoxon") {
+                wilcox.test(c_score ~ get(condition_col))$p.value # Mann–Whitney U test because paired = FALSE (default)
+              } else {
+                  NA_real_
+                }
+        } else {
+          message("Site ", unique(rep_table$annotated_sites), " ignored : doesn't have at least 2 replicats.")
+          NA_real_
+          }
         },
-        delta_c_score = abs(mean(c_score[get(condition_col) == unique(get(condition_col))[1]]) -
-    mean(c_score[get(condition_col) == unique(get(condition_col))[2]])) # delta C-score for student, wilcoxon and kruskal only
-  )
-  }
+        delta_c_score = {
+          rep_table <- dplyr::cur_data()
+          groups_table <- table(rep_table[[condition_col]])
+          if (length(groups_table) == 2 && all(groups_table >= 2)) {
+            abs(mean(rep_table$c_score[rep_table[[condition_col]] == unique(rep_table[[condition_col]])[1]]) -
+                  mean(rep_table$c_score[rep_table[[condition_col]] == unique(rep_table[[condition_col]])[2]]))
+          } else {
+            NA_real_
+          }
+        }
+      )
+}
+      #-------------------------------------------------------------------------
+            
+  #           abs(mean(c_score[get(condition_col) == unique(get(condition_col))[1]]) -
+  #   mean(c_score[get(condition_col) == unique(get(condition_col))[2]])) # delta C-score for student, wilcoxon and kruskal only
+  # )
+  # }
   
   # pval_adj for all tests
   res_pv$p_adj <- p.adjust(res_pv$p_value, method = "fdr")

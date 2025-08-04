@@ -1,5 +1,5 @@
 #' Plot a correlation heatmap from a RiboClass object.
-#'  
+#' @description
 #' Shows the correlation distance between samples.
 #'
 #' @param ribo A RiboClass object.
@@ -8,9 +8,32 @@
 #' @returns ComplexHeatmap object
 #' @export
 #'
-#' @examples plot_heatmap_annotated(ribo, qcdata)
+#' @examples 
+#' data("ribo_toy")
+#' qcdata <- ribo_toy[[2]]
+#' ribo_matrix <- extract_data(ribo_toy, "count", position_to_rownames = TRUE)
+#' medcov <- apply(ribo_matrix,2,function(x) median(x,na.rm=TRUE)) 
+#' qcdata <- cbind(qcdata,median_coverage=medcov[rownames(qcdata)]) 
+#' qcdata$coverage_quality <- "pass" 
+#' qcdata$coverage_quality[qcdata$median_coverage < 100] <- "warning" 
+#' plot_rle <- rRMSAnalyzer::plot_rle(ribo_toy,show_outlier = TRUE)
+#' mad <- plot_rle$plot_env$mad  
+#' rle_median <- as.vector(plot_rle$plot_env$rle_grouped$median)
+#' keys <- as.vector(plot_rle$plot_env$rle_grouped$key)
+#' outlier_table <- data.frame(key = keys, rle_median = rle_median)
+#' outlier <- data.frame()
+#' for (i in 1:nrow(outlier_table)) {
+#'   if(outlier_table$rle_median[i] < mad) {
+#'     outlier <- rbind(outlier, outlier_table[i,])}}
+#' qcdata$rle_median <- outlier_table$rle_median[match(qcdata$samplename, outlier_table$key)]
+#' qcdata$rle_median_quality <- "pass" 
+#' qcdata$rle_median_quality[qcdata$rle_median < mad] <- "warning" 
+#' qcdata$total_outliers <- rowSums(qcdata[, c("coverage_quality", "rle_median_quality")] == "warning")
+#' ribo_toy$metadata$outlier_level <- qcdata$total_outliers
+#' qcdata$total_outliers <- as.character(qcdata$total_outliers)
+#' plot_heatmap_annotated(ribo_toy, qcdata)
 
-heatmap_annotated <- function(ribo = ribo, qcdata = qcdata) {
+plot_heatmap_annotated <- function(ribo = ribo, qcdata = qcdata) {
   
   corr_matrix <- extract_data(ribo, "count")
   corr_matrix <- corr_matrix[, -1]

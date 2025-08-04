@@ -1,4 +1,4 @@
-#' Plot global profile for a given condition on a given metadata
+#' Plot global profile for given conditions on a given metadata
 #'
 #' @param ribo A RiboClass object.
 #' @param condition_col condition column for the plot
@@ -8,7 +8,16 @@
 #' @export
 #' 
 #' @examples
-#' plot_global_profile(ribo, condition_col, ech, ctrl)
+#' data("ribo_toy")
+#' data("human_methylated")
+#' ribo_toy <- remove_ribo_samples(ribo_toy,c("RNA1", "RNA2"))
+#' ribo_toy <- rename_rna(ribo_toy)  
+#' ribo_toy <- annotate_site(ribo_toy,
+#'                                 annot = human_methylated,
+#'                                 anno_rna = "rRNA",
+#'                                 anno_pos = "Position",
+#'                                 anno_value = "Nomenclature")
+#' plot_global_profile(ribo_toy, "condition")
 
 plot_global_profile <- function(ribo = ribo_adj_annot, condition_col = NULL) { 
 
@@ -24,7 +33,7 @@ plot_global_profile <- function(ribo = ribo_adj_annot, condition_col = NULL) {
     tibble::rownames_to_column("annotated_sites") %>%  # Add annotated_sites as column
     tidyr::pivot_longer(cols = -annotated_sites, names_to = "samplename", values_to = "c_score")  # keep annotated_sites outside pivoting
 
-# fusion with metadata
+  # fusion with metadata
   ribom_merged <- ribom_long %>% 
     dplyr::left_join(meta, by = "samplename") # left join between metadata and ribom_long 
   
@@ -44,8 +53,10 @@ plot_global_profile <- function(ribo = ribo_adj_annot, condition_col = NULL) {
   #other_sites <- setdiff(unique(result$annotated_sites), fst_order) # sites only present in result 
   
   #concatenation of both order
-  final_order <- c(manual, fst_order) #order 5.8S before 18 and 28-S
+  final_order <- c(manual, fst_order) #order 5.8S before 18 and 28_S
   
+  #check for duplicates
+  final_order <- final_order[!duplicated(final_order)]
   #use final_order
   result <- result %>%
     dplyr::mutate(annotated_sites = factor(annotated_sites, levels = final_order)) 

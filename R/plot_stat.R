@@ -1,17 +1,30 @@
-#' Plot statistic
-#'
+#' Plot statistic of significant differential sites between experimental condition returned by the 
+#' res.pv function 
 #' @param ribo a RiboClass
 #' @param site sites to plot
 #' @param res_pv df of p values extracted from res_pv.R
 #' @param pthr p value threshold
 #' @param condition_col the condition column passed in params of the Rmd
-#' @param p_cutoff cutoff of c-score under which sites are not taken in account
-#' @param cscore_cutoff 
-#' @param adjust_pvalues_method 
-#'
+#' @param p_cutoff cutoff of p-value under which sites are not taken in account
+#' @param cscore_cutoff cutoff of c-score under which sites are not taken in account
+#' @param adjust_pvalues_method Method to adjust p-value
+#' @importFrom stats anova cor kruskal.test lm mad median p.adjust sd setNames t.test wilcox.test
+#' @importFrom utils head
 #' @export
 #'
-#' @examples plot_stat(data = ribo, site = NULL, res_pv = res_pv, pthr = 0.05)
+#' @examples 
+#' data("ribo_toy")
+#' data("human_methylated")
+#' ribo_toy <- remove_ribo_samples(ribo_toy,c("RNA1", "RNA2"))
+#' ribo_toy <- rename_rna(ribo_toy)  
+#' ribo_toy <- annotate_site(ribo_toy,
+#'                                 annot = human_methylated,
+#'                                 anno_rna = "rRNA",
+#'                                 anno_pos = "Position",
+#'                                 anno_value = "Nomenclature")
+#' res_pv <- res_pv(ribo = ribo_toy, test = "kruskal", condition_col = "condition") 
+#' plot_stat(ribo = ribo_toy, site = NULL, res_pv = res_pv, pthr = 0.01, 
+#' condition_col = "condition", cscore_cutoff = 0.5)
 plot_stat <- function(ribo = ribo,
                       p_cutoff = 0.05,
                       cscore_cutoff = 0.5,
@@ -30,7 +43,7 @@ plot_stat <- function(ribo = ribo,
     }
   }
   
-    # Case where plot can't be draw
+  #-------------------------------Case where plot can't be draw-----------------
   if (is.null(site) && (is.null(res_pv) || is.null(pthr))) {
     stop("Error : You need to specify at least one site")
   }
@@ -38,13 +51,16 @@ plot_stat <- function(ribo = ribo,
     stop("Error : res_pv is required if pthr is given")
   }
 
-  # filter sites
-  if ("delta_c_score" %in% colnames(res_pv)) {
+  # ------------------------------Filter on sites-------------------------------
+  # if site specified we use it without applying any threshold
+  if (!is.null(site)) {
+    significant_sites <- site
+  } else if ("delta_c_score" %in% colnames(res_pv) ) { # if sites not specified, compute significant sites for welch and wilcoxon
     significant_sites <- res_pv %>% 
       dplyr::filter(p_adj < pthr, abs(delta_c_score - 1) >= cscore_cutoff) %>% 
       dplyr::pull(annotated_sites)
-  } else {
-    warning("ANOVA test : filter on p_adj")
+  } else {  # if sites not specified, compute significant sites for anova and kruskal
+    warning("filter on p_adj")
     significant_sites <- res_pv %>% 
       dplyr::filter(p_adj < pthr) %>% 
       dplyr::pull(annotated_sites)
@@ -55,25 +71,10 @@ plot_stat <- function(ribo = ribo,
              annotate("text", x = 4, y = 25, size = 8,
                       label = "No differential site found !") + 
              theme_void())
-  } else {
-  site <- significant_sites
- }
-
-  # if (!is.null(res_pv) && !is.null(pthr)) {
-  #   significant_sites <- res_pv %>% 
-  #     dplyr::filter(p_adj < pthr, abs(delta_c_score - 1) >= cscore_cutoff) %>% 
-  #     dplyr::pull(annotated_sites)
-  #   if (length(significant_sites) == 0) {
-  #     return(ggplot() + 
-  #              annotate("text", x = 4, y = 25, size=8,
-  #                       label = "No differential site found !") + 
-  #              theme_void())
-  #     }
-  # } else {
-  #   significant_sites <- site
-  # }
-
-  # Extract data
+  }
+  
+  # ------------------------------Data formatting ------------------------------
+  # Extract
   data <- extract_data(ribo, only_annotated = TRUE, position_to_rownames = TRUE)
   
   # Transform data into long format excluding -annotated_sites
@@ -81,26 +82,37 @@ plot_stat <- function(ribo = ribo,
     tibble::rownames_to_column("annotated_sites") %>%  # Add annotated_sites as column
     tidyr::pivot_longer(cols = -annotated_sites, names_to = "samplename", values_to = "c_score")  # keep annotated_sites outside pivoting
   
-  data <- data %>%
-    dplyr::left_join(ribo$metadata, by = "samplename") # left join between metadata and ribom_long
+  # Verify that specified sites exist
+  sites_in_data <- unique(data$annotated_sites) #existing sites
+  if (!all(significant_sites %in% sites_in_data)) { # if sites doesn't exist
+    warning("given site in 'site = ...' doesn't exist in data. Please, check for typos in ", 
+            paste(setdiff(significant_sites, sites_in_data), collapse = ", "))
+  }
   
+  # Left join between metadata and ribom_long
   data <- data %>%
-    dplyr::filter(annotated_sites %in% significant_sites)
+    dplyr::left_join(ribo$metadata, by = "samplename") 
   
-  # add pval if res_pv is given 
+
+  # Add pval in data if res_pv is given 
   if (!is.null(res_pv)) { # keep only sites for which pval_adj is < pthr
     data <- data %>%
       dplyr::left_join(res_pv %>% dplyr::select(annotated_sites, p_value, p_adj), by = "annotated_sites")
   }
   
-  # Generate plot
+  # Keep only specified sites if necessary
+  if(!is.null(site)) {
+  data <- data %>% dplyr::filter(annotated_sites %in% significant_sites)
+  }
+  
+  # -----------------------------Generate plot---------------------------------
   stat <- ggplot(data, aes(x = !!sym(condition_col), y = c_score, fill = !!sym(condition_col))) +
     geom_boxplot() +
     facet_wrap(~ annotated_sites) +
         theme_bw() +
     labs(title = "Statistical Analysis", x = "Condition", y = "C_score")
   
-  # Add p_values if res_pv given
+  # Add p_values on plot if res_pv given
   if (!is.null(res_pv)) {
     stat <- stat + 
       geom_text(
