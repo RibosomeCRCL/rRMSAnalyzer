@@ -1,12 +1,11 @@
 #' Plot counts for a given position on a given RNA
 #' 
-#'
 #' @param ribo A RiboClass object
 #' @param rna Name of RNA where the position is located
 #' @param pos Position on RNA on which the view will be centered
 #' @param samples Samples to display. "all" will display all samples.
 #' @param flanking Number of sites to display on the left/right of the selected position.
-#'
+#' @param condition Condition column in metadata
 #' @return A ggplot object
 #' @export
 #'
@@ -15,7 +14,7 @@
 #' ribo_toy <- rename_rna(ribo = ribo_toy)
 #' plot_counts_env(ribo = ribo_toy, rna = "5.8S", pos = 15)
 plot_counts_env <- function(ribo = NULL, rna = NULL, pos = NULL, samples = "all", flanking = 6, condition = NULL) {
-  #in this code condition = column name of the metadata BUT [[condition]] and .data[[condition]] = value taken by the parameter "condition" in the function above
+
   new_position <- count <- NULL
   
   #Check for ribo
