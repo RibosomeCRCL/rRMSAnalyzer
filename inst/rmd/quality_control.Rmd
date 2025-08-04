@@ -38,10 +38,6 @@ background-color: #E4F3F3;
 </style>
 ```
 
-```{r library, echo = FALSE, warning=FALSE}
-library(DT)
-library(kableExtra)
-```
 <details>
 
 <summary>
@@ -137,7 +133,7 @@ qcdata$coverage_quality[qcdata$median_coverage < 100] <- "warning"
 ```
 
 ```{r,warning=FALSE}
-rRMSAnalyzer::boxplot_count(ribo_to_check) + ggplot2::ggtitle("End read counts distribution by sample")
+rRMSAnalyzer::boxplot_count(ribo_to_check, ) + ggplot2::ggtitle("End read counts distribution by sample")
 ```
 
 
@@ -231,7 +227,6 @@ It is possible to visualise the bias linked to the sequencing batch and to evalu
 COA-1 allows to visualize the different libraries and thus putative batch effect that can be resolved using ComBat-seq. <br>
 
 ```{r, warning=FALSE}
-#{r, fig.asp = 1, fig.width = 10} https://bookdown.org/yihui/rmarkdown-cookbook/html-tabs.html
 plot_coa <- rRMSAnalyzer::plot_coa(ribo_to_check,color_col = params$library_col)+ 
   ggplot2::scale_color_manual(values = c("L1" = "#00F", "L2" = "orange", "L3" = "purple", "L4" = "#808000", "L5" = "#000080", "L6" = "pink", "L7" = "#FF00FF", "L8" = "#CCCCFF", "L9" = "#9FE2BF", "L10" = "#DFFF00", "L11" = "#DFAF00", "L12" = "#DFDF00"))
 print(plot_coa)
@@ -242,11 +237,11 @@ print(plot_coa)
 COA-2 allows to visualize the sample depending whether they have been considered as outliers based on 1 or 2 previous graphs (see section 2.1 and 2.2). The outlier level of “0” means that no warning has been raised for this sample.
 
 ```{r, warning=FALSE}
-plot_coa_binaire <- rRMSAnalyzer::plot_coa(ribo_to_check, color_col = "outlier_level")
-plot_coa_binaire <- plot_coa_binaire + 
+plot_coa_outliers <- rRMSAnalyzer::plot_coa(ribo_to_check, color_col = "outlier_level")
+plot_coa_outliers <- plot_coa_outliers + 
    ggplot2::scale_color_manual(values = c("0" = "darkgrey", "1" = "lightsalmon", "2" = "orange", "3" = "#A91101"))
 
-print(plot_coa_binaire)
+print(plot_coa_outliers)
 ```
 
 ## {-}
