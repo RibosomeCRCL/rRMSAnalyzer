@@ -19,9 +19,10 @@ Available features (version 3):
 - Include a table of annotated human rRNA sites
 - Export computed C-scores into a dataframe
 - Automated quality control report (quality_control.Rmd)
-- Automated analysis of 2'Ome global methylation profile  (2ome_analysis.Rmd)
-- Automated differential analysis of 2'ome methylation site (diff_sites.Rmd)
-
+- Automated analysis of 2’Ome global methylation profile
+  (2ome_analysis.Rmd)
+- Automated differential analysis of 2’ome methylation site
+  (diff_sites.Rmd)
 
 > **Note** We have also developed a [dedicated Nextflow
 > pipeline](https://github.com/RibosomeCRCL/ribomethseq-nf) to process
