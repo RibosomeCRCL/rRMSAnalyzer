@@ -9,7 +9,7 @@ generate_palette(metadata, cols_to_use)
 \arguments{
 \item{metadata}{A data.frame containing sample metadata}
 
-\item{color_col}{The name of the column to generate colors for}
+\item{cols_to_use}{The name of the column to generate colors for}
 }
 \value{
 A named vector of colors
