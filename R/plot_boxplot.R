@@ -160,7 +160,7 @@ boxplot_cscores <- function(ribo,outlier = TRUE, sort_by = c("median","iqr","var
   }else{
     # If color_col is missing, create a "qc" column to identify the outliers
     matrix_inv <- cbind(matrix_inv, qc=0)
-    matrix_inv$qc[apply(matrix,2,median,"na.rm"=T)<=2] <- 1 
+    matrix_inv$qc[apply(matrix,2,median,"na.rm"=TRUE)<=2] <- 1 
     id_vars <- c("qc", "Sample")
     
   }

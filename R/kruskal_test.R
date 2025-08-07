@@ -1,4 +1,3 @@
-
 #' Kruskal test on c-scores
 #'
 #' @param cscore_matrix Sites x Samples C-score matrix (output of extract_data()).

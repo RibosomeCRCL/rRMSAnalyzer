@@ -28,7 +28,7 @@ select_most_differential_sites <- function(df_of_kruskal = NULL, p_cutoff = 1e-0
 #' @param most_differential_sites A list of most differential sites.
 #'  Output of select_most_differential_sites function.
 #' @import ggplot2
-#' 
+#' @return a ggplot object
 #' @keywords internal
 #'
 plot_most_differential_sites <- function(df_of_Cscores = NULL,

@@ -6,8 +6,12 @@
 #' @param ribo A RiboClass object.
 #' @param metadata_col Metadata columns to add. Must be in RiboClass' metadata.
 #' @param only_annotated Keep only sites that have been annotated.
-#' @return A ggplot-friendly dataframe with the following columns : 1) site; 2) sample; 3) cscore; ...) any metadata added
+#' @return A ggplot-friendly dataframe with the following columns : 1) site; 2) sample; 
+#' 3) cscore; ...) any metadata added
 #' @export
+#' @examples 
+#' data("ribo_toy")
+#' format_to_plot(ribo_toy, metadata_col = NULL, anly_annotated = FALSE)
 #' 
 format_to_plot <- function(ribo, metadata_col = NULL, only_annotated = FALSE) {
   site <- NULL #NSE fix
