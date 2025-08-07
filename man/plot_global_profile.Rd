@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_global_profile.R
 \name{plot_global_profile}
 \alias{plot_global_profile}
-\title{Plot global profile for a given condition on a given metadata}
+\title{Plot global profile for given conditions on a given metadata}
 \usage{
 plot_global_profile(ribo = ribo_adj_annot, condition_col = NULL)
 }
@@ -15,8 +15,17 @@ plot_global_profile(ribo = ribo_adj_annot, condition_col = NULL)
 a ggplot object
 }
 \description{
-Plot global profile for a given condition on a given metadata
+Plot global profile for given conditions on a given metadata
 }
 \examples{
-plot_global_profile(ribo, condition_col, ech, ctrl)
+data("ribo_toy")
+data("human_methylated")
+ribo_toy <- remove_ribo_samples(ribo_toy,c("RNA1", "RNA2"))
+ribo_toy <- rename_rna(ribo_toy)  
+ribo_toy <- annotate_site(ribo_toy,
+                                annot = human_methylated,
+                                anno_rna = "rRNA",
+                                anno_pos = "Position",
+                                anno_value = "Nomenclature")
+plot_global_profile(ribo_toy, "condition")
 }

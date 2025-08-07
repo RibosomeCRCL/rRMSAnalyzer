@@ -11,7 +11,7 @@
 #' @importFrom stats anova cor kruskal.test lm mad median p.adjust sd setNames t.test wilcox.test
 #' @importFrom utils head
 #' @export
-#'
+#' @return a ggplot object
 #' @examples 
 #' data("ribo_toy")
 #' data("human_methylated")

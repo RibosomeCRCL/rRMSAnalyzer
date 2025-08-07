@@ -22,9 +22,8 @@
 #' @param output_dir Path of output directory
 #' @param ribo_name 
 #' @param comments Path to a text file containing comments 
-#'
+#' @return an html file
 #' @keywords internal
-#'
 report <- function(ribo, ribo_name,rmdfile, condition_col, library_col, project_name, output_dir, comments = NULL) {
   if (!is.null(comments) && file.exists(comments)) {
     comments_text <- readLines(comments, warn = FALSE)
@@ -52,8 +51,11 @@ report <- function(ribo, ribo_name,rmdfile, condition_col, library_col, project_
 #' @param project_name Name of the project.
 #' @param comments Path to a text file containing comments
 #' @param output_dir Path to output dir. Working directory is selected by default.
-#'
+#' @return an html file
 #' @export
+#' @examples 
+#' data('ribo_toy')
+#' report_qc(ribo_toy, "run")
 report_qc <- function(ribo, library_col, project_name = "Unnamed project", output_dir = getwd(), comments = NULL) {
   ribo_name <- deparse(substitute(ribo))
   

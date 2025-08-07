@@ -19,6 +19,9 @@ Output of extract_data().}
 \item{most_differential_sites}{A list of most differential sites.
 Output of select_most_differential_sites function.}
 }
+\value{
+a ggplot object
+}
 \description{
 Using dataframes obtained from
 }

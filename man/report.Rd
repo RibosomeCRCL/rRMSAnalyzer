@@ -32,6 +32,9 @@ report(
 
 \item{comments}{Path to a text file containing comments}
 }
+\value{
+an html file
+}
 \description{
 Note : if you want to create your own report template,
 please make sure it has the following header : 

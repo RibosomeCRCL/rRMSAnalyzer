@@ -11,6 +11,10 @@ check_metadata(ribo, metadata_name)
 
 \item{metadata_name}{The vector of string to check against ribo's metadata.}
 }
+\value{
+Invisibly returns NULL if all strings are valid metadata; otherwise, 
+the function stops with an error.
+}
 \description{
 This function returns nothing if each string matches with a metadata.
 It will stop and display a formatted error message if one or more strings in

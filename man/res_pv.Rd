@@ -2,7 +2,7 @@
 % Please edit documentation in R/res_pv.R
 \name{res_pv}
 \alias{res_pv}
-\title{Compute statistics for c-score based on condition column}
+\title{Compute statistics for C-score based on condition column}
 \usage{
 res_pv(ribo = ribo, test = NULL, condition_col = NULL)
 }
@@ -17,8 +17,9 @@ res_pv(ribo = ribo, test = NULL, condition_col = NULL)
 a dataframe
 }
 \description{
-Compute statistics for c-score based on condition column
+Compute statistics for C-score based on condition column
 }
 \examples{
-res_pv(ribo = ribo_adj_annot, test_name = t.test, condition_col = col)
+data("ribo_toy")
+res_pv(ribo = ribo_toy, test = "student", condition_col = "condition")
 }

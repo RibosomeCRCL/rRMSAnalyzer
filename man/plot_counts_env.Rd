@@ -23,6 +23,8 @@ plot_counts_env(
 \item{samples}{Samples to display. "all" will display all samples.}
 
 \item{flanking}{Number of sites to display on the left/right of the selected position.}
+
+\item{condition}{Condition column in metadata}
 }
 \value{
 A ggplot object

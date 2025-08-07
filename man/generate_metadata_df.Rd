@@ -11,6 +11,9 @@ generate_metadata_df(counts_folder_path, create_samplename_col = TRUE)
 
 \item{create_samplename_col}{Generate a sample name col with filename by default}
 }
+\value{
+a data frame
+}
 \description{
 Generate an "empty" dataframe with the required filename and samplename columns to include in a riboclass.
 

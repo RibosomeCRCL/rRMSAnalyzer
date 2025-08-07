@@ -27,5 +27,8 @@ two ggplot objects
 Plot comparison of median of C-score between two conditions
 }
 \examples{
-plot_comparison_median(ribo_adj_annot, params$condition_col, params$ech, params$ctrl)
+data("ribo_toy")
+ech <- "cond1"
+ctrl <- "cond2"
+plot_comparison_median(ribo_toy, "condition", ech, ctrl)
 }

@@ -23,6 +23,13 @@ report_qc(
 
 \item{comments}{Path to a text file containing comments}
 }
+\value{
+an html file
+}
 \description{
 Generate html report about possible batch effect for a given RiboClass.
+}
+\examples{
+data('ribo_toy')
+report_qc(ribo_toy, "run")
 }
