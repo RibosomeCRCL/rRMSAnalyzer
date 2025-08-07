@@ -1,5 +1,10 @@
 ---
 title: "Create and use custom sites annotation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Create and use custom sites annotation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -54,3 +59,7 @@ ribo <- annotate_site(ribo,
 
 ```
 
+# Session info 
+```{r,echo=TRUE}
+sessionInfo()
+```

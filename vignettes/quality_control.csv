@@ -1,0 +1,15 @@
+samplename	condition	run	filename	median_coverage	coverage_quality	rle_median	rle_median_quality	total_outliers
+S1	cond1	L2	S1_5_counts.csv	1761	pass	0.0575139540734626	pass	0
+S2	cond2	L1	S2_5_counts.csv	1292	pass	-0.343901150500703	pass	0
+S3	cond2	L2	S3_5_counts.csv	2212	pass	0.395425907536753	pass	0
+S4	cond2	L1	S4_5_counts.csv	2147	pass	0.333701201759683	pass	0
+S5	cond2	L2	S5_5_counts.csv	1682	pass	-0.0113976029623459	pass	0
+S6	cond2	L2	S6_5_counts.csv	1774	pass	0.049972126609826	pass	0
+S7	cond2	L1	S7_5_counts.csv	696	pass	-1.25476092984993	warning	1
+S8	cond1	L1	S8_5_counts.csv	1759	pass	0.0618611017441565	pass	0
+S9	cond1	L2	S9_5_counts.csv	1394	pass	-0.250486581792173	pass	0
+S10	cond1	L1	S10_5_counts.csv	1625	pass	-0.0767011746340767	pass	0
+S11	cond1	L1	S11_5_counts.csv	1632	pass	-0.0471290870796922	pass	0
+S12	cond1	L2	S12_5_counts.csv	1683	pass	0.00627532542648735	pass	0
+RNA1	RNA ref	L1	RNA1_5_counts.csv	1593	pass	-0.106199403831925	pass	0
+RNA2	RNA ref	L2	RNA2_5_counts.csv	2316	pass	0.382232951466556	pass	0

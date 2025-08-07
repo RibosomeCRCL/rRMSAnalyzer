@@ -1,5 +1,10 @@
 ---
 title: "Customizing a RiboClass"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Customizing a RiboClass}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -76,4 +81,9 @@ Here is an example to generate a new RiboClass by removing two samples ("S1" and
 ```{r}
 ribo_removed_samples <- remove_ribo_samples(ribo_toy,c("S1","S1"))
 print(ribo_removed_samples)
+```
+
+# Session info 
+```{r,echo=TRUE}
+sessionInfo()
 ```
