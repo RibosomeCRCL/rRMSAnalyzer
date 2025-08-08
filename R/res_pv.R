@@ -1,4 +1,4 @@
-#' Compute statistics for C-score based on condition column
+#' Compute statistics (p-value for, Welch, Wilcoxon, Kruskal, ANOVA test) for C-score based on condition column
 #'
 #' @param test statistic test wanted student, anova or kruskal
 #' @param condition_col column condition in metadata

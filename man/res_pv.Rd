@@ -2,7 +2,7 @@
 % Please edit documentation in R/res_pv.R
 \name{res_pv}
 \alias{res_pv}
-\title{Compute statistics for C-score based on condition column}
+\title{Compute statistics (p-value for, Welch, Wilcoxon, Kruskal, ANOVA test) for C-score based on condition column}
 \usage{
 res_pv(ribo = ribo, test = NULL, condition_col = NULL)
 }
@@ -17,7 +17,7 @@ res_pv(ribo = ribo, test = NULL, condition_col = NULL)
 a dataframe
 }
 \description{
-Compute statistics for C-score based on condition column
+Compute statistics (p-value for, Welch, Wilcoxon, Kruskal, ANOVA test) for C-score based on condition column
 }
 \examples{
 data("ribo_toy")
