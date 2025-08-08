@@ -45,6 +45,7 @@ reference:
   - get_variant_sites
   - res_pv
   - get_outliers
+  - get_2ome_summary
 - title: Plots
   desc: Different plots to show either samples and sites.
 - contents:

@@ -20,5 +20,11 @@ utils::globalVariables(c(
   "params",
   "p_adj",
   "delta_c_score",
-  "p_value"
+  "p_value",
+  "iqr",
+  "rna",
+  "rnapo",
+  "status_all_samples",
+  "median_c_score_all_samples",
+  "IQR_median_all_samples"
 )) 
