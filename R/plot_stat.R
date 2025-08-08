@@ -23,7 +23,7 @@
 #'                                 anno_pos = "Position",
 #'                                 anno_value = "Nomenclature")
 #' res_pv <- res_pv(ribo = ribo_toy, test = "kruskal", condition_col = "condition") 
-#' plot_stat(ribo = ribo_toy, site = NULL, res_pv = res_pv, pthr = 0.01, 
+#' plot_stat(ribo = ribo_toy, site = NULL, res_pv = res_pv, pthr = 0.05, 
 #' condition_col = "condition", cscore_cutoff = 0.5)
 plot_stat <- function(ribo = ribo,
                       p_cutoff = 0.05,

@@ -119,7 +119,7 @@ plot_most_differential_sites <- function(df_of_Cscores = NULL,
 #' ribo_toy <- annotate_site(ribo_toy,human_methylated)
 #' plot_diff_sites(ribo_toy,"condition", p_cutoff=0.1)
 plot_diff_sites <- function(ribo, factor_column,
-                            p_cutoff = 1e-02,
+                            p_cutoff = 0.05,
                             cscore_cutoff = 0.05,
                             adjust_pvalues_method = "fdr",
                             object_only = FALSE) {
