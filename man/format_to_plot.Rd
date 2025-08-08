@@ -23,6 +23,6 @@ Metadata columns can be added if extra informations are needed.
 }
 \examples{
 data("ribo_toy")
-format_to_plot(ribo_toy, metadata_col = NULL, anly_annotated = FALSE)
+format_to_plot(ribo_toy, metadata_col = NULL, only_annotated = FALSE)
 
 }
