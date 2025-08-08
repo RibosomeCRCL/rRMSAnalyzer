@@ -12,6 +12,7 @@ reference:
 - contents:
   - human_methylated
   - human_suspected
+  - human_both_methylated_and_suspected
 - title: RiboClass annotation
   desc: Functions to add, remove or keep selected annotation in a RiboClass.
 - contents:
