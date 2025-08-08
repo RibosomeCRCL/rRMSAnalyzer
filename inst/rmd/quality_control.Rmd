@@ -127,21 +127,9 @@ In this section, QC measures that are derived from the end read counts on all se
 The coverage distribution of absolute end read counts at each genomic position is visualized here using a boxplot for each individual sample, controlling for coverage variation. 
 
 Samples with a median coverage below 100 (ie., log10(100)=2; the blue line), are highlighted in red and should be interpreted with caution or excluded from further analysis.
-```{r boxplot2,warning=FALSE}
-## Create a df to save all the data
-ribo_matrix <- extract_data(ribo_to_check, "count", position_to_rownames = TRUE)
-#calculate median for all the column in the ribo_matrix df
-medcov <- apply(ribo_matrix,2,function(x) median(x,na.rm=T)) 
-# create a df like ribo_matrix and add median_coverage column
-qcdata <- cbind(qcdata,median_coverage=medcov[rownames(qcdata)]) 
-# add a quality column initialized
-qcdata$coverage_quality <- "pass" 
-# add a threshold for outliers
-qcdata$coverage_quality[qcdata$median_coverage < 100] <- "warning" 
-```
 
-```{r,warning=FALSE}
-rRMSAnalyzer::boxplot_count(ribo_to_check, ) + ggplot2::ggtitle("End read counts distribution by sample")
+```{r end read count distribution ,warning=FALSE}
+rRMSAnalyzer::boxplot_count(ribo_to_check, params$library_col) + ggplot2::ggtitle("End read counts distribution by sample")
 ```
 
 
@@ -160,36 +148,8 @@ Where :
 
 The following graph shows the Relative Log Coverage boxplot. The blue lines give the median +/- 2 median absolute deviation (mad) variation. Median outside the blue lines identifies putative outlier samples (highlighted in red). Sample presenting a lower or higher coverage compared to other samples might be considered carefully, or outlier and removed from further biological analyses.
 
-```{r,warning=FALSE}
-#plot object extraction
-plot_rle <- rRMSAnalyzer::plot_rle(ribo_to_check,show_outlier = TRUE) + ggplot2::ggtitle("Relative Log Coverage")
-# extraction of the median absolute deviation
-mad <- plot_rle$plot_env$mad  
-# extraction of the median for all samples
-rle_median <- as.vector(plot_rle$plot_env$rle_grouped$median)
-# extraction of sample names
-keys <- as.vector(plot_rle$plot_env$rle_grouped$key)
-# creation of a data frame containing sample names and medians
-outlier_table <- data.frame(
-  key = keys,
-  rle_median = rle_median)
-# creation of the data frame outlier 
-outlier <- data.frame()
-# calculation of outliers 
-for (i in 1:nrow(outlier_table)) {
-  if(outlier_table$rle_median[i] < mad) {
-  outlier <- rbind(outlier, outlier_table[i,])
-  }
-}
-
-#incrementing the df qcdata with rle median
-qcdata$rle_median <- outlier_table$rle_median[match(qcdata$samplename, outlier_table$key)]
-# add a rle_median_quality column initialized at ok
-qcdata$rle_median_quality <- "pass" 
-# add a threshold for outliers
-qcdata$rle_median_quality[qcdata$rle_median < mad] <- "warning" 
-
-print(plot_rle)
+```{r relative log cov}
+rRMSAnalyzer::plot_rle(ribo_to_check,show_outlier = TRUE) + ggplot2::ggtitle("Relative Log Coverage")
 ```
 
 ## RNA fraction per sample
@@ -199,7 +159,7 @@ The rRNA end read counts distribution is used as an indicator of rRNA quality. A
 The following graph shows stacked barplots representing read count fractions of the total end read counts for each rRNA per sample. Theoretical mean fractions have been computed using 38 samples issued from 6 different human tumoral cell lines and the commercial Human XpressRef Universal Total RNA, which consists in total RNA issued from 20 different human adult and fetal normal major organs (Qiagen). These theoretical mean fractions are given as dotted lines. In the case of rRNAs, most end read counts are assigned to the longest rRNAs, namely the 18S (~ 0.30) and the 28S (~ 0.60).
 
 ```{r,warning=FALSE, fig.asp = 0.8, fig.width = 10}
-rRMSAnalyzer::plot_counts_fraction(ribo) + ggplot2::ggtitle("RNA fraction per sample")
+rRMSAnalyzer::plot_counts_fraction(ribo_to_check) + ggplot2::ggtitle("RNA fraction per sample")
 ```
 
 # Profiles comparison
@@ -211,18 +171,14 @@ It is also possible for samples to cluster in sequencing batches. In this case, 
 ## Correlation matrix
 
 Coverage profiles are compared with each other within the cohort. This helps highlight divergent coverage profiles. Pairwise sample correlations of coverage profile are calculated using a Pearson correlation based distance. A heatmap is then generated that summarizes the correlation values for the entire cohort. These values go from 0 (no correlation, indicated in red) to 1 (perfect correlation, indicated in blue).<br><br>
-A sample identified as an outlier in the previous analyses is highlighted in red and the origin of the issue is indicated on the top two bars and in the legend (e.g., outlier_xxx).<br>
+A sample identified as an outlier in the previous analyses is highlighted in red and the origin of the issue is indicated on the top two bars and in the legend (e.g., outlier_coverage_distribution).<br>
 
-```{r heatmap_corr, warning=FALSE, echo=FALSE, fig.asp = 0.9, fig.width = 15}
-  #incrementing qcdata
-  #calculate the number of fold the sample is an outlier
-  qcdata$total_outliers <- rowSums(qcdata[, c("coverage_quality", "rle_median_quality")] == "warning")
-  
-  #add the column in ribo_to_check
-  ribo_to_check$metadata$outlier_level <- qcdata$total_outliers
-  qcdata$total_outliers <- as.character(qcdata$total_outliers)
-  
-rRMSAnalyzer::plot_heatmap_annotated(ribo, qcdata)
+```{r get outlier data frame}
+qcdata <- rRMSAnalyzer::get_outliers(ribo_to_check)
+```
+
+```{r heatmap annotated, fig.asp = 0.9, fig.width = 15}
+rRMSAnalyzer::plot_heatmap_annotated(ribo_to_check, qcdata)
 ```
 
 ## Correspondance analysis {.tabset .tabset-pills}
@@ -245,6 +201,9 @@ print(plot_coa)
 COA-2 allows to visualize the sample depending whether they have been considered as outlier based on 1 or 2 previous graphs (see section 2.1 and 2.2). The outlier level of “0” means that no warning has been raised for this sample.
 
 ```{r, warning=FALSE}
+#add the column of outlier level in ribo
+ribo_to_check$metadata$outlier_level <- qcdata$total_outliers
+
 plot_coa_outliers <- rRMSAnalyzer::plot_coa(ribo_to_check, color_col = "outlier_level")
 plot_coa_outliers <- plot_coa_outliers + 
    ggplot2::scale_color_manual(values = c("0" = "darkgrey", "1" = "lightsalmon", "2" = "orange", "3" = "#A91101"))

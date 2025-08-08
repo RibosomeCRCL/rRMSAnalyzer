@@ -44,6 +44,7 @@ reference:
   - get_IQR
   - get_variant_sites
   - res_pv
+  - get_outliers
 - title: Plots
   desc: Different plots to show either samples and sites.
 - contents:
