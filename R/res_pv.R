@@ -24,9 +24,6 @@ res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
   data <- data %>%
     dplyr::left_join(ribo$metadata, by = "samplename") # left join between metadata and ribom_long
   
-  #Erase lines with at least one NA
-  datatest <- data %>% tidyr::drop_na({{condition_col}})
-  
   # Determine test if not provided
   if (is.null(test)) {
     n_conditions <- length(unique(data[[condition_col]]))
@@ -55,8 +52,10 @@ res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
     dplyr::group_by(annotated_sites) %>%
     dplyr::summarise(
       p_value = {
-        rep_table <- dplyr::cur_data()
+        # Check replicats
+        rep_table <- dplyr::cur_data() # extract sub data
         groups_table <- table(rep_table[[condition_col]])
+        # Verify number of group >= 2 replicats number >= 2
         if (length(groups_table) >= 2 && all(groups_table >= 2)) {
           if (test == "anova") { # test == "anova"
             anova(lm(c_score ~ get(condition_col), data = rep_table))$"Pr(>F)"[1]
@@ -65,13 +64,11 @@ res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
           }
         } else {
           message(" Site ", unique(rep_table$annotated_sites),
-                  " ignored : doesn't have at least 2 replicats.")
+                  " ignored : doesn't have at least 2 replicats. Help : Check for remaining 'reference' samples")
           NA_real_
         }
       }
     )
-  #     p_value = anova(lm(c_score ~ get(condition_col)))$"Pr(>F)"[1])
-  # } else {
   } else { #if not anova, nor kruskal  
     res_pv <- data %>%
       dplyr::group_by(annotated_sites) %>%
@@ -86,7 +83,7 @@ res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
             if (test == "student") { # Welch here
               t.test(c_score ~ get(condition_col), var.equal = FALSE)$p.value #, var.equal = FALSE for Welch test, otherwise its student test
             } else if (test == "wilcoxon") {
-                wilcox.test(c_score ~ get(condition_col))$p.value # Mann–Whitney U test because paired = FALSE (default)
+                wilcox.test(c_score ~ get(condition_col), exact = FALSE)$p.value # Mann–Whitney U test because paired = FALSE (default). exact = FALSE avoid warning when there is ex-aequo in c-score that don't enable to compute exact p-value
               } else {
                   NA_real_
                 }
