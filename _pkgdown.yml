@@ -46,6 +46,9 @@ reference:
   - res_pv
   - get_outliers
   - get_2ome_summary
+  - get_diff_sites_summary
+  - render_html_welch
+  - render_html_wilcoxon
 - title: Plots
   desc: Different plots to show either samples and sites.
 - contents:
