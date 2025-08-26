@@ -26,5 +26,6 @@ utils::globalVariables(c(
   "rnapo",
   "status_all_samples",
   "median_c_score_all_samples",
-  "IQR_median_all_samples"
+  "IQR_median_all_samples",
+  "rnapos"
 )) 
