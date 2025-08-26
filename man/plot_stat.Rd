@@ -7,19 +7,19 @@ res.pv function}
 \usage{
 plot_stat(
   ribo = ribo,
-  p_cutoff = 0.05,
-  cscore_cutoff = 0.5,
+  plot_all = FALSE,
+  cscore_cutoff = 0.05,
   adjust_pvalues_method = "fdr",
   site = NULL,
   res_pv = res_pv,
-  pthr = NULL,
+  pthr = 0.05,
   condition_col = NULL
 )
 }
 \arguments{
 \item{ribo}{a RiboClass}
 
-\item{p_cutoff}{cutoff of p-value under which sites are not taken in account}
+\item{plot_all}{a logical set to FALSE to plot only significants sites and TRUE to plot all sites}
 
 \item{cscore_cutoff}{cutoff of c-score under which sites are not taken in account}
 
@@ -29,9 +29,9 @@ plot_stat(
 
 \item{res_pv}{df of p values extracted from res_pv.R}
 
-\item{pthr}{p value threshold}
+\item{pthr}{p value threshold under which sites are not taken in account}
 
-\item{condition_col}{the condition column passed in params of the Rmd}
+\item{condition_col}{the condition column used for calculation in metadata}
 }
 \value{
 a ggplot object
@@ -52,5 +52,5 @@ ribo_toy <- annotate_site(ribo_toy,
                                 anno_value = "Nomenclature")
 res_pv <- res_pv(ribo = ribo_toy, test = "kruskal", condition_col = "condition") 
 plot_stat(ribo = ribo_toy, site = NULL, res_pv = res_pv, pthr = 0.05, 
-condition_col = "condition", cscore_cutoff = 0.5)
+condition_col = "condition", cscore_cutoff = 0.05)
 }
