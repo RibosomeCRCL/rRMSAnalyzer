@@ -14,9 +14,11 @@ mean_samples_by_conditon(
 \arguments{
 \item{ribo}{a RiboClass object}
 
-\item{value}{name or index of the column containing the values on which mean by condition is calculated. (Either "cscore" or "count")}
+\item{value}{name or index of the column containing the values on which mean
+by condition is calculated. (Either "cscore" or "count")}
 
-\item{metadata_condition}{name or index of the column \strong{in metadata} containing the condition}
+\item{metadata_condition}{name or index of the column \strong{in metadata} containing
+the condition}
 
 \item{only_annotated}{use annotation site name instead of default}
 }
@@ -24,7 +26,8 @@ mean_samples_by_conditon(
 a dataframe with the mean for each condition for a selected value
 }
 \description{
-An helper function that will give the mean by condition of the cscore or count, for each position. The standard deviation is also given.
+An helper function that will give the mean by condition of the
+cscore or count, for each position. The standard deviation is also given.
 this can be used to create a boxplot with ggplot.
 }
 \examples{
