@@ -27,6 +27,7 @@ knitr::opts_chunk$set(
 library(dplyr)
 library(DT)
 library(kableExtra)
+library(rRMSAnalyzer)
 ```
 
 # Help, bug reports and suggestions
@@ -45,9 +46,8 @@ This project has been funded by the French Cancer Institute (INCa, PLBIO 2019-13
 
 The latest version of rRMSAnalyzer package can be installed from Github with :
 
-```{r, eval=FALSE}
-library(devtools)
-devtools::install_github("RibosomeCRCL/rRMSAnalyzer") 
+```{r, eval = FALSE}
+devtools::install_github("RibosomeCRCL/rRMSAnalyzer")
 devtools::install_github("RibosomeCRCL/rRMSReports")
 library(rRMSAnalyzer)
 library(rRMSReports)
@@ -77,7 +77,7 @@ To use this package, the user must provide at least one csv/tsv file with the 5'
 
 1.  The **name of the rRNA** on which the read end counting was performed.
 
-2.  The **number of the position** on the rRNA.
+2.  The **position's number** on the rRNA.
 
 3.  The **value of the read end counts** at the position.
 
@@ -112,7 +112,7 @@ Here is an example of metadata for three samples:
 +--------------+--------------+----------------------+
 | filename     | samplename   | condition            |
 |              |              |                      |
-| (mandatory)  | (mandatory)  | (optionnal)          |
+| (mandatory)  | (mandatory)  | (optional)          |
 +==============+==============+======================+
 | sample1.csv  | sample 1     | condition 1          |
 +--------------+--------------+----------------------+
@@ -135,7 +135,7 @@ Here is an example of auto-generated metadata:
 
 To load both data and metadata, and store them in a RiboClass, the function `load_ribodata` is used.
 
-The following example displays a call to load_ribodata, with all parameters shown :
+The following example displays a call to `load_ribodata()`, with all parameters shown :
 
 ```{r}
 path <- system.file("extdata", package="rRMSAnalyzer")
@@ -170,7 +170,7 @@ rRNA names are automatically obtained from the data and stored in a generated da
 
 1.  **original_name**: original name of each rRNA (e.g NR_023363.1).
 
-2.  **current_name**: current name of each rRNA, reflecting any user's change with *rename_rna* function (see [Rename RNA]).
+2.  **current_name**: current name of each rRNA, reflecting any user's change with `rename_rna()` function (see [Rename RNA]).
 
 This dataframe is used to keep track of the original name, which often includes the NCBI’s accession ID.
 
@@ -185,7 +185,7 @@ Here is an example:
 
 ### Custom
 
-The user must not modify this dataframe manually. To rename or remove rRNA, the user can use rename_rna and remove_rna. The dataframe will be updated accordingly.
+The user must not modify this dataframe manually. To rename or remove rRNA, the user can use `rename_rna()` and `remove_rna()`. The dataframe will be updated accordingly.
 
 # C-score calculation
 
@@ -197,7 +197,7 @@ The C-score is calculated by normalizing the end read count with respect to the 
 
 To obtain a robust estimate of the 2’Ome level, different C-scores can be determined depending on the parameters used to compute the local coverage. In particular, the estimation method and the size of the local coverage to be considered can be changed.
 
-By default, the local coverage is estimated by calculating the **median** of the end read counts  in a **flanking region of 6** (i.e., 6 nucleotides downstream the nucleotide n and 6 upstream the nucleotide n, where n is the nucleotid directly following the 2’Ome site of interest). This package provide the ability to change these two parameters either when loading the data or during the analysis.
+By default, the local coverage is estimated by calculating the **median** of the end read counts  in a **flanking region of 6** (i.e., 6 nucleotides downstream the nucleotide n and 6 upstream the nucleotide n, where n is the nucleotid directly following the 2’Ome site of interest). This package provides the ability to change these two parameters either when loading the data or during the analysis.
 
 ## C-score computation when loading data
 
@@ -243,8 +243,9 @@ QC can be either performed using a panel of ready to use functions, which corres
 
 The automatic QC report can be generated using the `report_qc()` function:
 
-With the ribo_toy example, the column that contains the information about samples batches is called "run". The name is thus given to the `library_col` parameter.
-```{r,eval=FALSE}
+With the ribo_toy example, the column that contains the information about samples batches is called "run". The name is thus given to the `library_col` parameter but it can be also left empty.
+
+```{r, eval=FALSE}
 report_qc(ribo = ribo_toy, library_col = "run")
 ```
 
@@ -332,7 +333,7 @@ In this example, the technical replicates RNA1 and RNA2 included in library 1 an
 
 ### Batch effect adjustment
 
-Batch effect of RiboMethSeq data can be adjusted using the ComBat-seq method (Paraqindes et al, in revision <<<<<<<<<J'IMAGINE QUE CE N'EST PLUS EN REVISION ? QUELLE EST L'ANNÉE ?? 2023 ??>>>>>>>> ; Zhang, et al, 2020). The rRMSAnalyzer package includes a wrapper (adjust_bias) to perform ComBat-seq adjustment which provides a new RiboClass with adjusted read end count values and C-scores automatically recalculated with the same setup parameters.
+Batch effect of RiboMethSeq data can be adjusted using the ComBat-seq method (Paraqindes et al, 2023 ; Zhang, et al, 2020). The rRMSAnalyzer package includes a wrapper (adjust_bias) to perform ComBat-seq adjustment which provides a new RiboClass with adjusted read end count values and C-scores automatically recalculated with the same setup parameters.
 
 ```{r}
 data("ribo_toy")
@@ -351,7 +352,8 @@ plot_pca(ribo_adjusted,"run")
 
 ```{r, warning=FALSE}
 output_dir <- getwd()
-write.table(qcdata,file.path(output_dir,"quality_control.csv"),sep="\t",row.names=FALSE,quote = FALSE)
+# to save the output:
+#write.table(qcdata,file.path(output_dir,"quality_control.csv"),sep="\t",row.names=FALSE,quote = FALSE)
 knitr::kable(qcdata, "html") %>% kable_styling("striped") %>% scroll_box(width = "100%", height = "500px")
 ```
 
@@ -370,7 +372,7 @@ After batch effect adjustment using ComBat-seq method, the two technical replica
 The C-score depends on the local coverage around the site. For a simple visualization of the read end count coverage of the flanking region of a given genomic position of interest, use the `plot_counts_env()` function. 
 Two plotting methods are available:
 
-1. **display all samples** (default parameters): by displaying the end read count coverage of all samples using a boxplot at the +6/-6 genomic position relative to the genomic position of interest (green box). A pink box is displayed if there is other modification in the window. Such a plot is automatically used when samples = "all". The median of the read end count and coverage limit are shown as two dashed red lines.
+1. **display all samples** (default parameters): by displaying the end read count coverage of all samples using a boxplot at the +/-6 genomic position relative to the genomic position of interest (green box). A pink box is displayed if there is other modification in the window. Such a plot is automatically used when samples = "all". The median of the read end count and coverage limit are shown as two dashed red lines.
 
 Here is an example:
 
@@ -378,7 +380,7 @@ Here is an example:
 plot_counts_env(ribo_adjusted,"NR_046235.3_5.8S",14)
 ```
 
-2. **sample of interest**: by displaying the end read count coverage of the sample of interest only using the profile at the +6/-6 genomic position relative to the genomic position of interest (vertical green line). The median of the read end count is displayed as a horizontal dotted red line.
+2. **sample of interest**: by displaying the end read count coverage of the sample of interest only using the profile at the +/-6 genomic position relative to the genomic position of interest (vertical green line). The median of the read end count is displayed as a horizontal dotted red line.
 
 Here is an example:
 
@@ -650,7 +652,7 @@ Here is an example of a comparison table for two comparisons (case of variableA 
 |(mandatory)|            |            |
 +-----------+------------+------------+
 |   comp2   |   ctrl     |   P2       |
-|(optionnal)|            |            |
+|(optional)|            |            |
 +-----------+------------+------------+
 
 This table will be used exclusively in the diff_sites report functions or to generate the latter. 
@@ -702,13 +704,13 @@ Now the ribo_adj_annot_variableA contain this metadata after the code is execute
 | S45_R1.5_counts.csv   | variableA_N3_P2      | P2        | variableA   | P2        | L2  |
 +-----------------------+----------------------+-----------+-------------+-----------+-----+
 
-Note: As the copy of the RiboClass is now created, it has to be used in the "ribo" argument for all the functions in diff_sites. The comparison table follow the same logic. When the argument "comparison" is asked in a report or a function, it is this table that has to be given. 
+Note: As the copy of the RiboClass is now created, it has to be used in the "ribo" argument for all the functions in diff_sites. The comparison table follows the same logic. When the argument "comparison" is asked in a report or a function, it is this table that has to be given. 
 
-If there is only one column condition, it is still the same thing. Here in the metadata example we can see 3 columns variable. They are the different comparison that is wanted to be analysed. You can replace the name for your custom ones. You can also run the analysis on "condition" column. In this case analysis will be done camparing as many modalities as you have in the same report (!! be aware that even in this case you need a comparison table for the diff_site analysis). (The treatment column is optionnal)
+If there is only one column condition, it is still the same thing. Here in the metadata example we can see 3 column variables. They are the different comparisons that are wanted to be analysed. You can replace the name for your custom ones. You can also run the analysis on the "condition" column. In this case analysis will be done comparing as many modalities as you have in the same report (!! be aware that even in this case you need a comparison table for the diff_site analysis). (The treatment column is optional)
 
 ## Annotation of rRNA 2'Ome sites
 
-The rRMSAnalyzer package calculates a C-score for each genomic position of the rRNAs. However, not every sites of the reference 2’Ome rRNA is necessarily methylated. Therefore, it is expected that the user provides a list of potentially methylated sites of interest, called “annotated sites”. This will make it easier to restrict further analysis to this list of sites.
+The rRMSAnalyzer package calculates a C-score for each genomic position of the rRNAs. However, not every site of the reference 2’Ome rRNA is necessarily methylated. Therefore, it is expected that the user provides a list of potentially methylated sites of interest, called “annotated sites”. This will make it easier to restrict further analysis to this list of sites. By default, rRMSAnalyzer package includes its own human annotated sites.
 
 ### Included annotation : Human 2'Ome rRNA sites
 
@@ -718,7 +720,7 @@ By default, rRMSAnalyzer package includes two dataframes containing the position
 
 -   human_suspected: a dataframe, containing the 17 sites that are putative 2'Ome sites for the human rRNAs, as described in the litterature.
 
--   human_suspected: a dataframe, containing the 129 sites of both known 2'Ome sites and sites that are putative 2'Ome sites for the human rRNAs.
+-   human_both_methylated_and_suspected: a dataframe, containing the 129 sites of both known 2'Ome sites and sites that are putative 2'Ome sites for the human rRNAs.
 
 *<<<<<Equivalent will come soon for the mouse.>>>>>*
 
@@ -744,7 +746,7 @@ You can see an example below :
 
 ### Annotate rRNA sites {#annotate-sites}
 
-The 2’Ome sites of interest must be attached to the RiboClass object for further analysis using the annotate function with either the provided annotations or custom annotations.
+The 2’Ome sites of interest must be attached to the RiboClass object for further analysis using the `annotate_site()` function with either the provided annotations or custom annotations.
 
 Here is an example using the included human methylated annotations:
 
@@ -797,7 +799,7 @@ plot_pca(ribo_adjusted,
          only_annotated = TRUE)
 ```
 
-**Note 2**  the function returns the complete dudi.pca object instead of the plot by setting *object_only* to TRUE:
+**Note 2**  the function returns the complete dudi.pca _object_ (`dudi.pca()` function from ade4 library) instead of the plot by setting *object_only* to TRUE:
 
 ```{r}
 pca <- plot_pca(ribo_adjusted,
@@ -884,7 +886,7 @@ report_2ome_sites(ribo_adjusted, "condition", comments = "./comment_2ome.Rmd")
 
 # Site-by-site comparison of 2'Ome levels report 
 
-A differential site analysis (diff_site) report can be added to the two previous report to refine the analysis on 2'O methylation. It uses several metrics and tests to find differentially methylated sites that can differentiate biological condition / variable. To run these functions a comparison table and supplementary metadata columns needs to be done (see [Comparison table and supplementary metadata columns])
+A differential site analysis (diff_site) report can be added to the two previous report to refine the analysis on 2'Ome. It uses several metrics and tests to identify differentially methylated sites that can discriminate between biological condition / variable. To run these functions a comparison table and supplementary metadata columns needs to be done (see [Comparison table and supplementary metadata columns])
 
 ```{r, eval = FALSE}
 data("ribo_toy")
@@ -913,9 +915,9 @@ report_diff_sites(ribo = ribo_toy, condition_col = "comp1", comparisons = compar
 
 The diff_sites report includes the following visualization:
 
-- 2'Ome Global Profile (plot_global_profile)
-- Representation of Differential median C-score with the combination of twe graphs for each comparisons present in the table provided for this report (plot_comparison_median)
-- Boxplot of differential sites done with several statistical tests (plot_stat)
+- 2'Ome Global Profile (`plot_global_profile()`)
+- Representation of Differential median C-score with the combination of two graphs for each comparisons present in the table provided for this report (`plot_comparison_median()`)
+- Boxplot of differential sites done with several statistical tests (`plot_stat()`)
 
 ## Plot global profile
 
@@ -986,25 +988,23 @@ All resulting p-values were corrected for multiple testing using the False Disco
 <br>
 Applying both parametric and non-parametric methods to the same dataset ensures greater robustness of the findings. Parametric tests are sensitive under ideal distributional conditions, while non-parametric tests offer a more conservative alternative when those assumptions may not be fully met. Sites identified as significant by both approaches are interpreted as the most reliable candidates for biological interpretation.
 
-The `plot_stat()` function displays only the rRNA sites that meet these two cut-off criteria. It produces a boxplot visualizing the median C-scores per biological condition and the p-value. But it use a res_pv table that can be generated from ANOVA, Welch, Kruskal or Wilcoxon test thanks to the `res_pv()` function. 
+The `plot_stat()` function produces a boxplot visualizing the median C-scores per biological condition and the p-value. But it uses a res_pv table that can be generated from ANOVA, Welch, Kruskal or Wilcoxon test thanks to the `res_pv()` function. These functions are described below. To use them a RiboClass needs to be loaded with annotated sites. 
 
 ```{r}
 data("ribo_toy")
-ribo_adjusted <- adjust_bias(ribo_toy,"run") 
+ribo_adjusted <- adjust_bias(ribo_toy,"run") # optional
 
 data("human_methylated")
 cat("human_methylated's rna names: ", unique(human_methylated$rRNA),"\n")
 cat("ribo's rna names: ", as.character(ribo_adjusted$rna_names$current_name)) # change name of RiboClass if necessary
-
-ribo_adj_name <- rename_rna(ribo_adjusted, #change name of RiboClass if necessary for ribo_adj if you adjusted the data
-                            new_names = c("5S", "5.8S", "18S", "28S"))
+ribo_adj_name <- rename_rna(ribo_adjusted, # rename RNA if needed
+                             new_names = c("5S", "5.8S", "18S", "28S"))
 
 ribo_adjusted <- annotate_site(ribo_adj_name, 
                                 annot = human_methylated,
                                 anno_rna = "rRNA",
                                 anno_pos = "Position",
                                 anno_value = "Nomenclature")
-
 ```
 
 ## Parametric test
@@ -1018,7 +1018,7 @@ Sites with both an adjusted p-value below 0.05 and |ΔC-score| > 0.05 between th
 Below is an example of the function used for two sites. One of the two sites doesn't exist in the data, thus an error message is printed and the existing site is plotted anyway. 
 The table resulting of the res_pv function is printed also.
 
-```{r, fig.width= 8, fig.height=15}
+```{r, fig.width= 8, fig.height=12}
 res_pv <- rRMSAnalyzer::res_pv(ribo = ribo_adjusted, test = "anova", condition_col = "condition") 
 print(res_pv)
 plot_stat(ribo = ribo_adjusted, res_pv = res_pv, site = c("18S_Um116", "18S_Xm1031"), pthr = 0.05, condition_col = "condition", cscore_cutoff = 0.8)
@@ -1028,7 +1028,7 @@ plot_stat(ribo = ribo_adjusted, res_pv = res_pv, site = c("18S_Um116", "18S_Xm10
 
 Pairwise comparisons can be performed between two biological conditions using Welch’s t-test, which is well-suited for assessing differences in group means without assuming equal variances. Contrary to ANOVA or Kruskal-wallis tests, this test needs to be used only between two conditions. That is why a column for each comparisons needs to exist in metadata (see [Comparison table and supplementary metadata columns]). 
 
-```{r, fig.width= 8, fig.height=15}
+```{r, fig.width= 8, fig.height=12}
 # filter with metadata to keep only samples present in the column "comp1"
 kept_samples <- ribo_adjusted$metadata %>%
   dplyr::filter(!is.na(comp1)) %>% # keep lines that are not "NA"
@@ -1082,7 +1082,7 @@ report_diff_sites(ribo = ribo_adj_annot_comp1, condition_col = "comp1", comparis
 
 # Exporting data
 
-Data can be exported as two different objects.
+Data can be exported as two different objects in three different ways.
 
 ## Export as a dataframe
 
@@ -1109,14 +1109,14 @@ knitr::kable(ribo_df[1:10,1:4],caption = "Excerpt from the output dataframe, whe
 
 ## Export as a ggplot-ready dataframe
 
-The user can export data as a ggplot-ready dataframe using the format_to_plot function.
+The user can export data as a ggplot-ready dataframe using the `format_to_plot()` function.
 
 By default, C-scores for all the genomic rRNA positions are exported. The user can export additional information contained in the metadata by specifying the name of the column of interest. The user can export information related to the subset of annotated rRNA 2’Ome sites by setting the *only_annotated* parameter to TRUE.
 
 Here is an example of ggplot-ready dataframe containing the C-scores of all the genomic rRNA positions as well as the condition related to the particular sample of interest:
 
 ```{r}
-ggplot_table <- format_to_plot(ribo_adjusted,"condition")
+ggplot_table <- format_to_plot(ribo = ribo_adjusted, metadata_col = "condition", only_annotated = FALSE)
 ```
 
 ```{r,echo=FALSE}
@@ -1125,15 +1125,15 @@ knitr::kable(ggplot_table[501:510,], caption = "Excerpt from the output ggplot-r
 
 ## Export as a dataframe by condition
 
-The *mean_samples_by_condition* function provides the summarized values per modality of a variable in the metadata dataframe.
+The `mean_samples_by_condition()` function regroup all the genomic rRNA positions by condition and compute mean and standard deviation for each condition. Then it displays a table.
 
-By default, the function provides for all the genomic rRNA positions the name of the position, the mean and standard deviation (sd) of the C-scores. By using the value=”count” parameter, it is als possible to calculate these values from the read end counts. Calculations can be limited to only annotated rRNA 2’Ome sites by setting the only_annotated parameter to TRUE.
+By default, the function provides the metrics of the C-scores. By setting the *value* parameter to "count", it is also possible to calculate these values from the read end counts. Calculations can be limited to only annotated rRNA 2’Ome sites by setting the *only_annotated* parameter to TRUE.
 
 Here is an example of dataframe showing the summarized C-scores per modality of the “condition” variable for all the genomic rRNA positions:
 
 ```{r}
 mean_tb <- mean_samples_by_conditon(ribo_adjusted,
-                                    value = "cscore",
+                                    value = "cscore", #or "count"
                                     metadata_condition = "condition",
                                     only_annotated = TRUE)
 ```
@@ -1148,4 +1148,4 @@ knitr::kable(mean_tb[1:10,],caption = "Excerpt from the output dataframe by cond
 sessionInfo()
 ```
 
-# Reference
+# References
