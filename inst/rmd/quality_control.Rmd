@@ -11,6 +11,7 @@ toc-title: "rRMSAnalyzer"
     
 params:
     library_col: "lib"
+    specie: "not specified"
     condition_col: "condition"
     ribo_name: "ribo"
     project_name: "Unnamed project"
@@ -52,7 +53,7 @@ library(kableExtra)
 </summary>
 Project name : **`r params$project_name`**<br>
 <br>
-Data aligned on: **GRCh38 (gencode annotation V46)** for human project and **mm39 (gencode version vM35)** for murine project.<br>
+Data aligned on: **`r if (params$specie=="human") {"GRCh38 (gencode annotation V46)"} else if (params$specie == "mouse") {"mm39 (gencode version vM35)"} else {"unknown annotation"}`**.<br>
 <br>
 Analysed by: Allyson Moureaux <br>
 Date : **`r Sys.time()`**
@@ -85,7 +86,7 @@ In this report, the 5' end read count data is used to ensure the quality of the 
 
 ## Project summary
 
-This QC report is generated from the analysis of the project **`r params$project_name`**, which is loaded inside the RiboClass object **`r params$ribo_name`**. This **`r params$ribo_name`** object was generated from **`r length(ribo_to_check[[1]])`** samples and **`r as.character(all_sites)`** genomic positions.
+This QC report is generated from the analysis of the project **`r params$project_name`**, which is loaded inside the RiboClass object **`r params$ribo_name`**. This **`r params$ribo_name`** object was generated from **`r length(ribo_to_check[[1]])`** samples and **`r as.character(all_sites)`** genomic positions. This project was aligned on **`r if (params$specie=="human") {"GRCh38 (gencode annotation V46)"} else if (params$specie == "mouse") {"mm39 (gencode version vM35)"} else {"unknown annotation"}`**.
 
 The following (r)RNA were used by the coverage tool: **`r as.character(ribo_to_check[["rna_names"]][["original_name"]])`**.
 

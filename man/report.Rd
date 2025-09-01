@@ -6,6 +6,7 @@
 \usage{
 report(
   ribo,
+  specie = "not specified",
   ribo_name,
   rmdfile,
   condition_col,
@@ -18,7 +19,9 @@ report(
 \arguments{
 \item{ribo}{a RiboClass object.}
 
-\item{ribo_name}{}
+\item{specie}{studied specie of the project}
+
+\item{ribo_name}{name of RiboClass}
 
 \item{rmdfile}{filename of the Rmarkdown template to use.}
 
