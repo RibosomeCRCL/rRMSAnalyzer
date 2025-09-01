@@ -1,8 +1,8 @@
 ---
-title: "Exemple code for Human analysis"
+title: "Example code for Human analysis"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Exemple code for Human analysis}
+  %\VignetteIndexEntry{Example code for Human analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -41,9 +41,7 @@ open metadata.csv in Excel, fill in the file and save it under .csv with ";" as 
 ```{r, eval=FALSE}
 library(devtools)
 devtools::install_github("RibosomeCRCL/rRMSAnalyzer")
-devtools::install_github("RibosomeCRCL/rRMSReports")
 library(rRMSAnalyzer)
-library(rRMSReports)
 ```
 
 # RiboClass creation
@@ -103,7 +101,7 @@ plot_coa(
 ## QC_report for all data
 
 ```{r, eval=FALSE}
-report_qc(ribo = ribo, lib_col = "lib")
+report_qc(ribo = ribo, specie = "human", lib_col = "lib")
 ```
 
 ## adjustment ComBat-Seq if necessary
@@ -119,7 +117,7 @@ plot_pca(ribo_adj,"lib")
 ## QC_report for adjusted data
 
 ```{r, eval=FALSE}
-report_qc(ribo = ribo_adj, lib_col = "lib", project_name = "name", comments = "./comment_QC.Rmd") 
+report_qc(ribo = ribo_adj, specie = "human", lib_col = "lib", project_name = "name", comments = "./comment_QC.Rmd") 
 ```
 
 
@@ -263,7 +261,7 @@ comparisons <- tibble::tibble(
 ## global profile analysis of rRNA 2'Ome  
 
 ```{r, eval=FALSE}
-report_2ome_sites(ribo = ribo_adj_annot_variableA,condition_col = "variableA", project_name = "name", comments = "./comment_2ome_variableA.Rmd") 
+report_2ome_sites(ribo = ribo_adj_annot_variableA, specie = "human", condition_col = "variableA", project_name = "name", comments = "./comment_2ome_variableA.Rmd") 
 ```
 
 ## Analysis of rRNAs 2'Ome level differences
@@ -271,7 +269,7 @@ report_2ome_sites(ribo = ribo_adj_annot_variableA,condition_col = "variableA", p
 Here we need the comparison table created previously. 
 
 ```{r, eval=FALSE}
-report_diff_sites(ribo = ribo_adj_annot_variableA, condition_col = "variableA", project_name = "name", comparisons = comparisons, comments = "./comment_diff_site_variableA.Rmd") 
+report_diff_sites(ribo = ribo_adj_annot_variableA, specie = "human", condition_col = "variableA", project_name = "name", comparisons = comparisons, comments = "./comment_diff_site_variableA.Rmd") 
 ```
 
  --------------------------------------B----------------------------------------
@@ -302,13 +300,13 @@ comparisons <- tibble::tibble(
 ## 2'Ome of rRNAs analysis of the global profile
 
 ```{r, eval=FALSE}
-report_2ome_sites(ribo = ribo_adj_annot_variableB,condition_col = "variableB", project_name = "name", comments = "./comment_2ome_variableB.Rmd") 
+report_2ome_sites(ribo = ribo_adj_annot_variableB, specie = "human", condition_col = "variableB", project_name = "name", comments = "./comment_2ome_variableB.Rmd") 
 ```
 
 ##  Analysis of rRNAs 2'Ome level differences
 
 ```{r, eval=FALSE}
-report_diff_sites(ribo = ribo_adj_annot_variableB, condition_col = "variableB", project_name = "name", comparisons = comparisons, comments = "./comment_diff_site_variableB.Rmd") 
+report_diff_sites(ribo = ribo_adj_annot_variableB, specie = "human", condition_col = "variableB", project_name = "name", comparisons = comparisons, comments = "./comment_diff_site_variableB.Rmd") 
 ```
 
  --------------------------------------C----------------------------------------
@@ -339,13 +337,13 @@ comparisons <- tibble::tibble(
 ## 2'Ome of rRNAs analysis of the global profile
 
 ```{r, eval=FALSE}
-report_2ome_sites(ribo = ribo_adj_annot_variableC, condition_col = "variableC", project_name = "name", comments = "./comment_2ome_variableC.Rmd") 
+report_2ome_sites(ribo = ribo_adj_annot_variableC, specie = "human", condition_col = "variableC", project_name = "name", comments = "./comment_2ome_variableC.Rmd") 
 ```
 
 ##  Analysis of rRNAs 2'Ome level differences
 
 ```{r, eval=FALSE}
-report_diff_sites(ribo = ribo_adj_annot_variableC, condition_col = "variableC", project_name = "name", comparisons = comparisons, comments = "./comment_diff_site_variableC.Rmd") 
+report_diff_sites(ribo = ribo_adj_annot_variableC, specie = "human", condition_col = "variableC", project_name = "name", comparisons = comparisons, comments = "./comment_diff_site_variableC.Rmd") 
 ```
 
 # Check local environments of sites of interest (optionnal) 
