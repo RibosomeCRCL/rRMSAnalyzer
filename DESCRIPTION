@@ -24,15 +24,13 @@ URL: https://github.com/RibosomeCRCL/rRMSAnalyzer,
     https://ribosomecrcl.github.io/rRMSAnalyzer/
 BugReports: https://github.com/RibosomeCRCL/rRMSAnalyzer/issues
 Depends: R (>= 4.5.0)
-Imports: RColorBrewer, dplyr, tibble, tidyr, rlang, cli, sva, factoextra, ade4, ggplot2, ComplexHeatmap, colorRamp2, reshape2, scales, cowplot, grid, patchwork, DT, htmltools, glue
+Imports: RColorBrewer, dplyr, tibble, tidyr, rlang, cli, sva, factoextra, ade4, ggplot2, ComplexHeatmap, colorRamp2, reshape2, scales, cowplot, grid, patchwork, DT, htmltools, glue, knitr, kableExtra
 LazyData: FALSE
 biocViews: Software, BiologicalQuestion, RiboSeq, BatchEffect, DifferentialMethylation
 RoxygenNote: 7.3.2
 NeedsCompilation: no
 Encoding: UTF-8
 Suggests: 
-    knitr,
-    kableExtra,
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
