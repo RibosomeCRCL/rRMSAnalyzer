@@ -28,7 +28,7 @@ select_most_differential_sites <- function(df_of_kruskal = NULL, p_cutoff = 1e-0
 #' @param most_differential_sites A list of most differential sites.
 #'  Output of select_most_differential_sites function.
 #' @import ggplot2
-#' 
+#' @return a ggplot object
 #' @keywords internal
 #'
 plot_most_differential_sites <- function(df_of_Cscores = NULL,
@@ -119,7 +119,7 @@ plot_most_differential_sites <- function(df_of_Cscores = NULL,
 #' ribo_toy <- annotate_site(ribo_toy,human_methylated)
 #' plot_diff_sites(ribo_toy,"condition", p_cutoff=0.1)
 plot_diff_sites <- function(ribo, factor_column,
-                            p_cutoff = 1e-02,
+                            p_cutoff = 0.05,
                             cscore_cutoff = 0.05,
                             adjust_pvalues_method = "fdr",
                             object_only = FALSE) {
@@ -128,7 +128,7 @@ plot_diff_sites <- function(ribo, factor_column,
   
   check_metadata(ribo,factor_column)
   ribo_matrix <- extract_data(ribo, only_annotated = TRUE, position_to_rownames = TRUE)
-  kruskal_df <- wrapper_kruskal_test(ribo, factor_column = factor_column) #test non paramétrique, Tester avec anova
+  kruskal_df <- wrapper_kruskal_test(ribo, factor_column = factor_column)  
   
  if(object_only) return(kruskal_df)
   

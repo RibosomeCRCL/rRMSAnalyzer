@@ -1,11 +1,14 @@
 #' Regroup samples by condition and calculate mean for each condition
 #' 
-#' @description An helper function that will give the mean by condition of the cscore or count, for each position. The standard deviation is also given.
+#' @description An helper function that will give the mean by condition of the 
+#' cscore or count, for each position. The standard deviation is also given.
 #' this can be used to create a boxplot with ggplot.
 #'
 #' @param ribo a RiboClass object
-#' @param metadata_condition name or index of the column __in metadata__ containing the condition
-#' @param value name or index of the column containing the values on which mean by condition is calculated. (Either "cscore" or "count")
+#' @param metadata_condition name or index of the column __in metadata__ containing 
+#' the condition
+#' @param value name or index of the column containing the values on which mean 
+#' by condition is calculated. (Either "cscore" or "count")
 #' @param only_annotated use annotation site name instead of default
 #' 
 #' @importFrom dplyr %>%

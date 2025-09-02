@@ -5,6 +5,7 @@
 #'
 #' @export
 #' @keywords internal
+#' @return text
 print.RiboClass <- function(x, ...) {
    cat(as.character(paste("a RiboClass with", length(x[["data"]]),
                           "samples and", nrow(x[["rna_names"]]), "RNA(s) :\n")))

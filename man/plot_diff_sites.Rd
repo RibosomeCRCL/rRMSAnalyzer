@@ -7,7 +7,7 @@
 plot_diff_sites(
   ribo,
   factor_column,
-  p_cutoff = 0.01,
+  p_cutoff = 0.05,
   cscore_cutoff = 0.05,
   adjust_pvalues_method = "fdr",
   object_only = FALSE

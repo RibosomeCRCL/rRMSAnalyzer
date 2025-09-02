@@ -11,7 +11,7 @@
 #' @md 
 #' @param counts_folder_path The path where count files are stored.
 #' @param create_samplename_col Generate a sample name col with filename by default
-#' 
+#' @return a data frame
 #' @keywords internal
 generate_metadata_df <- function(counts_folder_path,
                                  create_samplename_col=TRUE) {

@@ -2,42 +2,55 @@
 % Please edit documentation in R/plot_stat.R
 \name{plot_stat}
 \alias{plot_stat}
-\title{Plot statistic}
+\title{Plot statistic of significant differential sites between experimental condition returned by the 
+res.pv function}
 \usage{
 plot_stat(
-  ribo = ribo_adj_annot,
-  p_cutoff = 0.01,
-  cscore_cutoff = 0.5,
+  ribo = ribo,
+  plot_all = FALSE,
+  cscore_cutoff = 0.05,
   adjust_pvalues_method = "fdr",
   site = NULL,
   res_pv = res_pv,
-  pthr = NULL,
+  pthr = 0.05,
   condition_col = NULL
 )
 }
 \arguments{
 \item{ribo}{a RiboClass}
 
-\item{p_cutoff}{cutoff of c-score under which sites are not taken in account}
+\item{plot_all}{a logical set to FALSE to plot only significants sites and TRUE to plot all sites}
 
-\item{cscore_cutoff}{}
+\item{cscore_cutoff}{cutoff of c-score under which sites are not taken in account}
 
-\item{adjust_pvalues_method}{}
+\item{adjust_pvalues_method}{Method to adjust p-value}
 
 \item{site}{sites to plot}
 
 \item{res_pv}{df of p values extracted from res_pv.R}
 
-\item{pthr}{p value threshold}
+\item{pthr}{p value threshold under which sites are not taken in account}
 
-\item{condition_col}{the condition column passed in params of the Rmd}
+\item{condition_col}{the condition column used for calculation in metadata}
 }
 \value{
-a boxplot
+a ggplot object
 }
 \description{
-Plot statistic
+Plot statistic of significant differential sites between experimental condition returned by the 
+res.pv function
 }
 \examples{
-plot_stat(data = ribo, site = NULL, res_pv = res_pv, pthr = 0.05)
+data("ribo_toy")
+data("human_methylated")
+ribo_toy <- remove_ribo_samples(ribo_toy,c("RNA1", "RNA2"))
+ribo_toy <- rename_rna(ribo_toy)  
+ribo_toy <- annotate_site(ribo_toy,
+                                annot = human_methylated,
+                                anno_rna = "rRNA",
+                                anno_pos = "Position",
+                                anno_value = "Nomenclature")
+res_pv <- res_pv(ribo = ribo_toy, test = "kruskal", condition_col = "condition") 
+plot_stat(ribo = ribo_toy, site = NULL, res_pv = res_pv, pthr = 0.05, 
+condition_col = "condition", cscore_cutoff = 0.05)
 }

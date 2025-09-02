@@ -4,7 +4,7 @@
 \alias{plot_heatmap_corr}
 \title{Plot a correlation heatmap from a riboclass object.
 
-Shows the correlation \strong{distance} between samples.}
+Shows the correlation distance between samples.}
 \usage{
 plot_heatmap_corr(ribo, values_col, color_col = NULL)
 }
@@ -21,7 +21,7 @@ ComplexHeatmap object
 \description{
 Plot a correlation heatmap from a riboclass object.
 
-Shows the correlation \strong{distance} between samples.
+Shows the correlation distance between samples.
 }
 \examples{
 data("ribo_toy")

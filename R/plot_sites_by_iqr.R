@@ -1,7 +1,8 @@
 #' Plot IQR or variance per site 
 #' 
 #' @description
-#' The sites that show an IQR/variance higher than median + 2*MAD are colored in red and are considered as the most variant sites.
+#' The sites that show an IQR/variance higher than median + 2*MAD are colored in red and are 
+#' considered as the most variant sites.
 #'
 #' @param ribo A ribo class object containing the data
 #' @param plot Type of plot: "IQR" (default) or "boxplot"

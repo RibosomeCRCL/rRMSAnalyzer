@@ -6,6 +6,7 @@
 \usage{
 report_qc(
   ribo,
+  specie = "not specified",
   library_col,
   project_name = "Unnamed project",
   output_dir = getwd(),
@@ -15,6 +16,8 @@ report_qc(
 \arguments{
 \item{ribo}{A RiboClass object.}
 
+\item{specie}{studied specie of the project.}
+
 \item{library_col}{Library/run column in the metadata.}
 
 \item{project_name}{Name of the project.}
@@ -23,6 +26,13 @@ report_qc(
 
 \item{comments}{Path to a text file containing comments}
 }
+\value{
+an html file
+}
 \description{
 Generate html report about possible batch effect for a given RiboClass.
+}
+\examples{
+data('ribo_toy')
+report_qc(ribo_toy, "human", "run")
 }

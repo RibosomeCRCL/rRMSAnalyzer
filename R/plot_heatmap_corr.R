@@ -2,7 +2,7 @@
 
 #' Plot a correlation heatmap from a riboclass object.
 #'  
-#' Shows the correlation **distance** between samples.
+#' Shows the correlation distance between samples.
 #' @md
 #' @inheritParams plot_heatmap
 #' @param values_col Name of the column containing the value (either count or cscore).

@@ -43,9 +43,9 @@
   rle.plot <- ggplot2::ggplot(rle_calc, ggplot2::aes(x = key, value)) + 
     ggplot2::geom_boxplot(outlier.shape = outlier_shape, outlier.size = 0.3,
                  fill = ifelse(rle_grouped$median < mad, "red","white")) +
-    ggplot2::ylab(paste0("RLE")) +
+    ggplot2::ylab(paste0("RLC")) +
     ggplot2::xlab("Sample") +
-    ggplot2::ggtitle("RLE plot")+
+    ggplot2::ggtitle("RLC plot")+
     ggplot2::geom_hline(yintercept = 2*mad(rle_calc$value, na.rm = TRUE),
                         colour = "blue") + 
     ggplot2::geom_hline(yintercept = - 2*mad(rle_calc$value, na.rm = TRUE),

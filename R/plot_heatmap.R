@@ -12,8 +12,13 @@
 #'
 #' @examples 
 #' data("ribo_toy")
-#' data("human_methylated")#' 
+#' data("human_methylated") 
 #' ribo_toy <- rename_rna(ribo_toy)
+#' ribo_toy <- annotate_site(ribo_toy,
+#'                                 annot = human_methylated,
+#'                                 anno_rna = "rRNA",
+#'                                 anno_pos = "Position",
+#'                                 anno_value = "Nomenclature")
 #' plot_heatmap(ribo_toy,  color_col = c("run","condition"), only_annotated=TRUE)
 plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
                          cutree_rows=4, cutree_cols=2, ...) {
@@ -21,6 +26,7 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
   check_metadata(ribo,color_col)
   matrix <- extract_data(ribo, "cscore", position_to_rownames = TRUE,
                          only_annotated = only_annotated)
+  if (nrow(matrix) == 0) message("Empty matrix : Are your data annotated ?")
   
   .plot_heatmap(matrix, ribo[["metadata"]], color_col = color_col,
                 most_variant = FALSE, title = title, cutree_rows = cutree_rows,
@@ -47,7 +53,7 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
   
   if(!is.null(color_col)) {
     col <- generate_palette(metadata,color_col)
-    column_ha <- ComplexHeatmap::HeatmapAnnotation(df = metadata[color_col], col = col,na_col = "red")
+    column_ha <- ComplexHeatmap::HeatmapAnnotation(df = metadata[color_col], col = col, na_col = "red")
   } else {
     column_ha <- NULL
   }
@@ -55,7 +61,7 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
   cscore_matrix <- stats::na.omit(cscore_matrix)
   cscore_matrix <- as.matrix(cscore_matrix)
 ComplexHeatmap::Heatmap(cscore_matrix,col = heat_colors,name = "C-score",
-                          row_title = "rRNA 2'Ome sites",column_title = "Sample", 
+                          row_title = "rRNA 2'Ome sites",column_title = "Samples", 
                           column_title_side = "bottom",
                           cluster_rows = TRUE, cluster_columns = TRUE,
                           clustering_distance_columns = "manhattan", 

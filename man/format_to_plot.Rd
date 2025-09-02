@@ -14,9 +14,15 @@ format_to_plot(ribo, metadata_col = NULL, only_annotated = FALSE)
 \item{only_annotated}{Keep only sites that have been annotated.}
 }
 \value{
-A ggplot-friendly dataframe with the following columns : 1) site; 2) sample; 3) cscore; ...) any metadata added
+A ggplot-friendly dataframe with the following columns : 1) site; 2) sample; 
+3) cscore; ...) any metadata added
 }
 \description{
 Turn a RiboClass into a dataframe that should be ready to be used in ggplot.
 Metadata columns can be added if extra informations are needed.
+}
+\examples{
+data("ribo_toy")
+format_to_plot(ribo_toy, metadata_col = NULL, only_annotated = FALSE)
+
 }

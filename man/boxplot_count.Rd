@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_boxplot.R
 \name{boxplot_count}
 \alias{boxplot_count}
-\title{Plot a boxplot of a RiboClass object’s counts.}
+\title{Plot a boxplot of a RiboClass object counts.}
 \usage{
 boxplot_count(ribo, color_col = NA, outlier = TRUE, horizontal = FALSE)
 }
@@ -25,5 +25,4 @@ raw counts.
 \examples{
 data("ribo_toy")
 boxplot_count(ribo_toy,"run")
-
 }

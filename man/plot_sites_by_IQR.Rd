@@ -19,7 +19,8 @@ plot_sites_by_IQR(ribo = NULL, plot = "IQR", variance = "IQR", ...)
 A ggplot object
 }
 \description{
-The sites that show an IQR/variance higher than median + 2*MAD are colored in red and are considered as the most variant sites.
+The sites that show an IQR/variance higher than median + 2*MAD are colored in red and are 
+considered as the most variant sites.
 }
 \examples{
 data("ribo_toy")

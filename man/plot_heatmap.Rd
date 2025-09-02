@@ -37,7 +37,12 @@ This easy function will let you display an heatmap for any given column (count o
 }
 \examples{
 data("ribo_toy")
-data("human_methylated")#' 
+data("human_methylated") 
 ribo_toy <- rename_rna(ribo_toy)
+ribo_toy <- annotate_site(ribo_toy,
+                                annot = human_methylated,
+                                anno_rna = "rRNA",
+                                anno_pos = "Position",
+                                anno_value = "Nomenclature")
 plot_heatmap(ribo_toy,  color_col = c("run","condition"), only_annotated=TRUE)
 }

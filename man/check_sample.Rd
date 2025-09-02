@@ -11,6 +11,10 @@ check_sample(ribo, sample_names)
 
 \item{sample_names}{The vector of string to check against ribo's samplenames}
 }
+\value{
+Invisibly returns NULL if all strings are valid data; otherwise, 
+the function stops with an error.
+}
 \description{
 This function returns nothing if each string matches with the samplenames
 It will stop and display a formatted error message if one or more strings in

@@ -11,6 +11,9 @@
 
 \item{...}{print() params}
 }
+\value{
+text
+}
 \description{
 print() to display basic informations about a RiboClass
 }

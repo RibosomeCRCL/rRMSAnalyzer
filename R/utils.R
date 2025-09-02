@@ -6,6 +6,8 @@
 #' @param ribo A RiboClass.
 #' @param metadata_name The vector of string to check against ribo's metadata.
 #' @keywords internal
+#' @return Invisibly returns NULL if all strings are valid metadata; otherwise, 
+#' the function stops with an error.
 #'
 check_metadata <- function(ribo,metadata_name) {
   # Get metadata columns that do not exist in ribo's metadata.
@@ -16,7 +18,7 @@ check_metadata <- function(ribo,metadata_name) {
   if(len_unmatched > 0) {
     
     cli::cli_abort(c(
-      "You have supplied names that are not part of the RiboClass metadat.",
+      "You have supplied names that are not part of the RiboClass metadata.",
       "i" = "The RiboClass has the following metadata:
       {.val {colnames(ribo[['metadata']])}}.",
       "x" = "{len_unmatched} supplied name{?s} {?is/are} not part of the metadata:
@@ -33,6 +35,8 @@ check_metadata <- function(ribo,metadata_name) {
 #' @param ribo A RiboClass.
 #' @param sample_names The vector of string to check against ribo's samplenames
 #' @keywords internal
+#' @return Invisibly returns NULL if all strings are valid data; otherwise, 
+#' the function stops with an error.
 #'
 check_sample <- function(ribo, sample_names) {
   unmatched_elts <- sample_names[

@@ -1,3 +1,25 @@
+# rRMSAnalyzer 3.0.0
+
+## New report 
+
+-   `diff_sites.Rmd` report: Statistical analysis of differential 2'O-methylation sites across experimental conditions. 
+
+## New features
+
+-   `plot_sites_by_IQR`: Gives IQR or variance per site 
+-   `plot_global_profile`: Gives a line plot of 2'O-Methylation profile for conditions 
+-   `plot_comparison_median`: Gives comparison of median C-scores between biological conditions
+-   `res.pv`: Compute statistics for C-score based on condition column
+-   `plot_stat`: Gives significant differential sites between experimental conditions
+
+
+## Breaking change
+
+-   `quality_control.Rmd`: Added (i) summary tables of outliers and (ii) conclusion part
+-   `plot_counts_fraction`: Added human theoretical fraction threshold
+-   `heatmap_annotated`: Added annotation (outliers)
+-   `2ome_analysis.Rmd`: Added (i) variant site threshold computation, (ii) variation summary, (iii) conclusion part 
+
 # rRMSAnalyzer 2.0.1
 
 ## New feature

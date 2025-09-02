@@ -12,6 +12,7 @@ reference:
 - contents:
   - human_methylated
   - human_suspected
+  - human_both_methylated_and_suspected
 - title: RiboClass annotation
   desc: Functions to add, remove or keep selected annotation in a RiboClass.
 - contents:
@@ -43,12 +44,16 @@ reference:
   - get_IQR
   - get_variant_sites
   - res_pv
+  - get_outliers
+  - get_2ome_summary
+  - get_diff_sites_summary
+  - render_html_welch
+  - render_html_wilcoxon
 - title: Plots
   desc: Different plots to show either samples and sites.
 - contents:
   - starts_with("plot_")
   - starts_with("boxplot_")
-  - heatmap_annotated
 - title: Export data
   desc: Export data
 - contents:
@@ -58,4 +63,36 @@ reference:
 - title: Reports
   desc: Generate automated reports from a RiboClass
 - contents: starts_with("report_")
-
+navbar:
+  structure:
+    left:
+      - Get_started    # tab for the guide
+      - reference      # tab for index
+      - articles       # tab Articles (vignettes)
+      - news           # tab Change log
+      - Model_murine   # tab murin model
+      - Model_human    # tab human model
+  components:
+    Get_started:
+      text: "get started" #text on the tab
+      href: articles/rRMSAnalyzer.html # relative adress
+    Model_murine:
+      text: "Murine model" #text on the tab
+      href: articles/Model_murine.html # relative adress
+    Model_human:
+      text: "Human_model"
+      href: articles/Model_human.html
+articles:
+      - title: Murine model
+        contents:
+          - Model_murine
+      - title: Human model
+        contents:
+          - Model_human
+      - title: Custom Annotation
+        contents:
+          - custom_anno
+      - title: Custom Ribo
+        contents:
+          - custom_ribo
+# to test it run : pkgdown::build_site() 
