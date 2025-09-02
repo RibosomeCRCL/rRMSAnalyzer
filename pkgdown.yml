@@ -2,10 +2,12 @@ pandoc: 3.1.11
 pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
-  articles/custom_anno: custom_anno.html
-  articles/custom_ribo: custom_ribo.html
+  custom_anno: custom_anno.html
+  custom_ribo: custom_ribo.html
+  Model_human: Model_human.html
+  Model_murine: Model_murine.html
   rRMSAnalyzer: rRMSAnalyzer.html
-last_built: 2025-05-28T12:35Z
+last_built: 2025-09-02T06:01Z
 urls:
   reference: https://ribosomecrcl.github.io/rRMSAnalyzer/reference
   article: https://ribosomecrcl.github.io/rRMSAnalyzer/articles

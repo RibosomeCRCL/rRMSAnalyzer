@@ -15,14 +15,12 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/rRMSAnalyzer.html">Get started</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/rRMSAnalyzer.html">get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/custom_anno.html">Create and use custom sites annotation</a></li>
-    <li><a class="dropdown-item" href="../articles/custom_ribo.html">Customizing a RiboClass</a></li>
-  </ul></li>
+<li class="nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/Model_murine.html">Murine model</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/Model_human.html">Human_model</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/RibosomeCRCL/rRMSAnalyzer/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -94,6 +92,12 @@
 
         </dt>
         <dd>Suspected 2'Ome positions in Humans' rRNA</dd>
+      </dl><dl><dt>
+
+          <code><a href="human_both_methylated_and_suspected.html">human_both_methylated_and_suspected</a></code>
+
+        </dt>
+        <dd>Known and suspected 2'Ome positions in Humans' rRNA</dd>
       </dl></div><div class="section level2">
       <h2 id="riboclass-annotation">RiboClass annotation<a class="anchor" aria-label="anchor" href="#riboclass-annotation"></a></h2>
 
@@ -244,7 +248,37 @@
           <code><a href="res_pv.html">res_pv()</a></code>
 
         </dt>
-        <dd>Compute statistics for c-score based on condition column</dd>
+        <dd>Compute statistics (p-value for, Welch, Wilcoxon, Kruskal, ANOVA test) for C-score based on condition column</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_outliers.html">get_outliers()</a></code>
+
+        </dt>
+        <dd>Create a outlier summary table (used in plot_heatmap_annotated)</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_2ome_summary.html">get_2ome_summary()</a></code>
+
+        </dt>
+        <dd>Create a metric summary table for 2ome_analysis report</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_diff_sites_summary.html">get_diff_sites_summary()</a></code>
+
+        </dt>
+        <dd>Get a summary of statistics for differential 2'ome-sites analysis</dd>
+      </dl><dl><dt>
+
+          <code><a href="render_html_welch.html">render_html_welch()</a></code>
+
+        </dt>
+        <dd>Print Welch result in report</dd>
+      </dl><dl><dt>
+
+          <code><a href="render_html_wilcoxon.html">render_html_wilcoxon()</a></code>
+
+        </dt>
+        <dd>Print Wilcoxon result in report</dd>
       </dl></div><div class="section level2">
       <h2 id="plots">Plots<a class="anchor" aria-label="anchor" href="#plots"></a></h2>
 
@@ -264,10 +298,10 @@
         <dd>Correspondence analysis of a RiboClass' counts.</dd>
       </dl><dl><dt>
 
-          <code><a href="plot_comparison_medianes.html">plot_comparison_medianes()</a></code>
+          <code><a href="plot_comparison_median.html">plot_comparison_median()</a></code>
 
         </dt>
-        <dd>Plot comparison of mediane of c-score between two conditions</dd>
+        <dd>Plot comparison of median of C-score between two conditions</dd>
       </dl><dl><dt>
 
           <code><a href="plot_counts_env.html">plot_counts_env()</a></code>
@@ -291,7 +325,7 @@
           <code><a href="plot_global_profile.html">plot_global_profile()</a></code>
 
         </dt>
-        <dd>Plot global profile for a given condition on a given metadata</dd>
+        <dd>Plot global profile for given conditions on a given metadata</dd>
       </dl><dl><dt>
 
           <code><a href="plot_heatmap.html">plot_heatmap()</a></code>
@@ -300,10 +334,16 @@
         <dd>Plot heatmap for a riboclass object.</dd>
       </dl><dl><dt>
 
+          <code><a href="plot_heatmap_annotated.html">plot_heatmap_annotated()</a></code>
+
+        </dt>
+        <dd>Plot a correlation heatmap from a RiboClass object.</dd>
+      </dl><dl><dt>
+
           <code><a href="plot_heatmap_corr.html">plot_heatmap_corr()</a></code>
 
         </dt>
-        <dd>Plot a correlation heatmap from a riboclass object. Shows the correlation <strong>distance</strong> between samples.</dd>
+        <dd>Plot a correlation heatmap from a riboclass object. Shows the correlation distance between samples.</dd>
       </dl><dl><dt>
 
           <code><a href="plot_pca.html">plot_pca()</a></code>
@@ -327,25 +367,19 @@
           <code><a href="plot_stat.html">plot_stat()</a></code>
 
         </dt>
-        <dd>Plot statistic</dd>
+        <dd>Plot statistic of significant differential sites between experimental condition returned by the res.pv function</dd>
       </dl><dl><dt>
 
           <code><a href="boxplot_count.html">boxplot_count()</a></code>
 
         </dt>
-        <dd>Plot a boxplot of a RiboClass object’s counts.</dd>
+        <dd>Plot a boxplot of a RiboClass object counts.</dd>
       </dl><dl><dt>
 
           <code><a href="boxplot_cscores.html">boxplot_cscores()</a></code>
 
         </dt>
         <dd>Plot boxplot representing the C-score values of all samples for each individual annotated site. Sites are sorted by their median.</dd>
-      </dl><dl><dt>
-
-          <code><a href="heatmap_annotated.html">heatmap_annotated()</a></code>
-
-        </dt>
-        <dd>Plot a correlation heatmap from a RiboClass object. Shows the correlation distance between samples.</dd>
       </dl></div><div class="section level2">
       <h2 id="export-data">Export data<a class="anchor" aria-label="anchor" href="#export-data"></a></h2>
 
