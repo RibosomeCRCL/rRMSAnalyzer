@@ -253,7 +253,9 @@ Coverage estimations were performed over four reference rRNAs (5S, 5.8S, 18S, an
 Outlier detection steps identified **`r sum(qcdata$coverage_quality != "pass")`**  sample(s) based on the global coverage distribution, and **`r sum(qcdata$rlc_median_quality == "warning")`** sample(s) as a potential outlier(s) using the Relative Log Coverage (RLC) metric. The sample(s) identified as outlier(s) based on QC metrics should be interpreted with caution in downstream analyses :
 
 ```{r print outlier samples}
+if (any(qcdata$total_outliers != 0)) {
 outlier_summary <- data.frame(outliers = qcdata$samplename[qcdata$total_outliers != 0], row.names = "Sample") # print samples that is outlier at least 1 time
+} else  outlier_summary <- "No outlier"
 knitr::kable(outlier_summary, "html") %>% kable_styling("striped") %>% scroll_box(width = "60%", height = "500px")
 ```
 
