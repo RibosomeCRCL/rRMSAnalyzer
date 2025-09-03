@@ -41,14 +41,14 @@ reference:
   - keep_ribo_samples
 - title: Utils
 - contents:
-  - get_IQR
-  - get_variant_sites
-  - res_pv
-  - get_outliers
   - get_2ome_summary
   - get_diff_sites_summary
+  - get_IQR
+  - get_outliers
+  - get_variant_sites
   - render_html_welch
   - render_html_wilcoxon
+  - res_pv
 - title: Plots
   desc: Different plots to show either samples and sites.
 - contents:

@@ -4,14 +4,14 @@ Title: Package to Analyze RiboMethSeq Data
 Version: 3.0.0
 Authors@R: c(
     person("Théo","Combe", email="RibosOmics@lyon.unicancer.fr", role=c("aut","cre")),
-    person("Allyson","Moureaux", role="aut"),
     person("Hermes","Paraqindes", role="aut"),
+    person("Allyson","Moureaux", role="aut"),
     person("Janice","Kielbassa", role="aut"),
     person("Fleur","Bourdelais", role="aut"),
     person("Sébastien","Durand", role="aut"),
-    person("Virginie","Marcel", role="aut"),
     person("Émilie","Thomas", role="aut"),
     person("Anthony","Ferrari", role="aut"),
+    person("Virginie","Marcel", role="aut"),
     person("Fondation Synergie Lyon Cancer", role="fnd"),
     person("INCa", role="fnd"),
     person("SIRIC program", role="fnd"),

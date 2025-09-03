@@ -1,6 +1,4 @@
-# ==================================================
-
-#' Plot a correlation heatmap from a riboclass object.
+#' Plot a correlation heatmap from a riboclass object
 #'  
 #' Shows the correlation distance between samples.
 #' @md
@@ -18,7 +16,7 @@ plot_heatmap_corr <- function(ribo, values_col, color_col=NULL) {
   if(!is.null(color_col)) check_metadata(ribo,color_col)
   .plot_heatmap_corr(matrix, ribo[["metadata"]], color_col = color_col)
 }
-#' Internal function of plot_heatmap_corr.
+#' Internal function of plot_heatmap_corr
 #'
 #' @param cscore_matrix  Sites x Samples C-score matrix (output of extract_data()).
 #' @param metadata Metadata of samples in matrix

@@ -1,4 +1,4 @@
-#' Return a list of differential sites.
+#' Return a list of differential sites
 #' 
 #' @inherit plot_diff_sites details
 #' @param df_of_kruskal Output of kruskal_test_on_cscores().
@@ -18,7 +18,7 @@ select_most_differential_sites <- function(df_of_kruskal = NULL, p_cutoff = 1e-0
   return(most_differential_sites)
 }
 
-#' (Internal) Display differential sites.
+#' (Internal) Display differential sites
 #' 
 #' Using dataframes obtained from
 #' 
@@ -88,7 +88,7 @@ plot_most_differential_sites <- function(df_of_Cscores = NULL,
   return(p1)
 }
 
-#' plot differential sites between conditions.
+#' Plot sites showing statistical difference between conditions
 #' 
 #' Display a boxplot between condition for each site where there is a sufficent difference between conditions.
 #' The Kruskal-Wallis p-value is displayed at the bottom left of each boxplot.

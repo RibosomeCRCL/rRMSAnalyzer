@@ -1,4 +1,4 @@
-#' Plot IQR or variance per site 
+#' Plot sites in increasing/decreasing order of IQR or variance
 #' 
 #' @description
 #' The sites that show an IQR/variance higher than median + 2*MAD are colored in red and are 

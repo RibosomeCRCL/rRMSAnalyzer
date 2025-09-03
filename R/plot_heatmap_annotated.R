@@ -1,4 +1,4 @@
-#' Plot a correlation heatmap from a RiboClass object.
+#' Plot a correlation heatmap from a RiboClass object
 #' @description
 #' Shows the correlation distance between samples.
 #'

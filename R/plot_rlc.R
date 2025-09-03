@@ -55,7 +55,7 @@
    return(rlc.plot)
 }
 
-#' Relative Log Expression plot of a RiboClass object’s counts. 
+#' Relative Log Expression plot of a RiboClass object’s counts 
 #'
 #' @param ribo a RiboClass object.
 #' @param show_outlier Show boxplot outlier values. 
