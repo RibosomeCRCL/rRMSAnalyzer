@@ -57,17 +57,15 @@
 <p>rRMSAnalyzer is an R package that provides a set of easy-to-use functions to evaluate 2’Ome levels by computing C-scores from RiboMethSeq read end counts as input.</p>
 <p>Available features (version 3):</p>
 <ul>
-<li>C-score computation (using either mean or median for the window of neighboring positions)</li>
+<li>C-score computation</li>
 <li>Batch effect adjustment with CombatSeq</li>
 <li>Different visualizations to compare samples or sites</li>
 <li>Include a table of annotated human rRNA sites</li>
 <li>Export computed C-scores into a dataframe</li>
-<li>Automated quality control report (quality_control.Rmd)</li>
-<li>Automated analysis of 2’Ome global methylation profile (2ome_analysis.Rmd)</li>
-<li>Automated differential analysis of 2’ome methylation site (diff_sites.Rmd)</li>
+<li>Three novel functions to compute automatically reports (QC report and 2 analytic reports dedicated to 2’Ome profiles and site-by-site change in 2’Ome)</li>
 </ul>
 <blockquote>
-<p><strong>Note</strong> We have also developed a <a href="https://github.com/RibosomeCRCL/ribomethseq-nf" class="external-link">dedicated Nextflow pipeline</a> to process the data from sequencing output (fastq files) to useful raw data for rRMSAnalyzer (read end counts).</p>
+<p><strong>Note</strong>: We have also developed a dedicated Nextflow pipeline <a href="https://github.com/RibosomeCRCL/ribomethseq-nf" class="external-link">(ribomethseq-nf)</a> to process the data from sequencing output (fastq files) to useful raw data for rRMSAnalyzer (read end counts).</p>
 </blockquote>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -89,7 +87,7 @@
 <span>              metadata_key <span class="op">=</span> <span class="st">"filename"</span>,</span>
 <span>              metadata_id <span class="op">=</span> <span class="st">"samplename"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Compute the c-score using different parameters,</span></span>
+<span><span class="co"># Compute the C-score using different parameters,</span></span>
 <span><span class="co"># including calculation of the local coverage using the mean instead of the median</span></span>
 <span><span class="va">ribo</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/compute_cscore.html">compute_cscore</a></span><span class="op">(</span><span class="va">ribo</span>, method <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span>
 <span></span>
@@ -103,7 +101,7 @@
 <div class="section level2">
 <h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
-<p>The “getting started” is available on our website: <a href="https://ribosomecrcl.github.io/rRMSAnalyzer/" class="uri">https://ribosomecrcl.github.io/rRMSAnalyzer/</a></p>
+<p>The “getting started” is available on our Github page: <a href="https://ribosomecrcl.github.io/rRMSAnalyzer/" class="uri">https://ribosomecrcl.github.io/rRMSAnalyzer/</a></p>
 <p>A test dataset (ribo_toy) is included in the package.</p>
 </div>
 <div class="section level2">
@@ -119,7 +117,7 @@
 <div class="section level2">
 <h2 id="funding">Funding<a class="anchor" aria-label="anchor" href="#funding"></a>
 </h2>
-<p>This project has been funded by the French Cancer Institute (INCa, PLBIO 2019-138 MARACAS), the SIRIC Program (INCa-DGOS-Inserm_12563 LyRICAN), LabEX program (DEVweCan), the French association Ligue Nationale Contre le Cancer and Synergie Lyon Cancer Foundation.</p>
+<p>This project has been funded by the French Cancer Institute (INCa, PLBIO 2019-138 MARACAS, INCa_18375), the SIRIC Program (INCa-DGOS-Inserm_12563 LyRICAN), LabEX program (DEVweCan), the French association Ligue Nationale Contre le Cancer and Synergie Lyon Cancer Foundation.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
