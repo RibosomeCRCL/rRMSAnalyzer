@@ -67,7 +67,7 @@ render_html_welch <- function(ribo, condition_col, ctrl, cases, pthr, cscore_cut
   # Conditionnal text
   text <- if (length(w[["plot_env"]][["significant_sites"]]) != 0) {
     glue::glue("This panel displays boxplots of C-scores for rRNA 2'Ome sites identified 
-         as significantly different between the two biological conditions **{cases}** 
+         as significantly different between the two biological conditions {cases} 
          and {ctrl}, based on Welch's t-test results. Significance was defined by 
          two criteria: adjusted p-value < 0.05 and |deltaC-score| > 0.05. Each boxplot 
          shows the distribution of C-scores per condition, based on the summary 
