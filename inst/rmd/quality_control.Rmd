@@ -129,11 +129,9 @@ The coverage distribution of absolute end read counts at each genomic position i
 
 Samples with a median coverage below 100 (ie., log10(100)=2; the blue line), are highlighted in red and should be interpreted with caution or excluded from further analysis.
 
-```{r end read count distribution ,warning=FALSE}
+```{r end read count distribution, warning=FALSE}
 rRMSAnalyzer::boxplot_count(ribo_to_check, params$library_col) + ggplot2::ggtitle("End read counts distribution by sample")
 ```
-
-
 
 ## Relative Log Coverage
 
