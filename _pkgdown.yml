@@ -74,14 +74,8 @@ navbar:
       - Model_human    # tab human model
   components:
     Get_started:
-      text: "get started" #text on the tab
+      text: "Get started" #text on the tab
       href: articles/rRMSAnalyzer.html # relative adress
-    Model_murine:
-      text: "Murine model" #text on the tab
-      href: articles/Model_murine.html # relative adress
-    Model_human:
-      text: "Human_model"
-      href: articles/Model_human.html
 articles:
       - title: Murine model
         contents:
