@@ -12,20 +12,15 @@ RiboMethSeq read end counts as input.
 
 Available features (version 3):
 
-- C-score computation (using either mean or median for the window of
-  neighboring positions)
+- C-score computation
 - Batch effect adjustment with CombatSeq
 - Different visualizations to compare samples or sites
 - Include a table of annotated human rRNA sites
 - Export computed C-scores into a dataframe
-- Automated quality control report (quality_control.Rmd)
-- Automated analysis of 2’Ome global methylation profile
-  (2ome_analysis.Rmd)
-- Automated differential analysis of 2’ome methylation site
-  (diff_sites.Rmd)
+- Three novel functions to compute automatically reports (QC report and 2 analytic reports dedicated to 2’Ome profiles and site-by-site change in 2’Ome)
 
-> **Note** We have also developed a [dedicated Nextflow
-> pipeline](https://github.com/RibosomeCRCL/ribomethseq-nf) to process
+> **Note**: We have also developed a dedicated Nextflow
+> pipeline [(ribomethseq-nf)](https://github.com/RibosomeCRCL/ribomethseq-nf) to process
 > the data from sequencing output (fastq files) to useful raw data for
 > rRMSAnalyzer (read end counts).
 
@@ -50,7 +45,7 @@ ribo <- load_ribodata(
               metadata_key = "filename",
               metadata_id = "samplename")
 
-# Compute the c-score using different parameters,
+# Compute the C-score using different parameters,
 # including calculation of the local coverage using the mean instead of the median
 ribo <- compute_cscore(ribo, method = "mean")
 
@@ -64,7 +59,7 @@ plot_pca(ribo,"condition")
 
 ## Getting started
 
-The “getting started” is available on our website:
+The “getting started” is available on our Github page:
 <https://ribosomecrcl.github.io/rRMSAnalyzer/>
 
 A test dataset (ribo_toy) is included in the package.
@@ -84,6 +79,6 @@ suggestions.
 ## Funding
 
 This project has been funded by the French Cancer Institute (INCa, PLBIO
-2019-138 MARACAS), the SIRIC Program (INCa-DGOS-Inserm_12563 LyRICAN),
+2019-138 MARACAS, INCa_18375), the SIRIC Program (INCa-DGOS-Inserm_12563 LyRICAN),
 LabEX program (DEVweCan), the French association Ligue Nationale Contre
 le Cancer and Synergie Lyon Cancer Foundation.
