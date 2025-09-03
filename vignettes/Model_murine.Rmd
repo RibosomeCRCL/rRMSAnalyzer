@@ -42,6 +42,7 @@ open metadata.csv in Excel, fill in the file and save it under .csv with ";" as 
 library(devtools)
 devtools::install_github("RibosomeCRCL/rRMSAnalyzer")
 library(rRMSAnalyzer)
+library(rRMSReports)
 ```
 
 # RiboClass creation
@@ -101,7 +102,7 @@ plot_coa(
 ## QC_report for all data
 
 ```{r, eval=FALSE}
-report_qc(ribo = ribo, specie = "human", lib_col = "lib")
+report_qc(ribo = ribo, specie = "human", library_col = "lib")
 ```
 
 ## adjustment ComBat-Seq if necessary

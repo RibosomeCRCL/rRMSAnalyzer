@@ -16,19 +16,19 @@
 #' qcdata <- cbind(qcdata,median_coverage=medcov[rownames(qcdata)]) 
 #' qcdata$coverage_quality <- "pass" 
 #' qcdata$coverage_quality[qcdata$median_coverage < 100] <- "warning" 
-#' plot_rle <- rRMSAnalyzer::plot_rle(ribo_toy,show_outlier = TRUE)
-#' mad <- plot_rle$plot_env$mad  
-#' rle_median <- as.vector(plot_rle$plot_env$rle_grouped$median)
-#' keys <- as.vector(plot_rle$plot_env$rle_grouped$key)
-#' outlier_table <- data.frame(key = keys, rle_median = rle_median)
+#' plot_rlc <- rRMSAnalyzer::plot_rlc(ribo_toy,show_outlier = TRUE)
+#' mad <- plot_rlc$plot_env$mad  
+#' rlc_median <- as.vector(plot_rlc$plot_env$rlc_grouped$median)
+#' keys <- as.vector(plot_rlc$plot_env$rlc_grouped$key)
+#' outlier_table <- data.frame(key = keys, rlc_median = rlc_median)
 #' outlier <- data.frame()
 #' for (i in 1:nrow(outlier_table)) {
-#'   if(outlier_table$rle_median[i] < mad) {
+#'   if(outlier_table$rlc_median[i] < mad) {
 #'     outlier <- rbind(outlier, outlier_table[i,])}}
-#' qcdata$rle_median <- outlier_table$rle_median[match(qcdata$samplename, outlier_table$key)]
-#' qcdata$rle_median_quality <- "pass" 
-#' qcdata$rle_median_quality[qcdata$rle_median < mad] <- "warning" 
-#' qcdata$total_outliers <- rowSums(qcdata[, c("coverage_quality", "rle_median_quality")] == "warning")
+#' qcdata$rlc_median <- outlier_table$rlc_median[match(qcdata$samplename, outlier_table$key)]
+#' qcdata$rlc_median_quality <- "pass" 
+#' qcdata$rlc_median_quality[qcdata$rlc_median < mad] <- "warning" 
+#' qcdata$total_outliers <- rowSums(qcdata[, c("coverage_quality", "rlc_median_quality")] == "warning")
 #' ribo_toy$metadata$outlier_level <- qcdata$total_outliers
 #' qcdata$total_outliers <- as.character(qcdata$total_outliers)
 #' plot_heatmap_annotated(ribo_toy, qcdata)
@@ -43,7 +43,7 @@ plot_heatmap_annotated <- function(ribo = ribo, qcdata = qcdata) {
   # Préparer les annotations
   row_annotation <- ComplexHeatmap::HeatmapAnnotation(
     outlier_coverage_distribution = qcdata$coverage_quality,
-    outlier_relative_log_coverage = qcdata$rle_median_quality,
+    outlier_relative_log_coverage = qcdata$rlc_median_quality,
     col = list(
       outlier_coverage_distribution = c("pass" = "darkgrey", "warning" = "red"),
       outlier_relative_log_coverage = c("pass" = "darkgrey", "warning" = "red")
@@ -61,7 +61,7 @@ plot_heatmap_annotated <- function(ribo = ribo, qcdata = qcdata) {
   
   # identifying warning sample
   column_colors <- ifelse(
-    qcdata$coverage_quality == "warning" | qcdata$rle_median_quality == "warning",
+    qcdata$coverage_quality == "warning" | qcdata$rlc_median_quality == "warning",
     "red",  # "Warning" in red
     "black" # other in black
   )

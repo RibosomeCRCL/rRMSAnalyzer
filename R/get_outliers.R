@@ -24,36 +24,36 @@ qcdata$coverage_quality <- "pass"
 qcdata$coverage_quality[qcdata$median_coverage < 100] <- "warning" 
 
 #plot object extraction
-plot_rle <- rRMSAnalyzer::plot_rle(ribo,show_outlier = TRUE)
+plot_rlc <- rRMSAnalyzer::plot_rlc(ribo,show_outlier = TRUE)
 # extraction of the median absolute deviation
-mad <- plot_rle$plot_env$mad  
+mad <- plot_rlc$plot_env$mad  
 # extraction of the median for all samples
-rle_median <- as.vector(plot_rle$plot_env$rle_grouped$median)
+rlc_median <- as.vector(plot_rlc$plot_env$rlc_grouped$median)
 # extraction of sample names
-keys <- as.vector(plot_rle$plot_env$rle_grouped$key)
+keys <- as.vector(plot_rlc$plot_env$rlc_grouped$key)
 # creation of a data frame containing sample names and medians
 outlier_table <- data.frame(
   key = keys,
-  rle_median = rle_median)
+  rlc_median = rlc_median)
 # creation of the data frame outlier 
 outlier <- data.frame()
 # calculation of outliers 
 for (i in 1:nrow(outlier_table)) {
-  if(outlier_table$rle_median[i] < mad) {
+  if(outlier_table$rlc_median[i] < mad) {
     outlier <- rbind(outlier, outlier_table[i,])
   }
 }
 
-#incrementing the df qcdata with rle median
-qcdata$rle_median <- outlier_table$rle_median[match(qcdata$samplename, outlier_table$key)]
-# add a rle_median_quality column initialized at ok
-qcdata$rle_median_quality <- "pass" 
+#incrementing the df qcdata with rlc median
+qcdata$rlc_median <- outlier_table$rlc_median[match(qcdata$samplename, outlier_table$key)]
+# add a rlc_median_quality column initialized at ok
+qcdata$rlc_median_quality <- "pass" 
 # add a threshold for outliers
-qcdata$rle_median_quality[qcdata$rle_median < mad] <- "warning" 
+qcdata$rlc_median_quality[qcdata$rlc_median < mad] <- "warning" 
 
 #incrementing qcdata
 #calculate the number of fold the sample is an outlier
-qcdata$total_outliers <- rowSums(qcdata[, c("coverage_quality", "rle_median_quality")] == "warning")
+qcdata$total_outliers <- rowSums(qcdata[, c("coverage_quality", "rlc_median_quality")] == "warning")
 
 qcdata$total_outliers <- as.character(qcdata$total_outliers)
 

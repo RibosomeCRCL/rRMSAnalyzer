@@ -257,7 +257,7 @@ report_qc(ribo = ribo_toy, library_col = "run")
 The QC report includes the following visualizations:
 
 - read-end counts distribution by sample (*`boxplot_count()`*)
-- Relative log coverage (i.e., end read count) by sample (*`plot_rle()`*)
+- Relative log coverage (i.e., end read count) by sample (*`plot_rlc()`*)
 - rRNA fraction of read-end counts per sample (*`plot_count_fraction()`*)
 - Heatmap summarizing the correlation matrix of the read-end counts (*`heatmap_annotated()`*)
 - Correspondence analysis of the read-end counts (*`plot_coa()`*)

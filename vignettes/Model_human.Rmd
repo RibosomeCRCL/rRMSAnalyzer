@@ -42,6 +42,7 @@ open metadata.csv in Excel, fill in the file and save it under .csv with ";" as 
 library(devtools)
 devtools::install_github("RibosomeCRCL/rRMSAnalyzer")
 library(rRMSAnalyzer)
+library(rRMSReports)
 ```
 
 # RiboClass creation
@@ -79,7 +80,7 @@ ribo <- load_ribodata(
 
 Plot PCA
 ```{r, eval=FALSE}
-plot_pca(ribo,"lib") #change column name of the lib if necessary
+plot_pca(ribo,"run") #change column name of the lib if necessary #ribo_toy lib_col = "run"
 ```
 
 Plot COA
@@ -101,23 +102,23 @@ plot_coa(
 ## QC_report for all data
 
 ```{r, eval=FALSE}
-report_qc(ribo = ribo, specie = "human", lib_col = "lib")
+report_qc(ribo = ribo, specie = "human", library_col = "run", project_name = "my_project") #ribo_toy lib_col = "run"
 ```
 
 ## adjustment ComBat-Seq if necessary
 
 ```{r, eval=FALSE}
-plot_pca(ribo, "lib")                #ribo_toy lib_col = "run"
+plot_pca(ribo, "lib") #ribo_toy lib_col = "run"               
 
 ribo_adj <- adjust_bias(ribo_toy,"run") 
 
-plot_pca(ribo_adj,"lib")            
+plot_pca(ribo_adj,"lib")  #ribo_toy lib_col = "run"          
 ```
 
 ## QC_report for adjusted data
 
 ```{r, eval=FALSE}
-report_qc(ribo = ribo_adj, specie = "human", lib_col = "lib", project_name = "name", comments = "./comment_QC.Rmd") 
+report_qc(ribo = ribo_adj, specie = "human", library_col = "run", project_name = "name", comments = "./comment_QC.Rmd") #ribo_toy lib_col = "run"
 ```
 
 
@@ -222,7 +223,7 @@ If only one column condition, it is still the same thing. Here in the metadata e
 
 (to do only if you want to compare a subset of your samples and not all the samples together otherwise pass this chunk)
 
-Data are filtered with metadata to keep only samples present in the colum "variableA" (in the case you have some NA in the column). Samples with NA will be erased from subset for the analysis.
+Data are filtered with metadata to keep only samples present in the column "variableA" (in the case you have some NA in the column). Samples with NA will be erased from subset for the analysis.
 
 ```{r, eval=FALSE}
 kept_samples <- ribo_adj_annot$metadata %>%
