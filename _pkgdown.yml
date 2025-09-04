@@ -48,7 +48,7 @@ reference:
   - get_variant_sites
   - render_html_welch
   - render_html_wilcoxon
-  - res_pv
+  - compute_pval
 - title: Plots
   desc: Different plots to show either samples and sites.
 - contents:
@@ -59,10 +59,11 @@ reference:
 - contents:
   - extract_data
   - format_to_plot
-  - mean_samples_by_conditon
+  - mean_samples_by_condition
 - title: Reports
   desc: Generate automated reports from a RiboClass
-- contents: starts_with("report_")
+- contents: 
+  - starts_with("report_")
 navbar:
   structure:
     left:
@@ -70,23 +71,21 @@ navbar:
       - reference      # tab for index
       - articles       # tab Articles (vignettes)
       - news           # tab Change log
-      - Model_murine   # tab murin model
-      - Model_human    # tab human model
   components:
     Get_started:
       text: "Get started" #text on the tab
       href: articles/rRMSAnalyzer.html # relative adress
 articles:
-      - title: Murine model
+      - title: Customize annotation
         contents:
-          - Model_murine
+          - custom_anno
+      - title: Customize a RiboClass
+        contents:
+          - custom_ribo
       - title: Human model
         contents:
           - Model_human
-      - title: Custom Annotation
+      - title: Reports
         contents:
-          - custom_anno
-      - title: Custom Ribo
-        contents:
-          - custom_ribo
+          - example_reports
 # to test it run : pkgdown::build_site() 
