@@ -1,0 +1,18 @@
+---
+title: "Example Reports"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{example_reports}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Example Reports
+
+examples of reports for initial comparison: <br>
+- [Example of QC report generated using report_qc() with ribo_toy](quality_control.html)<br>
+- [Example of 2’Ome_site report generated using report_2ome_sites() with ribo_toy](2ome_analysis.html)<br>
+- [Example of diff_site report generated using report_diff_sites() with ribo_toy](diff_sites.html)<br>
+<br>
+Ready-to-use code for non-bioinformaticians: <br>
+- [example of code for analyzing human rRNA 2’Ome](Model_human.html)<br>
