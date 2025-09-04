@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_rlc.R
 \name{plot_rlc}
 \alias{plot_rlc}
-\title{Relative Log Expression plot of a RiboClass object’s counts.}
+\title{Relative Log Expression plot of a RiboClass object’s counts}
 \usage{
 plot_rlc(ribo, show_outlier = TRUE)
 }
@@ -15,7 +15,7 @@ plot_rlc(ribo, show_outlier = TRUE)
 A ggplot object. Samples with a median lower than median(RLC counts)-2*MAD (Median Absolute Deviation) are colored in red.
 }
 \description{
-Relative Log Expression plot of a RiboClass object’s counts.
+Relative Log Expression plot of a RiboClass object’s counts
 }
 \examples{
 data("ribo_toy")

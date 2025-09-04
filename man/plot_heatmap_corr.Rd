@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_heatmap_corr.R
 \name{plot_heatmap_corr}
 \alias{plot_heatmap_corr}
-\title{Plot a correlation heatmap from a riboclass object.
+\title{Plot a correlation heatmap from a riboclass object
 
 Shows the correlation distance between samples.}
 \usage{
@@ -19,7 +19,7 @@ plot_heatmap_corr(ribo, values_col, color_col = NULL)
 ComplexHeatmap object
 }
 \description{
-Plot a correlation heatmap from a riboclass object.
+Plot a correlation heatmap from a riboclass object
 
 Shows the correlation distance between samples.
 }

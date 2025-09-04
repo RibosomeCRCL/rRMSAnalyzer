@@ -11,7 +11,7 @@ plot_stat(
   cscore_cutoff = 0.05,
   adjust_pvalues_method = "fdr",
   site = NULL,
-  res_pv = res_pv,
+  compute_pval = compute_pval,
   pthr = 0.05,
   condition_col = NULL
 )
@@ -27,7 +27,7 @@ plot_stat(
 
 \item{site}{sites to plot}
 
-\item{res_pv}{df of p values extracted from res_pv.R}
+\item{compute_pval}{df of p values extracted from compute_pval.R}
 
 \item{pthr}{p value threshold under which sites are not taken in account}
 
@@ -50,7 +50,7 @@ ribo_toy <- annotate_site(ribo_toy,
                                 anno_rna = "rRNA",
                                 anno_pos = "Position",
                                 anno_value = "Nomenclature")
-res_pv <- res_pv(ribo = ribo_toy, test = "kruskal", condition_col = "condition") 
-plot_stat(ribo = ribo_toy, site = NULL, res_pv = res_pv, pthr = 0.05, 
+compute_pval <- compute_pval(ribo = ribo_toy, test = "kruskal", condition_col = "condition") 
+plot_stat(ribo = ribo_toy, site = NULL, compute_pval = compute_pval, pthr = 0.05, 
 condition_col = "condition", cscore_cutoff = 0.05)
 }

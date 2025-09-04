@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_sites.R
 \name{plot_diff_sites}
 \alias{plot_diff_sites}
-\title{plot differential sites between conditions.}
+\title{Plot sites showing statistical difference between conditions}
 \usage{
 plot_diff_sites(
   ribo,

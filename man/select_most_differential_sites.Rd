@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_sites.R
 \name{select_most_differential_sites}
 \alias{select_most_differential_sites}
-\title{Return a list of differential sites.}
+\title{Return a list of differential sites}
 \usage{
 select_most_differential_sites(
   df_of_kruskal = NULL,
@@ -23,7 +23,7 @@ conditions' mean is considered significant.}
 a vector of sites that are differentials
 }
 \description{
-Return a list of differential sites.
+Return a list of differential sites
 }
 \details{
 To be considered as differential, a site must follow two conditions :

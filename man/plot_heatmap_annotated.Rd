@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_heatmap_annotated.R
 \name{plot_heatmap_annotated}
 \alias{plot_heatmap_annotated}
-\title{Plot a correlation heatmap from a RiboClass object.}
+\title{Plot a correlation heatmap from a RiboClass object}
 \usage{
 plot_heatmap_annotated(ribo = ribo, qcdata = qcdata)
 }

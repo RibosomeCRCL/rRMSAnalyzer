@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_heatmap.R
 \name{.plot_heatmap}
 \alias{.plot_heatmap}
-\title{Internal function to plot heatmap.}
+\title{Internal function to plot heatmap}
 \usage{
 .plot_heatmap(
   cscore_matrix = NULL,
@@ -36,6 +36,6 @@
 ComplexHeatmap heatmap
 }
 \description{
-Internal function to plot heatmap.
+Internal function to plot heatmap
 }
 \keyword{internal}

@@ -3,7 +3,7 @@
 \name{boxplot_cscores}
 \alias{boxplot_cscores}
 \title{Plot boxplot representing the C-score values of all samples for each
-individual annotated site.
+individual annotated site
 Sites are sorted by their median.}
 \usage{
 boxplot_cscores(
@@ -28,7 +28,7 @@ a ggplot geom_boxplot
 }
 \description{
 Plot boxplot representing the C-score values of all samples for each
-individual annotated site.
+individual annotated site
 Sites are sorted by their median.
 }
 \examples{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_sites_by_iqr.R
 \name{plot_sites_by_IQR}
 \alias{plot_sites_by_IQR}
-\title{Plot IQR or variance per site}
+\title{Plot sites in increasing/decreasing order of IQR or variance}
 \usage{
 plot_sites_by_IQR(ribo = NULL, plot = "IQR", variance = "IQR", ...)
 }
