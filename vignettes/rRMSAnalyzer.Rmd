@@ -924,7 +924,7 @@ By default, the function provides the metrics of the C-scores. By setting the *v
 Here is an example of dataframe showing the summarized C-scores per modality of the “condition” variable for all the genomic rRNA positions:
 
 ```{r}
-mean_tb <- mean_samples_by_conditon(ribo_adjusted,
+mean_tb <- mean_samples_by_condition(ribo_adjusted,
                                     value = "cscore", #or "count"
                                     metadata_condition = "condition",
                                     only_annotated = TRUE)
