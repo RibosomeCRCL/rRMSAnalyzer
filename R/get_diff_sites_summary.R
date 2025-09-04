@@ -33,8 +33,8 @@ get_diff_sites_summary <- function(ribo = ribo, pthr = 0.05, condition_col = con
   
   #----------------------------------------ANOVA test---------------------------
   if(length(unique(qcdata$condition_col)) > 2){
-  res_pv_anova <- rRMSAnalyzer::res_pv(ribo = ribo, test = "anova", condition_col = condition_col) 
-  a <-rRMSAnalyzer::plot_stat(ribo = ribo, res_pv = res_pv_anova, pthr = pthr, condition_col = condition_col, cscore_cutoff = cscore_cutoff)
+  compute_pval_anova <- rRMSAnalyzer::compute_pval(ribo = ribo, test = "anova", condition_col = condition_col) 
+  a <-rRMSAnalyzer::plot_stat(ribo = ribo, compute_pval = compute_pval_anova, pthr = pthr, condition_col = condition_col, cscore_cutoff = cscore_cutoff)
   }
   
   #----------------------------------------Welch test---------------------------
@@ -50,16 +50,16 @@ get_diff_sites_summary <- function(ribo = ribo, pthr = 0.05, condition_col = con
     
     ribo_filtered <- keep_ribo_samples(ribo_filtered,kept_samples)
     
-    res_pv_welch <- rRMSAnalyzer::res_pv(ribo = ribo_filtered, test = "student", condition_col = condition_col) 
+    compute_pval_welch <- rRMSAnalyzer::compute_pval(ribo = ribo_filtered, test = "student", condition_col = condition_col) 
     
-    w <- rRMSAnalyzer::plot_stat(ribo = ribo_filtered, res_pv = res_pv_welch, pthr = pthr, condition_col = condition_col, cscore_cutoff = cscore_cutoff)
+    w <- rRMSAnalyzer::plot_stat(ribo = ribo_filtered, compute_pval = compute_pval_welch, pthr = pthr, condition_col = condition_col, cscore_cutoff = cscore_cutoff)
     w_list[[i]] <- w 
   }
   
   #----------------------------------------Kruskal test-------------------------
   if(length(unique(qcdata$condition_col)) > 2){
-    res_pv_kruskal <- rRMSAnalyzer::res_pv(ribo = ribo, test = "kruskal", condition_col = condition_col)
-    k <-rRMSAnalyzer::plot_stat(ribo = ribo, res_pv = res_pv_kruskal, pthr = pthr, condition_col = condition_col, cscore_cutoff = cscore_cutoff)
+    compute_pval_kruskal <- rRMSAnalyzer::compute_pval(ribo = ribo, test = "kruskal", condition_col = condition_col)
+    k <-rRMSAnalyzer::plot_stat(ribo = ribo, compute_pval = compute_pval_kruskal, pthr = pthr, condition_col = condition_col, cscore_cutoff = cscore_cutoff)
   }
   
   #----------------------------------------Wilcoxon test------------------------
@@ -75,9 +75,9 @@ get_diff_sites_summary <- function(ribo = ribo, pthr = 0.05, condition_col = con
     
     ribo_filtered_x <- keep_ribo_samples(ribo_filtered_x,kept_samples_x)
     
-    res_pv_wolcoxon <- rRMSAnalyzer::res_pv(ribo = ribo_filtered_x, test = "wilcoxon", condition_col = condition_col)
+    compute_pval_wolcoxon <- rRMSAnalyzer::compute_pval(ribo = ribo_filtered_x, test = "wilcoxon", condition_col = condition_col)
     
-    x <- rRMSAnalyzer::plot_stat(ribo = ribo_filtered_x, res_pv = res_pv_wolcoxon, pthr = pthr, condition_col = condition_col, cscore_cutoff = cscore_cutoff)
+    x <- rRMSAnalyzer::plot_stat(ribo = ribo_filtered_x, compute_pval = compute_pval_wolcoxon, pthr = pthr, condition_col = condition_col, cscore_cutoff = cscore_cutoff)
     x_list[[i]] <- x 
   }
   

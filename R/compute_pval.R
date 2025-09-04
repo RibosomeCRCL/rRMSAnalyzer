@@ -9,8 +9,8 @@
 #'
 #' @examples 
 #' data("ribo_toy")
-#' res_pv(ribo = ribo_toy, test = "student", condition_col = "condition")
-res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
+#' compute_pval(ribo = ribo_toy, test = "student", condition_col = "condition")
+compute_pval <- function(ribo = ribo, test = NULL, condition_col = NULL) {
   
   # Extract data
   data <- extract_data(ribo, only_annotated = TRUE, position_to_rownames = TRUE)
@@ -46,9 +46,9 @@ res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
   #----------------------------------------------------------------------------
   
   # Stats
-  #create the table res_pv
+  #create the table compute_pval
   if (test %in% c("anova", "kruskal")) {
-  res_pv <- data %>%
+  compute_pval <- data %>%
     dplyr::group_by(annotated_sites) %>%
     dplyr::summarise(
       p_value = {
@@ -70,7 +70,7 @@ res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
       }
     )
   } else { #if not anova, nor kruskal  
-    res_pv <- data %>%
+    compute_pval <- data %>%
       dplyr::group_by(annotated_sites) %>%
       #-------------------------------------------------------------------------
       dplyr::summarise(
@@ -112,7 +112,7 @@ res_pv <- function(ribo = ribo, test = NULL, condition_col = NULL) {
   # }
   
   # pval_adj for all tests
-  res_pv$p_adj <- p.adjust(res_pv$p_value, method = "fdr")
+  compute_pval$p_adj <- p.adjust(compute_pval$p_value, method = "fdr")
   
-  return(res_pv)
+  return(compute_pval)
 }

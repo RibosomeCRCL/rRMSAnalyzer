@@ -34,21 +34,21 @@ render_html_welch <- function(ribo, condition_col, ctrl, cases, pthr, cscore_cut
   
   ribo_filtered <- keep_ribo_samples(ribo_filtered, kept_samples)
   
-  res_pv <- rRMSAnalyzer::res_pv(ribo = ribo_filtered, test = "student", condition_col = condition_col)
+  compute_pval <- rRMSAnalyzer::compute_pval(ribo = ribo_filtered, test = "student", condition_col = condition_col)
   
-  res_pv_print <- res_pv
-  if ("p_value" %in% names(res_pv_print)) {
-    res_pv_print$p_value <- formatC(res_pv_print$p_value, format = "e", digits = 3)
+  compute_pval_print <- compute_pval
+  if ("p_value" %in% names(compute_pval_print)) {
+    compute_pval_print$p_value <- formatC(compute_pval_print$p_value, format = "e", digits = 3)
   }
-  if ("p_adj" %in% names(res_pv_print)) {
-    res_pv_print$p_adj <- formatC(res_pv_print$p_adj, format = "e", digits = 3)
+  if ("p_adj" %in% names(compute_pval_print)) {
+    compute_pval_print$p_adj <- formatC(compute_pval_print$p_adj, format = "e", digits = 3)
   }
-  if ("delta_c_score" %in% names(res_pv_print)) {
-    res_pv_print$delta_c_score <- round(res_pv_print$delta_c_score, 3)
+  if ("delta_c_score" %in% names(compute_pval_print)) {
+    compute_pval_print$delta_c_score <- round(compute_pval_print$delta_c_score, 3)
   }
   
   # Creation of the table
-  dt <- DT::datatable(res_pv_print,
+  dt <- DT::datatable(compute_pval_print,
                   rownames = FALSE,
                   extensions = c("Buttons"),
                   options = list(
@@ -62,7 +62,7 @@ render_html_welch <- function(ribo, condition_col, ctrl, cases, pthr, cscore_cut
                     )
                   ))
 
-  w <- rRMSAnalyzer::plot_stat(ribo = ribo_filtered, site = NULL, res_pv = res_pv, pthr = pthr, condition_col = condition_col, cscore_cutoff = cscore_cutoff)
+  w <- rRMSAnalyzer::plot_stat(ribo = ribo_filtered, site = NULL, compute_pval = compute_pval, pthr = pthr, condition_col = condition_col, cscore_cutoff = cscore_cutoff)
   empty_w <- list(plot_env = list(significant_sites = character(0)))
   # Conditionnal text
   text <- if (length(w[["plot_env"]][["significant_sites"]]) != 0) {
