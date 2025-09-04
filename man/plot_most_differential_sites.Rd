@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_sites.R
 \name{plot_most_differential_sites}
 \alias{plot_most_differential_sites}
-\title{(Internal) Display differential sites.}
+\title{(Internal) Display differential sites}
 \usage{
 plot_most_differential_sites(
   df_of_Cscores = NULL,

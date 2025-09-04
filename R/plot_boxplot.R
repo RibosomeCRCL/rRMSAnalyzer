@@ -1,4 +1,4 @@
-#' Plot a boxplot of a RiboClass object counts. 
+#' Plot a boxplot of a RiboClass object counts 
 #' @description This plot is useful to check if the samples are alike in their
 #' raw counts.
 #' @param ribo A RiboClass object.
@@ -22,7 +22,7 @@ boxplot_count <- function(ribo, color_col = NA,
 }
 
 #' Plot boxplot representing the C-score values of all samples for each
-#' individual annotated site.
+#' individual annotated site
 #' Sites are sorted by their median.
 #' @inheritParams boxplot_count 
 #' @param sort_by Sort sites by median ("median", default) by variance ("var")

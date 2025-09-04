@@ -15,7 +15,7 @@ test_that("test if plots creation do not fail", {
   
   expect_no_error(rRMSAnalyzer::boxplot_count(ribo_toy))
   expect_no_error(rRMSAnalyzer::boxplot_cscores(ribo_toy))
-  expect_no_error(rRMSAnalyzer::plot_rle(ribo_toy))
+  expect_no_error(rRMSAnalyzer::plot_rlc(ribo_toy))
   
   expect_no_error(rRMSAnalyzer::plot_heatmap(ribo_toy,
                                              color_col = c("run","condition")))

@@ -129,11 +129,9 @@ The coverage distribution of absolute end read counts at each genomic position i
 
 Samples with a median coverage below 100 (ie., log10(100)=2; the blue line), are highlighted in red and should be interpreted with caution or excluded from further analysis.
 
-```{r end read count distribution ,warning=FALSE}
+```{r end read count distribution, warning=FALSE}
 rRMSAnalyzer::boxplot_count(ribo_to_check, params$library_col) + ggplot2::ggtitle("End read counts distribution by sample")
 ```
-
-
 
 ## Relative Log Coverage
 
@@ -150,7 +148,7 @@ Where :
 The following graph shows the Relative Log Coverage boxplot. The blue lines give the median +/- 2 median absolute deviation (mad) variation. Median outside the blue lines identifies putative outlier samples (highlighted in red). Sample presenting a lower or higher coverage compared to other samples might be considered carefully, or outlier and removed from further biological analyses.
 
 ```{r relative log cov}
-rRMSAnalyzer::plot_rle(ribo_to_check,show_outlier = TRUE) + ggplot2::ggtitle("Relative Log Coverage")
+rRMSAnalyzer::plot_rlc(ribo_to_check, show_outlier = TRUE) + ggplot2::ggtitle("Relative Log Coverage")
 ```
 
 ## RNA fraction per sample
@@ -250,10 +248,12 @@ Coverage estimations were performed over four reference rRNAs (5S, 5.8S, 18S, an
 <br>
 **`r ifelse(is.null(ribo_to_check[["combatSeq_count"]]),"No","A")` ComBat-seq** batch correction was applied.<br>
 <br>
-Outlier detection steps identified **`r sum(qcdata$coverage_quality != "pass")`**  sample(s) based on the global coverage distribution, and **`r sum(qcdata$rle_median_quality == "warning")`** sample(s) as a potential outlier(s) using the Relative Log Coverage (RLC) metric. The sample(s) identified as outlier(s) based on QC metrics should be interpreted with caution in downstream analyses :
+Outlier detection steps identified **`r sum(qcdata$coverage_quality != "pass")`**  sample(s) based on the global coverage distribution, and **`r sum(qcdata$rlc_median_quality == "warning")`** sample(s) as a potential outlier(s) using the Relative Log Coverage (RLC) metric. The sample(s) identified as outlier(s) based on QC metrics should be interpreted with caution in downstream analyses :
 
 ```{r print outlier samples}
+if (any(qcdata$total_outliers != 0)) {
 outlier_summary <- data.frame(outliers = qcdata$samplename[qcdata$total_outliers != 0], row.names = "Sample") # print samples that is outlier at least 1 time
+} else  outlier_summary <- "No outlier"
 knitr::kable(outlier_summary, "html") %>% kable_styling("striped") %>% scroll_box(width = "60%", height = "500px")
 ```
 

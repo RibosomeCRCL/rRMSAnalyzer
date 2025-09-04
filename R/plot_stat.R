@@ -3,7 +3,7 @@
 #' @param ribo a RiboClass
 #' @param plot_all a logical set to FALSE to plot only significants sites and TRUE to plot all sites
 #' @param site sites to plot
-#' @param res_pv df of p values extracted from res_pv.R
+#' @param compute_pval df of p values extracted from compute_pval.R
 #' @param pthr p value threshold under which sites are not taken in account
 #' @param condition_col the condition column used for calculation in metadata
 #' @param cscore_cutoff cutoff of c-score under which sites are not taken in account
@@ -22,15 +22,15 @@
 #'                                 anno_rna = "rRNA",
 #'                                 anno_pos = "Position",
 #'                                 anno_value = "Nomenclature")
-#' res_pv <- res_pv(ribo = ribo_toy, test = "kruskal", condition_col = "condition") 
-#' plot_stat(ribo = ribo_toy, site = NULL, res_pv = res_pv, pthr = 0.05, 
+#' compute_pval <- compute_pval(ribo = ribo_toy, test = "kruskal", condition_col = "condition") 
+#' plot_stat(ribo = ribo_toy, site = NULL, compute_pval = compute_pval, pthr = 0.05, 
 #' condition_col = "condition", cscore_cutoff = 0.05)
 plot_stat <- function(ribo = ribo,
                       plot_all = FALSE,
                       cscore_cutoff = 0.05,
                       adjust_pvalues_method = "fdr",
                       site = NULL, 
-                      res_pv = res_pv, 
+                      compute_pval = compute_pval, 
                       pthr = 0.05, 
                       condition_col = NULL) {
   
@@ -44,24 +44,24 @@ plot_stat <- function(ribo = ribo,
   }
   
   #-------------------------------Case where plot can't be draw-----------------
-  if (is.null(site) && (is.null(res_pv) || is.null(pthr))) {
+  if (is.null(site) && (is.null(compute_pval) || is.null(pthr))) {
     stop("Error : You need to specify at least one site")
   }
-  if (!is.null(site) && is.null(res_pv) && !is.null(pthr)) {
-    stop("Error : res_pv is required if pthr is given")
+  if (!is.null(site) && is.null(compute_pval) && !is.null(pthr)) {
+    stop("Error : compute_pval is required if pthr is given")
   }
 
   # ------------------------------Filter on sites-------------------------------
   # if site specified we use it without applying any threshold
   if (!is.null(site)) {
     significant_sites <- site
-  } else if ("delta_c_score" %in% colnames(res_pv) ) { # if sites not specified, compute significant sites for welch and wilcoxon
-    significant_sites <- res_pv %>% 
+  } else if ("delta_c_score" %in% colnames(compute_pval) ) { # if sites not specified, compute significant sites for welch and wilcoxon
+    significant_sites <- compute_pval %>% 
       dplyr::filter(p_adj < pthr, abs(delta_c_score - 1) >= cscore_cutoff) %>% 
       dplyr::pull(annotated_sites)
   } else {  # if sites not specified, compute significant sites for anova and kruskal
     warning("filter on p_adj")
-    significant_sites <- res_pv %>% 
+    significant_sites <- compute_pval %>% 
       dplyr::filter(p_adj < pthr) %>% 
       dplyr::pull(annotated_sites)
   }
@@ -94,10 +94,10 @@ plot_stat <- function(ribo = ribo,
     dplyr::left_join(ribo$metadata, by = "samplename") 
   
 
-  # Add pval in data if res_pv is given 
-  if (!is.null(res_pv)) { # keep only sites for which pval_adj is < pthr
+  # Add pval in data if compute_pval is given 
+  if (!is.null(compute_pval)) { # keep only sites for which pval_adj is < pthr
     data <- data %>%
-      dplyr::left_join(res_pv %>% dplyr::select(annotated_sites, p_value, p_adj), by = "annotated_sites")
+      dplyr::left_join(compute_pval %>% dplyr::select(annotated_sites, p_value, p_adj), by = "annotated_sites")
   }
   
   # Keep only specified sites if necessary
@@ -119,17 +119,17 @@ plot_stat <- function(ribo = ribo,
     theme_bw() +
     labs(title = "Statistical Analysis", x = "Condition", y = "C_score")
   
-  # Add p_values on plot if res_pv given
-  if (!is.null(res_pv)) {
-    res_pv_filtered <- if(plot_all == FALSE && length(significant_sites) != 0) { # filter res_pv to keep only significants sites
-      res_pv %>% dplyr::filter(annotated_sites %in% significant_sites)
+  # Add p_values on plot if compute_pval given
+  if (!is.null(compute_pval)) {
+    compute_pval_filtered <- if(plot_all == FALSE && length(significant_sites) != 0) { # filter compute_pval to keep only significants sites
+      compute_pval %>% dplyr::filter(annotated_sites %in% significant_sites)
     } else {
-      res_pv
+      compute_pval
     }
     stat <- stat + 
       geom_text(
         aes(x = 1.5, y = 0.3, label = paste0("p=", signif(p_value, 3), "\n p_adj=", signif(p_adj, 3))),
-        data = res_pv_filtered, inherit.aes = FALSE, size = 3)
+        data = compute_pval_filtered, inherit.aes = FALSE, size = 3)
   }
   
 return(stat)

@@ -1,4 +1,4 @@
-#' Correspondence analysis of a RiboClass' counts.
+#' Correspondence analysis of a RiboClass' counts
 #'
 #' @param ribo A RiboClass object.
 #' @param color_col Name of the column in the metadata used for coloring samples.

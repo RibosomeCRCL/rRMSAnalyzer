@@ -18,8 +18,8 @@
 #' @md
 #' @examples
 #' data("ribo_toy")
-#' mean_df <- mean_samples_by_conditon(ribo_toy,"count","condition")
-mean_samples_by_conditon <- function(ribo,value, metadata_condition,
+#' mean_df <- mean_samples_by_condition(ribo_toy,"count","condition")
+mean_samples_by_condition <- function(ribo,value, metadata_condition,
                                      only_annotated = FALSE) {
   #TODO Make a real if/else statement for only_annotated
   named_position <- NULL # NSE fix # nolint

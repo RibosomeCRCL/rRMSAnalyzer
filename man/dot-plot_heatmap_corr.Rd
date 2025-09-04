@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_heatmap_corr.R
 \name{.plot_heatmap_corr}
 \alias{.plot_heatmap_corr}
-\title{Internal function of plot_heatmap_corr.}
+\title{Internal function of plot_heatmap_corr}
 \usage{
 .plot_heatmap_corr(cscore_matrix, metadata, color_col)
 }
@@ -17,6 +17,6 @@
 ComplexHeatmap heatmap
 }
 \description{
-Internal function of plot_heatmap_corr.
+Internal function of plot_heatmap_corr
 }
 \keyword{internal}

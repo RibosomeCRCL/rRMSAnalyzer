@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_heatmap.R
 \name{plot_heatmap}
 \alias{plot_heatmap}
-\title{Plot heatmap for a riboclass object.}
+\title{Plot heatmap for a riboclass object}
 \usage{
 plot_heatmap(
   ribo,

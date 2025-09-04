@@ -1,4 +1,4 @@
-#' Plot heatmap for a riboclass object.
+#' Plot heatmap for a riboclass object
 #' @description This easy function will let you display an heatmap for any given column (count or c-score). You can add an additionnal layer of information with metadata columns.
 #' @param ribo A RiboClass object.
 #' @param color_col Vector of the metadata columns’ name used for coloring samples.
@@ -34,7 +34,7 @@ plot_heatmap <- function(ribo, color_col = NULL, only_annotated=FALSE, title,
 }
 
 
-#' Internal function to plot heatmap.
+#' Internal function to plot heatmap
 #'
 #' @param cscore_matrix Sites x Samples C-score matrix (output of extract_data()).
 #' @param metadata metadata for samples in cscore_matrix
