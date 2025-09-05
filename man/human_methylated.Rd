@@ -3,7 +3,7 @@
 \docType{data}
 \name{human_methylated}
 \alias{human_methylated}
-\title{Known 2'Ome positions in Human rRNA}
+\title{Known 2'Ome positions in human rRNAs}
 \format{
 A data frame with 112 rows and 10 variables:
 \describe{

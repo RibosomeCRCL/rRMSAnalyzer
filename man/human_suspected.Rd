@@ -3,7 +3,7 @@
 \docType{data}
 \name{human_suspected}
 \alias{human_suspected}
-\title{Suspected 2'Ome positions in Human rRNA}
+\title{Suspected 2'Ome positions in human rRNAs}
 \format{
 A data frame with 17 rows and 10 variables:
 \describe{
