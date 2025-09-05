@@ -1,7 +1,7 @@
-#' Compute IQR or variance for 2'Ome sites
+#' Compute IQR or variance for 2'Ome sites and return a dataframe
 #'
 #' @param df a dataframe 
-#' @param order athe type of variance to be computed. Should be var or iqr.
+#' @param order the type of variance to be computed. Should be var or iqr.
 #' @return a ggplot data frame with Cscore, Site, IQR or var value and sample ID
 #' @export
 #'
