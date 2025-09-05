@@ -14,15 +14,15 @@ report_qc(
 )
 }
 \arguments{
-\item{ribo}{A RiboClass object.}
+\item{ribo}{a RiboClass object.}
 
-\item{specie}{studied specie of the project.}
+\item{specie}{studied specie of the project}
 
-\item{library_col}{Library/run column in the metadata.}
+\item{library_col}{name or index of the column __in metadata__ containing the library}
 
-\item{project_name}{Name of the project.}
+\item{project_name}{Name of the project to display on the report}
 
-\item{output_dir}{Path to output dir. Working directory is selected by default.}
+\item{output_dir}{Path of output directory}
 
 \item{comments}{Path to a text file containing comments}
 }
