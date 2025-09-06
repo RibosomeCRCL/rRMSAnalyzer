@@ -58,7 +58,7 @@ Hermès PARAQINDES, Allyson MOUREAUX, Janice KIELBASSA, Fleur BOURDELAIS,
 Sébastien DURAND, Emilie THOMAS, Anthony FERRARI and Virginie
 MARCEL</h4>
             
-            <h4 data-toc-skip class="date">09/04/2025</h4>
+            <h4 data-toc-skip class="date">09/06/2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/RibosomeCRCL/rRMSAnalyzer/blob/main/vignettes/rRMSAnalyzer.Rmd" class="external-link"><code>vignettes/rRMSAnalyzer.Rmd</code></a></small>
       <div class="d-none name"><code>rRMSAnalyzer.Rmd</code></div>
@@ -127,8 +127,7 @@ Cancer Foundation</a>.</p>
 Github with :</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"RibosomeCRCL/rRMSAnalyzer"</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RibosomeCRCL/rRMSAnalyzer" class="external-link">rRMSAnalyzer</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">rRMSReports</span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RibosomeCRCL/rRMSAnalyzer" class="external-link">rRMSAnalyzer</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -216,7 +215,7 @@ position.</p></li>
 because column index can be used in the function
 <em>load_ribodata()</em>, using <em><code>count_value()</code></em>,
 <em><code>count_rnaid()</code></em> and
-<em><code>count_pos()</code></em> parameters.</p>
+<em><code>count_pos()</code></em> arguments.</p>
 <p>Note 2: if no metadata is specified (metadata = NULL), rRMSAnalyzer
 will try to fetch any csv files in the folder specified in count_path
 and its subfolders.</p>
@@ -309,7 +308,7 @@ can be modified by the user.</p>
 <p>To load both data and metadata, and store them in a RiboClass, the
 function <em><code><a href="../reference/load_ribodata.html">load_ribodata()</a></code></em> is used.</p>
 <p>The following example displays a call to
-<em><code><a href="../reference/load_ribodata.html">load_ribodata()</a></code></em>, with all parameters shown :</p>
+<em><code><a href="../reference/load_ribodata.html">load_ribodata()</a></code></em>, with all arguments shown :</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package<span class="op">=</span><span class="st">"rRMSAnalyzer"</span><span class="op">)</span> <span class="co">#change for your path</span></span>
 <span></span>
@@ -320,15 +319,15 @@ function <em><code><a href="../reference/load_ribodata.html">load_ribodata()</a>
 <span>                      <span class="co"># data &amp; metadata files separator</span></span>
 <span>                      count_sep <span class="op">=</span> <span class="st">"\t"</span>,</span>
 <span>                      metadata_sep <span class="op">=</span> <span class="st">","</span>,</span>
-<span>                      <span class="co"># count data parameters :</span></span>
+<span>                      <span class="co"># count data arguments :</span></span>
 <span>                      count_header <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                      count_value <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>                      count_rnaid <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                      count_pos <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>                      <span class="co"># Metadata parameters :</span></span>
+<span>                      <span class="co"># Metadata arguments :</span></span>
 <span>                      metadata_key <span class="op">=</span> <span class="st">"filename"</span>,</span>
 <span>                      metadata_id <span class="op">=</span> <span class="st">"samplename"</span>,</span>
-<span>                      <span class="co"># C-score parameters :</span></span>
+<span>                      <span class="co"># C-score arguments :</span></span>
 <span>                      flanking <span class="op">=</span> <span class="fl">6</span>,</span>
 <span>                      method <span class="op">=</span> <span class="st">"median"</span>,</span>
 <span>                      ncores <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -405,7 +404,7 @@ rRNA molecules of the sample are 2’Ome at this specific site). A C-score
 with an intermediate value between 0 to 1 means that the sample contains
 a mixture of un-2’Ome and 2’Ome rRNA molecules.</p>
 <p>To obtain a robust estimate of the 2’Ome level, different C-scores
-can be determined depending on the parameters used to compute the local
+can be determined depending on the arguments used to compute the local
 coverage. In particular, the estimation method and the size of the local
 coverage to be considered can be changed.</p>
 <p>By default, the local coverage is estimated by calculating the
@@ -413,16 +412,16 @@ coverage to be considered can be changed.</p>
 <strong>flanking region of 6</strong> (i.e., 6 nucleotides downstream
 the nucleotide n and 6 upstream the nucleotide n, where n is the
 nucleotid directly following the 2’Ome site of interest). This package
-provides the ability to change these two parameters either when loading
+provides the ability to change these two arguments either when loading
 the data or during the analysis.</p>
 <div class="section level5">
 <h5 class="unnumbered" id="c-score-computation-when-loading-data">C-score computation when loading data<a class="anchor" aria-label="anchor" href="#c-score-computation-when-loading-data"></a>
 </h5>
 <p>When using the <em><code><a href="../reference/load_ribodata.html">load_ribodata()</a></code></em> function, a
 C-score is automatically calculated for all genomic positions of the
-rRNA. The C-score is computed using either the default parameters of the
-<em><code><a href="../reference/load_ribodata.html">load_ribodata()</a></code></em> function or user-defined
-parameters as follows:</p>
+rRNA. The C-score is computed using either the default arguments of the
+<em><code><a href="../reference/load_ribodata.html">load_ribodata()</a></code></em> function or user-defined arguments
+as follows:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/load_ribodata.html">load_ribodata</a></span><span class="op">(</span>count.path <span class="op">=</span> <span class="st">"/path/to/csv/"</span>,</span>
 <span>              metadata <span class="op">=</span> <span class="st">"/path/to/metadata.csv"</span>,</span>
@@ -435,14 +434,14 @@ parameters as follows:</p>
 <div class="section level5">
 <h5 class="unnumbered" id="c-score-computation-during-the-analysis">C-score computation during the analysis<a class="anchor" aria-label="anchor" href="#c-score-computation-during-the-analysis"></a>
 </h5>
-<p>During the analysis, the C-score calculating parameters (method and
+<p>During the analysis, the C-score calculating arguments (method and
 size of the flanking region) can be modified using the
 <em><code><a href="../reference/compute_cscore.html">compute_cscore()</a></code></em> function, which will
 automatically update the C-score in the RiboClass.</p>
 <p>In the following example, both the flanking region’s size of the
 local coverage and the computation method have been modified:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Compute the C-score using different parameters,</span></span>
+<code class="sourceCode R"><span><span class="co"># Compute the C-score using different arguments,</span></span>
 <span><span class="co"># including calculation of the local coverage using the mean instead of the median</span></span>
 <span><span class="va">ribo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compute_cscore.html">compute_cscore</a></span><span class="op">(</span><span class="va">ribo</span>,</span>
 <span>                       flanking <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -475,7 +474,7 @@ which correspond to data visualization, or automatically.</p>
 <em><code><a href="../reference/report_qc.html">report_qc()</a></code></em> function:</p>
 <p>With the ribo_toy example, the column that contains the information
 about samples batches is called “run”. The name is thus given to the
-<em><code>library_col</code></em> parameter but it can be also left
+<em><code>library_col</code></em> argument but it can be also left
 empty.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/report_qc.html">report_qc</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_toy</span>, library_col <span class="op">=</span> <span class="st">"run"</span><span class="op">)</span></span></code></pre></div>
@@ -516,7 +515,7 @@ identification:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">output_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co"># To display the output</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">qcdata</span>, <span class="st">"html"</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">kable_styling</span><span class="op">(</span><span class="st">"striped"</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">scroll_box</span><span class="op">(</span>width <span class="op">=</span> <span class="st">"100%"</span>, height <span class="op">=</span> <span class="st">"500px"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">qcdata</span>, <span class="st">"html"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">kable_styling</span><span class="op">(</span><span class="st">"striped"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">scroll_box</span><span class="op">(</span>width <span class="op">=</span> <span class="st">"100%"</span>, height <span class="op">=</span> <span class="st">"500px"</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; overflow-x: scroll; width:100%; ">
 <table class="table table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1089,7 +1088,7 @@ method (Paraqindes et al, 2023 ; Zhang, et al, 2020). The rRMSAnalyzer
 package includes a wrapper (adjust_bias) to perform ComBat-seq
 adjustment which provides a new RiboClass with adjusted read end count
 values and C-scores automatically recalculated with the same setup
-parameters.</p>
+arguments.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"ribo_toy"</span><span class="op">)</span></span>
 <span><span class="co"># If necessary, adjust any technical biases using ComBat-Seq.</span></span>
@@ -1126,7 +1125,7 @@ region of a given genomic position of interest, use the
 available:</p>
 <ol style="list-style-type: decimal">
 <li>
-<strong>display all samples</strong> (default parameters): by
+<strong>display all samples</strong> (default arguments): by
 displaying the end read count coverage of all samples using a boxplot at
 the +/-6 genomic position relative to the genomic position of interest
 (green box). A pink box is displayed if there is other modification in
@@ -1271,7 +1270,7 @@ sites which will be attached to the RiboClass object using the
 <code><a href="../reference/annotate_site.html">annotate_site()</a></code> function (see Section : annotation of rRNA
 2’Ome sites).</p>
 <p>This <code><a href="../reference/annotate_site.html">annotate_site()</a></code> function expects an “annot”
-parameter which must be a dataframe object that contains the following
+argument which must be a dataframe object that contains the following
 three mandatory columns :</p>
 <ul>
 <li><p><strong>RNA name</strong>: the name of the rRNA, matching the
@@ -1333,9 +1332,10 @@ annotations</a>.</p>
 <h3 id="analysis-design-for-multiple-comparisons">Analysis design for multiple comparisons<a class="anchor" aria-label="anchor" href="#analysis-design-for-multiple-comparisons"></a>
 </h3>
 <p>Although comparison of two groups can be computed using the analytic
-report functions (e.g., report_2ome_sites or report_diff_sites – (see <a href="#site-by-site-comparison-of-2ome-levels-report">Site-by-site
-comparison of 2’Ome levels report</a>)) thanks to the “condition” column
-of the metadata, this section needs to be considered to perform multiple
+report functions (e.g., report_2ome_sites or report_diff_sites – (see
+[2’Ome profiling report] or <a href="#ome-site-by-site-report">2’Ome
+site-by-site report</a>)) thanks to the “condition” column of the
+metadata, this section needs to be considered to perform multiple
 comparisons (i.e., more than 2 groups). The following section Addition
 of new columns in the metadata is required for the two reports while the
 section Comparison table is required for report_diff_sites only.</p>
@@ -1367,9 +1367,10 @@ replicates for each (total = 4 samples). <br>
 replicates for each (total = 6 samples). <br>
 </li>
 </ul>
-<ol style="list-style-type: lower-roman">
-<li>Update of the metadata .csv file</li>
-</ol>
+</div>
+<div class="section level4">
+<h4 class="unnumbered" id="i-update-of-the-metadata--csv-file">(i) Update of the metadata .csv file<a class="anchor" aria-label="anchor" href="#i-update-of-the-metadata--csv-file"></a>
+</h4>
 <p>-&gt;&gt;&gt; Here is the initial metadata in the RiboClass:</p>
 <table style="width:96%;" class="table">
 <colgroup>
@@ -2094,21 +2095,34 @@ the third design of the novel metadata:</p>
 </tr>
 </tbody>
 </table>
-<ol start="2" style="list-style-type: lower-roman">
-<li>create a new Riboclass:</li>
-</ol>
+</div>
+<div class="section level4">
+<h4 class="unnumbered" id="ii-create-a-new-riboclass">(ii) create a new Riboclass:<a class="anchor" aria-label="anchor" href="#ii-create-a-new-riboclass"></a>
+</h4>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ribo_exp_design</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_ribodata.html">load_ribodata</a></span><span class="op">(</span>count_path <span class="op">=</span> <span class="va">...</span>, metadata <span class="op">=</span> <span class="st">"./new_metadata.csv"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 class="unnumbered" id="comparison-table">Comparison table<a class="anchor" aria-label="anchor" href="#comparison-table"></a>
 </h4>
-<p>To perform automated multiple group comparison in the
+<p>To perform an automated multiple group comparison using the
 <em><code>report_diff_sites</code></em> function, a dataframe containing
 all the biological comparisons should be prepared. This dataframe is
 created using the code provided below and including in a new RiboClass
 created using the <em><code><a href="../reference/load_ribodata.html">load_ribodata()</a></code></em> function and the
 argument comparison.</p>
+<p>Here is an example:</p>
+<p>The study includes 3 experimental conditions termed “variable A to C”
+(e.g., wild-type, mutation 1, mutation 2) that has been exposed to
+another condition termed “ctrl, P1 and P2 (e.g., untreated vs treatment
+with 2 different concentrations). All these experimental conditions have
+been performed in replicates termed “N”. In summary, it includes:<br> -
+VariableA has 1 control (ctrl) and 2 cases (P1 and P2) with 3 replicates
+each (total = 9 samples)<br> - VariableB has 1 control (ctrl) and 1 case
+(P2) with 2 replicates each (total = 4 samples)<br> - VariableC has 1
+control (ctrl) and 1 case (P2) with 3 replicates or each (total = 6
+samples)<br><br> The objectives are to perform 2 comparisons in the
+“variableA” condition only, as summarized here:</p>
 <table style="width:53%;" class="table">
 <colgroup>
 <col width="16%">
@@ -2142,33 +2156,40 @@ argument comparison.</p>
 </tr>
 </tbody>
 </table>
-<p>This table will be used exclusively in the diff_sites report
-functions or to generate the latter.</p>
-<p>Note: as the comparisons are done with respect to this table in the
-report diff_site, the latter can contain as much lines as the number of
-comparison expected for the analysis.</p>
-<p>The following example displays how to create the dataframe for the
-report diff_site (also present in the Model_murine.Rmd / Model_human.Rmd
-scripts provided in a tabset):</p>
+</div>
+<div class="section level4">
+<h4 class="unnumbered" id="i-creation-of-the-dataframe-for-the-report_diff_sites-function">(i) Creation of the dataframe for the
+report_diff_sites function:<a class="anchor" aria-label="anchor" href="#i-creation-of-the-dataframe-for-the-report_diff_sites-function"></a>
+</h4>
+<p>Here is the code to create the comparison table</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#----------- (1) part 1 (metadata) of this subsection is used here--------------</span></span>
-<span><span class="co"># store the subset sammples thanks to the columns created in metadata before</span></span>
-<span><span class="va">kept_samples</span> <span class="op">&lt;-</span> <span class="va">ribo_adj_annot</span><span class="op">$</span><span class="va">metadata</span> <span class="op">%&gt;%</span> <span class="co">#here we suppose that a RiboClass is already created and annotated </span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">variableA</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co">#we filter the lines in metadata to keep only those which are not NA in the column "variableA"</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">samplename</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># create a copy of the RiboClass with a subset of samples</span></span>
-<span><span class="va">ribo_adj_annot_variableA</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_ribo_samples.html">keep_ribo_samples</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>,<span class="va">kept_samples</span><span class="op">)</span> <span class="co">#Then we save the new riboclass only with sample from variableA column</span></span>
-<span></span>
-<span><span class="co">#----------- (2) part 2 (comparison table) of this subsection is used here------</span></span>
+<code class="sourceCode R"><span><span class="co">#---------------------Creation of the comparison table--------------------------</span></span>
 <span><span class="co"># Here is the comparison table needed for this example data</span></span>
 <span><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>  comp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"comp1"</span>, <span class="st">"comp2"</span><span class="op">)</span>,</span>
 <span>  ctrl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ctrl"</span>, <span class="st">"ctrl"</span><span class="op">)</span>,</span>
 <span>  cases <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P1"</span>, <span class="st">"P2"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Now the ribo_adj_annot_variableA contain this metadata after the code
-is executed:</p>
+</div>
+<div class="section level4">
+<h4 class="unnumbered" id="ii-creation-of-a-new-riboclass-including-only-the-required-samples">(ii) Creation of a new RiboClass including only
+the required samples<a class="anchor" aria-label="anchor" href="#ii-creation-of-a-new-riboclass-including-only-the-required-samples"></a>
+</h4>
+<p>Here is an example to extract a new RiboClass incuding only the
+samples required to perfom the multiple comparison. It refers to the
+metadata/RiboClass created in the previous section “(i) Update of the
+metadata .csv file”, in the subsection “If the analysis includes
+comparison of 2 conditions independently of the other”.</p>
+<p>Store the subset samples required for the analysis using the column
+names of the metadata created in the previous section “Addition of new
+columns in the metadata”</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">kept_samples</span> <span class="op">&lt;-</span> <span class="va">ribo_adj_annot</span><span class="op">$</span><span class="va">metadata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co">#use the new RiboClass created in the previous section “Addition of new columns in the metadata”  </span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">variableA</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># filter the lines in the metadata to keep only those that are not NA in the "variableA" column</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">samplename</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create a copy of the RiboClass with the subset of samples</span></span>
+<span><span class="va">ribo_adj_annot_variableA</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_ribo_samples.html">keep_ribo_samples</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>,<span class="va">kept_samples</span><span class="op">)</span> <span class="co"># save the new RiboClass including only the samples with information in the “variableA” column</span></span></code></pre></div>
 <table style="width:96%;" class="table">
 <colgroup>
 <col width="25%">
@@ -2261,53 +2282,55 @@ is executed:</p>
 </tr>
 </tbody>
 </table>
-<p>Note: As the copy of the RiboClass is now created, it has to be used
-in the “ribo” argument for all the functions in diff_sites. The
-comparison table follows the same logic. When the argument “comparison”
-is asked in a report or a function, it is this table that has to be
-given.</p>
-<p>If there is only one column condition, it is still the same thing.
-Here in the metadata example we can see 3 column variables. They are the
-different comparisons that are wanted to be analysed. You can replace
-the name for your custom ones. You can also run the analysis on the
-“condition” column. In this case analysis will be done comparing as many
-modalities as you have in the same report (!! be aware that even in this
-case you need a comparison table for the diff_site analysis). (The
+<p>Note: the metadata should contain as many columns as there are
+comparisons expected for the analysis.</p>
+<p>Note: If there is only one column condition, it is still the same
+thing. Here in the metadata example we can see 3 column variables. They
+are the different comparisons that are wanted to be analysed. You can
+replace the name for your custom ones. You can also run the analysis on
+the “condition” column. In this case analysis will be done comparing as
+many modalities as you have in the same report (!! be aware that even in
+this case you need a comparison table for the diff_site analysis). (The
 treatment column is optional)</p>
+<p>The <a href="#ome-site-by-site-report">2’Ome site-by-site report</a>
+can now be used.</p>
 </div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="ome-profiling-report">2’Ome profiling report<a class="anchor" aria-label="anchor" href="#ome-profiling-report"></a>
 </h2>
-<p>A 2’Ome profile report (2ome_analysis) can be performed. It uses
-several metrics to help identify global profile of methylation between
-biological conditions.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">report_2ome_sites</span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_adjusted</span>, specie <span class="op">=</span> <span class="st">"human"</span>, condition_col <span class="op">=</span> <span class="st">"condition"</span>, project_name <span class="op">=</span> <span class="st">"name_of_project"</span>, comments <span class="op">=</span> <span class="st">"./path/to/comments_for_this_report.Rmd"</span><span class="op">)</span></span></code></pre></div>
-<p>To determine whether rRNA 2’Ome profiles are different between
-conditions and identify the most variable rRNA 2’Ome sites, several
-functions have been implemented to obtain a ggplot. Moreover, the
-parameter <code>only_annotated</code>, which is included in all the plot
-related functions, enables the plotting of only the annotated rRNA 2’Ome
-sites of interest (i.e., with biological relevance) when set to true.
-Here is a list of the implemented plots with the function name:</p>
+<p>A 2’Ome profiling report (2ome_analysis) can be automatically
+generated. It uses several metrics to help identify global profile of
+methylation between biological conditions.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/report_2ome_sites.html">report_2ome_sites</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_adjusted</span>, specie <span class="op">=</span> <span class="st">"human"</span>, condition_col <span class="op">=</span> <span class="st">"condition"</span>, project_name <span class="op">=</span> <span class="st">"name_of_project"</span>, comments <span class="op">=</span> <span class="st">"./path/to/comments_for_this_report.Rmd"</span><span class="op">)</span></span></code></pre></div>
+<p>To determine whether 2’Ome profiles are different between conditions
+using either all the annotated 2’Ome sites or only the most variable
+2’Ome sites, several functions have been implemented to obtain an html
+report. Here is a list of the implemented plots/dataframe with the
+function name:</p>
 <ul>
-<li>principal component analysis using the C-scores of the annotated
-rRNA 2’Ome sites (<code><a href="../reference/plot_pca.html">plot_pca()</a></code>)</li>
-<li>heatmap using the C-scores of the annotated rRNA 2’Ome sites
-(<code><a href="../reference/plot_heatmap.html">plot_heatmap()</a></code>)</li>
-<li>boxplot using the C-scores of the annotated rRNA 2’Ome sites in
-descending order of variability (<code><a href="../reference/boxplot_cscores.html">boxplot_cscores()</a></code>)</li>
-<li>scatterplot using the Interquartile Range (IQR) of the annotated
-rRNA 2’Ome sites in descending order of variability. A Gauss curve is
-added on the right side using the IQR distribution allowing to identify
-the most variable sites in red (<code><a href="../reference/plot_sites_by_IQR.html">plot_sites_by_IQR()</a></code>)<br>
-In addition, a function to provide a summary of the metrics computed in
-the report is generated as a data frame using
+<li>principal component analysis using the C-scores of all or the most
+variable annotated 2’Ome sites (<em><code><a href="../reference/plot_pca.html">plot_pca()</a></code></em>)</li>
+<li>heatmap using the C-scores of all or the most variable the annotated
+2’Ome sites (<em><code><a href="../reference/plot_heatmap.html">plot_heatmap()</a></code></em>)</li>
+<li>boxplot using the C-scores of the annotated 2’Ome sites in
+descending order of variability
+(<em><code><a href="../reference/boxplot_cscores.html">boxplot_cscores()</a></code></em>)</li>
+<li>scatterplot using the Interquartile Range (IQR) of the C-scores of
+all the annotated 2’Ome sites in descending order of variability with a
+Gauss curve given the IQR distribution
+(<em><code><a href="../reference/plot_sites_by_IQR.html">plot_sites_by_IQR()</a></code></em>)<br>
+</li>
+<li>dataframe providing the metrics used to generate the report
 <em>(<code><a href="../reference/get_2ome_summary.html">get_2ome_summary()</a></code>)</em>
 </li>
 </ul>
+<p>Note: Moreover, the argument <code>only_annotated</code>, which is
+included in all the plot related functions, enables the plotting of only
+the annotated rRNA 2’Ome sites of interest (i.e., with biological
+relevance) when set to true.</p>
 <div class="section level4">
 <h4 class="unnumbered" id="pca">PCA<a class="anchor" aria-label="anchor" href="#pca"></a>
 </h4>
@@ -2316,24 +2339,23 @@ presented below.</p>
 <p>Here is an example comparing samples reflecting different biological
 conditions based on the rRNA 2’Ome profile of the provided
 human_methylated list:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_pca.html">plot_pca</a></span><span class="op">(</span><span class="va">ribo_adjusted</span>,</span>
 <span>         color_col <span class="op">=</span> <span class="st">"condition"</span>,</span>
 <span>         only_annotated <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="rRMSAnalyzer_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
-<p><strong>Note 1</strong> : by default, PC1 and PC2 axes are plotted.
-However, the user can choose the PCA axes of interest using the “axes”
-parameter.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<p><img src="rRMSAnalyzer_files/figure-html/unnamed-chunk-27-1.png" width="700"></p>
+<p>Note: by default, PC1 and PC2 axes are plotted. However, the user can
+choose the PCA axes of interest using the “axes” argument.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_pca.html">plot_pca</a></span><span class="op">(</span><span class="va">ribo_adjusted</span>,</span>
 <span>         color_col <span class="op">=</span> <span class="st">"condition"</span>,</span>
 <span>         axes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>, <span class="co">#PC2 and PC3 will be plotted</span></span>
 <span>         only_annotated <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="rRMSAnalyzer_files/figure-html/unnamed-chunk-27-1.png" width="700"></p>
-<p><strong>Note 2</strong> the function returns the complete dudi.pca
-<em>object</em> (<code>dudi.pca()</code> function from ade4 library)
-instead of the plot by setting <em>object_only</em> to TRUE:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<p><img src="rRMSAnalyzer_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
+<p>Note: the function returns the complete dudi.pca <em>object</em>
+(<code>dudi.pca()</code> function from ade4 library) instead of the plot
+by setting <em>object_only</em> to TRUE:</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_pca.html">plot_pca</a></span><span class="op">(</span><span class="va">ribo_adjusted</span>,</span>
 <span>         color_col <span class="op">=</span> <span class="st">"condition"</span>,</span>
 <span>         only_annotated <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -2342,57 +2364,63 @@ instead of the plot by setting <em>object_only</em> to TRUE:</p>
 <div class="section level4">
 <h4 class="unnumbered" id="comments-1">Comments<a class="anchor" aria-label="anchor" href="#comments-1"></a>
 </h4>
-<p>To add some comments in the Comments section of the report, a
-Rmarkdown file has to be created and saved in the working directory.
-Path to this report has to be given in the comments argument of the
-function to be included in the final report.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">report_2ome_sites</span><span class="op">(</span><span class="va">ribo_adjusted</span>, specie <span class="op">=</span> <span class="st">"human"</span>, condition_col <span class="op">=</span> <span class="st">"condition"</span>, project_name <span class="op">=</span> <span class="st">"name_of_project"</span>, comments <span class="op">=</span>  <span class="st">"./path/to/comments_for_this_report.Rmd"</span><span class="op">)</span> </span></code></pre></div>
+<p>A comment section is available in the 2’Ome profiling report to add
+some personal comments. To do so, a Rmarkdown file should be created and
+saved in the working directory. Then, path to this report should be
+given in the comments argument of the
+<em><code>report_2ome_site()</code></em> function.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/report_2ome_sites.html">report_2ome_sites</a></span><span class="op">(</span><span class="va">ribo_adjusted</span>, specie <span class="op">=</span> <span class="st">"human"</span>, condition_col <span class="op">=</span> <span class="st">"condition"</span>, project_name <span class="op">=</span> <span class="st">"name_of_project"</span>, comments <span class="op">=</span>  <span class="st">"./path/to/comments_for_this_report.Rmd"</span><span class="op">)</span> </span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 id="site-by-site-comparison-of-2ome-levels-report">Site-by-site comparison of 2’Ome levels report<a class="anchor" aria-label="anchor" href="#site-by-site-comparison-of-2ome-levels-report"></a>
+<h2 id="ome-site-by-site-report">2’Ome site-by-site report<a class="anchor" aria-label="anchor" href="#ome-site-by-site-report"></a>
 </h2>
-<p>A differential site analysis (diff_site) report can be added to the
-two previous report to refine the analysis on 2’Ome. It uses several
-metrics and tests to identify differentially methylated sites that can
-discriminate between biological condition / variable. To run these
-functions a comparison table (see how to create it below) and
-supplementary metadata columns needs to be done (see [Comparison table
-and supplementary metadata columns])</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># !! usefull only for the diff site report create the necessary comparison table for the diff_sites report</span></span>
-<span><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>  comp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"comp1"</span><span class="op">)</span>,</span>
-<span>  ctrl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cond1"</span><span class="op">)</span>,</span>
-<span>  cases <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cond2"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p>The diff_sites report includes the following visualization:</p>
+<p>A site-by-site 2’Ome comparison report can be automatically
+generated. It uses several metrics and statistical tests to identify
+differentially 2’Ome sites between biological conditions. To run these
+functions, a <a href="#comparison-table">Comparison table</a> and an
+updated metadata/RiboClass needs to be generated (see <a href="#analysis-design-for-multiple-comparisons">Analysis design for
+multiple comparisons</a>)</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/report_diff_sites.html">report_diff_sites</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_adjusted</span>, specie <span class="op">=</span> <span class="st">"human"</span>, condition_col <span class="op">=</span> <span class="st">"comp1"</span>, project_name <span class="op">=</span> <span class="st">"name"</span>, comparisons <span class="op">=</span> <span class="va">comparisons</span>, comments <span class="op">=</span> <span class="st">"./path/to/comments_for_this_report.Rmd"</span><span class="op">)</span> </span></code></pre></div>
+<p>To determine whether 2’Ome levels is different between conditions at
+each site, several functions have been implemented to obtain an html
+report. Here is a list of the implemented plots/dataframe with the
+function name:</p>
 <ul>
-<li>2’Ome Global Profile
-(<em><code><a href="../reference/plot_global_profile.html">plot_global_profile()</a></code></em>)</li>
-<li>Representation of Differential median C-score with the combination
-of two graphs for each comparisons present in the table provided for
-this report (<em><code><a href="../reference/plot_comparison_median.html">plot_comparison_median()</a></code></em>)</li>
-<li>Boxplot of differential sites done with several possible (ANOVA,
-Welch, Kruskal-Wallis, Wilcoxon) statistical tests related to the number
-of variable (<em><code><a href="../reference/plot_stat.html">plot_stat()</a></code></em>) <br> In addition, a
-<em><code><a href="../reference/get_diff_sites_summary.html">get_diff_sites_summary()</a></code></em> gives the summary of
-significant sites in a least one statistical test.</li>
+<li>line plot using the mean C-score of all annotated 2’Ome sites
+(<em><code><a href="../reference/plot_global_profile.html">plot_global_profile()</a></code></em>)<br>
+</li>
+<li>histogram plot representing differences in the median C-score
+(<em><code><a href="../reference/plot_comparison_median.html">plot_comparison_median()</a></code></em>)<br>
+</li>
+<li>boxplot showing the mean C-scores for each conditions, but only for
+sites where a statistical difference was observed (ANOVA, Welch,
+Kruskal-Wallis, Wilcoxon) (<em><code><a href="../reference/plot_stat.html">plot_stat()</a></code></em>) <br>
+</li>
+<li>dataframe providing the metrics used to generate the report
+<em>(<code><a href="../reference/get_diff_sites_summary.html">get_diff_sites_summary()</a></code>)</em>
+</li>
 </ul>
 <div class="section level3">
 <h3 class="unnumbered" id="summary-table-of-statistical-tests">Summary table of statistical tests<a class="anchor" aria-label="anchor" href="#summary-table-of-statistical-tests"></a>
 </h3>
 <p>To get a table of significant sites in at least one test the function
 below can be used.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_diff_sites_summary.html">get_diff_sites_summary</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_toy</span>, condition_col <span class="op">=</span> <span class="st">"comp1"</span>, comparisons <span class="op">=</span> <span class="va">comparisons</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 class="unnumbered" id="comments-2">Comments<a class="anchor" aria-label="anchor" href="#comments-2"></a>
 </h3>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">report_diff_sites</span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_toy</span>, specie <span class="op">=</span> <span class="st">"human"</span>, condition_col <span class="op">=</span> <span class="st">"comp1"</span>, comparisons <span class="op">=</span> <span class="va">comparisons</span>, comments <span class="op">=</span> <span class="st">"./path/to/comments_for_this_report.Rmd"</span><span class="op">)</span> </span></code></pre></div>
+<p>A comment section is available in the site-by-site 2’Ome comparison
+report to add some personal comments. To do so, a Rmarkdown file should
+be created and saved in the working directory. Then, path to this report
+should be given in the <code>comments</code> argument of the
+<em><code><a href="../reference/report_diff_sites.html">report_diff_sites()</a></code></em> function.</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/report_diff_sites.html">report_diff_sites</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_toy</span>, specie <span class="op">=</span> <span class="st">"human"</span>, condition_col <span class="op">=</span> <span class="st">"comp1"</span>, comparisons <span class="op">=</span> <span class="va">comparisons</span>, comments <span class="op">=</span> <span class="st">"./path/to/comments_for_this_report.Rmd"</span><span class="op">)</span> </span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -2407,13 +2435,13 @@ ways.</p>
 <em><code><a href="../reference/extract_data.html">extract_data()</a></code></em> function.</p>
 <p>By default, C-scores for all the genomic rRNA positions are
 exported.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ribo_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_data.html">extract_data</a></span><span class="op">(</span><span class="va">ribo_adjusted</span>,</span>
 <span>                        col <span class="op">=</span> <span class="st">"cscore"</span><span class="op">)</span></span></code></pre></div>
 <p>The user can export data related to the subset of annotated rRNA
-2’Ome sites by setting the <code>only_annotated</code> parameter to
+2’Ome sites by setting the <code>only_annotated</code> argument to
 TRUE.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ribo_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_data.html">extract_data</a></span><span class="op">(</span><span class="va">ribo_adjusted</span>,</span>
 <span>                        col <span class="op">=</span> <span class="st">"cscore"</span>,</span>
 <span>                        only_annotated <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -2499,11 +2527,11 @@ samples:</caption>
 The user can export additional information contained in the metadata by
 specifying the name of the column of interest. The user can export
 information related to the subset of annotated rRNA 2’Ome sites by
-setting the <em>only_annotated</em> parameter to TRUE.</p>
+setting the <em>only_annotated</em> argument to TRUE.</p>
 <p>Here is an example of ggplot-ready dataframe containing the C-scores
 of all the genomic rRNA positions as well as the condition related to
 the particular sample of interest:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ggplot_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_to_plot.html">format_to_plot</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_adjusted</span>, metadata_col <span class="op">=</span> <span class="st">"condition"</span>, only_annotated <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <caption>Excerpt from the output ggplot-ready dataframe</caption>
@@ -2595,14 +2623,14 @@ the particular sample of interest:</p>
 regroup all the genomic rRNA positions by condition and compute mean and
 standard deviation for each condition. Then it displays a table.</p>
 <p>By default, the function provides the metrics of the C-scores. By
-setting the <em>value</em> parameter to “count”, it is also possible to
+setting the <em>value</em> argument to “count”, it is also possible to
 calculate these values from the read-end counts. Calculations can be
 limited to only annotated rRNA 2’Ome sites by setting the
-<em>only_annotated</em> parameter to TRUE.</p>
+<em>only_annotated</em> argument to TRUE.</p>
 <p>Here is an example of dataframe showing the summarized C-scores per
 modality of the “condition” variable for all the genomic rRNA
 positions:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mean_tb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mean_samples_by_condition.html">mean_samples_by_condition</a></span><span class="op">(</span><span class="va">ribo_adjusted</span>,</span>
 <span>                                    value <span class="op">=</span> <span class="st">"cscore"</span>, <span class="co">#or "count"</span></span>
 <span>                                    metadata_condition <span class="op">=</span> <span class="st">"condition"</span>,</span>
@@ -2683,7 +2711,7 @@ positions:</p>
 <div class="section level2">
 <h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.5.1 (2025-06-13)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>

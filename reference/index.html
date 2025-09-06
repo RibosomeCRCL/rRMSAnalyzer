@@ -83,19 +83,19 @@
           <code><a href="human_methylated.html">human_methylated</a></code>
 
         </dt>
-        <dd>Known 2'Ome positions in Human rRNA</dd>
+        <dd>Known 2'Ome positions in human rRNAs</dd>
       </dl><dl><dt>
 
           <code><a href="human_suspected.html">human_suspected</a></code>
 
         </dt>
-        <dd>Suspected 2'Ome positions in Human rRNA</dd>
+        <dd>Suspected 2'Ome positions in human rRNAs</dd>
       </dl><dl><dt>
 
           <code><a href="human_both_methylated_and_suspected.html">human_both_methylated_and_suspected</a></code>
 
         </dt>
-        <dd>Known and suspected 2'Ome positions in Human rRNA</dd>
+        <dd>Known and suspected 2'Ome positions in human rRNAs</dd>
       </dl></div><div class="section level2">
       <h2 id="riboclass-annotation">RiboClass annotation<a class="anchor" aria-label="anchor" href="#riboclass-annotation"></a></h2>
 
@@ -231,6 +231,12 @@
 
       <dl><dt>
 
+          <code><a href="compute_pval.html">compute_pval()</a></code>
+
+        </dt>
+        <dd>Compute statistics (p-value for, Welch, Wilcoxon, Kruskal, ANOVA test) for C-score based on condition column</dd>
+      </dl><dl><dt>
+
           <code><a href="get_2ome_summary.html">get_2ome_summary()</a></code>
 
         </dt>
@@ -246,7 +252,7 @@
           <code><a href="get_IQR.html">get_IQR()</a></code>
 
         </dt>
-        <dd>Compute IQR or variance for 2'Ome sites</dd>
+        <dd>Compute IQR or variance for 2'Ome sites and return a dataframe</dd>
       </dl><dl><dt>
 
           <code><a href="get_outliers.html">get_outliers()</a></code>
@@ -271,12 +277,6 @@
 
         </dt>
         <dd>Print Wilcoxon result in report</dd>
-      </dl><dl><dt>
-
-          <code><a href="compute_pval.html">compute_pval()</a></code>
-
-        </dt>
-        <dd>Compute statistics (p-value for, Welch, Wilcoxon, Kruskal, ANOVA test) for C-score based on condition column</dd>
       </dl></div><div class="section level2">
       <h2 id="plots">Plots<a class="anchor" aria-label="anchor" href="#plots"></a></h2>
 
@@ -419,6 +419,18 @@
 
 
       <dl><dt>
+
+          <code><a href="report_2ome_sites.html">report_2ome_sites()</a></code>
+
+        </dt>
+        <dd>Generate html report about the analysis of 2’Ome profile</dd>
+      </dl><dl><dt>
+
+          <code><a href="report_diff_sites.html">report_diff_sites()</a></code>
+
+        </dt>
+        <dd>Generate html report about the statistical analysis of difference in 2’Ome level at each site</dd>
+      </dl><dl><dt>
 
           <code><a href="report_qc.html">report_qc()</a></code>
 

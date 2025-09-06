@@ -10,6 +10,7 @@
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/authors.html</loc></url>
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/index.html</loc></url>
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/news/index.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/2ome_analysis.html</loc></url>
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/adjust_bias.html</loc></url>
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/annotate_site.html</loc></url>
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/boxplot_count.html</loc></url>
@@ -18,6 +19,7 @@
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/check_sample.html</loc></url>
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/compute_cscore.html</loc></url>
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/compute_pval.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/diff_sites.html</loc></url>
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-calculate_pca.html</loc></url>
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-compute_RLC.html</loc></url>
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/dot-compute_coa.html</loc></url>
@@ -75,6 +77,8 @@
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/render_html_welch.html</loc></url>
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/render_html_wilcoxon.html</loc></url>
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/report.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/report_2ome_sites.html</loc></url>
+<url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/report_diff_sites.html</loc></url>
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/report_qc.html</loc></url>
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/ribo_toy.html</loc></url>
 <url><loc>https://ribosomecrcl.github.io/rRMSAnalyzer/reference/select_most_differential_sites.html</loc></url>
