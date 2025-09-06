@@ -1,4 +1,4 @@
-#' Known 2'Ome positions in Human rRNA
+#' Known 2'Ome positions in human rRNAs
 #'
 #' A dataset containing 112 2'Ome positions with associated data
 #' 
@@ -20,7 +20,7 @@
 #' }
 "human_methylated"
 
-#' Suspected 2'Ome positions in Human rRNA
+#' Suspected 2'Ome positions in human rRNAs
 #'
 #' A dataset containing 17 2'Ome positions with associated data
 #' @usage data(human_suspected)
@@ -41,7 +41,7 @@
 #' }
 "human_suspected"
 
-#' Known and suspected 2'Ome positions in Human rRNA
+#' Known and suspected 2'Ome positions in human rRNAs
 #'
 #' A dataset containing 129 2'Ome positions with associated data
 #' 

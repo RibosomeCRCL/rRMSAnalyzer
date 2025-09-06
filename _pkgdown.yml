@@ -41,6 +41,7 @@ reference:
   - keep_ribo_samples
 - title: Utils
 - contents:
+  - compute_pval
   - get_2ome_summary
   - get_diff_sites_summary
   - get_IQR
@@ -48,7 +49,7 @@ reference:
   - get_variant_sites
   - render_html_welch
   - render_html_wilcoxon
-  - compute_pval
+
 - title: Plots
   desc: Different plots to show either samples and sites.
 - contents:

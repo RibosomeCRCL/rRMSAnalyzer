@@ -1,0 +1,330 @@
+---
+title: "Unsupervised analysis of rRNA 2’O-methylation profiles"
+output: 
+    html_document:
+        theme: cosmo
+        number_sections: true
+        toc: true
+        toc_float:
+            collapsed: false
+toc-title: "rRMSAnalyzer"
+
+params:
+    library_col: "library"
+    specie: "not specified"
+    condition_col: "condition"
+    ribo_name: "ribo"
+    project_name: ""
+    comments: "No comment"
+---
+```{r include = FALSE}
+knitr::opts_chunk$set(echo=FALSE)
+
+all_sites <- length(ribo_to_check[[1]][[1]][[1]])
+
+# Get the number of valid sites
+ribom <- extract_data(ribo_to_check)
+valid_sites <- sum(complete.cases(ribom))
+```
+
+```{=html}
+<style type="text/css">
+  body{
+ font-family: Helvetica;    
+}
+
+details{
+background-color: #E4F3F3;
+}
+
+mark {
+  background-color: #E4F3F3;
+  color: black;
+}
+
+</style>
+```
+
+```{r labrary, message=FALSE, warning=FALSE, echo=FALSE}
+library(DT)
+library(kableExtra)
+```
+
+```{r}
+df_ribo <- ribo_to_check[[1]][[1]]
+
+df_ribo_annot <- df_ribo[which(!is.na(df_ribo["site"])),c("rna","rnapos","site")]
+```
+
+<details>
+
+<summary>
+
+<b> ℹ️ Summary of input data </b>
+
+</summary>
+Project name : **`r params$project_name`**<br>
+<br>
+Data aligned on: **`r if (params$specie=="human") {"GRCh38 (gencode annotation V46)"} else if (params$specie == "mouse") {"mm39 (gencode version vM35)"} else {"unknown annotation"}`**.<br>
+Analysed by: **Allyson Moureaux** <br>
+Date : **`r Sys.time()`**<br>
+<br>
+RiboClass Name : **`r params$ribo_name`** <br> 
+Number of uploaded samples: **`r length(ribo_to_check[[1]])`** samples <br> 
+RNA(s) used by the coverage tool: **`r as.character(ribo_to_check[["rna_names"]][["original_name"]])`** <br> 
+There are **`r as.character(all_sites)`** genomic positions.<br> 
+<br> 
+__**C-score**__ <br>
+Method of computation : **`r as.character(ribo_to_check["cscore_method"])`** <br>
+Window length : **`r as.character(ribo_to_check["cscore_window"])`** nucleotides<br>
+There are **`r as.character(valid_sites)`** genomic positions with a valid C-score in all samples.<br>
+There are **`r nrow(df_ribo_annot)`** annotated rRNA 2'Ome sites.<br>
+<br>
+__**ComBat-seq**__<br>
+ComBat-seq correction: 
+**`r ifelse(is.null(ribo_to_check[["combatSeq_count"]]),"No","Yes")`** <br>
+Metadata column used for ComBat-seq :
+**`r ifelse(is.null(ribo_to_check[["col_used_combatSeq"]]),"None",as.character(ribo_to_check["col_used_combatSeq"]))`**
+
+</details>
+
+# Introduction
+
+## Content
+
+The purpose of this analytical report (2Ome_profile) is to analyse RNA 2'-O-ribose methylation (2'Ome) profiles using C-score values computed across **`r nrow(df_ribo_annot)`** annotated rRNA sites. The objectives are:<br>
+<br>
+- to evaluate whether the 2’Ome profiles of these **`r nrow(df_ribo_annot)`** sites can distinguish samples according to their biological condition in the **`r params$condition_col`** metadata column.<br>
+- to identify the most variable 2’Ome sites, independently of the conditions, and to evaluate whether this reduced set is sufficient to capture the underlying biological structure.<br>
+- to identify potential technical biases that may impact the analysis results and require corrective methods.<br>
+<br>
+
+## Project summary
+
+This 2’Ome profile report is generated from the analysis of the project  **`r params$project_name`**, which is loaded into the RiboClass object **`r params$ribo_name`**. The dataset used for the downstream analyses corresponds to a cohort of **`r length(ribo_to_check[[1]])`** biological samples, as part of the full dataset. This project was aligned on **`r if (params$specie=="human") {"GRCh38 (gencode annotation V46)"} else if (params$specie == "mouse") {"mm39 (gencode version vM35)"} else {"unknown annotation"}`**.<br>. Each sample is annotated with **associated metadata** describing its biological and technical context. These metadata are essential for interpreting the observed 2’Ome profile patterns and identifying potential technical biases, such as batch effects, or biological variations.<br>
+<br>
+The following metadata are used in the project **`r params$project_name`** :
+
+```{r prepare metadata table, echo=FALSE, warning=FALSE}
+qcdata <- ribo_to_check[[2]]
+```
+
+```{r print metadata table, echo=FALSE, warning=FALSE}
+datatable(qcdata,
+          rownames = FALSE,
+          extensions = c("Buttons"),
+          options = list(
+            pageLength = 20,
+            scrollX = TRUE,
+            dom = 'Bfrtip',  # Add buttons
+            buttons = list(
+      list(extend = 'csv', title = "Metadata"),
+      list(extend = 'excel', title = "Metadata")
+      ) # downloading buttons
+    )
+)
+```
+
+## Method: RNA 2’Ome interpretation and annotation 
+
+The 2’O-methylation (2’Ome) dataset consists of **C-score values**. The C-score represents the level of 2’Ome of a given site in a specific sample, ranging from **0 (unmethylated)** to **1 (fully methylated)**. Intermediate values reflect partial methylation (i.e.,  heterogeneous methylation states across ribosomes within the same cell or across the cells of the sample). The method used to compute the C-score is detailed in the QC report (section 1.3 “Method”). These quantitative profiles form the basis for all subsequent analyses, including **dimensionality reduction (PCA), hierarchical clustering**, and **variability assessments**.<br>
+<br>
+The 2’Ome dataset encompasses C-score values measured for a cohort of **`r length(ribo_to_check[[1]])`** biological samples.
+
+Here is a table, which summarizes the annotated rRNA 2’Ome sites used in the downstream analyses where:<br>
+- **"rna"** column indicates the rRNA molecule on which the 2'Ome site is located<br>
+- **"rnapos"** column indicates the position of the rRNA 2’Ome site<br>
+- **"site"** column indicates the name of the rRNA 2’Ome site by combining the RNA molecule on which it is located with the specific site identifier<br>
+
+```{r premiere table}
+datatable(df_ribo_annot,
+          rownames = FALSE,
+          extensions = c("Buttons"),
+          options = list(
+            pageLength = 20,
+            scrollX = TRUE,
+            dom = 'Bfrtip',  # Add buttons
+            buttons = list(
+      list(extend = 'csv', title = "annotated_rRNA_2’Ome_sites"),
+      list(extend = 'excel', title = "annotated_rRNA_2’Ome_sites")
+      ) # downloading buttons
+    )
+)
+```
+
+# Global analysis of all annotated sites
+
+In this first analytical section, alterations in rRNA 2’Ome are analysed globally, by comparing the 2’Ome profiles of the **`r nrow(df_ribo_annot)`** annotated sites.
+
+## Principal Component Analysis (PCA)
+
+The plot illustrates the distance between each sample based on its rRNA 2’Ome profile using a Principal Component Analysis (PCA). The percentages in dimensions 1 (PC1) and 2 (PC2) reflect the proportion of data variance explained by these axes. Color indicates the different biological groups. Moreover, this plot helps identify a putative batch effect that can be corrected using the inter-normalization option (ComBat-seq tool) (Paraqindes et al, 2023).
+
+```{r}
+rRMSAnalyzer::plot_pca(ribo_to_check,params$condition_col,only_annotated = TRUE) +
+    ggplot2::labs(color = "Condition") + # change legend title
+    ggplot2::guides(color = ggplot2::guide_legend(title = "Condition"), fill = "none", shape = "none") #delete all legend not used
+```
+
+## Heatmap and Hierarchical Clustering 
+
+The following heatmap shows the pairwise distances between samples, based on their rRNA 2’Ome profile at the **`r nrow(df_ribo_annot)`** annotated sites. Manhattan distance was used to quantify the dissimilarities, and hierarchical clustering was performed using ward.D2 method.<br>
+<br>
+Color indicates the different biological groups. The C-score is represented by colored square:<br>
+- 0 = no rRNA 2’Ome present in any of the rRNA molecules at a particular site in a sample;<br>
+- 1 = presence of 2’Ome in all rRNA molecules at a particular site in a sample;<br>
+- ]0:1[ = a mixture of un-methylated and methylated rRNA molecules at a particular site in a sample. <br>
+<br>
+This plot helps to identify biological variations and putative batch effects that can be corrected using the inter-normalization option (Combat-seq tool) (Paraqindes et al, 2023).
+
+```{r create title and subtitle for the 1st heatmap}
+temp <- rRMSAnalyzer::plot_heatmap(ribo_to_check, color_col = params$condition_col, only_annotated = TRUE)
+subtitle <-paste("Heatmap of",nrow(temp@matrix), "positions and", ncol(temp@matrix), "samples")
+```
+
+`r subtitle`
+
+```{r,fig.height=12}
+rRMSAnalyzer::plot_heatmap(ribo_to_check, color_col = params$condition_col, only_annotated = TRUE)
+```
+
+# Analysis of most variable sites
+
+In this second analysis section, the objectives are (1) to identify the most variable rRNA 2’Ome sites in a dataset as described in Marcel *et al*, 2021, and (2) to determine whether the minimal rRNA 2’Ome profile, restricted to these most variable sites, captures biological context differentially from the whole rRNA 2’Ome profile. This analysis is therefore focused on the most variable annotated sites.
+
+## Identification of the most variable sites
+
+To identify the most variable rRNA 2’Ome sites, the variability of the C-score is assessed using their Interquartile Range (IQR) among all the samples.<br>
+The boxplot displays the C-score values for all the samples and for each individual site, and is ordered in decreasing IQR.
+
+```{r,fig.width=13}
+rRMSAnalyzer::boxplot_cscores(ribo_to_check,sort_by = "iqr")
+```
+
+The  scatter plot shows the IQR values of the C-scores at each 2’Ome site among all the samples, displayed in order of decreasing variability (left). The IQR distribution is displayed using a curve (right) that identifies the most variable sites (i.e., those whose IQR is > median + 2 x (median absolute deviation)). These sites are shown in red.
+
+```{r IQR, fig.width=13}
+rRMSAnalyzer::plot_sites_by_IQR(ribo = ribo_to_check, plot = "IQR")
+```
+
+```{r}
+variant_sites <- rRMSAnalyzer::get_variant_sites(ribo_to_check)[["site"]]
+```
+
+The computed threshold value in this case is :<br>
+median + 2 x median absolute deviation = **`r median_2mad`**.<br>
+<br>
+This threshold allows the identification of the most variable rRNA 2’Ome sites, resulting in the selection of a minimal set of **`r length(variant_sites)`** sites for use in the subsequent analysis.
+
+## Principal Component Analysis (PCA) 
+
+The plot illustrates the distance between each sample based on its rRNA 2’Ome profile, restricted to the **`r length(variant_sites)`** most variable annotated sites, using a Principal Component Analysis (PCA). The percentages in dimensions 1 (PC1) and 2 (PC2) reflect the proportion of total variance explained by these axes. As in the full-site analysis (see Section 2.1), this reduced PCA -based on the most variable rRNA 2’Ome- enables us to assess whether these positions alone are sufficient for distinguishing between biological groups.<br>
+<br>
+Color indicates the different biological groups. Moreover, this plot helps to identify a putative batch effect that can be corrected using the inter-normalization option (ComBat-seq tool) (Paraqindes et al, 2023).
+
+
+```{r plot PCA}
+ribo_variant <- rRMSAnalyzer::keep_selected_annotation(ribo_to_check,variant_sites) #in site_annotation.R
+
+plot_pca(ribo_variant,color_col = params$condition_col,only_annotated = TRUE) +
+    ggplot2::labs(color = "Condition") + # change legend title
+    ggplot2::guides(color = ggplot2::guide_legend(title = "Condition"), fill = "none", shape = "none") #delete all legend not used
+```
+
+## Heatmap and Hierarchical Clustering 
+
+The heatmap shows the pairwise distances between samples, based on their reduced RNA 2’Ome profile, based on the **`r length(variant_sites)`** most variable annotated sites. Manhattan distance was used to quantify the dissimilarities, and hierarchical clustering was performed using ward.D2 method.<br>
+<br>
+Color indicates the different biological groups. C-score is represented by colored square: <br>
+- 0 = no 2’Ome present in any of the rRNA molecules at a particular site in a sample;<br>
+- 1 = presence of 2’Ome in all rRNA molecules at a particular site in a sample;<br>
+- ]0:1[ = a mixture of un-methylated and methylated rRNA molecules at a particular site in a  sample. <br>
+<br>
+This plot helps to identify putative batch effects that can be corrected using the inter-normalization option (Combat-seq tool) (Paraqindes et al, 2023). 
+
+```{r create title and subtitle for the 2nd heatmap}
+temp <- rRMSAnalyzer::plot_heatmap(ribo_variant, color_col = params$condition_col, only_annotated = TRUE)
+subtitle <-paste("Heatmap of",nrow(temp@matrix), "positions and", ncol(temp@matrix), "samples")
+```
+
+**`r subtitle`**
+
+```{r heatmap mosts variant sites, echo=FALSE}
+plot_heatmap(ribo_variant, color_col = params$condition_col,only_annotated = TRUE)
+```
+
+# Variation summary
+
+A summary table of the metrics used in this report is provided below, where:<br>
+- **"rnapos"** column indicates the position of the rRNA 2’Ome site<br>
+- **"site"** column indicates the name of the rRNA 2’Ome site by combining the RNA molecule on which it is located with the specific site identifier <br>
+- **"status_all_samples"** column flags the most variable sites (as shown in Section 3.1) as “variable”, and all others as “stable” <br>
+- **"median_c_score_all_samples"** column displays the median C-score value for each site across all samples <br>
+- **"IQR_median_all_samples"** column displays the median interquartile range (IQR), reflecting the variability of the C-score across samples <br>
+
+```{r summary table}
+df_ribo_annot2 <- rRMSAnalyzer::get_2ome_summary(ribo_to_check)
+```
+
+```{r print last table, echo=FALSE}
+datatable(df_ribo_annot2,
+          rownames = FALSE,
+          options = list(
+            pageLength = 20,
+            scrollX = TRUE
+          )
+)
+```
+
+# Conclusion
+
+## Analytical synthesis
+
+This 2ome_profile report was generated for the project **`r params$project_name`**. **`r length(ribo_to_check[[1]])`** biological samples  were analyzed across **`r nrow(df_ribo_annot)`** annotated rRNA 2’O-methylation (2’Ome) sites. The initial analysis included a **Principal Component Analysis (PCA)** and a **heatmap with hierarchical clustering**, both of which were performed using all sites. Next, a subset including the **`r length(variant_sites)` most variable sites** was identified based on interquartile range (IQR) metrics, and the same analyses (PCA and heatmap) were repeated using only this reduced set.
+
+## Comments
+
+```{r, echo=FALSE, results='asis'}
+cat((params$comments), sep = "\n")
+```
+
+# Additional information 
+
+## Bibliography
+
+-  Jaafar M, Paraqindes H, Gabut M, Diaz JJ, Marcel V\*#, Durand S\*#. 2’O-ribose methylation of ribosomal RNAs: natural diversity in living organisms, biological processes, and diseases. Cells 2021, 10(8):1948. https://doi.org/10.3390/cells10081948
+
+-  Marcel V#, Kielbassa J, Marchand V, Natchiar SK, Paraqindes H, Nguyen Van Long F, Ayadi L, Bourguignon-Igel V, Lo Monaco P, Monchiet D, Scott V, Tonon L, Bray SE, Diot A, Jordan LB, Thompson AM, Bourdon JC, Dubois T, André F, Catez F, Puisieux A, Motorin Y, Klaholz BP, Viari A, Diaz JJ. Ribosomal RNA 2’O-methylation as novel layer of inter-tumour heterogeneity in breast cancer. NAR Cancer 2020, 2(4):zcaa036.  https://doi.org/10.1093/narcan/zcab006
+
+-  Paraqindes H\*, Mourksi NEH\*, Ballesta S\*, Hedjam J, Bourdelais F, Fenouil T, Picart T, Catez F, Combe T, Ferrari A, Kielbassa J, Thomas E, Tonon L, Viari A, Attignon V, Carrere M, Perrossier J, Giraud S, Vanbelle C, Gabut M, Bergeron D, Scott MS, Castro Vega L, Magne N, Huillard E, Sanson M, Meyronet D, Diaz JJ, Ducray F#, Marcel V\*#, Durand S\*#. IDHwt and IDHmut adult-type diffuse gliomas display distinct alterations in ribosome biogenesis and 2’O-methylation of ribosomal RNA. Neuro Oncol 2023, 25(12) :2191-2206.  https://doi.org/10.1093/neuonc/noad140
+
+## Citation
+
+**When using this report, please cite: Paraqindes et al, Neuro Oncol 2023**
+
+## License
+
+rRMSAnalyzer<br>
+Copyright (C) 2023 Centre de Recherche en Cancérologie de Lyon
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+## Session info
+
+```{r,echo=TRUE}
+sessionInfo()
+```
+
+-----------------------
+This report has been automatically generated with [rRMSAnalyzer](https://github.com/RibosomeCRCL/rRMSAnalyzer) 2.0.1 (July 2025)

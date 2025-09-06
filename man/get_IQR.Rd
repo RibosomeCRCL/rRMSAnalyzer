@@ -2,20 +2,20 @@
 % Please edit documentation in R/get_IQR.R
 \name{get_IQR}
 \alias{get_IQR}
-\title{Compute IQR or variance for 2'Ome sites}
+\title{Compute IQR or variance for 2'Ome sites and return a dataframe}
 \usage{
 get_IQR(df = NULL, order = "IQR")
 }
 \arguments{
 \item{df}{a dataframe}
 
-\item{order}{athe type of variance to be computed. Should be var or iqr.}
+\item{order}{the type of variance to be computed. Should be var or iqr.}
 }
 \value{
 a ggplot data frame with Cscore, Site, IQR or var value and sample ID
 }
 \description{
-Compute IQR or variance for 2'Ome sites
+Compute IQR or variance for 2'Ome sites and return a dataframe
 }
 \examples{
 data("ribo_toy")

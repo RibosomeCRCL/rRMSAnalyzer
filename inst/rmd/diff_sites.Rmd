@@ -1,0 +1,569 @@
+---
+title: "Site-by-site analysis of rRNA 2’Ome profile"
+output: 
+    html_document:
+        theme: cosmo
+        number_sections: true
+        toc: true
+        toc_float:
+            collapsed: false
+toc-title: "rRMSAnalyzer"
+
+params:
+    library_col: "library"
+    specie: "not specified"
+    condition_col: "condition"
+    ribo_name: "ribo"
+    project_name: "unamed project"
+    comments: "No comment"
+    comparisons: NULL
+    
+---
+```{r include = FALSE}
+knitr::opts_chunk$set(echo=FALSE)
+
+all_sites <- length(ribo_to_check[[1]][[1]][[1]])
+
+# Get the number of valid sites
+ribom <- extract_data(ribo_to_check)
+valid_sites <- sum(complete.cases(ribom))
+```
+
+```{=html}
+<style type="text/css">
+  body{
+ font-family: Helvetica;    
+}
+
+details{
+background-color: #E4F3F3;
+}
+
+mark {
+  background-color: #E4F3F3;
+  color: black;
+}
+
+</style>
+```
+
+```{r labrary, message=FALSE, warning=FALSE, echo=FALSE}
+library(DT)
+library(kableExtra)
+library(dplyr)
+library(glue)
+library(htmltools)
+```
+
+```{r include = FALSE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(echo=FALSE) # define if code is printed when html is generated
+all_sites <- length(ribo_to_check[[1]][[1]][[1]])
+#ribom <- extract_data(ribo_adj_annot)
+ribom <- extract_data(ribo_to_check, col = "cscore", only_annotated = TRUE, position_to_rownames = TRUE)
+valid_sites <- sum(complete.cases(ribom))
+
+# Create dynamically the formula because some library for ANOVA tests are waiting for variable of type column and not character
+formula_str <- as.formula(paste("cscore ~", condition_col))
+formula_str2 <- as.formula(paste("c_score ~", condition_col))
+```
+
+```{r prepare tables, echo=FALSE, warning=FALSE}
+qcdata <- ribo_to_check[[2]] #for metadata
+
+df_ribo <- ribo_to_check[[1]][[1]]
+df_ribo_annot <- df_ribo[which(!is.na(df_ribo["site"])),c("rna","rnapos","site")]#for methylation sites
+```
+
+# {-}
+
+<details>
+
+<summary>
+
+<b> ℹ️ Summary of input data </b>
+
+</summary>
+Project name : **`r params$project_name`**<br>
+<br>
+Data aligned on: **`r if (params$specie=="human") {"GRCh38 (gencode annotation V46)"} else if (params$specie == "mouse") {"mm39 (gencode version vM35)"} else {"unknown annotation"}`**.<br>
+Analysed by: **Allyson Moureaux**<br>
+Date : **`r Sys.time()`**<br>
+<br>
+RiboClass Name : **`r params$ribo_name`** <br> 
+Number of uploaded samples: **`r length(ribo_to_check[[1]])`** samples <br> 
+RNA(s) used by the coverage tool: **`r as.character(ribo_to_check[["rna_names"]][["original_name"]])`** <br> 
+There are **`r as.character(all_sites)`** genomic positions.<br> 
+<br> 
+__**C-score**__ <br>
+Method of computation : **`r as.character(ribo_to_check["cscore_method"])`** <br>
+Window length : **`r as.character(ribo_to_check["cscore_window"])`** nucleotides<br>
+There are **`r as.character(valid_sites)`** genomic positions with a valid C-score in all samples.<br>
+There are **`r nrow(df_ribo_annot)`** annotated rRNA 2'Ome sites.<br>
+<br>
+__**ComBat-seq**__<br>
+ComBat-seq correction: 
+**`r ifelse(is.null(ribo_to_check[["combatSeq_count"]]),"No","Yes")`** <br>
+Metadata column used for ComBat-seq :
+**`r ifelse(is.null(ribo_to_check[["col_used_combatSeq"]]),"None",as.character(ribo_to_check["col_used_combatSeq"]))`**
+
+</details>
+
+# Introduction
+
+## Content
+
+The purpose of this analytical report (2Ome_profile) is to evaluate differences in rRNA 2'-O-methylation (2'Ome)  levels between conditions using C-score values computed across **`r nrow(df_ribo_annot)`** annotated rRNA sites. The objectives are:<br>
+<br>
+- to provide a descriptive overview of methylation profiles by condition prior to formal testing;<br>
+- to determine whether methylation levels at individual sites differ significantly between experimental conditions;<br>
+- to perform pairwise comparisons between conditions using independent statistical tests.<br>
+
+## Project summary 
+
+This 2’Ome_diff report is generated from the analysis of the project **`r params$project_name`**, which is loaded into the RiboClass object **`r params$ribo_name`**. The dataset used for the downstream analyses corresponds to a cohort of **`r length(ribo_to_check[[1]])`** biological samples, as part of the full dataset. This project was aligned on **`r if (params$specie=="human") {"GRCh38 (gencode annotation V46)"} else if (params$specie == "mouse") {"mm39 (gencode version vM35)"} else {"unknown annotation"}`**.<br>. Each sample is annotated with associated metadata describing its biological and technical context.<br>
+<br>
+These metadata are essential for interpreting the observed difference in 2’Ome level and for identifying potential technical biases, such as batch effects, or biological variations.<br>
+<br>
+The following metadata are used in the project **`r params$project_name`**:
+
+
+```{r print metadata table, echo=FALSE, warning=FALSE}
+datatable(qcdata,
+          rownames = FALSE,
+          extensions = c("Buttons"),
+          options = list(
+            pageLength = 20,
+            scrollX = TRUE,
+            dom = 'Bfrtip',  # Add buttons
+            buttons = list(
+      list(extend = 'csv', title = "Metadata"),
+      list(extend = 'excel', title = "Metadata")
+      ) # downloading buttons
+    )
+)
+```
+
+## Method: RNA 2’Ome interpretation and annotation
+
+The 2’O-methylation (2’Ome) dataset consists of **C-score values** measured at **`r nrow(df_ribo_annot)`** annotated rRNA sites for each biological sample. The C-score represents the level of 2’Ome of a given site in a specific sample, ranging from 0 (unmethylated) to 1 (fully methylated). Intermediate values reflect heterogenous methylation (i.e., heterogeneous methylation states across ribosomes within the same cell or across the cells of the sample). The method used to compute the C-score is detailed in the QC report (section 1.3 “Method”) and to extract the sites of interest in the 2’Ome_profile report (section 1.3 “Method: RNA 2’Ome interpretation and annotationrRNA”). These C-scores form the basis for all subsequent analyses, including **global profiling** and **differential analysis**.<br>
+<br>
+Here is a table, which summarizes the annotated rRNA 2’Ome sites used in the downstream analyses where:<br>
+- **"rna"** column indicates the RNA molecule on which the 2'Ome site is located<br>
+- **"rnapos"** column indicates the position of the rRNA 2’Ome site<br>
+- **"site"** column indicates the name of the rRNA 2’Ome site by combining the RNA molecule on which it is located with the specific site identifier<br>
+
+
+```{r premiere table}
+datatable(df_ribo_annot,
+          rownames = FALSE,
+          extensions = c("Buttons"),
+          options = list(
+            pageLength = 20,
+            scrollX = TRUE,
+            dom = 'Bfrtip',  # Add buttons
+            buttons = list(
+      list(extend = 'csv', title = "annotated_rRNA_2’Ome_sites"),
+      list(extend = 'excel', title = "annotated_rRNA_2’Ome_sites")
+      ) # downloading buttons
+    )
+)
+```
+
+
+## Design of comparisons
+
+Comparisons were designed to evaluate the differential levels of 2’Ome at each of the **`r nrow(df_ribo_annot)`** annotated sites between biological conditions, as defined by the **`r params$condition_col`** metadata field in the **`r params$project_name`** project dataset. Group comparisons are performed when the dataset includes at least 2 conditions.<br>
+<br>
+(1) Multiple comparisons are performed when the dataset includes 3 or more conditions. In this case, all groups are considered together in each comparison, enabling the identification of sites with significant differences in 2'Ome levels in at least one group compared to the others.<br>
+(2) Pairwise comparisons are performed when the dataset includes 2 conditions. In this case, each comparison involves a case group and a control group, enabling the identification of sites with significant differences in 2’Ome levels:
+
+
+```{r}
+condition_col <- params$condition_col 
+comparisons <- params$comparisons
+
+# Count samples in each comparisons 
+count_samples <- function(group) {
+  sum(qcdata[[condition_col]] == group, na.rm = TRUE)
+}
+
+# built a summary
+summary_lines <- apply(comparisons, 1, function(row) { # apply row function on all rows
+  ctrl_group <- row["ctrl"]
+  case_group <- row["cases"]
+  n_ctrl <- count_samples(ctrl_group)
+  n_case <- count_samples(case_group)
+  glue::glue("- **{case_group}** vs. **{ctrl_group}**: **{n_case}** samples in the **{case_group}** (case) group vs. **{n_ctrl}** samples in the **{ctrl_group}** (control) group")
+})
+
+#transform it in a data frame
+summary_df <- data.frame(Comparison = summary_lines)
+
+# print the table
+kable(summary_df)
+```
+
+These comparisons were designed to detect significant differences in site-specific 2’Ome levels between the control condition and each test condition. Both parametric and non-parametric statistical tests were applied independently to each site within each comparison, and adjusted p-values were computed to avoid bias due to the repetition of statistical tests (see section 3 for details).
+
+# Descriptive analysis of all annotated sites
+
+In this first analysis section, the alteration in 2’Ome levels between the biological conditions are assessed globally, across all the **`r nrow(df_ribo_annot)`** 2’Ome sites.
+
+## C-score profiles by condition
+
+The line plot shows the mean C-score for each site, ordered by genomic coordinates and stratified by biological condition. Shaded areas represent standard deviation, illustrating intra-group variability. Line colors correspond to biological groups. This figure highlights global 2’Ome profile trends and reveals sites with condition-specific variation.
+
+```{r, warning = FALSE, message = FALSE, fig.width = 15, fig.height=10}
+plot_global_profile(ribo_to_check, params$condition_col)
+```
+
+## Median C-score differences between conditions {.tabset .tabset-pills}
+
+A comparison of median C-scores between biological conditions was performed for the **`r nrow(df_ribo_annot)`** annotated rRNA 2’Ome sites.<br>
+<br>
+The left panel shows an histogram of ΔC-scores, calculated as ΔC-score = median C-score_case – median C-score_control. Each bar represents the ΔC-score at one site. Colors of the bar indicate the direction and magnitude of the difference at a specific site:<br>
+<br>
+    - **red**: substantial increase in the case group compared to the control group (|ΔC-score| > 0.05)<br>
+    - **blue**: substantial decrease in the case group compared to the control group (|ΔC-score| > 0.05)<br>
+    - **gray**: negligible changes (|ΔC-score| ≤ 0.05)<br>
+<br>
+Of note : those differences are row differences and are not tested statistically yet. (See Section 3) for statistically significant results.<br>
+<br>
+The right panel shows a scatter plot of median C-scores per site for each condition. Colors of the dots and horizontal lines indicate:<br>
+    - dots: **black**: control group; **orange**: case group<br> 
+<br>
+    - horizontal lines, which link dots when |ΔC-score| > 0.05, highlighting potentially meaningful site-specific changes: **red**: increase; **blue**: decrease
+
+```{r, warning = FALSE, message = FALSE, fig.width=15, fig.height=20, results='asis'}
+
+for(i in seq_len(nrow(params$comparisons))) {
+  ctrl <- params$comparisons$ctrl[i]
+  cases <- params$comparisons$cases[i]
+
+  cat("###", cases, "-", ctrl, "\n\n")
+  
+  print(plot_comparison_median(ribo_to_check, params$condition_col, cases, ctrl))
+  
+  cat("\n\n")
+}
+```
+
+# Differential analysis of 2’Ome
+
+```{r}
+pthr = 0.05
+cscore_cutoff = 0.05
+```
+
+## Statistical testing strategy
+
+To assess the differential level in 2′Ome at each of the **`r nrow(df_ribo_annot)`** annotated sites, both parametric and non-parametric statistical tests were performed, depending on the number of biological conditions and the assumptions about the data distribution.<br>
+
+(1) Parametric Tests <br>
+- In multiple-group comparisons involving three or more groups, a one-way ANOVA was applied to detect differences in mean C-scores across conditions. This method assumes that values are approximately normally distributed and that group variances are homogeneous (equal).<br>
+- In two-group comparisons, the Welch’s t-test was used. This test compares means without assuming equal variances between groups.<br>
+<br>
+(2) Non-Parametric Tests<br>
+To complement the parametric approach, a non-parametric approach is performed.<br>
+- For multiple-group comparisons, the Kruskal–Wallis test was performed across all biological conditions. As a non-parametric alternative to ANOVA, it does not assume normal distribution and is more stringent in detecting differences in distributions rather than means.<br>
+- For two-group comparisons, the Wilcoxon rank-sum test (Mann–Whitney U test) was used in place of Welch’s test under non-parametric assumptions.<br>
+<br>
+All resulting p-values were corrected for multiple testing using the False Discovery Rate (FDR) procedure.<br>
+<br>
+Applying both parametric and non-parametric methods to the same dataset ensures greater robustness of the findings. Parametric tests are sensitive under ideal distributional conditions, while non-parametric tests offer a more conservative alternative when those assumptions may not be fully met. Sites identified as significant by both approaches are interpreted as the most reliable candidates for biological interpretation.
+
+## Parametric test
+
+### Multiple Conditions: ANOVA test
+
+`r if(length(unique(qcdata[[params$condition_col]])) < 3) "!! Note: This section is not applicable to the current dataset, which includes only two biological groups. In such cases, Welch’s t-test is the more appropriate parametric method for pairwise comparisons. Please refer to Section 3.2.2 Using Welch’s Test for the corresponding results." else "In this section, a one-way ANOVA is applied to assess whether at least one biological group shows a significant difference in C-scores at each 2′Ome site. This test is used when the biological conditions include more than two groups. All p-values are corrected for multiple comparisons using the False Discovery Rate (FDR) method. \n\n Sites with both an adjusted p-value below 0.05 and |ΔC-score| > 0.05 between the lowest and highest mean C-scores, are considered significantly differentially methylated across conditions. \n\n A summary table of the metrics resulting from the ANOVA test is provided below, where: \n\n - **annotated_sites** : name of the rRNA 2’Ome site \n - **p_value**: raw p-value resulting from ANOVA test \n - **p_adj**: p-value adjusted for multiple comparisons using the False Discovery Rate (FDR) method.\n\n NaN is displayed when C-score is 0 among all groups, thus no p-value can be computed."`
+
+
+```{r anova, fig.width=12, fig.height=8, warning = FALSE, message = FALSE}
+a <- NULL
+    
+#/!\ No white space in metadata content !
+
+compute_pval <- rRMSAnalyzer::compute_pval(ribo = ribo_to_check, test = "anova", condition_col = params$condition_col) 
+
+# Formating number
+compute_pval_print <- compute_pval 
+if ("p_value" %in% names(compute_pval)) {
+  compute_pval_print$p_value <- formatC(compute_pval_print$p_value, format = "e", digits = 3)
+}
+if ("p_adj" %in% names(compute_pval_print)) {
+  compute_pval_print$p_adj <- formatC(compute_pval_print$p_adj, format = "e", digits = 3)
+}
+
+
+dt <- datatable(compute_pval_print,
+          rownames = FALSE,
+          extensions = c("Buttons"),
+          options = list(
+            pageLength = 20,
+            scrollX = TRUE,
+            dom = 'Bfrtip',  # Add buttons
+            buttons = list(
+              list(extend = 'csv', filename = 'summary_table_of_ANOVA_test'),
+              list(extend = 'excel', filename = 'summary_table_of_ANOVA_test'),
+              list(extend = 'pdf', filename = 'summary_table_of_ANOVA_test')
+            )
+          )
+)
+if(length(unique(qcdata[[params$condition_col]])) > 2){
+  htmltools::tagList(dt)
+}
+```
+
+```{r plot sites, fig.width=12, fig.height=8, warning = FALSE, message = FALSE}
+a <-rRMSAnalyzer::plot_stat(ribo = ribo_to_check, site = NULL, compute_pval = compute_pval, pthr = pthr, condition_col = params$condition_col, cscore_cutoff = cscore_cutoff)
+```
+
+```{r explain anova, results='asis'}
+if(length(unique(qcdata[[params$condition_col]])) > 2){ 
+  
+  if (length(a[["plot_env"]][["significant_sites"]]) != 0) {
+  cat(
+    "This panel displays boxplots of C-scores for each rRNA site identified as significantly differentially methylated across multiple biological conditions, based on one-way ANOVA results and current threshold (padj < 0.05 and |ΔC-score| > 0.05 between the lowest and highest mean C-scores). Each plot illustrates the distribution of C-scores by condition, based on the summary table presented above. Color denotes the biological group, enabling visual comparison of 2’Ome levels between conditions.\n\n"
+  )
+    } else {
+      cat(
+        "No significantly differentially methylated rRNA sites were identified under the current thresholds (ANOVA padj < 0.05 and |ΔC-score| > 0.05 between the lowest and highest mean C-scores).\n\n"
+  )
+  }
+}
+```
+
+```{r anova test, warning = FALSE, message = FALSE, fig.width=15, fig.height=20}
+if(length(unique(qcdata[[params$condition_col]])) > 2){ 
+  if(length(a[["plot_env"]][["significant_sites"]]) != 0){ 
+    print(a) 
+  }
+}
+```
+
+### Two conditions: Welch test {.tabset .tabset-pills}
+
+In this section, pairwise comparisons are performed between two biological conditions using Welch’s t-test, which is well-suited for assessing differences in group means without assuming equal variances.<br>
+<br>
+Only rRNA 2′Ome sites meeting the criteria of |ΔC-score| > 0.05 (ΔC-score = Mean C-score_case – Mean C-score_control) and p < 0.05 (adjusted using the False Discovery Rate (FDR)) are considered significantly differentially methylated. A summary table of the metrics resulting from the Welch test (Case vs Control) is provided below, where:<br><br>
+- **"annotated_sites"**: name of the rRNA 2’Ome site<br>
+- **"p_value"**: raw p-value from the Welch’s t-test.<br>
+- **"delta_c_score"**: difference in mean C-scores between the two conditions<br>
+- **"p_adj"**: p-value adjusted for multiple comparisons using the False Discovery Rate (FDR) method.<br>
+
+```{r welch test render, warning = FALSE, message = FALSE, fig.width=15, fig.height=20}
+outputs <- list()
+w_list <- list()
+outputs <- vector("list", length = nrow(params$comparisons))
+
+for(i in seq_len(nrow(params$comparisons))) {
+  ctrl <- params$comparisons$ctrl[i]
+  cases <- params$comparisons$cases[i]
+  res <- render_html_welch(ribo_to_check, params$condition_col, ctrl, cases, pthr, cscore_cutoff)
+  
+  outputs[[i]] <- res$ui
+  w_list[[i]] <- res$plot
+}
+
+# display content of all loop of tagList given by the function
+htmltools::tagList(outputs)
+
+# display each graph outside of tagList
+empty_w <- list(plot_env = list(significant_sites = character(0)))
+for (p in w_list) {
+  if (!is.null(p) && !identical(p, empty_w)) { # avoid printing empty_w plot if p and empty_w are not same type/structure/content. Case when there is no significant sites in the test.
+    print(p)
+  }
+}
+```
+
+## Non parametric tests
+
+### Multiple conditions: Kruskal–Wallis test 
+
+`r if(length(unique(qcdata[[params$condition_col]])) < 3) "!! Note: This section is not applicable to the current dataset, which includes only two biological groups. The Kruskal–Wallis test is designed for comparing three or more groups. In cases involving two groups, the Wilcoxon rank-sum test (also known as the Mann–Whitney U test) is a more appropriate non-parametric alternative. Please refer to Section 3.3.2: Two conditions: Wilcoxon rank-sum test for the relevant results." else "In this section, a Kruskal–Wallis test is applied to each rRNA 2′Ome site to assess whether at least one biological group shows a significant difference in C-score distributions across the conditions. This non-parametric test is used when the biological condition variable includes more than two groups, and does not require assumptions of normality or equal variances. All p-values are corrected for multiple comparisons using the False Discovery Rate (FDR) method. Sites with an adjusted p-value below 0.05 are considered significantly differentially methylated across conditions.\n\n A summary table of the metrics resulting from the Kruskal-Wallis test is provided below, where:\n\n- **annotated_sites**: name of the rRNA 2’Ome site\n\n- **p_value**: raw p-value from the Kruskal–Wallis's test\n\n - **p_adj**: p-value adjusted for multiple comparisons using the False Discovery Rate (FDR) method."`
+
+```{r kruskal, warning = FALSE, message = FALSE, echo = FALSE}
+k <- NULL
+if(length(unique(qcdata[[params$condition_col]])) > 2){ 
+    
+    #/!\ No white space in metadata content !
+    
+    compute_pval <- rRMSAnalyzer::compute_pval(ribo = ribo_to_check, test = "kruskal", condition_col = params$condition_col) 
+    
+    # Formating number
+    compute_pval_print <- compute_pval 
+    if ("p_value" %in% names(compute_pval)) {
+      compute_pval_print$p_value <- formatC(compute_pval_print$p_value, format = "e", digits = 3)
+    }
+    if ("p_adj" %in% names(compute_pval_print)) {
+      compute_pval_print$p_adj <- formatC(compute_pval_print$p_adj, format = "e", digits = 3)
+    }
+    #erase column delta_c_score that is calculated between first and second unique value in condition_col
+    if ("delta_c_score" %in% names(compute_pval_print)) {
+      compute_pval_print <- compute_pval_print[, !(names(compute_pval_print) == "delta_c_score")]
+    }
+    
+    
+    dt <- datatable(compute_pval_print,
+              rownames = FALSE,
+              extensions = c("Buttons"),
+              options = list(
+                pageLength = 20,
+                scrollX = TRUE,
+                dom = 'Bfrtip',  # Add buttons
+                buttons = list(
+                list(extend = 'csv', filename = 'summary_table_of_Kruskal_test'),
+                list(extend = 'excel', filename = 'summary_table_of_Kruskal_test'),
+                list(extend = 'pdf', filename = 'summary_table_of_Kruskal_test')
+                )
+              )
+            )
+    htmltools::browsable(dt)
+}
+
+```
+
+```{r plot sites kruskal, fig.width=12, fig.height=8, warning = FALSE, message = FALSE}
+k <-rRMSAnalyzer::plot_stat(ribo = ribo_to_check, site = NULL, compute_pval = compute_pval, pthr = pthr, condition_col = params$condition_col, cscore_cutoff = cscore_cutoff)
+```
+
+```{r explain kruskal, results='asis'}
+if(length(unique(qcdata[[params$condition_col]])) > 2){ 
+
+  if (length(k[["plot_env"]][["significant_sites"]]) == 0) { 
+    cat(
+      "No significantly differentially rRNA 2′Ome sites were identified under the current threshold (Kruskal–Wallis test, adjusted p-value < 0.05 and |ΔC-score| > 0.05 between the lowest and highest mean C-scores).\n\n")
+    } else {
+      cat(glue(
+        "This panel displays boxplots of C-scores for each rRNA sites identified as significantly differentially methylated between the two biological conditions **{cases}** and **{ctrl}**, based on Kruskal–Wallis test results and current threshold (adjusted p-value < 0.05 and |ΔC-score| > 0.05 between the lowest and highest mean C-scores). Each boxplot shows the distribution of C-scores stratified by condition based on the summary table presented above. Color denotes the biological group, enabling visual comparison of 2’Ome levels between conditions.\n\n")
+        )
+    }
+}
+```
+
+```{r kruskal test, warning = FALSE, message = FALSE, fig.width=15, fig.height=20}
+if(length(unique(qcdata[[params$condition_col]])) > 2){ 
+  if(length(k[["plot_env"]][["significant_sites"]]) != 0){ 
+    print(k)
+  }
+}
+```
+
+### Two conditions: Wilcoxon rank-sum test {.tabset .tabset-pills}
+
+In this section, the Wilcoxon rank-sum test (also known as the Mann–Whitney U test) is applied to each rRNA 2′Ome site to assess whether the C-score distributions differ significantly between two biological conditions. 
+This non-parametric test does not require assumptions of normality or equal variances, making it suitable for robust pairwise comparisons. <br>
+<br>
+All p-values are corrected for multiple testing using the False Discovery Rate (FDR) method. Sites with an adjusted p-value < 0.05 and |ΔC-score| > 0.05 are considered significantly differentially methylated between the two conditions.<br>
+<br>
+A summary table of the metrics resulting from the Wilcoxon rank-sum test (Case vs Control) is provided below, where:<br>
+<br>
+- **"annotated_sites"**: name of the rRNA 2’Ome site<br>
+- **"p_value"**: raw p-value from the Wilcoxon rank-sum test.<br>
+- **"delta_c_score"**: difference in mean C-scores between the two conditions<br>
+- **"p_adj"**: p-value adjusted for multiple comparisons using the False Discovery Rate (FDR) method.<br>
+
+```{r wilcoxon test render, warning = FALSE, message = FALSE, fig.width=15, fig.height=20}
+outputs <- list()
+x_list <- list()
+outputs <- vector("list", length = nrow(params$comparisons)) # a list of output by comparisons
+
+for(i in seq_len(nrow(params$comparisons))) {
+  ctrl <- params$comparisons$ctrl[i]
+  cases <- params$comparisons$cases[i]
+  res <- render_html_wilcoxon(ribo_to_check, params$condition_col, ctrl, cases, pthr, cscore_cutoff)
+  
+  outputs[[i]] <- res$ui
+  x_list[[i]] <- res$plot
+}
+
+# display content of all loop of tagList given by the function
+htmltools::tagList(outputs)
+
+# display each graph outside of tagList
+empty_x <- list(plot_env = list(significant_sites = character(0)))
+for (p in x_list) {
+  if (!is.null(p) && !identical(p, empty_x)) { # avoid printing empty_x plot if p and empty_x are not same type/structure/content. Case when there is no significant sites in the test.
+    print(p)
+  }
+}
+```
+
+# Conclusion
+
+## Analytic Synthesis 
+
+This diff_site report presents the analysis of **`r length(ribo_to_check[[1]])`** biological samples across **`r nrow(df_ribo_annot)`** annotated rRNA 2’Ome sites. The initial analysis included `r if (length(unique(qcdata[[params$condition_col]])) > 2) "**Anova, Welch, Kruskal-Wallis** and **Wilcoxon** tests" else "**Welch and Wilcoxon rank-sum** tests"`, both of which were performed using all sites.<br>
+Statistical analyses were performed to assess differential rRNA 2′Ome site-specific variations across biological conditions. A dual approach combining parametric and non-parametric methods was adopted:<br>
+- For comparisons involving two biological groups, Welch’s t-test and the Wilcoxon rank-sum test were applied.<br>
+- For comparisons involving three or more groups, a one-way ANOVA and a Kruskal–Wallis test were used.<br>
+<br>
+All resulting p-values were adjusted for multiple testing using the False Discovery Rate (FDR) procedure. Sites meeting the significance threshold (adjusted p-value < 0.05) and |ΔC-score| > 0.05 (when applicable) were retained.<br>
+<br>
+\> Summary of Differentially Methylated rRNA 2′Ome Sites > (Only significant sites in at least one test are shown)
+
+```{r}
+summary_table <- rRMSAnalyzer::get_diff_sites_summary(ribo = ribo_to_check, condition_col = params$condition_col, comparisons = params$comparisons)
+
+DT::datatable(
+  summary_table,
+  rownames = FALSE,
+  extensions = c("Buttons"),
+  options = list(
+    dom = 'Bfrtip',
+    buttons = list(
+      list(extend = 'csv', filename = 'summary_table_of_significant_sites'),
+      list(extend = 'excel', filename = 'summary_table_of_significant_sites'),
+      list(extend = 'pdf', filename = 'summary_table_of_significant_sites')
+    ),
+    pageLength = 20,
+    scrollX = TRUE
+  )
+)
+```
+
+## Comments
+
+```{r print comment, results='asis'}
+cat((params$comments), sep = "\n")
+```
+
+# Additional information
+
+## Bibliography
+
+-  Jaafar M, Paraqindes H, Gabut M, Diaz JJ, Marcel V\*#, Durand S\*#. 2’O-ribose methylation of ribosomal RNAs: natural diversity in living organisms, biological processes, and diseases. Cells 2021, 10(8):1948. https://doi.org/10.3390/cells10081948
+
+-  Marcel V#, Kielbassa J, Marchand V, Natchiar SK, Paraqindes H, Nguyen Van Long F, Ayadi L, Bourguignon-Igel V, Lo Monaco P, Monchiet D, Scott V, Tonon L, Bray SE, Diot A, Jordan LB, Thompson AM, Bourdon JC, Dubois T, André F, Catez F, Puisieux A, Motorin Y, Klaholz BP, Viari A, Diaz JJ. Ribosomal RNA 2’O-methylation as novel layer of inter-tumour heterogeneity in breast cancer. NAR Cancer 2020, 2(4):zcaa036. https://doi.org/10.1093/narcan/zcab006
+
+-  Paraqindes H\*, Mourksi NEH\*, Ballesta S\*, Hedjam J, Bourdelais F, Fenouil T, Picart T, Catez F, Combe T, Ferrari A, Kielbassa J, Thomas E, Tonon L, Viari A, Attignon V, Carrere M, Perrossier J, Giraud S, Vanbelle C, Gabut M, Bergeron D, Scott MS, Castro Vega L, Magne N, Huillard E, Sanson M, Meyronet D, Diaz JJ, Ducray F#, Marcel V\*#, Durand S\*#. IDHwt and IDHmut adult-type diffuse gliomas display distinct alterations in ribosome biogenesis and 2’O-methylation of ribosomal RNA. Neuro Oncol 2023, 25(12):2191-2206.  https://doi.org/10.1093/neuonc/noad140
+
+## Citation
+**When using this report, please cite: Paraqindes et al, Neuro Oncol 2023**
+
+## License
+rRMSAnalyzer<br>
+Copyright (C) 2023 Centre de Recherche en Cancérologie de Lyon
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+## Session info 
+```{r,echo=TRUE}
+sessionInfo()
+```
+
+-----------------------
+This report has been automatically generated with [rRMSAnalyzer](https://github.com/RibosomeCRCL/rRMSAnalyzer) 2.0.1 (July 2025)
