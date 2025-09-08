@@ -61,176 +61,70 @@
 
     
     
-<p>rRMSAnalyzer: analysis script of RiboMethSeq | Human by Allyson
-Moureaux inspired by Virginie Marcel the 19/06/2025 thanks to
-rRMSAnalyzer &amp; rRMSReports packages &amp; rRMSFonctions</p>
-<p>For more specific help: <a href="https://ribosomecrcl.github.io/rRMSAnalyzer/" class="uri">https://ribosomecrcl.github.io/rRMSAnalyzer/</a></p>
 <div class="section level2">
-<h2 id="before-starting-analysis">Before starting analysis<a class="anchor" aria-label="anchor" href="#before-starting-analysis"></a>
+<h2 id="creation-of-a-new-folder-in-the-repository">Creation of a new folder in the repository<br><a class="anchor" aria-label="anchor" href="#creation-of-a-new-folder-in-the-repository"></a>
 </h2>
-<p>Create a new Project and prepare working environment<br><br> go to
-/file/new project/ create a new folder<br> In this folder, copy and
-paste files of directory “rRMSAnalyser_template”:<br> metadata.csv +
-rRMSAnalyzer_template.R<br> For Human analysis take
-“human.methylated.rda” and “human.suspected.rda”<br> Don’t forget to put
-your 5’end counts file in this directory.<br> open metadata.csv in
-Excel, fill in the file and save it under .csv with “;” as
-separator.<br><br></p>
+<p><br></p>
+<p>open your repository, go to your folder of interest <br> - create a
+new folder<br> - copy and paste in this new folder:</p>
+<ul>
+<li>metadata.csv created previously: to update it, open metadata.csv in
+Excel, fill in the file and save it using .csv with “;” as separator.
+<br>
+</li>
+<li>rRMSAnalyzer_template.R (<a href="https://github.com/RibosomeCRCL/rRMSAnalyzer/tree/main/vignettes" class="external-link uri">https://github.com/RibosomeCRCL/rRMSAnalyzer/tree/main/vignettes</a>)
+<br>
+</li>
+<li>“human.methylated.rda” and “human.suspected.rda” (<a href="https://github.com/RibosomeCRCL/rRMSAnalyzer/tree/main/data" class="external-link uri">https://github.com/RibosomeCRCL/rRMSAnalyzer/tree/main/data</a>)<br>
+</li>
+<li>a folder with all the 5’end read counts files<br>
+</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="perform-analysis-using-rstudio">Perform analysis using RStudio<a class="anchor" aria-label="anchor" href="#perform-analysis-using-rstudio"></a>
+</h2>
 <div class="section level3">
-<h3 id="package-update-rmsanalyzer-and-rmsreport">Package update RMSAnalyzer and RMSReport<a class="anchor" aria-label="anchor" href="#package-update-rmsanalyzer-and-rmsreport"></a>
+<h3 id="open-rstudio">Open RStudio<a class="anchor" aria-label="anchor" href="#open-rstudio"></a>
+</h3>
+</div>
+<div class="section level3">
+<h3 id="update-rmsanalyzer">Update RMSAnalyzer<a class="anchor" aria-label="anchor" href="#update-rmsanalyzer"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"RibosomeCRCL/rRMSAnalyzer"</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RibosomeCRCL/rRMSAnalyzer" class="external-link">rRMSAnalyzer</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">rRMSReports</span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RibosomeCRCL/rRMSAnalyzer" class="external-link">rRMSAnalyzer</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 id="riboclass-creation">RiboClass creation<a class="anchor" aria-label="anchor" href="#riboclass-creation"></a>
+<h2 id="create-a-riboclass-metadata-counts-c-score-parameters">Create a RiboClass (metadata, counts, C-score parameters)<a class="anchor" aria-label="anchor" href="#create-a-riboclass-metadata-counts-c-score-parameters"></a>
 </h2>
-<p>Model data to get used to the package</p>
+<p>As an example, the provided dataset “ribo_toy” is used.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"ribo_toy"</span><span class="op">)</span></span></code></pre></div>
+<p>Personal data preparation</p>
 <div class="section level3">
-<h3 id="personal-data-preparation">Personal data preparation<a class="anchor" aria-label="anchor" href="#personal-data-preparation"></a>
+<h3 id="prepare-the-comparison-table">Prepare the comparison table<a class="anchor" aria-label="anchor" href="#prepare-the-comparison-table"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ribo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_ribodata.html">load_ribodata</a></span><span class="op">(</span></span>
-<span>  <span class="co">#data &amp; metadata files path</span></span>
-<span>  count_path <span class="op">=</span> <span class="st">"~/Desktop/RMS/path/counts/"</span>,</span>
-<span>  metadata <span class="op">=</span> <span class="st">"~/Desktop/RMS/path/metadata.csv"</span>,<span class="co"># data &amp; metadata files separator</span></span>
-<span>  count_sep <span class="op">=</span> <span class="st">"\t"</span>,</span>
-<span>  metadata_sep <span class="op">=</span> <span class="st">";"</span>,</span>
-<span>  <span class="co"># count data parameters :</span></span>
-<span>  count_header <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  count_value <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  count_rnaid <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  count_pos <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  <span class="co"># Metadata parameters :</span></span>
-<span>  metadata_key <span class="op">=</span> <span class="st">"filename"</span>,</span>
-<span>  metadata_id <span class="op">=</span> <span class="st">"samplename"</span>,</span>
-<span>  <span class="co"># c-score parameters :</span></span>
-<span>  flanking <span class="op">=</span> <span class="fl">6</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"median"</span>,</span>
-<span>  ncores <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="check-importation-with-a-pca-and-coa">Check importation with a PCA and COA<a class="anchor" aria-label="anchor" href="#check-importation-with-a-pca-and-coa"></a>
-</h3>
-<p>Plot PCA</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_pca.html">plot_pca</a></span><span class="op">(</span><span class="va">ribo</span>,<span class="st">"run"</span><span class="op">)</span> <span class="co">#change column name of the lib if necessary #ribo_toy lib_col = "run"</span></span></code></pre></div>
-<p>Plot COA</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_coa.html">plot_coa</a></span><span class="op">(</span></span>
-<span>  <span class="va">ribo</span>,</span>
-<span>  color_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  axes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>  only_annotated <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  title <span class="op">=</span> <span class="st">"default"</span>,</span>
-<span>  subtitle <span class="op">=</span> <span class="st">"default"</span>,</span>
-<span>  object_only <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="qc-step">QC step<a class="anchor" aria-label="anchor" href="#qc-step"></a>
-</h2>
-<div class="section level3">
-<h3 id="qc_report-for-all-data">QC_report for all data<a class="anchor" aria-label="anchor" href="#qc_report-for-all-data"></a>
-</h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/report_qc.html">report_qc</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo</span>, specie <span class="op">=</span> <span class="st">"human"</span>, library_col <span class="op">=</span> <span class="st">"run"</span>, project_name <span class="op">=</span> <span class="st">"my_project"</span><span class="op">)</span> <span class="co">#ribo_toy lib_col = "run"</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="adjustment-combat-seq-if-necessary">adjustment ComBat-Seq if necessary<a class="anchor" aria-label="anchor" href="#adjustment-combat-seq-if-necessary"></a>
-</h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_pca.html">plot_pca</a></span><span class="op">(</span><span class="va">ribo</span>, <span class="st">"lib"</span><span class="op">)</span> <span class="co">#ribo_toy lib_col = "run"               </span></span>
-<span></span>
-<span><span class="va">ribo_adj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/adjust_bias.html">adjust_bias</a></span><span class="op">(</span><span class="va">ribo_toy</span>,<span class="st">"run"</span><span class="op">)</span> </span>
-<span></span>
-<span><span class="fu"><a href="../reference/plot_pca.html">plot_pca</a></span><span class="op">(</span><span class="va">ribo_adj</span>,<span class="st">"lib"</span><span class="op">)</span>  <span class="co">#ribo_toy lib_col = "run"          </span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="qc_report-for-adjusted-data">QC_report for adjusted data<a class="anchor" aria-label="anchor" href="#qc_report-for-adjusted-data"></a>
-</h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/report_qc.html">report_qc</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_adj</span>, specie <span class="op">=</span> <span class="st">"human"</span>, library_col <span class="op">=</span> <span class="st">"run"</span>, project_name <span class="op">=</span> <span class="st">"name"</span>, comments <span class="op">=</span> <span class="st">"./comment_QC.Rmd"</span><span class="op">)</span> <span class="co">#ribo_toy lib_col = "run"</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="remove-problematic-or-not-used-samples-optionnal">Remove problematic or not used samples (optionnal)<a class="anchor" aria-label="anchor" href="#remove-problematic-or-not-used-samples-optionnal"></a>
-</h3>
-<div class="section level4">
-<h4 id="keep-a-small-number-of-samples">Keep a small number of samples<a class="anchor" aria-label="anchor" href="#keep-a-small-number-of-samples"></a>
-</h4>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ribo_adj_small</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_ribo_samples.html">keep_ribo_samples</a></span><span class="op">(</span><span class="va">ribo_adj</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample1"</span>,<span class="st">"sample2"</span>,<span class="st">"sample3"</span>,<span class="st">"sample4"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="remove-a-small-number-of-samples">Remove a small number of samples<a class="anchor" aria-label="anchor" href="#remove-a-small-number-of-samples"></a>
-</h4>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ribo_adj_small</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_ribo_samples.html">remove_ribo_samples</a></span><span class="op">(</span><span class="va">ribo_adj</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"xxxx"</span>,<span class="st">"xxxccc"</span>,<span class="st">"RNA_ref-1"</span>,<span class="st">"RNA_ref-2"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Uniformisation of Riboclass name</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ribo_adj</span> <span class="op">&lt;-</span> <span class="va">ribo_adj_small</span> </span></code></pre></div>
-</div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="human-rrna-2ome-sites-annotation">Human rRNA 2’Ome sites annotation<a class="anchor" aria-label="anchor" href="#human-rrna-2ome-sites-annotation"></a>
-</h2>
-<p>You must have download the file on git and saved it locally</p>
-<div class="section level3">
-<h3 id="for-known-sites--">For known sites ….<a class="anchor" aria-label="anchor" href="#for-known-sites--"></a>
-</h3>
-<p>Choose between this section or the next one. If both of known and
-suspected sites analysis are desired, script has to be run twice from
-here.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"human_methylated"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"human_methylated's rna names: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">human_methylated</span><span class="op">$</span><span class="va">rRNA</span><span class="op">)</span>,<span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"ribo's rna names: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">ribo</span><span class="op">$</span><span class="va">rna_names</span><span class="op">$</span><span class="va">current_name</span><span class="op">)</span><span class="op">)</span> <span class="co"># change name of RiboClass if necessary</span></span>
-<span></span>
-<span><span class="va">ribo_adj_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rename_rna.html">rename_rna</a></span><span class="op">(</span><span class="va">ribo</span>, <span class="co">#change name of RiboClass if necessary for ribo_adj if you adjusted the data</span></span>
-<span>                            new_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"5S"</span>, <span class="st">"5.8S"</span>, <span class="st">"18S"</span>, <span class="st">"28S"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">ribo_adj_annot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/annotate_site.html">annotate_site</a></span><span class="op">(</span><span class="va">ribo_adj_name</span>, </span>
-<span>                                annot <span class="op">=</span> <span class="va">human_methylated</span>,</span>
-<span>                                anno_rna <span class="op">=</span> <span class="st">"rRNA"</span>,</span>
-<span>                                anno_pos <span class="op">=</span> <span class="st">"Position"</span>,</span>
-<span>                                anno_value <span class="op">=</span> <span class="st">"Nomenclature"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="or-for-suspected-sites">…. or for suspected sites<a class="anchor" aria-label="anchor" href="#or-for-suspected-sites"></a>
-</h3>
-<p>If you choose to analyse known site first pass this chunk and come
-back to it when first analysis is done.</p>
-<div class="section level4">
-<h4 id="redo-all-the-analysis-for-adjusted-data-if-necessary">redo all the analysis for adjusted data if necessary<a class="anchor" aria-label="anchor" href="#redo-all-the-analysis-for-adjusted-data-if-necessary"></a>
-</h4>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"/home/bioinfo/Desktop/RMS/human.suspected.rda"</span><span class="op">)</span> </span>
-<span></span>
-<span><span class="va">ribo_adj_annot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/annotate_site.html">annotate_site</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>, <span class="va">human.suspected</span><span class="op">)</span> <span class="co"># verify rRNA names</span></span>
-<span></span>
-<span><span class="va">ribo_adj_annot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/annotate_site.html">annotate_site</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>,</span>
-<span>                                annot <span class="op">=</span> <span class="va">human.suspected</span>,</span>
-<span>                                anno_rna <span class="op">=</span> <span class="st">"rRNA"</span>,</span>
-<span>                                anno_pos <span class="op">=</span> <span class="st">"Position"</span>,</span>
-<span>                                anno_value <span class="op">=</span> <span class="st">"Nomenclature"</span><span class="op">)</span></span></code></pre></div>
-</div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="reports">Reports<a class="anchor" aria-label="anchor" href="#reports"></a>
-</h2>
-<p>In this section we run the two reports for analysis.</p>
-<p>To launch as many time as the number of comparisons asked(A, B, C
-…).</p>
-<p>Ex of metadata:</p>
+<ul>
+<li>open the metadata.csv using Excel<br>
+</li>
+<li>add as many new columns as required (1 column per comparison, here
+“column name = “variableA to C”)<br>
+</li>
+<li>complete the new columns with<br><ul>
+<li>ctrl = control condition<br>
+</li>
+<li>P1 = condition 1<br>
+</li>
+<li>P2 = condition 2….<br> • NA = not applicable<br> Save your metadata
+file using .csv and separator “;” <br>
+</li>
+</ul>
+</li>
+</ul>
+<p>Here is an example of metadata:</p>
 <table class="table">
 <colgroup>
 <col width="21%">
@@ -301,306 +195,212 @@ back to it when first analysis is done.</p>
 <td>P2</td>
 <td>variableC</td>
 <td>P2</td>
-<td>L2</td>
-</tr>
-<tr class="even">
-<td>S32_R1.5_counts.csv</td>
-<td>variableA_N3_P1</td>
-<td>P1</td>
-<td>NA</td>
-<td>NA</td>
-<td>variableA</td>
-<td>P1</td>
-<td>L2</td>
-</tr>
-<tr class="odd">
-<td>S33_R1.5_counts.csv</td>
-<td>variableA_N3_ctrl</td>
-<td>ctrl</td>
-<td>NA</td>
-<td>NA</td>
-<td>variableA</td>
-<td>ctrl</td>
-<td>L2</td>
-</tr>
-<tr class="even">
-<td>S34_R1.5_counts.csv</td>
-<td>variableC_N1_ctrl</td>
-<td>NA</td>
-<td>NA</td>
-<td>ctrl</td>
-<td>variableC</td>
-<td>ctrl</td>
-<td>L2</td>
-</tr>
-<tr class="odd">
-<td>S35_R1.5_counts.csv</td>
-<td>variableA_N1_P2</td>
-<td>P2</td>
-<td>NA</td>
-<td>NA</td>
-<td>variableA</td>
-<td>P2</td>
-<td>L2</td>
-</tr>
-<tr class="even">
-<td>S36_R1.5_counts.csv</td>
-<td>variableA_N2_ctrl</td>
-<td>ctrl</td>
-<td>NA</td>
-<td>NA</td>
-<td>variableA</td>
-<td>ctrl</td>
-<td>L2</td>
-</tr>
-<tr class="odd">
-<td>S37_R1.5_counts.csv</td>
-<td>variableC_N2_ctrl</td>
-<td>NA</td>
-<td>NA</td>
-<td>ctrl</td>
-<td>variableC</td>
-<td>ctrl</td>
-<td>L2</td>
-</tr>
-<tr class="even">
-<td>S38_R1.5_counts.csv</td>
-<td>variableA_N2_P2</td>
-<td>P2</td>
-<td>NA</td>
-<td>NA</td>
-<td>variableA</td>
-<td>P2</td>
-<td>L2</td>
-</tr>
-<tr class="odd">
-<td>S39_R1.5_counts.csv</td>
-<td>variableC_N1_P2</td>
-<td>NA</td>
-<td>NA</td>
-<td>P2</td>
-<td>variableC</td>
-<td>P2</td>
-<td>L2</td>
-</tr>
-<tr class="even">
-<td>S40_R1.5_counts.csv</td>
-<td>variableB_N1_ctrl</td>
-<td>NA</td>
-<td>ctrl</td>
-<td>NA</td>
-<td>variableB</td>
-<td>ctrl</td>
-<td>L2</td>
-</tr>
-<tr class="odd">
-<td>S41_R1.5_counts.csv</td>
-<td>variableA_N1_P1</td>
-<td>P1</td>
-<td>NA</td>
-<td>NA</td>
-<td>variableA</td>
-<td>P1</td>
-<td>L2</td>
-</tr>
-<tr class="even">
-<td>S42_R1.5_counts.csv</td>
-<td>variableA_N1_ctrl</td>
-<td>ctrl</td>
-<td>NA</td>
-<td>NA</td>
-<td>variableA</td>
-<td>ctrl</td>
-<td>L2</td>
-</tr>
-<tr class="odd">
-<td>S43_R1.5_counts.csv</td>
-<td>variableC_N3_P2</td>
-<td>NA</td>
-<td>NA</td>
-<td>P2</td>
-<td>variableC</td>
-<td>P2</td>
-<td>L2</td>
-</tr>
-<tr class="even">
-<td>S44_R1.5_counts.csv</td>
-<td>variableB_N3_ctrl</td>
-<td>NA</td>
-<td>ctrl</td>
-<td>NA</td>
-<td>variableB</td>
-<td>ctrl</td>
-<td>L2</td>
-</tr>
-<tr class="odd">
-<td>S45_R1.5_counts.csv</td>
-<td>variableA_N3_P2</td>
-<td>P2</td>
-<td>NA</td>
-<td>NA</td>
-<td>variableA</td>
-<td>P2</td>
-<td>L2</td>
+<td></td>
 </tr>
 </tbody>
 </table>
-<p>If only one column condition, it is still the same thing. Here in the
-metadata example we can see 3 columns variable. They are the different
-comparison that is wanted to be analysed. You can replace the name for
-your custom ones. You can also run the analysis on “condition” column.
-In this case analysis will be done camparing as many modalities as you
-have in the same report. (The column treatment is optionnal)</p>
-<p>————————————–variableA——————————–</p>
+<p>In Rstudio, load a newRiboClass using:<br></p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ribo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_ribodata.html">load_ribodata</a></span><span class="op">(</span></span>
+<span>  <span class="co">#data &amp; metadata files path</span></span>
+<span>  count_path <span class="op">=</span> <span class="st">"~/Desktop/RMS/path/counts/"</span>,</span>
+<span>  metadata <span class="op">=</span> <span class="st">"~/Desktop/RMS/path/metadata.csv"</span>,<span class="co"># data &amp; metadata files separator</span></span>
+<span>  count_sep <span class="op">=</span> <span class="st">"\t"</span>,</span>
+<span>  metadata_sep <span class="op">=</span> <span class="st">";"</span>,</span>
+<span>  <span class="co"># count data parameters :</span></span>
+<span>  count_header <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  count_value <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  count_rnaid <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  count_pos <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  <span class="co"># Metadata parameters :</span></span>
+<span>  metadata_key <span class="op">=</span> <span class="st">"filename"</span>,</span>
+<span>  metadata_id <span class="op">=</span> <span class="st">"samplename"</span>,</span>
+<span>  <span class="co"># c-score parameters :</span></span>
+<span>  flanking <span class="op">=</span> <span class="fl">6</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"median"</span>,</span>
+<span>  ncores <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+</div>
 <div class="section level3">
-<h3 id="filter-data">filter data<a class="anchor" aria-label="anchor" href="#filter-data"></a>
+<h3 id="check-importation-by-ploting-a-pca-and-coa">Check importation by ploting a PCA and COA<a class="anchor" aria-label="anchor" href="#check-importation-by-ploting-a-pca-and-coa"></a>
 </h3>
-<p>(to do only if you want to compare a subset of your samples and not
-all the samples together otherwise pass this chunk)</p>
-<p>Data are filtered with metadata to keep only samples present in the
-column “variableA” (in the case you have some NA in the column). Samples
-with NA will be erased from subset for the analysis.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_pca.html">plot_pca</a></span><span class="op">(</span><span class="va">ribo</span>,<span class="st">"run"</span><span class="op">)</span> <span class="co">#change column name of the lib if necessary #ribo_toy lib_col = "run"</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/plot_coa.html">plot_coa</a></span><span class="op">(</span></span>
+<span>  <span class="va">ribo</span>,</span>
+<span>  color_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  axes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  only_annotated <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  title <span class="op">=</span> <span class="st">"default"</span>,</span>
+<span>  subtitle <span class="op">=</span> <span class="st">"default"</span>,</span>
+<span>  object_only <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="perfom-qc-analysis">Perfom QC analysis<a class="anchor" aria-label="anchor" href="#perfom-qc-analysis"></a>
+</h2>
+<div class="section level4">
+<h4 id="generate-a-qcreport">Generate a QCreport<a class="anchor" aria-label="anchor" href="#generate-a-qcreport"></a>
+</h4>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/report_qc.html">report_qc</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo</span>, specie <span class="op">=</span> <span class="st">"human"</span>, library_col <span class="op">=</span> <span class="st">"run"</span>, project_name <span class="op">=</span> <span class="st">"my_project"</span><span class="op">)</span> <span class="co">#ribo_toy lib_col = "run"</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="adjustment-using-combat-seq-if-necessary">Adjustment using ComBat-Seq if necessary<a class="anchor" aria-label="anchor" href="#adjustment-using-combat-seq-if-necessary"></a>
+</h4>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ribo_adj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/adjust_bias.html">adjust_bias</a></span><span class="op">(</span><span class="va">ribo_toy</span>,<span class="st">"run"</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="co">#verify the adjustment using a PCA</span></span>
+<span><span class="fu"><a href="../reference/plot_pca.html">plot_pca</a></span><span class="op">(</span><span class="va">ribo_adj</span>,<span class="st">"lib"</span><span class="op">)</span>  <span class="co">#ribo_toy lib_col = "run"         </span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/report_qc.html">report_qc</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_adj</span>, specie <span class="op">=</span> <span class="st">"human"</span>, library_col <span class="op">=</span> <span class="st">"run"</span>, project_name <span class="op">=</span> <span class="st">"name"</span>, comments <span class="op">=</span> <span class="st">"./comment_QC.Rmd"</span><span class="op">)</span> <span class="co">#ribo_toy lib_col = "run"</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="remove-problematic-or-unused-samples-optionnal">Remove problematic or unused samples (optionnal)<a class="anchor" aria-label="anchor" href="#remove-problematic-or-unused-samples-optionnal"></a>
+</h3>
+<div class="section level4">
+<h4 id="to-keep-a-small-number-of-samples">To keep a small number of samples<a class="anchor" aria-label="anchor" href="#to-keep-a-small-number-of-samples"></a>
+</h4>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ribo_adj_small</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_ribo_samples.html">keep_ribo_samples</a></span><span class="op">(</span><span class="va">ribo_adj</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample1"</span>,<span class="st">"sample2"</span>,<span class="st">"sample3"</span>,<span class="st">"sample4"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="to-remove-a-small-number-of-samples">To remove a small number of samples<a class="anchor" aria-label="anchor" href="#to-remove-a-small-number-of-samples"></a>
+</h4>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ribo_adj_small</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_ribo_samples.html">remove_ribo_samples</a></span><span class="op">(</span><span class="va">ribo_adj</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"xxxx"</span>,<span class="st">"xxxccc"</span>,<span class="st">"RNA_ref-1"</span>,<span class="st">"RNA_ref-2"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="uniformisation-of-the-riboclass-name">Uniformisation of the RiboClass name<a class="anchor" aria-label="anchor" href="#uniformisation-of-the-riboclass-name"></a>
+</h4>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ribo_adj</span> <span class="op">&lt;-</span> <span class="va">ribo_adj_small</span> </span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="annotation-of-human-rrna-2ome-sites">Annotation of human rRNA 2’Ome sites<a class="anchor" aria-label="anchor" href="#annotation-of-human-rrna-2ome-sites"></a>
+</h3>
+<p>Choose between 2 annotations: known (n=112 sites) or suspected
+(n=17). This section or the next one. If the two annotations are
+required, both of known and suspected sites analysis are desired, the 2
+scripts has to be run twice from here.</p>
+<div class="section level4">
+<h4 id="annotation-of-the-112-known-sites">Annotation of the 112 known sites<a class="anchor" aria-label="anchor" href="#annotation-of-the-112-known-sites"></a>
+</h4>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"human_methylated"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"human_methylated's rna names: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">human_methylated</span><span class="op">$</span><span class="va">rRNA</span><span class="op">)</span>,<span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"ribo's rna names: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">ribo</span><span class="op">$</span><span class="va">rna_names</span><span class="op">$</span><span class="va">current_name</span><span class="op">)</span><span class="op">)</span> <span class="co"># change name of RiboClass if necessary</span></span>
+<span></span>
+<span><span class="va">ribo_adj_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rename_rna.html">rename_rna</a></span><span class="op">(</span><span class="va">ribo</span>, <span class="co">#change name of RiboClass if necessary for ribo_adj if you adjusted the data</span></span>
+<span>                            new_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"5S"</span>, <span class="st">"5.8S"</span>, <span class="st">"18S"</span>, <span class="st">"28S"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ribo_adj_annot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/annotate_site.html">annotate_site</a></span><span class="op">(</span><span class="va">ribo_adj_name</span>, </span>
+<span>                                annot <span class="op">=</span> <span class="va">human_methylated</span>,</span>
+<span>                                anno_rna <span class="op">=</span> <span class="st">"rRNA"</span>,</span>
+<span>                                anno_pos <span class="op">=</span> <span class="st">"Position"</span>,</span>
+<span>                                anno_value <span class="op">=</span> <span class="st">"Nomenclature"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="annotation-of-the-19-suspected-sites">Annotation of the 19 suspected sites<a class="anchor" aria-label="anchor" href="#annotation-of-the-19-suspected-sites"></a>
+</h4>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"/home/path/to/RMS/human.suspected.rda"</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">ribo_adj_annot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/annotate_site.html">annotate_site</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>, <span class="va">human.suspected</span><span class="op">)</span> <span class="co"># verify rRNA names</span></span>
+<span></span>
+<span><span class="va">ribo_adj_annot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/annotate_site.html">annotate_site</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>,</span>
+<span>                                annot <span class="op">=</span> <span class="va">human.suspected</span>,</span>
+<span>                                anno_rna <span class="op">=</span> <span class="st">"rRNA"</span>,</span>
+<span>                                anno_pos <span class="op">=</span> <span class="st">"Position"</span>,</span>
+<span>                                anno_value <span class="op">=</span> <span class="st">"Nomenclature"</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="analytic-reports">Analytic reports<a class="anchor" aria-label="anchor" href="#analytic-reports"></a>
+</h3>
+<div class="section level4">
+<h4 id="reports-for-comparisons-explained-in-column-1">Reports for comparisons explained in column 1<a class="anchor" aria-label="anchor" href="#reports-for-comparisons-explained-in-column-1"></a>
+</h4>
+<p>In the previous example: in column “VariableA”, comparison ctrl vs P1
+and ctrl vs P2</p>
+<div class="section level5">
+<h5 id="filter-the-data">Filter the data<a class="anchor" aria-label="anchor" href="#filter-the-data"></a>
+</h5>
+<p>To do only if you want to compare a subset of your samples (i.e., not
+all the samples included in the RiboClass).</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">kept_samples</span> <span class="op">&lt;-</span> <span class="va">ribo_adj_annot</span><span class="op">$</span><span class="va">metadata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">variableA</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># keep lines that are not "NA"</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">samplename</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">ribo_adj_annot_variableA</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_ribo_samples.html">keep_ribo_samples</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>,<span class="va">kept_samples</span><span class="op">)</span> <span class="co"># create a new riboclass name for the subdata variableA</span></span></code></pre></div>
+<span><span class="va">ribo_adj_annot_variableA</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_ribo_samples.html">keep_ribo_samples</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>,<span class="va">kept_samples</span><span class="op">)</span> <span class="co">#create a new RiboClass including the subdata variableA</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="create-mandatory-table-for-the-diff_sites-report">create mandatory table for the diff_sites report<a class="anchor" aria-label="anchor" href="#create-mandatory-table-for-the-diff_sites-report"></a>
-</h3>
-<p>The last report needs this table to know what comparisons has to be
-run. Here in variable A we have 3 modalities : P1, P2 and ctrl. We want
-to compare P1 to the ctrl and P2 to the ctrl. The order in ctrl and
-cases lines is important. The first argument of the “ctrl” line will be
-compared to the first argument of the “cases” line. Same for the second
-third etc. You can add as much argument as you want in each lines as
-long as they exist in your metadata column (here variableA) and the line
-ctrl and cases have the same length. For example this :</p>
-<p>comparisons &lt;- tibble::tibble(<br> comp = c(“comp1”, “comp2”),<br>
-ctrl = c(“ctrl”),<br> cases = c(“P1”, “P2”)<br> )<br> can’t work because
-ctrl has 1 argument and cases has 2. <br> This :<br> comparisons &lt;-
-tibble::tibble(<br> comp = c(“comp1”, “comp2”),<br> ctrl = c(“ctrl”,
-“ctrl”),<br> cases = c(“P1”, “P3”)<br> )<br> can’t work because P3
-doesn’t exist in variableA column in the metadata.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="section level5">
+<h5 id="create-mandatory-comparison-table-for-the-report_diff_sites">Create mandatory comparison table for the report_diff_sites<a class="anchor" aria-label="anchor" href="#create-mandatory-comparison-table-for-the-report_diff_sites"></a>
+</h5>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>  comp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"comp1"</span>, <span class="st">"comp2"</span><span class="op">)</span>,</span>
-<span>  ctrl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ctrl"</span>, <span class="st">"ctrl"</span><span class="op">)</span>,</span>
-<span>  cases <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P1"</span>, <span class="st">"P2"</span><span class="op">)</span></span>
+<span>  comp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"comp1"</span>, <span class="st">"comp2"</span><span class="op">)</span>, <span class="co">#name of the 2 comparisons, add as many as required</span></span>
+<span>  ctrl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ctrl"</span>, <span class="st">"ctrl"</span><span class="op">)</span>, <span class="co">#name of the ctrl as appearing in your metadata for each comparison, in the order, add as many name than comparison that will be performed</span></span>
+<span>  cases <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P1"</span>, <span class="st">"P2"</span><span class="op">)</span> <span class="co">#name of the cases as appearing in your metadata for each comparison, in the order, add as many name than comparison that will be performed</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
+<div class="section level5">
+<h5 id="generate-a-report-to-compare-2ome-profile">Generate a report to compare 2’Ome profile<a class="anchor" aria-label="anchor" href="#generate-a-report-to-compare-2ome-profile"></a>
+</h5>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/report_2ome_sites.html">report_2ome_sites</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_adj_annot_variableA</span>, specie <span class="op">=</span> <span class="st">"human"</span>, condition_col <span class="op">=</span> <span class="st">"variableA"</span>, project_name <span class="op">=</span> <span class="st">"name"</span>, comments <span class="op">=</span> <span class="st">"./path/to/comment_2ome_variableA.Rmd"</span><span class="op">)</span> </span>
+<span><span class="co">#condition_col: change the name of the column to perform new analysis</span></span>
+<span><span class="co">#comments: change the path and name of your files with your comments if required</span></span></code></pre></div>
+</div>
+<div class="section level5">
+<h5 id="generate-a-report-to-perform-site-by-site-2ome-comparison">Generate a report to perform site-by-site 2’Ome comparison<a class="anchor" aria-label="anchor" href="#generate-a-report-to-perform-site-by-site-2ome-comparison"></a>
+</h5>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/report_diff_sites.html">report_diff_sites</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_adj_annot_variableA</span>, specie <span class="op">=</span> <span class="st">"human"</span>, condition_col <span class="op">=</span> <span class="st">"variableA"</span>, project_name <span class="op">=</span> <span class="st">"name"</span>, comparisons <span class="op">=</span> <span class="va">comparisons</span>, comments <span class="op">=</span> <span class="st">"./comment_diff_site_variableA.Rmd"</span><span class="op">)</span></span>
+<span><span class="co">#condition_col: change the name of the column to perform new analysis</span></span>
+<span><span class="co">#comparisons: name of the comparison table</span></span>
+<span><span class="co">#comments: change the name of your files with your comments if required</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level4">
+<h4 id="reports-for-comparisons-explained-in-column-2">Reports for comparisons explained in column 2<a class="anchor" aria-label="anchor" href="#reports-for-comparisons-explained-in-column-2"></a>
+</h4>
+<p>Re-do all the steps of <a href="#reports-for-comparisons-explained-in-column-1">Reports for
+comparisons explained in column 1</a> but using the name of your column
+of interest</p>
+</div>
+</div>
 <div class="section level3">
-<h3 id="global-profile-analysis-of-rrna-2ome">global profile analysis of rRNA 2’Ome<a class="anchor" aria-label="anchor" href="#global-profile-analysis-of-rrna-2ome"></a>
+<h3 id="export-data">Export data<a class="anchor" aria-label="anchor" href="#export-data"></a>
 </h3>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/report_2ome_sites.html">report_2ome_sites</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_adj_annot_variableA</span>, specie <span class="op">=</span> <span class="st">"human"</span>, condition_col <span class="op">=</span> <span class="st">"variableA"</span>, project_name <span class="op">=</span> <span class="st">"name"</span>, comments <span class="op">=</span> <span class="st">"./comment_2ome_variableA.Rmd"</span><span class="op">)</span> </span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="analysis-of-rrnas-2ome-level-differences">Analysis of rRNAs 2’Ome level differences<a class="anchor" aria-label="anchor" href="#analysis-of-rrnas-2ome-level-differences"></a>
-</h3>
-<p>Here we need the comparison table created previously.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/report_diff_sites.html">report_diff_sites</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_adj_annot_variableA</span>, specie <span class="op">=</span> <span class="st">"human"</span>, condition_col <span class="op">=</span> <span class="st">"variableA"</span>, project_name <span class="op">=</span> <span class="st">"name"</span>, comparisons <span class="op">=</span> <span class="va">comparisons</span>, comments <span class="op">=</span> <span class="st">"./comment_diff_site_variableA.Rmd"</span><span class="op">)</span> </span></code></pre></div>
-<p>————————————–B—————————————-</p>
-<p>Now we do the exact same thing but for the variableB column.</p>
-</div>
-<div class="section level3">
-<h3 id="filter-with-metadata-to-keep-only-samples-present-in-the-colum-variableb">filter with metadata to keep only samples present in the colum
-“variableB”<a class="anchor" aria-label="anchor" href="#filter-with-metadata-to-keep-only-samples-present-in-the-colum-variableb"></a>
-</h3>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">kept_samples</span> <span class="op">&lt;-</span> <span class="va">ribo_adj_annot</span><span class="op">$</span><span class="va">metadata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">variableB</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">samplename</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">ribo_adj_annot_variableB</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_ribo_samples.html">keep_ribo_samples</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>,<span class="va">kept_samples</span><span class="op">)</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="create-the-necessary-comparison-table-for-the-diff_sites-report">create the necessary comparison table for the diff_sites report<a class="anchor" aria-label="anchor" href="#create-the-necessary-comparison-table-for-the-diff_sites-report"></a>
-</h2>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>  comp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"comp1"</span><span class="op">)</span>,</span>
-<span>  ctrl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ctrl"</span><span class="op">)</span>,</span>
-<span>  cases <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P2"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="ome-of-rrnas-analysis-of-the-global-profile">2’Ome of rRNAs analysis of the global profile<a class="anchor" aria-label="anchor" href="#ome-of-rrnas-analysis-of-the-global-profile"></a>
-</h3>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/report_2ome_sites.html">report_2ome_sites</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_adj_annot_variableB</span>, specie <span class="op">=</span> <span class="st">"human"</span>, condition_col <span class="op">=</span> <span class="st">"variableB"</span>, project_name <span class="op">=</span> <span class="st">"name"</span>, comments <span class="op">=</span> <span class="st">"./comment_2ome_variableB.Rmd"</span><span class="op">)</span> </span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="analysis-of-rrnas-2ome-level-differences-1">Analysis of rRNAs 2’Ome level differences<a class="anchor" aria-label="anchor" href="#analysis-of-rrnas-2ome-level-differences-1"></a>
-</h3>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/report_diff_sites.html">report_diff_sites</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_adj_annot_variableB</span>, specie <span class="op">=</span> <span class="st">"human"</span>, condition_col <span class="op">=</span> <span class="st">"variableB"</span>, project_name <span class="op">=</span> <span class="st">"name"</span>, comparisons <span class="op">=</span> <span class="va">comparisons</span>, comments <span class="op">=</span> <span class="st">"./comment_diff_site_variableB.Rmd"</span><span class="op">)</span> </span></code></pre></div>
-<p>————————————–C—————————————-</p>
-<p>Do it again for the last column variableC</p>
-</div>
-<div class="section level3">
-<h3 id="filter-with-metadata-to-keep-only-samples-present-in-the-colum-variablec">filter with metadata to keep only samples present in the colum
-“variableC”<a class="anchor" aria-label="anchor" href="#filter-with-metadata-to-keep-only-samples-present-in-the-colum-variablec"></a>
-</h3>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">kept_samples</span> <span class="op">&lt;-</span> <span class="va">ribo_adj_annot</span><span class="op">$</span><span class="va">metadata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">variableC</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">samplename</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">ribo_adj_annot_variableC</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_ribo_samples.html">keep_ribo_samples</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>,<span class="va">kept_samples</span><span class="op">)</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="create-the-necessary-comparison-table-for-the-diff_sites-report-1">create the necessary comparison table for the diff_sites report<a class="anchor" aria-label="anchor" href="#create-the-necessary-comparison-table-for-the-diff_sites-report-1"></a>
-</h2>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>  comp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"comp1"</span><span class="op">)</span>,</span>
-<span>  ctrl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ctrl"</span><span class="op">)</span>,</span>
-<span>  cases <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P2"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="ome-of-rrnas-analysis-of-the-global-profile-1">2’Ome of rRNAs analysis of the global profile<a class="anchor" aria-label="anchor" href="#ome-of-rrnas-analysis-of-the-global-profile-1"></a>
-</h3>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/report_2ome_sites.html">report_2ome_sites</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_adj_annot_variableC</span>, specie <span class="op">=</span> <span class="st">"human"</span>, condition_col <span class="op">=</span> <span class="st">"variableC"</span>, project_name <span class="op">=</span> <span class="st">"name"</span>, comments <span class="op">=</span> <span class="st">"./comment_2ome_variableC.Rmd"</span><span class="op">)</span> </span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="analysis-of-rrnas-2ome-level-differences-2">Analysis of rRNAs 2’Ome level differences<a class="anchor" aria-label="anchor" href="#analysis-of-rrnas-2ome-level-differences-2"></a>
-</h3>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/report_diff_sites.html">report_diff_sites</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_adj_annot_variableC</span>, specie <span class="op">=</span> <span class="st">"human"</span>, condition_col <span class="op">=</span> <span class="st">"variableC"</span>, project_name <span class="op">=</span> <span class="st">"name"</span>, comparisons <span class="op">=</span> <span class="va">comparisons</span>, comments <span class="op">=</span> <span class="st">"./comment_diff_site_variableC.Rmd"</span><span class="op">)</span> </span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="check-local-environments-of-sites-of-interest-optionnal">Check local environments of sites of interest (optionnal)<a class="anchor" aria-label="anchor" href="#check-local-environments-of-sites-of-interest-optionnal"></a>
-</h2>
-<p>If you want to verify a site that shows up as significant in the last
-report</p>
-<p>For all samples</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_counts_env.html">plot_counts_env</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>, rna<span class="op">=</span> <span class="st">"18S"</span>, pos <span class="op">=</span> <span class="fl">1442</span>, samples <span class="op">=</span> <span class="st">"all"</span>, condition <span class="op">=</span> <span class="st">"condition"</span><span class="op">)</span></span></code></pre></div>
-<p>For some samples</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_counts_env.html">plot_counts_env</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>, rna <span class="op">=</span> <span class="st">"18S"</span>, pos <span class="op">=</span> <span class="fl">1442</span>, samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample1"</span>, <span class="st">"sample2"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="data-exporting">data exporting<a class="anchor" aria-label="anchor" href="#data-exporting"></a>
-</h2>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ribo_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_data.html">extract_data</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>,</span>
 <span>                        col <span class="op">=</span> <span class="st">"cscore"</span>,</span>
 <span>                        only_annotated <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">ribo_df</span>, <span class="st">"/path/to/folder/cscore_df.csv"</span><span class="op">)</span> <span class="co">#give path</span></span></code></pre></div>
 </div>
+<div class="section level3">
+<h3 id="check-local-environments-of-sites-of-interest-optionnal">Check local environments of sites of interest (optionnal)<a class="anchor" aria-label="anchor" href="#check-local-environments-of-sites-of-interest-optionnal"></a>
+</h3>
+<p>If you want to verify a site that shows up as significant in the last
+report</p>
+<p>For all samples</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_counts_env.html">plot_counts_env</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>, rna<span class="op">=</span> <span class="st">"18S"</span>, pos <span class="op">=</span> <span class="fl">1442</span>, samples <span class="op">=</span> <span class="st">"all"</span>, condition <span class="op">=</span> <span class="st">"condition"</span><span class="op">)</span></span></code></pre></div>
+<p>For some samples</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_counts_env.html">plot_counts_env</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>, rna <span class="op">=</span> <span class="st">"18S"</span>, pos <span class="op">=</span> <span class="fl">1442</span>, samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample1"</span>, <span class="st">"sample2"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
 <div class="section level2">
 <h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.5.1 (2025-06-13)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
