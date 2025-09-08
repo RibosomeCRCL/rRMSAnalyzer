@@ -1,10 +1,12 @@
 ---
 title: "Example code for Human analysis"
+number_sections: true
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Example code for Human analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+
 ---
 
 ```{r, include = FALSE}
@@ -14,46 +16,62 @@ knitr::opts_chunk$set(
 )
 ```
 
-
-
-   rRMSAnalyzer: analysis script of RiboMethSeq | Human
-   by Allyson Moureaux inspired by Virginie Marcel the 19/06/2025
-   thanks to rRMSAnalyzer & rRMSReports packages & rRMSFonctions
-
-   For more specific help: https://ribosomecrcl.github.io/rRMSAnalyzer/
-
-
-
-
-# Before starting analysis 
-Create a new Project and prepare working environment<br>
-<br>
-go to /file/new project/ create a new folder<br>
-In this folder, copy and paste files of directory "rRMSAnalyser_template":<br>
-metadata.csv + rRMSAnalyzer_template.R<br>
-For Human analysis take "human.methylated.rda" and "human.suspected.rda"<br>
-Don't forget to put your 5'end counts file in this directory.<br>
-open metadata.csv in Excel, fill in the file and save it under .csv with ";" as separator.<br>
+# Creation of a new folder in the repository<br>
 <br>
 
-## Package update RMSAnalyzer and RMSReport
+open your repository, go to your folder of interest <br> 
+- create a new folder<br>
+- copy and paste in this new folder: 
+
+- metadata.csv created previously: to update it, open metadata.csv in Excel, fill in the file and save it using .csv with “;” as separator. <br>
+- rRMSAnalyzer_template.R (https://github.com/RibosomeCRCL/rRMSAnalyzer/tree/main/vignettes) <br>
+- "human.methylated.rda" and "human.suspected.rda"  (https://github.com/RibosomeCRCL/rRMSAnalyzer/tree/main/data)<br>
+- a folder with all the 5’end read counts files<br>
+
+# Perform analysis using RStudio
+
+## Open RStudio
+
+## Update RMSAnalyzer
 
 ```{r, eval=FALSE}
 library(devtools)
 devtools::install_github("RibosomeCRCL/rRMSAnalyzer")
 library(rRMSAnalyzer)
-library(rRMSReports)
 ```
 
-# RiboClass creation
+# Create a RiboClass (metadata, counts, C-score parameters)
 
-Model data to get used to the package
+As an example, the provided dataset "ribo_toy" is used.
 
 ```{r, eval=FALSE}
 data("ribo_toy")
 ```
 
-## Personal data preparation
+Personal data preparation
+
+## Prepare the comparison table
+
+- open the metadata.csv using Excel<br>
+- add as many new columns as required (1 column per comparison, here “column name = “variableA to C”)<br>
+- complete the new columns with<br>
+	- ctrl = control condition<br>
+	- P1 = condition 1<br>
+	- P2 = condition 2….<br>
+    • NA = not applicable<br>
+Save your metadata file using .csv and separator ";" <br>
+
+Here is an example of metadata:
+
+| filename              | samplename           | variableA | variableB | variableC | treatment   | condition | lib |
+|-----------------------|----------------------|-----------|-----------|-----------|-------------|-----------|-----|
+| S26_R1.5_counts.csv   | variableB_N2_P2      | NA        | P2        | NA        | variableB   | P2        | L2  |
+| S27_R1.5_counts.csv   | variableA_N2_P1      | P1        | NA        | NA        | variableA   | P1        | L2  |
+| S28_R1.5_counts.csv   | variableC_N1_ctrl    | NA        | NA        | ctrl      | variableC   | ctrl      | L2  |
+| S30_R1.5_counts.csv   | variableB_N1_P2      | NA        | P2        | NA        | variableB   | P2        | L2  |
+| S31_R1.5_counts.csv   | variableC_N2_P2      | NA        | NA        | P2        | variableC   | P2  
+
+In Rstudio, load a newRiboClass using:<br>
 
 ```{r, eval=FALSE}
 ribo <- load_ribodata(
@@ -76,16 +94,11 @@ ribo <- load_ribodata(
   ncores = 1)
 ```
 
-## Check importation with a PCA and COA
+## Check importation by ploting a PCA and COA
 
-Plot PCA
 ```{r, eval=FALSE}
 plot_pca(ribo,"run") #change column name of the lib if necessary #ribo_toy lib_col = "run"
-```
 
-Plot COA
-
-```{r, eval=FALSE}
 plot_coa(
   ribo,
   color_col = NULL,
@@ -97,59 +110,50 @@ plot_coa(
 )
 ```
 
-# QC step
+# Perfom QC analysis
 
-## QC_report for all data
+### Generate a QCreport
 
 ```{r, eval=FALSE}
 report_qc(ribo = ribo, specie = "human", library_col = "run", project_name = "my_project") #ribo_toy lib_col = "run"
 ```
 
-## adjustment ComBat-Seq if necessary
+### Adjustment using ComBat-Seq if necessary
 
 ```{r, eval=FALSE}
-plot_pca(ribo, "lib") #ribo_toy lib_col = "run"               
-
 ribo_adj <- adjust_bias(ribo_toy,"run") 
 
-plot_pca(ribo_adj,"lib")  #ribo_toy lib_col = "run"          
-```
+#verify the adjustment using a PCA
+plot_pca(ribo_adj,"lib")  #ribo_toy lib_col = "run"         
 
-## QC_report for adjusted data
-
-```{r, eval=FALSE}
 report_qc(ribo = ribo_adj, specie = "human", library_col = "run", project_name = "name", comments = "./comment_QC.Rmd") #ribo_toy lib_col = "run"
 ```
 
+## Remove problematic or unused samples (optionnal)
 
-## Remove problematic or not used samples (optionnal)
-
-### Keep a small number of samples
+### To keep a small number of samples
 
 ```{r, eval=FALSE}
 ribo_adj_small <- keep_ribo_samples(ribo_adj,c("sample1","sample2","sample3","sample4"))
 ```
 
-                          
-### Remove a small number of samples  
+### To remove a small number of samples  
 
 ```{r, eval=FALSE}
 ribo_adj_small <- remove_ribo_samples(ribo_adj,c("xxxx","xxxccc","RNA_ref-1","RNA_ref-2"))
 ```
 
-Uniformisation of Riboclass name
+### Uniformisation of the RiboClass name
 
 ```{r, eval=FALSE}
 ribo_adj <- ribo_adj_small 
 ```
 
-# Human rRNA 2'Ome sites annotation
+## Annotation of human rRNA 2’Ome sites
 
-You must have download the file on git and saved it locally
+Choose between 2 annotations: known (n=112 sites) or suspected (n=17). This section or the next one. If the two annotations are required, both of known and suspected sites analysis are desired, the 2 scripts has to be run twice from here.
 
-## For known sites .... 
-
-Choose between this section or the next one. If both of known and suspected sites analysis are desired, script has to be run twice from here. 
+### Annotation of the 112 known sites 
 
 ```{r, eval=FALSE}
 data("human_methylated")
@@ -166,14 +170,10 @@ ribo_adj_annot <- annotate_site(ribo_adj_name,
                                 anno_value = "Nomenclature")
 ```
 
-## .... or for suspected sites
-
-If you choose to analyse known site first pass this chunk and come back to it when first analysis is done. 
-
-### redo all the analysis for adjusted data if necessary 
+### Annotation of the 19 suspected sites
 
 ```{r, eval=FALSE}
-load(file = "/home/bioinfo/Desktop/RMS/human.suspected.rda") 
+load(file = "/home/path/to/RMS/human.suspected.rda") 
 
 ribo_adj_annot <- annotate_site(ribo_adj_annot, human.suspected) # verify rRNA names
 
@@ -185,169 +185,66 @@ ribo_adj_annot <- annotate_site(ribo_adj_annot,
 
 ```
 
-# Reports
+## Analytic reports
 
-In this section we run the two reports for analysis. 
+### Reports for comparisons explained in column 1
 
- To launch as many time as the number of comparisons asked(A, B, C ...). 
- 
- Ex of metadata:
+In the previous example: in column “VariableA”, comparison ctrl vs P1 and ctrl vs P2
 
-| filename              | samplename           | variableA | variableB | variableC | treatment   | condition | lib |
-|-----------------------|----------------------|-----------|-----------|-----------|-------------|-----------|-----|
-| S26_R1.5_counts.csv   | variableB_N2_P2      | NA        | P2        | NA        | variableB   | P2        | L2  |
-| S27_R1.5_counts.csv   | variableA_N2_P1      | P1        | NA        | NA        | variableA   | P1        | L2  |
-| S28_R1.5_counts.csv   | variableC_N1_ctrl    | NA        | NA        | ctrl      | variableC   | ctrl      | L2  |
-| S30_R1.5_counts.csv   | variableB_N1_P2      | NA        | P2        | NA        | variableB   | P2        | L2  |
-| S31_R1.5_counts.csv   | variableC_N2_P2      | NA        | NA        | P2        | variableC   | P2        | L2  |
-| S32_R1.5_counts.csv   | variableA_N3_P1      | P1        | NA        | NA        | variableA   | P1        | L2  |
-| S33_R1.5_counts.csv   | variableA_N3_ctrl    | ctrl      | NA        | NA        | variableA   | ctrl      | L2  |
-| S34_R1.5_counts.csv   | variableC_N1_ctrl    | NA        | NA        | ctrl      | variableC   | ctrl      | L2  |
-| S35_R1.5_counts.csv   | variableA_N1_P2      | P2        | NA        | NA        | variableA   | P2        | L2  |
-| S36_R1.5_counts.csv   | variableA_N2_ctrl    | ctrl      | NA        | NA        | variableA   | ctrl      | L2  |
-| S37_R1.5_counts.csv   | variableC_N2_ctrl    | NA        | NA        | ctrl      | variableC   | ctrl      | L2  |
-| S38_R1.5_counts.csv   | variableA_N2_P2      | P2        | NA        | NA        | variableA   | P2        | L2  |
-| S39_R1.5_counts.csv   | variableC_N1_P2      | NA        | NA        | P2        | variableC   | P2        | L2  |
-| S40_R1.5_counts.csv   | variableB_N1_ctrl    | NA        | ctrl      | NA        | variableB   | ctrl      | L2  |
-| S41_R1.5_counts.csv   | variableA_N1_P1      | P1        | NA        | NA        | variableA   | P1        | L2  |
-| S42_R1.5_counts.csv   | variableA_N1_ctrl    | ctrl      | NA        | NA        | variableA   | ctrl      | L2  |
-| S43_R1.5_counts.csv   | variableC_N3_P2      | NA        | NA        | P2        | variableC   | P2        | L2  |
-| S44_R1.5_counts.csv   | variableB_N3_ctrl    | NA        | ctrl      | NA        | variableB   | ctrl      | L2  |
-| S45_R1.5_counts.csv   | variableA_N3_P2      | P2        | NA        | NA        | variableA   | P2        | L2  |
+#### Filter the data
 
-If only one column condition, it is still the same thing. Here in the metadata example we can see 3 columns variable. They are the different comparison that is wanted to be analysed. You can replace the name for your custom ones. You can also run the analysis on "condition" column. In this case analysis will be done camparing as many modalities as you have in the same report. (The column treatment is optionnal)
-
- --------------------------------------variableA--------------------------------
-
-## filter data 
-
-(to do only if you want to compare a subset of your samples and not all the samples together otherwise pass this chunk)
-
-Data are filtered with metadata to keep only samples present in the column "variableA" (in the case you have some NA in the column). Samples with NA will be erased from subset for the analysis.
+To do only if you want to compare a subset of your samples (i.e., not all the samples included in the RiboClass).
 
 ```{r, eval=FALSE}
 kept_samples <- ribo_adj_annot$metadata %>%
   dplyr::filter(!is.na(variableA)) %>% # keep lines that are not "NA"
   dplyr::pull(samplename)
 
-ribo_adj_annot_variableA <- keep_ribo_samples(ribo_adj_annot,kept_samples) # create a new riboclass name for the subdata variableA
+ribo_adj_annot_variableA <- keep_ribo_samples(ribo_adj_annot,kept_samples) #create a new RiboClass including the subdata variableA
 ```
 
-## create mandatory table for the diff_sites report
-
-The last report needs this table to know what comparisons has to be run. Here in variable A we have 3 modalities : P1, P2 and ctrl. We want to compare P1 to the ctrl and P2 to the ctrl. The order in ctrl and cases lines is important. The first argument of the "ctrl" line will be compared to the first argument of the "cases" line. Same for the second third etc. You can add as much argument as you want in each lines as long as they exist in your metadata column (here variableA) and the line ctrl and cases have the same length. For example this : 
-
-comparisons <- tibble::tibble(<br>
-  comp = c("comp1", "comp2"),<br>
-  ctrl = c("ctrl"),<br>
-  cases = c("P1", "P2")<br>
-)<br>
-can't work because ctrl has 1 argument and cases has 2. <br>
-This :<br>
-comparisons <- tibble::tibble(<br>
-  comp = c("comp1", "comp2"),<br>
-  ctrl = c("ctrl", "ctrl"),<br>
-  cases = c("P1", "P3")<br>
-)<br>
-can't work because P3 doesn't exist in variableA column in the metadata. 
+#### Create mandatory comparison table for the report_diff_sites 
 
 ```{r, eval=FALSE}
 comparisons <- tibble::tibble(
-  comp = c("comp1", "comp2"),
-  ctrl = c("ctrl", "ctrl"),
-  cases = c("P1", "P2")
+  comp = c("comp1", "comp2"), #name of the 2 comparisons, add as many as required
+  ctrl = c("ctrl", "ctrl"), #name of the ctrl as appearing in your metadata for each comparison, in the order, add as many name than comparison that will be performed
+  cases = c("P1", "P2") #name of the cases as appearing in your metadata for each comparison, in the order, add as many name than comparison that will be performed
 )
 ```
 
-## global profile analysis of rRNA 2'Ome  
+#### Generate a report to compare 2’Ome profile   
 
 ```{r, eval=FALSE}
-report_2ome_sites(ribo = ribo_adj_annot_variableA, specie = "human", condition_col = "variableA", project_name = "name", comments = "./comment_2ome_variableA.Rmd") 
+report_2ome_sites(ribo = ribo_adj_annot_variableA, specie = "human", condition_col = "variableA", project_name = "name", comments = "./path/to/comment_2ome_variableA.Rmd") 
+#condition_col: change the name of the column to perform new analysis
+#comments: change the path and name of your files with your comments if required
 ```
 
-## Analysis of rRNAs 2'Ome level differences
-
-Here we need the comparison table created previously. 
+#### Generate a report to perform site-by-site 2’Ome comparison
 
 ```{r, eval=FALSE}
-report_diff_sites(ribo = ribo_adj_annot_variableA, specie = "human", condition_col = "variableA", project_name = "name", comparisons = comparisons, comments = "./comment_diff_site_variableA.Rmd") 
+report_diff_sites(ribo = ribo_adj_annot_variableA, specie = "human", condition_col = "variableA", project_name = "name", comparisons = comparisons, comments = "./comment_diff_site_variableA.Rmd")
+#condition_col: change the name of the column to perform new analysis
+#comparisons: name of the comparison table
+#comments: change the name of your files with your comments if required
 ```
 
- --------------------------------------B----------------------------------------
- 
-Now we do the exact same thing but for the variableB column. 
+### Reports for comparisons explained in column 2
 
-## filter with metadata to keep only samples present in the colum "variableB"
+Re-do all the steps of [Reports for comparisons explained in column 1] but using the name of your column of interest
 
-```{r, eval=FALSE}
-kept_samples <- ribo_adj_annot$metadata %>%
-  dplyr::filter(!is.na(variableB)) %>%
-  dplyr::pull(samplename)
+## Export data
 
-ribo_adj_annot_variableB <- keep_ribo_samples(ribo_adj_annot,kept_samples)
+```{r, eval = FALSE}
+ribo_df <- extract_data(ribo_adj_annot,
+                        col = "cscore",
+                        only_annotated = TRUE)
 
+write.csv(ribo_df, "/path/to/folder/cscore_df.csv") #give path
 ```
 
-# create the necessary comparison table for the diff_sites report
-
-```{r, eval=FALSE}
-comparisons <- tibble::tibble(
-  comp = c("comp1"),
-  ctrl = c("ctrl"),
-  cases = c("P2")
-)
-```
-
-## 2'Ome of rRNAs analysis of the global profile
-
-```{r, eval=FALSE}
-report_2ome_sites(ribo = ribo_adj_annot_variableB, specie = "human", condition_col = "variableB", project_name = "name", comments = "./comment_2ome_variableB.Rmd") 
-```
-
-##  Analysis of rRNAs 2'Ome level differences
-
-```{r, eval=FALSE}
-report_diff_sites(ribo = ribo_adj_annot_variableB, specie = "human", condition_col = "variableB", project_name = "name", comparisons = comparisons, comments = "./comment_diff_site_variableB.Rmd") 
-```
-
- --------------------------------------C----------------------------------------
- 
-Do it again for the last column variableC
-
-## filter with metadata to keep only samples present in the colum "variableC"
-
-```{r, eval=FALSE}
-kept_samples <- ribo_adj_annot$metadata %>%
-  dplyr::filter(!is.na(variableC)) %>%
-  dplyr::pull(samplename)
-
-ribo_adj_annot_variableC <- keep_ribo_samples(ribo_adj_annot,kept_samples)
-
-```
-
-# create the necessary comparison table for the diff_sites report
-
-```{r, eval=FALSE}
-comparisons <- tibble::tibble(
-  comp = c("comp1"),
-  ctrl = c("ctrl"),
-  cases = c("P2")
-)
-```
-
-## 2'Ome of rRNAs analysis of the global profile
-
-```{r, eval=FALSE}
-report_2ome_sites(ribo = ribo_adj_annot_variableC, specie = "human", condition_col = "variableC", project_name = "name", comments = "./comment_2ome_variableC.Rmd") 
-```
-
-##  Analysis of rRNAs 2'Ome level differences
-
-```{r, eval=FALSE}
-report_diff_sites(ribo = ribo_adj_annot_variableC, specie = "human", condition_col = "variableC", project_name = "name", comparisons = comparisons, comments = "./comment_diff_site_variableC.Rmd") 
-```
-
-# Check local environments of sites of interest (optionnal) 
+## Check local environments of sites of interest (optionnal) 
 
 If you want to verify a site that shows up as significant in the last report
 
@@ -361,16 +258,6 @@ For some samples
 
 ```{r, eval=FALSE}
 plot_counts_env(ribo_adj_annot, rna = "18S", pos = 1442, samples = c("sample1", "sample2"))
-```
-
-# data exporting
-
-```{r, eval=FALSE}
-ribo_df <- extract_data(ribo_adj_annot,
-                        col = "cscore",
-                        only_annotated = TRUE)
-
-write.csv(ribo_df, "/path/to/folder/cscore_df.csv") #give path
 ```
 
 # Session info 
