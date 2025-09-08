@@ -53,7 +53,7 @@ Personal data preparation
 ## Prepare the comparison table
 
 - open the metadata.csv using Excel<br>
-- add as many new columns as required (1 column per comparison, here “column name = “variableA to C”)<br>
+- add as many new columns as required (1 column per comparison, here "column name" = "variableA to C")<br>
 - complete the new columns with<br>
 	- ctrl = control condition<br>
 	- P1 = condition 1<br>
