@@ -49,7 +49,6 @@ reference:
   - get_variant_sites
   - render_html_welch
   - render_html_wilcoxon
-
 - title: Plots
   desc: Different plots to show either samples and sites.
 - contents:
