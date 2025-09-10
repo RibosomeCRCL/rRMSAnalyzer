@@ -176,6 +176,7 @@ A sample identified as an outlier in the previous analyses is highlighted in red
 qcdata <- rRMSAnalyzer::get_outliers(ribo_to_check)
 ```
 
+
 ```{r heatmap annotated, fig.asp = 0.9, fig.width = 15}
 rRMSAnalyzer::plot_heatmap_annotated(ribo_to_check, qcdata)
 ```
@@ -252,7 +253,7 @@ Outlier detection steps identified **`r sum(qcdata$coverage_quality != "pass")`*
 
 ```{r print outlier samples}
 if (any(qcdata$total_outliers != 0)) {
-outlier_summary <- data.frame(outliers = qcdata$samplename[qcdata$total_outliers != 0], row.names = "Sample") # print samples that is outlier at least 1 time
+outlier_summary <- data.frame(outliers = qcdata$samplename[qcdata$total_outliers != 0]) # print samples that is outlier at least 1 time
 } else  outlier_summary <- "No outlier"
 knitr::kable(outlier_summary, "html") %>% kable_styling("striped") %>% scroll_box(width = "60%", height = "500px")
 ```
