@@ -53,7 +53,7 @@ Personal data preparation
 ## Prepare the comparison table
 
 - open the metadata.csv using Excel<br>
-- add as many new columns as required (1 column per comparison, here “column name = “variableA to C”)<br>
+- add as many new columns as required (1 column per comparison, here "column name" = "variableA to C")<br>
 - complete the new columns with<br>
 	- ctrl = control condition<br>
 	- P1 = condition 1<br>
@@ -69,7 +69,21 @@ Here is an example of metadata:
 | S27_R1.5_counts.csv   | variableA_N2_P1      | P1        | NA        | NA        | variableA   | P1        | L2  |
 | S28_R1.5_counts.csv   | variableC_N1_ctrl    | NA        | NA        | ctrl      | variableC   | ctrl      | L2  |
 | S30_R1.5_counts.csv   | variableB_N1_P2      | NA        | P2        | NA        | variableB   | P2        | L2  |
-| S31_R1.5_counts.csv   | variableC_N2_P2      | NA        | NA        | P2        | variableC   | P2  
+| S31_R1.5_counts.csv   | variableC_N2_P2      | NA        | NA        | P2        | variableC   | P2        | L2  |
+| S32_R1.5_counts.csv   | variableA_N3_P1      | P1        | NA        | NA        | variableA   | P1        | L2  |
+| S33_R1.5_counts.csv   | variableA_N3_ctrl    | ctrl      | NA        | NA        | variableA   | ctrl      | L2  |
+| S34_R1.5_counts.csv   | variableC_N1_ctrl    | NA        | NA        | ctrl      | variableC   | ctrl      | L2  |
+| S35_R1.5_counts.csv   | variableA_N1_P2      | P2        | NA        | NA        | variableA   | P2        | L2  |
+| S36_R1.5_counts.csv   | variableA_N2_ctrl    | ctrl      | NA        | NA        | variableA   | ctrl      | L2  |
+| S37_R1.5_counts.csv   | variableC_N2_ctrl    | NA        | NA        | ctrl      | variableC   | ctrl      | L2  |
+| S38_R1.5_counts.csv   | variableA_N2_P2      | P2        | NA        | NA        | variableA   | P2        | L2  |
+| S39_R1.5_counts.csv   | variableC_N1_P2      | NA        | NA        | P2        | variableC   | P2        | L2  |
+| S40_R1.5_counts.csv   | variableB_N1_ctrl    | NA        | ctrl      | NA        | variableB   | ctrl      | L2  |
+| S41_R1.5_counts.csv   | variableA_N1_P1      | P1        | NA        | NA        | variableA   | P1        | L2  |
+| S42_R1.5_counts.csv   | variableA_N1_ctrl    | ctrl      | NA        | NA        | variableA   | ctrl      | L2  |
+| S43_R1.5_counts.csv   | variableC_N3_P2      | NA        | NA        | P2        | variableC   | P2        | L2  |
+| S44_R1.5_counts.csv   | variableB_N3_ctrl    | NA        | ctrl      | NA        | variableB   | ctrl      | L2  |
+| S45_R1.5_counts.csv   | variableA_N3_P2      | P2        | NA        | NA        | variableA   | P2        | L2  |
 
 In Rstudio, load a newRiboClass using:<br>
 
