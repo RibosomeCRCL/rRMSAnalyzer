@@ -504,7 +504,7 @@ All resulting p-values were adjusted for multiple testing using the False Discov
 <br>
 \> Summary of Differentially Methylated rRNA 2′Ome Sites > (Only significant sites in at least one test are shown)
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 summary_table <- rRMSAnalyzer::get_diff_sites_summary(ribo = ribo_to_check, condition_col = params$condition_col, comparisons = params$comparisons)
 
 DT::datatable(
