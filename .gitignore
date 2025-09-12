@@ -2,17 +2,4 @@
 .Rhistory
 .RData
 .Ruserdata
-inst/doc
-docs
 RiboMethSeq.Rproj
-bar_plot_niveau_outlier
-diff_sites.html
-metadata.csv
-quality_control.html
-
-quality_control.html
-Counts/
-diff_sites_files/
-inst/rmd/quality_control.csv
-tests/testthat/Rplots.pdf
-2ome_analysis.html
