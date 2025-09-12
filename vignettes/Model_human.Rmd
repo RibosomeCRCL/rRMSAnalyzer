@@ -154,7 +154,7 @@ ribo_adj_small <- keep_ribo_samples(ribo_adj,c("sample1","sample2","sample3","sa
 ### To remove a small number of samples  
 
 ```{r, eval=FALSE}
-ribo_adj_small <- remove_ribo_samples(ribo_adj,c("xxxx","xxxccc","RNA_ref-1","RNA_ref-2"))
+ribo_adj_small <- remove_ribo_samples(ribo_adj,c("xxxx","xxxccc","RNA_ref-1","RNA_ref-2")) # ribo_toy : ...,c("RNA1", "RNA2"))
 ```
 
 ### Uniformisation of the RiboClass name
@@ -211,10 +211,12 @@ To do only if you want to compare a subset of your samples (i.e., not all the sa
 
 ```{r, eval=FALSE}
 kept_samples <- ribo_adj_annot$metadata %>%
-  dplyr::filter(!is.na(variableA)) %>% # keep lines that are not "NA"
+  # keep lines that are not "NA"
+  dplyr::filter(!is.na(variableA)) %>% #ribo_toy (!is.na(comp1))
   dplyr::pull(samplename)
 
-ribo_adj_annot_variableA <- keep_ribo_samples(ribo_adj_annot,kept_samples) #create a new RiboClass including the subdata variableA
+#create a new RiboClass including the subdata variableA
+ribo_adj_annot_variableA <- keep_ribo_samples(ribo_adj_annot,kept_samples) #ribo_toy ribo_adj_annot_comp1 <- ...
 ```
 
 #### Create mandatory comparison table for the report_diff_sites 
@@ -231,7 +233,7 @@ comparisons <- tibble::tibble(
 
 ```{r, eval=FALSE}
 report_2ome_sites(ribo = ribo_adj_annot_variableA, specie = "human", condition_col = "variableA", project_name = "name", comments = "./path/to/comment_2ome_variableA.Rmd") 
-#condition_col: change the name of the column to perform new analysis
+#condition_col: change the name of the column to perform new analysis. ribo_toy condition_col = "comp1"
 #comments: change the path and name of your files with your comments if required
 ```
 
@@ -239,7 +241,8 @@ report_2ome_sites(ribo = ribo_adj_annot_variableA, specie = "human", condition_c
 
 ```{r, eval=FALSE}
 report_diff_sites(ribo = ribo_adj_annot_variableA, specie = "human", condition_col = "variableA", project_name = "name", comparisons = comparisons, comments = "./comment_diff_site_variableA.Rmd")
-#condition_col: change the name of the column to perform new analysis
+#ribo_toy : ribo = ribo_adj_annot_comp1
+#condition_col: change the name of the column to perform new analysis . ribo_toy condition_col = "comp1"
 #comparisons: name of the comparison table
 #comments: change the name of your files with your comments if required
 ```
@@ -251,7 +254,7 @@ Re-do all the steps of [Reports for comparisons explained in column 1] but using
 ## Export data
 
 ```{r, eval = FALSE}
-ribo_df <- extract_data(ribo_adj_annot,
+ribo_df <- extract_data(ribo_adj_annot, #change for the annotated RiboClass if needed
                         col = "cscore",
                         only_annotated = TRUE)
 

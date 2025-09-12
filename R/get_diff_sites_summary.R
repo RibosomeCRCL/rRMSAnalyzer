@@ -32,9 +32,10 @@ get_diff_sites_summary <- function(ribo = ribo, pthr = 0.05, condition_col = con
   qcdata <- ribo[[2]] 
   
   #----------------------------------------ANOVA test---------------------------
-  if(length(unique(qcdata$condition_col)) > 2){
+  if(length(unique(qcdata[[condition_col]])) > 2){
   compute_pval_anova <- rRMSAnalyzer::compute_pval(ribo = ribo, test = "anova", condition_col = condition_col) 
   a <-rRMSAnalyzer::plot_stat(ribo = ribo, compute_pval = compute_pval_anova, pthr = pthr, condition_col = condition_col, cscore_cutoff = cscore_cutoff)
+  sites_anova <- a[["plot_env"]][["significant_sites"]]
   }
   
   #----------------------------------------Welch test---------------------------
@@ -57,9 +58,10 @@ get_diff_sites_summary <- function(ribo = ribo, pthr = 0.05, condition_col = con
   }
   
   #----------------------------------------Kruskal test-------------------------
-  if(length(unique(qcdata$condition_col)) > 2){
+  if(length(unique(qcdata[[condition_col]])) > 2){
     compute_pval_kruskal <- rRMSAnalyzer::compute_pval(ribo = ribo, test = "kruskal", condition_col = condition_col)
     k <-rRMSAnalyzer::plot_stat(ribo = ribo, compute_pval = compute_pval_kruskal, pthr = pthr, condition_col = condition_col, cscore_cutoff = cscore_cutoff)
+    sites_kw <- k[["plot_env"]][["significant_sites"]]
   }
   
   #----------------------------------------Wilcoxon test------------------------
@@ -75,9 +77,9 @@ get_diff_sites_summary <- function(ribo = ribo, pthr = 0.05, condition_col = con
     
     ribo_filtered_x <- keep_ribo_samples(ribo_filtered_x,kept_samples_x)
     
-    compute_pval_wolcoxon <- rRMSAnalyzer::compute_pval(ribo = ribo_filtered_x, test = "wilcoxon", condition_col = condition_col)
+    compute_pval_wilcoxon <- rRMSAnalyzer::compute_pval(ribo = ribo_filtered_x, test = "wilcoxon", condition_col = condition_col)
     
-    x <- rRMSAnalyzer::plot_stat(ribo = ribo_filtered_x, compute_pval = compute_pval_wolcoxon, pthr = pthr, condition_col = condition_col, cscore_cutoff = cscore_cutoff)
+    x <- rRMSAnalyzer::plot_stat(ribo = ribo_filtered_x, compute_pval = compute_pval_wilcoxon, pthr = pthr, condition_col = condition_col, cscore_cutoff = cscore_cutoff)
     x_list[[i]] <- x 
   }
   
@@ -92,8 +94,8 @@ get_diff_sites_summary <- function(ribo = ribo, pthr = 0.05, condition_col = con
     comp_id <- paste0(case, "_vs_", ctrl)
     
     # Extract significant sites from tests
-    sites_welch <- w_list[[i]][["plot_env"]][["significant_sites"]]
-    sites_wilcox <- x_list[[i]][["plot_env"]][["significant_sites"]]
+    sites_welch <- unique(unlist(lapply(w_list, function(w) w[["plot_env"]][["significant_sites"]]))) 
+    sites_wilcox <- unique(unlist(lapply(x_list, function(x) x[["plot_env"]][["significant_sites"]])))
     
     # Add to the list
     comparison_results[[comp_id]] <- list(
@@ -106,15 +108,13 @@ get_diff_sites_summary <- function(ribo = ribo, pthr = 0.05, condition_col = con
   results <- list()
   
   # Identify all significant sites in at least on test
-  if(length(unique(qcdata$condition_col)) > 2){
+  if(length(unique(qcdata[[condition_col]])) > 2){
     sites_anova <- a[["plot_env"]][["significant_sites"]]
     sites_kw <- k[["plot_env"]][["significant_sites"]]
   }
-  sites_welch <- w_list[[i]][["plot_env"]][["significant_sites"]]
-  sites_wilcox <- x_list[[i]][["plot_env"]][["significant_sites"]]
   
   # all sites
-  if(length(unique(qcdata$condition_col)) > 2){
+  if(length(unique(qcdata[[condition_col]])) > 2){
   all_sites <- unique(c(sites_anova, sites_kw, sites_welch, sites_wilcox))
   } else {
     all_sites <- unique(c(sites_welch, sites_wilcox))
@@ -124,7 +124,7 @@ get_diff_sites_summary <- function(ribo = ribo, pthr = 0.05, condition_col = con
   results$Site <- all_sites
   
   # Add Anova et Kruskal column if groups > 2 
-  if (length(unique(qcdata$condition_col)) > 2) {
+  if (length(unique(qcdata[[condition_col]])) > 2) {
     results$Multiple_comparison_Anova <- ifelse(all_sites %in% sites_anova, "Significant", "NS")
     results$Multiple_comparison_Kruskal_Wallis <- ifelse(all_sites %in% sites_kw, "Significant", "NS")
     }
