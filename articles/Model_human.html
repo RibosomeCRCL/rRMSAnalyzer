@@ -410,7 +410,7 @@ file using .csv and separator “;” <br>
 <h4 id="to-remove-a-small-number-of-samples">To remove a small number of samples<a class="anchor" aria-label="anchor" href="#to-remove-a-small-number-of-samples"></a>
 </h4>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ribo_adj_small</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_ribo_samples.html">remove_ribo_samples</a></span><span class="op">(</span><span class="va">ribo_adj</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"xxxx"</span>,<span class="st">"xxxccc"</span>,<span class="st">"RNA_ref-1"</span>,<span class="st">"RNA_ref-2"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ribo_adj_small</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_ribo_samples.html">remove_ribo_samples</a></span><span class="op">(</span><span class="va">ribo_adj</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"xxxx"</span>,<span class="st">"xxxccc"</span>,<span class="st">"RNA_ref-1"</span>,<span class="st">"RNA_ref-2"</span><span class="op">)</span><span class="op">)</span> <span class="co"># ribo_toy : ...,c("RNA1", "RNA2"))</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="uniformisation-of-the-riboclass-name">Uniformisation of the RiboClass name<a class="anchor" aria-label="anchor" href="#uniformisation-of-the-riboclass-name"></a>
@@ -473,10 +473,12 @@ and ctrl vs P2</p>
 all the samples included in the RiboClass).</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">kept_samples</span> <span class="op">&lt;-</span> <span class="va">ribo_adj_annot</span><span class="op">$</span><span class="va">metadata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">variableA</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># keep lines that are not "NA"</span></span>
+<span>  <span class="co"># keep lines that are not "NA"</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">variableA</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co">#ribo_toy (!is.na(comp1))</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">samplename</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">ribo_adj_annot_variableA</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_ribo_samples.html">keep_ribo_samples</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>,<span class="va">kept_samples</span><span class="op">)</span> <span class="co">#create a new RiboClass including the subdata variableA</span></span></code></pre></div>
+<span><span class="co">#create a new RiboClass including the subdata variableA</span></span>
+<span><span class="va">ribo_adj_annot_variableA</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_ribo_samples.html">keep_ribo_samples</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>,<span class="va">kept_samples</span><span class="op">)</span> <span class="co">#ribo_toy ribo_adj_annot_comp1 &lt;- ...</span></span></code></pre></div>
 </div>
 <div class="section level5">
 <h5 id="create-mandatory-comparison-table-for-the-report_diff_sites">Create mandatory comparison table for the report_diff_sites<a class="anchor" aria-label="anchor" href="#create-mandatory-comparison-table-for-the-report_diff_sites"></a>
@@ -493,7 +495,7 @@ all the samples included in the RiboClass).</p>
 </h5>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/report_2ome_sites.html">report_2ome_sites</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_adj_annot_variableA</span>, specie <span class="op">=</span> <span class="st">"human"</span>, condition_col <span class="op">=</span> <span class="st">"variableA"</span>, project_name <span class="op">=</span> <span class="st">"name"</span>, comments <span class="op">=</span> <span class="st">"./path/to/comment_2ome_variableA.Rmd"</span><span class="op">)</span> </span>
-<span><span class="co">#condition_col: change the name of the column to perform new analysis</span></span>
+<span><span class="co">#condition_col: change the name of the column to perform new analysis. ribo_toy condition_col = "comp1"</span></span>
 <span><span class="co">#comments: change the path and name of your files with your comments if required</span></span></code></pre></div>
 </div>
 <div class="section level5">
@@ -501,7 +503,8 @@ all the samples included in the RiboClass).</p>
 </h5>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/report_diff_sites.html">report_diff_sites</a></span><span class="op">(</span>ribo <span class="op">=</span> <span class="va">ribo_adj_annot_variableA</span>, specie <span class="op">=</span> <span class="st">"human"</span>, condition_col <span class="op">=</span> <span class="st">"variableA"</span>, project_name <span class="op">=</span> <span class="st">"name"</span>, comparisons <span class="op">=</span> <span class="va">comparisons</span>, comments <span class="op">=</span> <span class="st">"./comment_diff_site_variableA.Rmd"</span><span class="op">)</span></span>
-<span><span class="co">#condition_col: change the name of the column to perform new analysis</span></span>
+<span><span class="co">#ribo_toy : ribo = ribo_adj_annot_comp1</span></span>
+<span><span class="co">#condition_col: change the name of the column to perform new analysis . ribo_toy condition_col = "comp1"</span></span>
 <span><span class="co">#comparisons: name of the comparison table</span></span>
 <span><span class="co">#comments: change the name of your files with your comments if required</span></span></code></pre></div>
 </div>
@@ -518,7 +521,7 @@ of interest</p>
 <h3 id="export-data">Export data<a class="anchor" aria-label="anchor" href="#export-data"></a>
 </h3>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ribo_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_data.html">extract_data</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>,</span>
+<code class="sourceCode R"><span><span class="va">ribo_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_data.html">extract_data</a></span><span class="op">(</span><span class="va">ribo_adj_annot</span>, <span class="co">#change for the annotated RiboClass if needed</span></span>
 <span>                        col <span class="op">=</span> <span class="st">"cscore"</span>,</span>
 <span>                        only_annotated <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
